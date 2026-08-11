@@ -1,0 +1,326 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
+    <link href="{% static 'tandu-main/tandu.png' %}" rel="icon">
+    <title>{% block title %}The Mist - Luxury Hotel HTML Template{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}">
+    <meta name="author" content="harnishdesign.net">
+
+    <!-- Stylesheet
+	============================== -->
+    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/animate.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/swiper-bundle.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/glightbox.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/daterangepicker.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/stylesheet.css' %}">
+	<!-- Here goes your Colors Css -->
+	<link id="color-switcher" rel="stylesheet" type="text/css" href="#">
+
+    <!-- Custom Header/Logo Scroll Behavior
+	============================== -->
+    <style>
+        /* Logo sizing - HERO state only, doesn't affect scrolled logo */
+        #header:not(.scrolled) .logo img {
+    max-height: 440px;
+    width: auto;
+    display: block;
+    margin-top: 60px; /* increased gap further */
+    background: transparent; /* ensure no bg box behind logo */
+    transition: max-height 0.3s ease;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+#header:not(.scrolled) .logo {
+    background: transparent; /* ensure wrapper has no bg either */
+}
+        /* Make container relative so we can absolutely position the logo */
+        #header .primary-menu .container {
+            position: relative;
+            overflow: visible;
+        }
+        /* Default state = over the hero: transparent navbar, logo centered */
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+        }
+        #header .primary-menu {
+            background-color: transparent;
+            transition: all 0.3s ease;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            overflow: visible;
+        }
+        #header .logo {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        /* Default state = hero: hide nav links and Book Now button, show only the logo */
+        #header #header-nav,
+        #header .btn-new {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        /* Keep the hamburger hidden too in the hero state on mobile (optional - remove if you want it visible) */
+        #header .navbar-toggler {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        /* Scrolled state = normal compact navbar, logo back on the left, links + button visible */
+        #header.scrolled {
+            background-color: #fff;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+        #header.scrolled .primary-menu {
+            background-color: #fff;
+            margin-top: 0 !important;
+        }
+        #header.scrolled .logo {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #header.scrolled .logo img {
+            max-height: 168px;
+        }
+        #header.scrolled #header-nav,
+        #header.scrolled .btn-new,
+        #header.scrolled .navbar-toggler {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        /* Push page content down so the fixed header doesn't overlap it on inner pages */
+        #content {
+            padding-top: 0;
+        }
+        /* Shrink the hero logo on mobile so it doesn't dominate the screen */
+@media (max-width: 576px) {
+	#header:not(.scrolled) .logo img {
+		max-height: 260px !important;
+		margin-top: 45px !important;
+	}
+}
+
+@media (min-width: 577px) and (max-width: 991px) {
+	#header:not(.scrolled) .logo img {
+		max-height: 320px !important;
+		margin-top: 55px !important;
+	}
+}
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="lds-ellipsis">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- Preloader End -->
+
+    <!-- Document Wrapper
+	=============================== -->
+    <div id="main-wrapper">
+        <!-- Header
+		============================ -->
+        <header id="header" class="sticky-top-slide">
+            <!-- Navbar -->
+            <nav class="primary-menu navbar navbar-expand-lg bg-transparent border-bottom-0 text-3 fw-600 mt-3">
+                <div class="container">
+                    <!-- Logo -->
+                   <a class="logo" href="{% url 'tandj_app:index' %}"><img src="{% static 'tandu-main/tandu.png' %}" alt=""></a>
+<!-- Logo End -->
+<div id="header-nav" class="collapse navbar-collapse justify-content-center">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'tandj_app:index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'tandj_app:about' %}">About</a>
+        </li>
+    
+							<li class="nav-item">
+    <a class="nav-link" href="{% url 'tandj_app:rooms' %}">Rooms</a>
+</li>
+                          <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:activities' %}">Activities</a></li>
+                            <li class="nav-item"><a class="nav-link" href="banquets.html">Banquets</a></li>
+                            <li class="nav-item"><a class="nav-link" href="spa.html">Spa</a></li>
+                            <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#">Pages</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="services.html">Services</a></li>
+                                    <li><a class="dropdown-item" href="facilities.html">Facilities</a></li>
+									<li><a class="dropdown-item" href="gallery.html">Gallery</a></li>
+									<li><a class="dropdown-item" href="faqs.html">FAQs</a></li>
+									<li><a class="dropdown-item" href="testimonials.html">testimonials</a></li>
+									<li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#">Blog</a>
+										<ul class="dropdown-menu">
+											<li><a class="dropdown-item" href="blog.html">Blog</a></li>
+											<li><a class="dropdown-item" href="blog-grid.html">Blog - Grid</a></li>
+											<li><a class="dropdown-item" href="blog-single-post.html">Blog Single Post</a></li>
+										</ul>
+									</li>
+									<li><a class="dropdown-item" href="404.html">404</a></li>
+									<li><a class="dropdown-item" href="coming-soon.html">Coming Soon</a></li>
+									
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Button -->
+                    <a href="contact.html" class="btn btn-new btn-primary text-capitalize rounded-pill text-nowrap ms-auto">
+						<span class="btn-text"><span>Book Now</span></span>
+						<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+					</a>
+                    <!-- Button End -->
+					
+					<!-- Hamburger Menu Button -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#header-nav"><span></span><span></span><span></span></button>
+                    <!-- Hamburger Menu Button End -->
+                </div>
+            </nav>
+            <!-- Navbar End -->
+        </header>
+        <!-- Header End -->
+
+        <!-- Content
+		============================================= -->
+        <div id="content" role="main">
+            {% block content %}{% endblock %}
+        </div>
+        <!-- Content end -->
+
+        <!-- Footer
+		============================================= -->
+        <footer id="footer" class="footer-dark">
+            <div class="hero-wrap section pb-0">
+                <div class="hero-mask opacity-9 bg-black"></div>
+                <div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/footer-bg.jpg' %}');"></div>
+                <div class="hero-content">
+                    <div class="container">
+                        <div class="row gy-4">
+                            <div class="col-sm-7 col-md-6 col-lg-4">
+                                <div class="mb-4"><a href="index.html"><img src="{% static 'tandu-main/images/logo.png' %}" alt=""></a></div>
+                                <p class="text-3">Welcome uncover a luxurious haven at Hotel The Mist, United States. Nestled in Los Ageless heart, our hotel offers modern elegance and warm hospitality.</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-3 ms-auto">
+                                <ul class="nav flex-column fw-500">
+                                    <li class="nav-item"> <a class="nav-link" href="about-us.html">About Us</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="rooms.html">Rooms</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="restaurant.html">Restaurant</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="banquets.html">Banquets</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="spa.html">Spa <span class="badge bg-primary text-1 fw-600 rounded-pill text-uppercase ms-1">New</span></a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="contact-us.html">Contact Us</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-4">
+                                <div class="d-flex gap-4 mb-3">
+                                    <span class="text-7 me-1"><i class="fa-solid fa-location-dot"></i></span>
+                                    <div class="text-3 lh-lg">423 W 9th St, Los Angeles, CA 90014, United States</div>
+                                </div>
+                                <a href="#" class="d-flex align-items-center gap-4 mb-1 link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
+                                    <span class="text-6"><i class="fa-solid fa-phone-volume"></i></span>
+                                    <div class="text-5 fw-700 lh-lg">(+060) 444 5346</div>
+                                </a>
+                                <a href="mailto:info@themist.com" class="d-flex align-items-center gap-4 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
+                                    <span class="text-6"><i class="fa-solid fa-envelope"></i></span>
+                                    <div class="text-5 fw-600 lh-lg">info@themist.com</div>
+                                </a>
+                                <div class="mt-3">
+                                    <ul class="social-icons social-icons-light">
+                                        <li><a data-bs-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                        <li><a data-bs-toggle="tooltip" href="http://www.x.com/" target="_blank" title="X"><i class="fa-brands fa-x-twitter"></i></a></li>
+                                        <li><a data-bs-toggle="tooltip" href="http://www.instagram.com/" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+                                        <li><a data-bs-toggle="tooltip" href="http://www.whatsapp.com/" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-copyright">
+                        <div class="container">
+                            <div class="row gy-3">
+                                <div class="col-lg">
+                                    <p class="text-3 text-center mb-2">Copyright &copy; 2026 <a class="fw-500 link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="#">The Mist</a>. All Rights Reserved.</p>
+                                    <p class="text-3 text-center mb-0">Designed by <a class="fw-500 link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="https://harnishdesign.net/">Harnish Design</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer end -->
+    </div>
+    <!-- Document Wrapper end -->
+
+    <!-- Back to Top
+	============================================= -->
+    <a id="back-to-top" href="javascript:void(0)"><i class="fa-solid fa-arrow-up"></i></a>
+
+    <!-- JavaScript -->
+    <script src="{% static 'tandu-main/js/jquery.min.js' %}"></script>
+    <script src="{% static 'tandu-main/js/bootstrap.bundle.min.js' %}"></script>
+	<script src="{% static 'tandu-main/js/wow.min.js' %}"></script>
+    <script src="{% static 'tandu-main/js/lenis.min.js' %}"></script>
+	<script src="{% static 'tandu-main/js/swiper-bundle.min.js' %}"></script>
+	<script src="{% static 'tandu-main/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'tandu-main/js/jarallax.min.js' %}"></script>
+	<!-- Datepicker -->
+	<script src="{% static 'tandu-main/js/moment.min.js' %}"></script>
+    <script src="{% static 'tandu-main/js/daterangepicker.min.js' %}"></script>
+	<script src="{% static 'tandu-main/js/daterangepicker-custom.js' %}"></script>
+	
+    <!-- Custom Script -->
+    <script src="{% static 'tandu-main/js/main.js' %}"></script>
+	<script src="{% static 'tandu-main/js/switcher.min.js' %}"></script>
+
+    <!-- Header scroll behavior: centered logo on hero -> normal navbar on scroll -->
+    <script>
+        (function () {
+            var header = document.getElementById('header');
+            var scrollThreshold = 100; // px scrolled before switching states
+
+            function updateHeaderState() {
+                if (window.scrollY > scrollThreshold) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }
+
+            window.addEventListener('scroll', updateHeaderState);
+            document.addEventListener('DOMContentLoaded', updateHeaderState);
+        })();
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,449 @@
+{% extends "admin_pages/base.html" %}
+{% load static %}
+
+{% block title %}Reservations | Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard__form__wraper">
+    <div class="create__course__title mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+            <h4 class="mb-2 mb-md-0">Reservations</h4>
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addReservationModal">
+                <i class="icofont-plus"></i> Add Reservation
+            </button>
+        </div>
+    </div>
+
+    <!-- Page size selector (above table) -->
+    <div class="d-flex justify-content-end align-items-center mb-3 per-page-select">
+        <label for="perPageSelect" class="mb-0 text-muted small me-2">Show</label>
+        <select id="perPageSelect" class="form-select form-select-sm per-page-dropdown">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="all">All</option>
+        </select>
+        <span class="text-muted small ms-2">entries per page</span>
+    </div>
+
+    <div class="custom-table-container">
+        <table class="table table-striped table-hover align-middle" id="reservationsTable">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Guest Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Package</th>
+                    <th scope="col">Check-in</th>
+                    <th scope="col">Check-out</th>
+                    <th scope="col">Guests</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="reservationsTableBody">
+                {% for reservation in reservations %}
+                <tr class="reservation-row">
+                    <td>{{ reservation.guest_name }}</td>
+                    <td>{{ reservation.guest_email }}</td>
+                    <td>{{ reservation.guest_phone|default:"-" }}</td>
+                    <td>{{ reservation.package.name|default:"General Inquiry" }}</td>
+                    <td>{{ reservation.check_in|date:"M d, Y" }}</td>
+                    <td>{{ reservation.check_out|date:"M d, Y" }}</td>
+                    <td>{{ reservation.num_guests }}</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewReservationModal{{ reservation.id }}">
+                            View
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- View Modal (Delete button lives here) -->
+                <div class="modal fade" id="viewReservationModal{{ reservation.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content border-0 shadow">
+                            <div class="modal-header bg-light border-0">
+                                <h5 class="modal-title fw-bold">
+                                    <i class="icofont-calendar text-primary me-2"></i>Reservation Details
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body px-4 py-3">
+                                <div class="row gy-3">
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Guest Name</small>
+                                        <span class="fw-semibold text-break">{{ reservation.guest_name }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Email</small>
+                                        <span class="fw-semibold text-break">{{ reservation.guest_email }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Phone</small>
+                                        <span class="fw-semibold text-break">{{ reservation.guest_phone|default:"-" }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Package</small>
+                                        <span class="fw-semibold text-break">{{ reservation.package.name|default:"General Inquiry" }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Check-in</small>
+                                        <span class="fw-semibold text-break">{{ reservation.check_in|date:"M d, Y" }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Check-out</small>
+                                        <span class="fw-semibold text-break">{{ reservation.check_out|date:"M d, Y" }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Guests</small>
+                                        <span class="fw-semibold text-break">{{ reservation.num_guests }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted d-block">Submitted</small>
+                                        <span class="fw-semibold text-break">{{ reservation.created_at|date:"M d, Y H:i" }}</span>
+                                    </div>
+                                    {% if reservation.special_requests %}
+                                    <div class="col-12">
+                                        <small class="text-muted d-block">Special Requests</small>
+                                        <span class="fw-semibold text-break">{{ reservation.special_requests }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0 flex-wrap gap-2">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                {% if reservation.guest_phone %}
+                                <a href="#" target="_blank" rel="noopener"
+                                   class="btn btn-whatsapp btn-whatsapp-link"
+                                   data-phone="{{ reservation.guest_phone }}"
+                                   data-name="{{ reservation.guest_name|escapejs }}"
+                                   data-package="{{ reservation.package.name|default:'General Inquiry'|escapejs }}"
+                                   data-checkin="{{ reservation.check_in|date:'M d, Y' }}"
+                                   data-checkout="{{ reservation.check_out|date:'M d, Y' }}"
+                                   data-guests="{{ reservation.num_guests }}">
+                                    <i class="icofont-brand-whatsapp"></i> WhatsApp
+                                </a>
+                                {% endif %}
+
+                                <button type="button" class="btn btn-delete btn-switch-modal"
+                                        data-bs-dismiss="modal"
+                                        data-target-modal="#deleteReservationModal{{ reservation.id }}">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="deleteReservationModal{{ reservation.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow">
+                            <form method="post" action="{% url 'tandj_app:reservation_delete' reservation.id %}">
+                                {% csrf_token %}
+                                <div class="modal-body text-center px-4 py-4">
+                                    <div class="mb-3">
+                                        <i class="icofont-warning-alt text-danger" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-2">Delete Reservation?</h5>
+                                    <p class="text-muted mb-0">
+                                        Are you sure you want to delete the reservation for
+                                        <strong>{{ reservation.guest_name }}</strong>? This action cannot be undone.
+                                    </p>
+                                </div>
+                                <div class="modal-footer border-0 justify-content-center pb-4">
+                                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-delete px-4">Yes, Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center py-5">
+                        <i class="icofont-calendar text-muted mb-3" style="font-size: 2.5rem;"></i>
+                        <p class="text-muted mb-0">No reservations yet.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination (built by JS) -->
+    <nav aria-label="Reservations pagination" class="mt-4">
+        <ul class="pagination pagination-sm justify-content-center mb-0" id="reservationsPagination"></ul>
+    </nav>
+</div>
+
+<!-- Add Reservation Modal -->
+<div class="modal fade" id="addReservationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <form method="post" action="{% url 'tandj_app:reservation_create' %}">
+                {% csrf_token %}
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-bold">
+                        <i class="icofont-plus-circle text-primary me-2"></i>Add Reservation
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 py-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.guest_name.id_for_label }}" class="form-label fw-semibold">Guest Name</label>
+                            {{ form.guest_name }}
+                            {% if form.guest_name.errors %}<div class="text-danger small mt-1">{{ form.guest_name.errors|join:", " }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.guest_email.id_for_label }}" class="form-label fw-semibold">Email</label>
+                            {{ form.guest_email }}
+                            {% if form.guest_email.errors %}<div class="text-danger small mt-1">{{ form.guest_email.errors|join:", " }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.guest_phone.id_for_label }}" class="form-label fw-semibold">Phone</label>
+                            {{ form.guest_phone }}
+                            {% if form.guest_phone.errors %}<div class="text-danger small mt-1">{{ form.guest_phone.errors|join:", " }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.package.id_for_label }}" class="form-label fw-semibold">Package</label>
+                            {{ form.package }}
+                            {% if form.package.errors %}<div class="text-danger small mt-1">{{ form.package.errors|join:", " }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.check_in.id_for_label }}" class="form-label fw-semibold">Check-in</label>
+                            {{ form.check_in }}
+                            {% if form.check_in.errors %}<div class="text-danger small mt-1">{{ form.check_in.errors|join:", " }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.check_out.id_for_label }}" class="form-label fw-semibold">Check-out</label>
+                            {{ form.check_out }}
+                            {% if form.check_out.errors %}<div class="text-danger small mt-1">{{ form.check_out.errors|join:", " }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.num_guests.id_for_label }}" class="form-label fw-semibold">Number of Guests</label>
+                            {{ form.num_guests }}
+                            {% if form.num_guests.errors %}<div class="text-danger small mt-1">{{ form.num_guests.errors|join:", " }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <!-- spacer to keep grid balanced -->
+                        </div>
+                        <div class="col-12">
+                            <label for="{{ form.special_requests.id_for_label }}" class="form-label fw-semibold">Special Requests</label>
+                            {{ form.special_requests }}
+                            {% if form.special_requests.errors %}<div class="text-danger small mt-1">{{ form.special_requests.errors|join:", " }}</div>{% endif %}
+                        </div>
+                    </div>
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger mt-3 mb-0">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer border-0 px-4 pb-4">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="icofont-check-circled"></i> Save Reservation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-view {
+        background-color: #17c1e8;
+        color: #fff;
+        border: none;
+    }
+    .btn-view:hover {
+        background-color: #12a6c9;
+        color: #fff;
+    }
+    .btn-delete {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+    }
+    .btn-delete:hover {
+        background-color: #c82333;
+        color: #fff;
+    }
+    .btn-whatsapp {
+        background-color: #25D366;
+        color: #fff;
+        border: none;
+    }
+    .btn-whatsapp:hover {
+        background-color: #1ebe5b;
+        color: #fff;
+    }
+
+    .per-page-select {
+        white-space: nowrap;
+    }
+    .per-page-dropdown {
+        width: auto;
+        min-width: 70px;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .pagination .page-link {
+        color: #495057;
+        cursor: pointer;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: #fff;
+    }
+    .pagination .page-item.disabled .page-link {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ---- View -> Delete modal handoff ----
+        document.querySelectorAll('.btn-switch-modal').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const targetSelector = btn.getAttribute('data-target-modal');
+                const currentModalEl = btn.closest('.modal');
+
+                currentModalEl.addEventListener('hidden.bs.modal', function handler() {
+                    const targetModalEl = document.querySelector(targetSelector);
+                    const targetModal = new bootstrap.Modal(targetModalEl);
+                    targetModal.show();
+                    currentModalEl.removeEventListener('hidden.bs.modal', handler);
+                });
+            });
+        });
+
+        // ---- WhatsApp button: build wa.me link with reservation details ----
+        // Default country code used when the stored phone number has no
+        // country code prefix. Change this to match your primary market
+        // (e.g. '91' for India, '1' for US/Canada, '44' for UK).
+        const DEFAULT_COUNTRY_CODE = '91';
+
+        function normalizePhoneForWhatsApp(rawPhone) {
+            // Strip everything except digits and a leading plus
+            let digits = rawPhone.replace(/[^\d+]/g, '');
+
+            // Remove a leading + if present, we'll deal with country code separately
+            let hasPlus = digits.startsWith('+');
+            if (hasPlus) {
+                digits = digits.substring(1);
+            }
+
+            // If the number already looks like it includes a country code
+            // (heuristic: length > 10), use it as-is. Otherwise prefix the
+            // default country code.
+            if (digits.length <= 10) {
+                digits = DEFAULT_COUNTRY_CODE + digits;
+            }
+
+            return digits;
+        }
+
+        document.querySelectorAll('.btn-whatsapp-link').forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const phone = normalizePhoneForWhatsApp(link.dataset.phone || '');
+                if (!phone) return;
+
+                const name = link.dataset.name || '';
+                const pkg = link.dataset.package || '';
+                const checkin = link.dataset.checkin || '';
+                const checkout = link.dataset.checkout || '';
+                const guests = link.dataset.guests || '';
+
+                const message =
+                    'Hello ' + name + ',\n\n' +
+                    'Here are your reservation details with us:\n' +
+                    'Package: ' + pkg + '\n' +
+                    'Check-in: ' + checkin + '\n' +
+                    'Check-out: ' + checkout + '\n' +
+                    'Guests: ' + guests + '\n\n' +
+                    'Please let us know if you have any questions. Thank you!';
+
+                const waUrl = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
+                window.open(waUrl, '_blank', 'noopener');
+            });
+        });
+
+        // ---- Client-side pagination ----
+        const perPageSelect = document.getElementById('perPageSelect');
+        const paginationEl = document.getElementById('reservationsPagination');
+        const rows = Array.from(document.querySelectorAll('#reservationsTableBody .reservation-row'));
+
+        let perPage = 25;
+        let currentPage = 1;
+
+        function renderTable() {
+            const isAll = perPage === 'all';
+            const totalRows = rows.length;
+            const totalPages = isAll ? 1 : Math.max(1, Math.ceil(totalRows / perPage));
+
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const start = isAll ? 0 : (currentPage - 1) * perPage;
+            const end = isAll ? totalRows : start + perPage;
+
+            rows.forEach(function (row, idx) {
+                row.style.display = (idx >= start && idx < end) ? '' : 'none';
+            });
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            paginationEl.innerHTML = '';
+            if (totalPages <= 1 || rows.length === 0) return;
+
+            function createPageItem(label, page, disabled, active) {
+                const li = document.createElement('li');
+                li.className = 'page-item' + (disabled ? ' disabled' : '') + (active ? ' active' : '');
+                const a = document.createElement('a');
+                a.className = 'page-link';
+                a.innerHTML = label;
+                if (!disabled && !active) {
+                    a.addEventListener('click', function () {
+                        currentPage = page;
+                        renderTable();
+                    });
+                }
+                li.appendChild(a);
+                return li;
+            }
+
+            paginationEl.appendChild(createPageItem('&laquo;&laquo;', 1, currentPage === 1, false));
+            paginationEl.appendChild(createPageItem('&laquo;', currentPage - 1, currentPage === 1, false));
+
+            const rangeStart = Math.max(1, currentPage - 2);
+            const rangeEnd = Math.min(totalPages, currentPage + 2);
+
+            for (let i = rangeStart; i <= rangeEnd; i++) {
+                paginationEl.appendChild(createPageItem(i, i, false, i === currentPage));
+            }
+
+            paginationEl.appendChild(createPageItem('&raquo;', currentPage + 1, currentPage === totalPages, false));
+            paginationEl.appendChild(createPageItem('&raquo;&raquo;', totalPages, currentPage === totalPages, false));
+        }
+
+        if (perPageSelect) {
+            perPageSelect.addEventListener('change', function () {
+                perPage = this.value === 'all' ? 'all' : parseInt(this.value, 10);
+                currentPage = 1;
+                renderTable();
+            });
+        }
+
+        renderTable();
+    });
+</script>
+{% endblock %}

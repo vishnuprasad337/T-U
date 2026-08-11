@@ -1,0 +1,695 @@
+{% extends "admin_pages/base.html" %}
+
+{% block content %}
+     <div class="dashboard-banner">
+        <div class="banner-content">
+            <h1 class="banner-title">Welcome back! Admin</h1>
+            <p class="banner-subtitle">An overview of your resort's activity in Munnar today..</p>
+        </div>
+    </div>
+    <!-- Stats Grid -->
+     <div class="stats-grid">
+
+        <!-- Bookings -->
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-title">Total Bookings</div>
+                <div class="stat-icon icon-green">
+                    <i class="icon">🗓️</i>
+                </div>
+            </div>
+            <div class="stat-value">{{ stats.bookings_count }}</div>
+            <div class="stat-change">
+                {% comment %} <span class="positive">+8.3% from last month</span> {% endcomment %}
+            </div>
+        </div>
+
+        <!-- Enquiries -->
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-title">Enquiries</div>
+                <div class="stat-icon icon-purple">
+                    <i class="icon">✉️</i>
+                </div>
+            </div>
+            <div class="stat-value">{{ stats.enquiries_count }}</div>
+            <div class="stat-change">
+                {% comment %} <span class="positive">+5.2% from last month</span> {% endcomment %}
+            </div>
+        </div>
+
+        <!-- Rooms -->
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-title">Rooms</div>
+                <div class="stat-icon icon-orange">
+                    <i class="icon">🛏️</i>
+                </div>
+            </div>
+            <div class="stat-value">{{ stats.rooms_count }}</div>
+            <div class="stat-change">
+                {% comment %} <span class="positive">+2 added this month</span> {% endcomment %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-container">
+    <!-- Monthly Bookings -->
+    <div class="chart-card">
+        <div class="chart-header">
+            <div class="chart-title">Monthly Bookings</div>
+            <div class="chart-actions">
+                {% comment %} <button class="chart-btn">Export</button> {% endcomment %}
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="bookingsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Monthly Testimonials -->
+    <div class="chart-card">
+        <div class="chart-header">
+            <div class="chart-title">Monthly Testimonials</div>
+            <div class="chart-actions">
+                {% comment %} <button class="chart-btn">View</button> {% endcomment %}
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="testimonialsChart"></canvas>
+        </div>
+    </div>
+</div>
+    <!-- Data Grids -->
+    <div class="data-grid">
+
+        <!-- Recent Bookings -->
+        <div class="data-card">
+            <div class="data-header">
+                <div class="data-title">Recent Bookings</div>
+                {% comment %} <a href="{% url 'tandj_app:reservation_list' %}" class="view-all">View All</a> {% endcomment %}
+            </div>
+            
+            <ul class="data-list">
+                {% for booking in recent_bookings %}
+                <li class="data-item">
+                    <div class="data-icon">👤</div>
+                    <div class="data-content">
+                        <p>
+                            <strong>{{ booking.guest_name }}</strong> 
+                            submitted a booking request
+                        </p>
+                        <div class="data-time">{{ booking.created_at|timesince }} ago</div>
+                    </div>
+                    <span class="badge badge-primary">New</span>
+                </li>
+                {% empty %}
+                <li>No recent bookings</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Latest Enquiries -->
+        <div class="data-card">
+            <div class="data-header">
+                <div class="data-title">Latest Enquiries</div>
+                {% comment %} <a href="{% url 'tandj_app:enquiry_list' %}" class="view-all">View All</a> {% endcomment %}
+            </div>
+            
+            <ul class="data-list">
+                {% for enquiry in recent_enquiries %}
+                <li class="data-item">
+                    <div class="data-icon">📩</div>
+                    <div class="data-content">
+                        <p>
+                            <strong>{{ enquiry.full_name }}</strong> - 
+                            {{ enquiry.message|truncatewords:10 }}
+                        </p>
+                        <div class="data-time">{{ enquiry.created_at|timesince }} ago</div>
+                    </div>
+                </li>
+                {% empty %}
+                <li>No enquiries yet</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Recently Added Rooms -->
+        <div class="data-card">
+            <div class="data-header">
+                <div class="data-title">Recently Added Rooms</div>
+                {% comment %} <a href="{% url 'tandj_app:room_list' %}" class="view-all">View All</a> {% endcomment %}
+            </div>
+            
+            <ul class="data-list">
+                {% for room in recent_rooms %}
+                <li class="data-item">
+                    <div class="data-icon">
+                        {% if room.main_image %}
+                        <img src="{{ room.main_image.url }}" width="24" height="24" alt="{{ room.room_category }}">
+                        {% else %}
+                        🛏️
+                        {% endif %}
+                    </div>
+                    <div class="data-content">
+                        <p><strong>{{ room.room_category|default:"Room" }} #{{ room.pk }}</strong></p>
+                        <div class="data-time">{{ room.created_at|timesince }} ago</div>
+                    </div>
+                </li>
+                {% empty %}
+                <li>No rooms available</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Bookings Chart
+    var ctx1 = document.getElementById('bookingsChart').getContext('2d');
+    var bookingsChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: {{ bookings_labels|safe }},
+            datasets: [{
+                label: 'Bookings',
+                data: {{ bookings_counts|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Testimonials Chart
+    var ctx2 = document.getElementById('testimonialsChart').getContext('2d');
+    var testimonialsChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: {{ testimonials_labels|safe }},
+            datasets: [{
+                label: 'Testimonials',
+                data: {{ testimonials_counts|safe }},
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+<style>
+    .dashboard-content {
+        padding: 25px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .dashboard-header {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 28px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+    
+    .dashboard-header p {
+        color: #7f8c8d;
+        margin-top: 0;
+    }
+    
+    .date-filter {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    
+    .date-filter select {
+        padding: 8px 12px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background: white;
+        color: #555;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        min-height: 120px;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .stat-title {
+        font-size: 16px;
+        color: #7f8c8d;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+    
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+    
+    .icon-blue {
+        background: #3498db;
+    }
+    
+    .icon-green {
+        background: #2ecc71;
+    }
+    
+    .icon-purple {
+        background: #9b59b6;
+    }
+    
+    .icon-orange {
+        background: #e67e22;
+    }
+    
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: #2c3e50;
+    }
+    
+    .stat-change {
+        font-size: 14px;
+    }
+    
+    .positive {
+        color: #2ecc71;
+        display: flex;
+        align-items: center;
+    }
+    
+    .negative {
+        color: #e74c3c;
+        display: flex;
+        align-items: center;
+    }
+    
+    .charts-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .chart-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        height: 350px;
+    }
+    
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .chart-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .chart-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .chart-btn {
+        background: #f5f7f9;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #7f8c8d;
+        transition: background 0.2s ease;
+    }
+    
+    .chart-btn:hover {
+        background: #e8ecef;
+    }
+    
+    .chart-container {
+        position: relative;
+        height: 280px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .chart-container canvas {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    
+    .data-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .data-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .data-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .data-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .view-all {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+    }
+    
+    .view-all:hover {
+        text-decoration: underline;
+    }
+    
+    .data-list {
+        list-style: none;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .data-item {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .data-item:last-child {
+        border-bottom: none;
+    }
+    
+    .data-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f5f7f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #3498db;
+        font-size: 16px;
+        flex-shrink: 0;
+    }
+    
+    .data-content {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .data-content p {
+        margin-bottom: 5px;
+        color: #2c3e50;
+        word-wrap: break-word;
+    }
+    
+    .data-time {
+        font-size: 12px;
+        color: #7f8c8d;
+    }
+    
+    .badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+    
+    .badge-primary {
+        background: #e1f0ff;
+        color: #3498db;
+    }
+    
+    .badge-success {
+        background: #e6f7ee;
+        color: #2ecc71;
+    }
+    
+    .data-progress {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 5px;
+    }
+    
+    .progress-bar {
+        flex: 1;
+        height: 6px;
+        background: #f0f0f0;
+        border-radius: 3px;
+        overflow: hidden;
+        min-width: 50px;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: #3498db;
+        border-radius: 3px;
+    }
+    
+    .data-progress span {
+        font-size: 12px;
+        color: #7f8c8d;
+        min-width: 35px;
+        text-align: right;
+        flex-shrink: 0;
+    }
+    
+    /* Enhanced Mobile Responsiveness */
+    @media (max-width: 1100px) {
+        .charts-container {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .dashboard-content {
+            padding: 15px;
+        }
+        
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .data-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .stat-card {
+            padding: 15px;
+        }
+        
+        .chart-card {
+            padding: 15px;
+            height: 300px;
+        }
+        
+        .chart-container {
+            height: 230px;
+        }
+        
+        .data-card {
+            padding: 15px;
+        }
+        .dashboard-banner {
+            padding: 24px 20px;
+        }
+
+        .banner-title {
+            font-size: 22px;
+        }
+    }
+    
+    @media (max-width: 600px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .dashboard-content {
+            padding: 12px;
+        }
+        
+        .chart-card {
+            height: 280px;
+        }
+        
+        .chart-container {
+            height: 210px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .dashboard-content {
+            padding: 10px;
+        }
+        
+        .stat-card {
+            padding: 12px;
+        }
+        
+        .chart-card {
+            padding: 12px;
+            height: 260px;
+        }
+        
+        .chart-container {
+            height: 190px;
+        }
+        
+        .data-card {
+            padding: 12px;
+        }
+        
+        .chart-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+        
+        .data-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+        .banner-subtitle {
+            font-size: 14px;
+        }
+    }
+    .dashboard-banner {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+        border-radius: 16px;
+        padding: 56px 32px;
+        min-height: 180px;
+        color: var(--white);
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+
+    .dashboard-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
+        opacity: 0.5;
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .banner-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--white);
+    }
+
+    .banner-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin: 0;
+        color: var(--white);
+    }
+</style>
+{% endblock %}

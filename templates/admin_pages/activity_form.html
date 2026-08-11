@@ -1,0 +1,538 @@
+{% extends "admin_pages/base.html" %}
+{% load static %}
+
+{% block title %}{% if is_edit %}Update Activity{% else %}Add Activity{% endif %} | Admin Dashboard{% endblock %}
+
+
+{% block extra_css %}
+<style>
+/* FIX: CKEditor Toolbar Sticky Position Issues */
+.ck.ck-editor__top.ck-reset_all {
+    position: relative !important;
+    top: auto !important;
+    z-index: 10 !important;
+}
+.ck.ck-sticky-panel .ck-sticky-panel__content {
+    position: relative !important;
+    top: auto !important;
+}
+.ck.ck-toolbar {
+    position: relative !important;
+    top: auto !important;
+}
+.ck-editor {
+    position: relative !important;
+    overflow: visible !important;
+}
+.ck.ck-editor__main {
+    overflow: visible !important;
+}
+.ck-editor__editable_inline {
+    min-height: 180px;
+    height: auto !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+}
+.ck-editor__top {
+    position: static !important;
+}
+.ck-sticky-panel {
+    position: static !important;
+}
+.ck.ck-editor {
+    z-index: 1 !important;
+}
+.ck.ck-balloon-panel {
+    z-index: 1000 !important;
+}
+</style>
+
+<style>
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.dashboard {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.container-fluid.full__width__padding {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.dashboard > .row,
+.dashboard .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.form-wrapper {
+    max-width: 900px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    overflow-x: hidden;
+}
+
+img, input, textarea, select, .form-control, .form-select, .form-text {
+    max-width: 100%;
+    height: auto;
+    word-wrap: break-word;
+}
+
+.ck-editor__editable_inline {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.form-control, .form-select {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+}
+
+.dashboard__form__button {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.dashboard__form__button .default__button {
+    background: #4f46e5;
+    color: #fff;
+    padding: 0.85rem 1.6rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    transition: background 0.3s;
+}
+
+.dashboard__form__button .default__button:hover {
+    background: #4338ca;
+}
+
+.dashboard__section__title {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard__section__title h4 {
+    font-weight: 600;
+    color: #111827;
+}
+
+.errorlist {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.35rem 0 0;
+    color: #dc3545;
+    font-size: 0.875rem;
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.current-image-preview {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    margin-bottom: 0.5rem;
+}
+
+.gallery-section-title {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1rem;
+}
+
+.gallery-existing-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.75rem;
+    background: #f9fafb;
+}
+
+.gallery-delete-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.gallery-upload-box {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1rem;
+    background: #f9fafb;
+}
+
+/* New-upload preview grid + cover badge, matching the Room form pattern */
+.gallery-image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.gallery-image-preview .gallery-thumb {
+    position: relative;
+    width: 120px;
+    height: 100px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f9fafb;
+    flex-shrink: 0;
+}
+
+.gallery-image-preview .gallery-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-image-preview .gallery-thumb .file-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gallery-image-preview .gallery-thumb-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.gallery-image-preview .gallery-thumb-remove:hover {
+    background: #dc3545;
+}
+
+.gallery-image-preview .gallery-thumb.is-cover {
+    border: 2px solid #4f46e5;
+}
+
+.gallery-image-preview .gallery-thumb.is-cover .cover-badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 999px;
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+@media (max-width: 1200px) {
+    .form-wrapper { max-width: 100%; }
+}
+
+@media (max-width: 992px) {
+    .dashboard__form__button {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .dashboard__form__button button,
+    .dashboard__form__button a {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard__section__title h4 {
+        font-size: 1.25rem;
+    }
+    .form-control, .form-select {
+        font-size: 0.95rem;
+        padding: 0.75rem 0.9rem;
+    }
+    .default__button {
+        font-size: 0.95rem;
+        padding: 0.75rem 1.2rem;
+    }
+    body, .dashboard, .container-fluid.full__width__padding {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    html, body, .dashboard {
+        overflow-x: hidden !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard sp_bottom_100">
+    <div class="container-fluid full__width__padding">
+        <div class="row">
+            <!-- Sidebar comes from base.html -->
+
+            <!-- Main Content -->
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12">
+                <div class="dashboard__section__title">
+                    <h4 class="mb-0">{% if is_edit %}Update Activity{% else %}Add Activity{% endif %}</h4>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <form method="post" enctype="multipart/form-data" class="form-wrapper" novalidate>
+                            {% csrf_token %}
+
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                            {% endif %}
+
+                            <div class="row">
+                                <!-- Activity Name -->
+                                <div class="col-12 mb-4">
+                                    <label for="{{ form.name.id_for_label }}" class="form-label">Activity Name <span class="text-danger">*</span></label>
+                                    {{ form.name }}
+                                    {{ form.name.errors }}
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-12 mb-4">
+                                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                                    {{ form.description }}
+                                    {{ form.description.errors }}
+                                </div>
+                            </div>
+
+                            <!-- Activity Images: one multi-file input. The FIRST file becomes the
+                                 cover image (Activity.image); any additional files become
+                                 ActivityImage gallery rows. -->
+                            <div class="gallery-section mt-2 mb-4">
+                                <h5 class="gallery-section-title">Activity Images</h5>
+
+                                {% if gallery_form.non_field_errors %}
+                                    <div class="alert alert-danger">{{ gallery_form.non_field_errors }}</div>
+                                {% endif %}
+
+                                {% if is_edit and activity.image %}
+                                <div class="mb-3">
+                                    <label class="form-label">Current Cover Image</label>
+                                    <div>
+                                        <img src="{{ activity.image.url }}" alt="{{ activity.name }}" class="current-image-preview" style="width:160px;">
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if is_edit and activity.images.all %}
+                                <div class="mb-3">
+                                    <label class="form-label">Current Gallery Images</label>
+                                    <div class="row">
+                                        {% for gallery_image in activity.images.all %}
+                                        <div class="col-6 col-md-3 mb-3">
+                                            <div class="gallery-existing-item">
+                                                <img src="{{ gallery_image.image.url }}" alt="Gallery image" class="current-image-preview">
+                                                <div class="gallery-delete-check">
+                                                    <input type="checkbox" name="delete_image_{{ gallery_image.id }}" id="delete_image_{{ gallery_image.id }}">
+                                                    <label for="delete_image_{{ gallery_image.id }}">Remove</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <div class="gallery-upload-box">
+                                    <label for="{{ gallery_form.activity_images.id_for_label }}" class="form-label">
+                                        {% if is_edit %}Add / Replace Images{% else %}Upload Images{% endif %}
+                                    </label>
+                                    <input
+                                        type="file"
+                                        name="activity_images"
+                                        id="{{ gallery_form.activity_images.id_for_label }}"
+                                        class="form-control"
+                                        accept="image/*"
+                                        multiple>
+                                    <small class="text-muted d-block mt-1">
+                                        Select one or more images. <strong>The first image becomes the cover image</strong>{% if is_edit %} (leave blank to keep the current cover){% endif %};
+                                        any additional images are added to the gallery. Hold <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac)
+                                        while clicking, or drag-select, to choose more than one image at once.
+                                    </small>
+                                    {{ gallery_form.activity_images.errors }}
+                                    <div class="gallery-image-preview mt-3" id="imagePreview"></div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="dashboard__form__button">
+                                <button type="submit" class="default__button">
+                                    {% if is_edit %}Update Activity{% else %}Add Activity{% endif %}
+                                </button>
+                                {% if is_edit %}
+                                <a href="{% url 'tandj_app:activity_detail' activity.slug %}" class="btn btn-outline-primary ms-2">
+                                    <i class="icofont-eye-alt"></i> View
+                                </a>
+                                {% endif %}
+                                <a href="{% url 'tandj_app:activity_list' %}" class="btn btn-light ms-2">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div> <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const descriptionField = document.getElementById('{{ form.description.id_for_label }}');
+    if (descriptionField) {
+        ClassicEditor
+            .create(descriptionField, {
+                toolbar: [
+                    'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
+                    '|', 'insertTable', 'blockQuote', 'undo', 'redo', 'imageUpload'
+                ]
+            })
+            .then(editor => {
+                editor.plugins.get('FileRepository').createUploadAdapter = loader => {
+                    return {
+                        upload: () => loader.file
+                            .then(file => new Promise((resolve, reject) => {
+                                const reader = new FileReader();
+                                reader.onload = () => resolve({ default: reader.result });
+                                reader.onerror = error => reject(error);
+                                reader.readAsDataURL(file);
+                            })),
+                        abort: () => {}
+                    };
+                };
+                editor.model.document.on('change:data', () => {
+                    editor.updateSourceElement();
+                });
+            })
+            .catch(error => console.error(error));
+    }
+});
+</script>
+
+<script>
+// Activity image handling: accumulate files across multiple picker opens (native
+// <input multiple> replaces the selection every time the dialog is reopened, so we
+// manage our own file list and keep the input's FileList in sync via DataTransfer).
+// The FIRST file in the accumulated list is highlighted as the cover image, matching
+// what the server will use as Activity.image.
+(function () {
+    const input = document.getElementById('{{ gallery_form.activity_images.id_for_label }}');
+    const preview = document.getElementById('imagePreview');
+
+    if (!input || !preview) return;
+
+    let selectedFiles = [];
+
+    function syncInputFiles() {
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        input.files = dt.files;
+    }
+
+    function renderPreview() {
+        preview.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                const thumb = document.createElement('div');
+                thumb.className = 'gallery-thumb' + (index === 0 ? ' is-cover' : '');
+                thumb.innerHTML = `
+                    ${index === 0 ? '<span class="cover-badge">Cover</span>' : ''}
+                    <img src="${ev.target.result}" alt="${file.name}">
+                    <span class="file-name">${file.name}</span>
+                    <span class="gallery-thumb-remove" data-index="${index}" title="Remove">&times;</span>
+                `;
+                preview.appendChild(thumb);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function syncAndRender() {
+        syncInputFiles();
+        renderPreview();
+    }
+
+    input.addEventListener('change', function () {
+        const newFiles = Array.from(input.files || []);
+
+        newFiles.forEach(file => {
+            const isDuplicate = selectedFiles.some(
+                f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
+            );
+            if (!isDuplicate) {
+                selectedFiles.push(file);
+            }
+        });
+
+        syncAndRender();
+    });
+
+    preview.addEventListener('click', function (e) {
+        if (e.target.classList.contains('gallery-thumb-remove')) {
+            const index = parseInt(e.target.dataset.index, 10);
+            selectedFiles.splice(index, 1);
+            syncAndRender();
+        }
+    });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends "frontends/base.html" %}
+{% load static %}
+
+{% block title %}{{ activity.name|default:"Activity" }} - The Mist Luxury Hotel{% endblock %}
+{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+
+{% block content %}
+
+		<!-- Page Header
+		============================================= -->
+		<section class="page-header page-header-text-light py-0 mb-0">
+			<div class="hero-wrap py-5">
+				<div class="hero-mask opacity-3 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% if activity.image %}{{ activity.image.url }}{% else %}{% static 'tandu-main/images/rooms/room-3.jpg' %}{% endif %}'); background-size:cover; background-position:center;"></div>
+				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+					<div class="container text-center mt-5 pt-5 pb-2">
+						<h1 class="text-17 mb-4 reveal reveal-fadeInUp">{{ activity.name|default:"Activity" }}</h1>
+						<ul class="breadcrumb justify-content-center mb-0 reveal reveal-fadeInUp" data-reveal-delay="200">
+							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
+							<li><a href="{% url 'tandj_app:activities' %}">Activities</a></li>
+							<li class="active">{{ activity.name|default:"Activity" }}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Page Header end -->
+
+            <!-- Activity Details
+			============================================= -->
+            <section class="section room-detail-section">
+                <div class="container">
+                    <div class="room-items-wrap">
+						<div class="row gx-4 gy-5">
+							<div class="col-lg-8 col-xl-9 reveal reveal-fade">
+								<!-- Main Image -->
+								<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
+									{% if activity.image %}
+									<img class="img-fluid d-block w-100 rounded-5" src="{{ activity.image.url }}" alt="{{ activity.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+									{% else %}
+									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/rooms/room-3.jpg' %}" alt="{{ activity.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+									{% endif %}
+								</div>
+
+								<!-- Thumbnail Gallery -->
+								{% if activity_images %}
+								<div class="row g-2 mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
+									{% for img in activity_images %}
+									<div class="col-3 col-md-2">
+										<a href="{{ img.image.url }}" class="glightbox d-block" data-gallery="activity-gallery">
+											<img class="img-fluid rounded-4 w-100" src="{{ img.image.url }}" alt="{{ img.caption|default:activity.name }}" style="height:90px; object-fit:cover;" loading="lazy" decoding="async">
+										</a>
+									</div>
+									{% endfor %}
+								</div>
+								{% endif %}
+
+								<!-- Activity Details -->
+								<h2 class="text-13 fw-600 reveal reveal-fadeInUp">{{ activity.name|default:"Activity" }}</h2>
+								<div class="row gy-2 gx-5 text-body-secondary mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
+									{% if activity.duration %}
+									<div class="col-6 col-md-auto d-flex align-items-center">
+										<span class="text-primary text-6 me-2"><i class="fa-solid fa-clock"></i></span>{{ activity.duration }}
+									</div>
+									{% endif %}
+									{% if activity.location %}
+									<div class="col-6 col-md-auto d-flex align-items-center">
+										<span class="text-primary text-6 me-2"><i class="fa-solid fa-location-dot"></i></span>{{ activity.location }}
+									</div>
+									{% endif %}
+								</div>
+								<div class="text-body-secondary lh-lg reveal reveal-fadeInUp" data-reveal-delay="200">{{ activity.description|safe }}</div>
+
+								<hr class="opacity-1 my-4">
+								<div class="room-price-book-bar d-flex flex-wrap align-items-center justify-content-between gap-3 w-100 reveal reveal-fadeInUp" data-reveal-delay="300">
+									<div class="text-9 fw-600 d-flex align-items-center gap-1 flex-shrink-0">
+										{% if activity.price %}₹{{ activity.price }}{% endif %}
+									</div>
+									<a class="btn btn-new btn-primary rounded-pill flex-shrink-0" href="{% url 'tandj_app:contact' %}">
+										<span class="btn-text"><span>Enquire Now</span></span>
+										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+									</a>
+								</div>
+							</div>
+							<div class="col-lg-4 col-xl-3 reveal reveal-fade">
+								<div class="row room-sidebar-sticky" style="z-index: 10;">
+									<div class="col-sm-6 col-lg-12">
+										<!-- Other Link -->
+										<div class="bg-white rounded-5 p-4 mb-4">
+											<h4 class="text-7 fw-600">Other Activities</h4>
+											<ul class="list-link">
+												{% for other in other_activities %}
+												<li><a href="{% url 'tandj_app:activity_detail_public' other.slug %}">{{ other.name|default:"Activity" }}</a></li>
+												{% empty %}
+												<li><a href="{% url 'tandj_app:activities' %}">View All Activities</a></li>
+												{% endfor %}
+											</ul>
+										</div>
+									</div>
+									<div class="col-sm-6 col-lg-12">
+										<!-- Help -->
+										<div class="hero-wrap rounded-5">
+											<div class="hero-mask opacity-6 bg-black"></div>
+											<img class="img-fluid d-flex rounded-5" src="{% static 'tandu-main/images/help-bg.jpg' %}" alt="">
+											<div class="hero-content position-absolute top-50 start-50 translate-middle w-100">
+												<div class="container py-5 px-4 text-center">
+													<span class="text-primary text-13"><i class="fa-solid fa-circle-question"></i></span>
+													<h3 class="text-white text-6 fw-600 mb-3">Need Help?</h3>
+													<div class="text-6 fw-700 text-primary mb-1">(+060) 444 5346</div>
+													<div class="fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">info@themist.com</div>
+													<a class="btn btn-new btn-sm btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
+														<span class="btn-text"><span>Contact Us</span></span>
+														<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Activity Details end -->
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* .section has overflow:hidden globally, which breaks position:sticky.
+   Override it just for this page's activity-detail section. */
+.room-detail-section {
+	overflow: visible !important;
+}
+
+/* Sidebar only sticks on large screens (matches the col-lg-4 breakpoint
+   where it sits beside the main content). On mobile it just flows in
+   normal document order below the activity info instead of sticking
+   early and jumping into view right after the hero image. */
+.room-sidebar-sticky {
+	position: static;
+}
+@media (min-width: 992px) {
+	.room-sidebar-sticky {
+		position: sticky;
+		top: 90px;
+	}
+}
+
+/* Header must always render above sticky content */
+#header {
+	z-index: 1000 !important;
+}
+
+/* Sharper hero background rendering */
+.page-header .hero-bg {
+	background-size: cover !important;
+	background-position: center center !important;
+	background-repeat: no-repeat !important;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: crisp-edges;
+}
+
+/* Sharper main/thumbnail activity images */
+.room-items-wrap img {
+	image-rendering: -webkit-optimize-contrast;
+}
+
+/* Price + Enquire Now bar: wrap instead of overflowing off-screen on
+   narrow phones where price + pill button don't both fit on one row. */
+.room-price-book-bar {
+	min-width: 0;
+}
+.room-price-book-bar .btn {
+	white-space: nowrap;
+}
+@media (max-width: 380px) {
+	.room-price-book-bar {
+		justify-content: center !important;
+		text-align: center;
+	}
+}
+
+/* Compact button on mobile: smaller padding, text, and icon circle so it
+   doesn't dominate the screen. */
+@media (max-width: 576px) {
+	.room-price-book-bar .btn {
+		padding: 10px 20px !important;
+		font-size: 0.85rem !important;
+	}
+	.room-price-book-bar .btn .btn-icon {
+		width: 28px !important;
+		height: 28px !important;
+		font-size: 0.7rem !important;
+	}
+	.room-price-book-bar .text-9 {
+		font-size: 1.75rem !important;
+	}
+}
+
+/* ---- Repeatable fade-in reveal animation ----
+   Unlike WOW.js (which animates an element once and leaves it), these
+   elements fade in every time they scroll into view and reset when they
+   scroll back out, so the effect replays on every pass, not just on
+   first page load. Controlled by the IntersectionObserver script below. */
+.reveal {
+	opacity: 0;
+	transition: opacity .6s ease, transform .6s ease;
+	will-change: opacity, transform;
+}
+/* Opacity-only variant — no transform. Use this on any wrapper that is an
+   ancestor of a position:sticky element: a transform on an ancestor
+   (even translate(0,0)) creates a new containing block and silently
+   breaks position:sticky on descendants. */
+.reveal-fade {
+	transition: opacity .6s ease;
+}
+.reveal-fadeInUp {
+	transform: translateY(30px);
+}
+.reveal-fadeInLeft {
+	transform: translateX(-40px);
+}
+.reveal-fadeInRight {
+	transform: translateX(40px);
+}
+.reveal.reveal-visible {
+	opacity: 1;
+	transform: translate(0, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+	}
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	var revealEls = document.querySelectorAll('.reveal');
+	if (!revealEls.length) return;
+
+	if (!('IntersectionObserver' in window)) {
+		// Fallback: just show everything immediately.
+		revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
+		return;
+	}
+
+	var observer = new IntersectionObserver(function (entries) {
+		entries.forEach(function (entry) {
+			var el = entry.target;
+			var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+			if (entry.isIntersecting) {
+				if (delay) {
+					setTimeout(function () { el.classList.add('reveal-visible'); }, delay);
+				} else {
+					el.classList.add('reveal-visible');
+				}
+			} else {
+				// Leaving the viewport resets it so it fades in again
+				// next time it's scrolled back into view.
+				el.classList.remove('reveal-visible');
+			}
+		});
+	}, { threshold: 0.15 });
+
+	revealEls.forEach(function (el) { observer.observe(el); });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,355 @@
+{% extends "admin_pages/base.html" %}
+{% load static %}
+
+{% block title %}Add Team Member | Admin Dashboard{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+/* Style for error messages */
+.field-error {
+    display: none;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    color: #dc3545;
+}
+
+/* Red border for invalid fields */
+.field-error-border {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+
+/* Green border for valid fields */
+.field-valid-border {
+    border-color: #28a745 !important;
+}
+
+</style>
+
+
+<style>
+/* Section Title */
+.dashboard__section__title {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard__section__title h4 {
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Form Inputs */
+.modern-input {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.modern-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Input Group */
+.input-group-text {
+    background-color: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    color: #6b7280;
+}
+
+.input-group .modern-input {
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+}
+
+/* Buttons */
+.dashboard__form__button {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dashboard__form__button .default__button {
+    background: #4f46e5;
+    color: #fff;
+    padding: 0.85rem 1.6rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    transition: background 0.3s;
+}
+
+.dashboard__form__button .default__button:hover {
+    background: #4338ca;
+}
+
+.dashboard__form__button .default__button.secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.dashboard__form__button .default__button.secondary:hover {
+    background: #e5e7eb;
+}
+
+/* Image Preview */
+.team-image-preview {
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.team-image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .form-wrapper {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+    .dashboard__form__button {
+        flex-direction: column;
+    }
+    .dashboard__form__button button,
+    .dashboard__form__button a {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="dashboard sp_bottom_100">
+    <div class="container-fluid full__width__padding">
+        <div class="row">
+            <!-- Sidebar comes from base.html -->
+
+            <!-- Main Content -->
+            <div class="col-xl-9 col-lg-9 col-md-12">
+                <div class="dashboard__section__title">
+                    <h4 class="mb-0">Add Team Member</h4>
+                   
+                </div>
+
+                <div class="row mt-4">
+                    <!-- Form -->
+                    <div class="col-12">
+                        <form method="post" enctype="multipart/form-data" class="needs-validation form-wrapper" novalidate>
+                            {% csrf_token %}
+                            <div class="row">
+                                <!-- Name -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="name" class="form-control modern-input" placeholder="Enter full name" required>
+                                    <div class="invalid-feedback">Please provide a name.</div>
+                                </div>
+
+                                <!-- Profession -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="profession" class="form-label">Profession <span class="text-danger">*</span></label>
+                                    <input type="text" name="profession" id="profession" class="form-control modern-input" placeholder="e.g. Software Engineer" required>
+                                    <div class="invalid-feedback">Please provide a profession.</div>
+                                </div>
+
+                                <!-- Profile Image -->
+                                <div class="col-12 mb-4">
+                                    <label for="image" class="form-label">Profile Image</label>
+                                    <input type="file" name="image" id="image" class="form-control modern-input" accept="image/*">
+                                    <div class="form-text">Recommended size: 300x300 pixels. Max size: 2MB</div>
+                                    <div id="imagePreview" class="team-image-preview mt-2"></div>
+                                </div>
+
+                                <!-- Social Links -->
+                                <div class="col-md-6 mb-4">
+                                    <label for="linkedin" class="form-label">LinkedIn URL</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fab fa-linkedin"></i></span>
+                                        <input type="url" name="linkedin" id="linkedin" class="form-control modern-input" placeholder="https://linkedin.com/in/username">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="github" class="form-label">GitHub URL</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fab fa-github"></i></span>
+                                        <input type="url" name="github" id="github" class="form-control modern-input" placeholder="https://github.com/username">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="twitter" class="form-label">Twitter URL</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fab fa-twitter"></i></span>
+                                        <input type="url" name="twitter" id="twitter" class="form-control modern-input" placeholder="https://twitter.com/username">
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12 mt-4">
+                                    <div class="dashboard__form__button">
+                                        <button type="submit" class="default__button">Add Team Member</button>
+                                        <a href="{% url 'team_list' %}" class="default__button secondary">View All Members</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div> <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+<script>
+// Image preview functionality
+document.getElementById('image').addEventListener('change', function(e) {
+    const preview = document.getElementById('imagePreview');
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        }
+        
+        reader.readAsDataURL(this.files[0]);
+    } else {
+        preview.innerHTML = '';
+    }
+});
+
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+
+    // Fields
+    const fields = {
+        name: {
+            element: document.getElementById('name'),
+            validate: value => {
+                if (!value.trim()) return 'Full name is required.';
+                if (!/^[A-Za-z0-9\s.,!?()\-:;'"&]+$/.test(value)) return 'Name must contain only letters and spaces.';
+                return null;
+            }
+        },
+        profession: {
+            element: document.getElementById('profession'),
+            validate: value => {
+                if (!value.trim()) return 'Profession is required.';
+                if (!/^[A-Za-z0-9\s.,!?()\-:;'"&]+$/.test(value)) return 'Profession must contain only letters and spaces.';
+                return null;
+            }
+        },
+        image: {
+            element: document.getElementById('image'),
+            validate: file => {
+                if (!file) return 'Profile image is required.';
+                if (!file.type.startsWith('image/')) return 'Please upload a valid image.';
+                if (file.size > 2 * 1024 * 1024) return 'Image must be less than 2MB.';
+                return null;
+            }
+        },
+        linkedin: {
+            element: document.getElementById('linkedin'),
+            validate: value => {
+                if (!value.trim()) return null;
+                try { new URL(value); return null; } catch { return 'Enter a valid URL.'; }
+            }
+        },
+        github: {
+            element: document.getElementById('github'),
+            validate: value => {
+                if (!value.trim()) return null;
+                try { new URL(value); return null; } catch { return 'Enter a valid URL.'; }
+            }
+        },
+        twitter: {
+            element: document.getElementById('twitter'),
+            validate: value => {
+                if (!value.trim()) return null;
+                try { new URL(value); return null; } catch { return 'Enter a valid URL.'; }
+            }
+        }
+    };
+
+    // Create error elements
+    Object.values(fields).forEach(f => {
+        f.error = document.createElement('div');
+        f.error.classList.add('text-danger', 'mt-1');
+        f.element.insertAdjacentElement('afterend', f.error);
+    });
+
+    // Validate single field
+    function validateField(fieldName) {
+        const field = fields[fieldName];
+        let value = field.element.value;
+        if (field.element.type === 'file') value = field.element.files[0] || null;
+        const error = field.validate(value);
+        field.error.textContent = error || '';
+        field.element.classList.toggle('field-error-border', !!error);
+        return !error;
+    }
+
+    // Validate form
+    function validateForm() {
+        return Object.keys(fields).every(validateField);
+    }
+
+    // Field events
+    Object.keys(fields).forEach(fieldName => {
+        const field = fields[fieldName];
+        field.element.addEventListener('blur', () => validateField(fieldName));
+        field.element.addEventListener('input', () => validateField(fieldName));
+    });
+
+    // Form submit
+    form.addEventListener('submit', function (e) {
+        if (!validateForm()) {
+            e.preventDefault();
+            const firstError = Object.keys(fields).find(f => fields[f].error.textContent);
+            if (firstError) fields[firstError].element.focus();
+        }
+    });
+});
+</script>
+
+<style>
+.field-error-border {
+    border-color: #dc3545 !important;
+}
+</style>
+{% endblock %}

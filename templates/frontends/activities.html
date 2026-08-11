@@ -1,0 +1,157 @@
+{% extends "frontends/base.html" %}
+{% load static %}
+
+{% block title %}Activities - The Mist Luxury Hotel{% endblock %}
+{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+
+{% block content %}
+
+		<!-- Page Header
+		============================================= -->
+		<section class="page-header page-header-text-light py-0 mb-0">
+			<div class="hero-wrap py-5">
+				<div class="hero-mask opacity-6 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
+				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+					<div class="container text-center mt-5 pt-5 pb-2">
+						<h1 class="text-17 mb-4 wow fadeInUp">Activities</h1>
+						<ul class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay=".2s">
+							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
+							<li class="active">Activities</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Page Header end -->
+
+            <!-- Activities
+			============================================= -->
+            <section class="section">
+                <div class="container">
+                    <div class="room-items-wrap">
+						{% for activity in activities %}
+						<div class="room-item bg-white rounded-5 {% if not forloop.last %}mb-5{% endif %}">
+							<div class="row g-0">
+								{% if forloop.counter|divisibleby:2 %}
+								<div class="col-lg-6 align-content-center">
+									<!-- Activity Details -->
+									<div class="p-4 m-2">
+										<h3 class="text-8 fw-600">{{ activity.name|default:"Activity" }}</h3>
+										<div class="text-body-secondary">{{ activity.description|safe|truncatewords_html:25 }}</div>
+										<div class="row g-2 text-3 text-body-secondary mb-3">
+											{% if activity.duration %}
+											<div class="col-6 col-xl-4 d-flex align-items-center">
+												<span class="text-primary text-5 me-2"><i class="fa-solid fa-clock"></i></span>
+												{{ activity.duration }}
+											</div>
+											{% endif %}
+											{% if activity.location %}
+											<div class="col-6 col-xl-4 d-flex align-items-center">
+												<span class="text-primary text-5 me-2"><i class="fa-solid fa-location-dot"></i></span>
+												{{ activity.location }}
+											</div>
+											{% endif %}
+										</div>
+										<hr class="opacity-1">
+										<div class="d-flex align-items-center justify-content-between w-100 bottom-0 start-0">
+											<div class="text-7 fw-600 d-flex align-items-center gap-1">
+												{% if activity.price %}₹{{ activity.price }}{% else %}&nbsp;{% endif %}
+											</div>
+											<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
+												<span class="btn-text"><span>Details</span></span>
+												<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<!-- Image -->
+									<div class="room-item-img rounded-5">
+										<a href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
+											{% if activity.image %}
+											<img class="img-fluid d-block" src="{{ activity.image.url }}" alt="{{ activity.name }}">
+											{% else %}
+											<img class="img-fluid d-block" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ activity.name }}">
+											{% endif %}
+										</a>
+									</div>
+								</div>
+								{% else %}
+								<div class="col-lg-6">
+									<!-- Image -->
+									<div class="room-item-img rounded-5">
+										<a href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
+											{% if activity.image %}
+											<img class="img-fluid d-block" src="{{ activity.image.url }}" alt="{{ activity.name }}">
+											{% else %}
+											<img class="img-fluid d-block" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ activity.name }}">
+											{% endif %}
+										</a>
+									</div>
+								</div>
+								<div class="col-lg-6 align-content-center">
+									<!-- Activity Details -->
+									<div class="p-4 m-2">
+										<h3 class="text-8 fw-600">{{ activity.name|default:"Activity" }}</h3>
+										<div class="text-body-secondary">{{ activity.description|safe|truncatewords_html:25 }}</div>
+										<div class="row g-2 text-3 text-body-secondary mb-3">
+											{% if activity.duration %}
+											<div class="col-6 col-xl-4 d-flex align-items-center">
+												<span class="text-primary text-5 me-2"><i class="fa-solid fa-clock"></i></span>
+												{{ activity.duration }}
+											</div>
+											{% endif %}
+											{% if activity.location %}
+											<div class="col-6 col-xl-4 d-flex align-items-center">
+												<span class="text-primary text-5 me-2"><i class="fa-solid fa-location-dot"></i></span>
+												{{ activity.location }}
+											</div>
+											{% endif %}
+										</div>
+										<hr class="opacity-1">
+										<div class="d-flex align-items-center justify-content-between w-100 bottom-0 start-0">
+											<div class="text-7 fw-600 d-flex align-items-center gap-1">
+												{% if activity.price %}₹{{ activity.price }}{% else %}&nbsp;{% endif %}
+											</div>
+											<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
+												<span class="btn-text"><span>Details</span></span>
+												<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+											</a>
+										</div>
+									</div>
+								</div>
+								{% endif %}
+							</div>
+						</div>
+						{% empty %}
+						<div class="text-center py-5">
+							<p class="text-body-secondary">No activities available right now. Please check back soon.</p>
+						</div>
+						{% endfor %}
+                    </div>
+                </div>
+            </section>
+            <!-- Activities end -->
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.room-items-wrap .room-item .row.g-0 {
+    align-items: stretch;
+}
+
+.room-items-wrap .room-item .room-item-img {
+    height: 100%;
+    min-height: 320px;
+}
+
+.room-items-wrap .room-item .room-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+</style>
+{% endblock %}

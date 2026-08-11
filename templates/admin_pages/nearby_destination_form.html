@@ -1,0 +1,774 @@
+{% extends "admin_pages/base.html" %}
+{% load static %}
+
+{% block title %}{{ action|default:"Add" }} Nearby Destination | Admin Dashboard{% endblock %}
+
+{% block extra_css %}
+
+<style>
+/* CKEditor List Styles - Fix for bullets and numbers */
+.ck-editor__editable ul,
+.ck-editor__editable ol {
+    padding-left: 40px !important;
+}
+
+.ck-editor__editable ul {
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+}
+
+.ck-editor__editable ol {
+    list-style-type: decimal !important;
+    list-style-position: outside !important;
+}
+
+.ck-editor__editable li {
+    display: list-item !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+.ck-editor__editable ul li {
+    list-style-type: disc !important;
+}
+
+.ck-editor__editable ol li {
+    list-style-type: decimal !important;
+}
+
+.ck-editor__editable ul ul {
+    list-style-type: circle !important;
+}
+
+.ck-editor__editable ul ul ul {
+    list-style-type: square !important;
+}
+
+/* Style for error messages */
+.field-error {
+    display: none;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    color: #dc3545;
+}
+
+.field-error-border {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+
+.field-valid-border {
+    border-color: #28a745 !important;
+}
+
+.ck-editor__editable.field-error-border {
+    border: 1px solid #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+</style>
+<style>
+/* ---------------- CORE RESPONSIVENESS & SAFETY ---------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.dashboard {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.container-fluid.full__width__padding {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.dashboard > .row,
+.dashboard .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.form-wrapper {
+    max-width: 900px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    overflow-x: hidden;
+}
+
+img, input, textarea, select, .form-control, .modern-input, .form-text {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    word-wrap: break-word;
+}
+
+.ck-editor__editable_inline,
+.ck-content {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.modern-input {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.modern-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+}
+
+.dashboard__form__button {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.dashboard__form__button .default__button {
+    background: #4f46e5;
+    color: #fff;
+    padding: 0.85rem 1.6rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    transition: background 0.3s;
+}
+
+.dashboard__form__button .default__button:hover {
+    background: #4338ca;
+}
+
+/* Image Preview */
+.destination-image-preview {
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.destination-image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Gallery Image Preview */
+.gallery-image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.gallery-image-preview .gallery-thumb {
+    position: relative;
+    width: 120px;
+    height: 100px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f9fafb;
+    flex-shrink: 0;
+}
+
+.gallery-image-preview .gallery-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-image-preview .gallery-thumb .file-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gallery-image-preview .gallery-thumb-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.gallery-image-preview .gallery-thumb-remove:hover {
+    background: #dc3545;
+}
+
+.existing-image-thumb {
+    width: 120px;
+    height: 100px;
+}
+
+.existing-image-delete {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(220, 53, 69, 0.85);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 3px 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.existing-image-delete input {
+    width: auto !important;
+    margin: 0;
+    cursor: pointer;
+}
+
+.gallery-upload-box {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1rem;
+    background: #fafafa;
+}
+
+.form-text, label, .invalid-feedback {
+    word-wrap: break-word;
+}
+
+.dashboard__section__title {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard__section__title h4 {
+    font-weight: 600;
+    color: #111827;
+}
+
+@media (max-width: 1200px) {
+    .form-wrapper { max-width: 100%; }
+}
+
+@media (max-width: 992px) {
+    .dashboard__form__button {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .dashboard__form__button button,
+    .dashboard__form__button a {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard__section__title h4 {
+        font-size: 1.25rem;
+    }
+    .modern-input {
+        font-size: 0.95rem;
+        padding: 0.75rem 0.9rem;
+    }
+    .default__button {
+        font-size: 0.95rem;
+        padding: 0.75rem 1.2rem;
+    }
+    body, .dashboard, .container-fluid.full__width__padding {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    html, body, .dashboard {
+        overflow-x: hidden !important;
+    }
+}
+</style>
+<style>
+/* CKEditor Toolbar Sticky Position Fixes */
+.ck.ck-editor__top.ck-reset_all {
+    position: relative !important;
+    top: auto !important;
+    z-index: 10 !important;
+}
+
+.ck.ck-sticky-panel .ck-sticky-panel__content {
+    position: relative !important;
+    top: auto !important;
+}
+
+.ck.ck-toolbar {
+    position: relative !important;
+    top: auto !important;
+}
+
+.ck-editor {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.ck.ck-editor__main {
+    overflow: visible !important;
+}
+
+.ck-editor__editable_inline {
+    min-height: 200px;
+    height: auto !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+}
+
+.ck-editor__top {
+    position: static !important;
+}
+
+.ck-sticky-panel {
+    position: static !important;
+}
+
+.ck.ck-editor {
+    z-index: 1 !important;
+}
+
+.ck.ck-balloon-panel {
+    z-index: 1000 !important;
+}
+</style>
+
+{% endblock %}
+{% block content %}
+<div class="dashboard sp_bottom_100">
+    <div class="container-fluid full__width__padding">
+        <div class="row">
+            <!-- Sidebar comes from base.html -->
+
+            <!-- Main Content -->
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12">
+                <div class="dashboard__section__title">
+                    <h4 class="mb-0">{{ action|default:"Add" }} Nearby Destination</h4>
+                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert" style="color: red; margin-bottom: 1rem;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row mt-4">
+                    <!-- Form -->
+                    <div class="col-12">
+
+                        <form method="post" enctype="multipart/form-data" action="{% if action == 'Edit' %}{% url 'tandj_app:nearby_destination_update' destination.slug %}{% else %}{% url 'tandj_app:nearby_destination_create' %}{% endif %}" class="needs-validation form-wrapper" novalidate>
+                            {% csrf_token %}
+                            <div class="row">
+
+                                <!-- Basic Information -->
+                                <div class="col-12 mb-3">
+                                    <h6 class="text-muted text-uppercase fw-bold small border-bottom pb-2">Basic Information</h6>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="name" class="form-control modern-input" placeholder="e.g. Munnar Tea Gardens" value="{{ form.name.value|default:'' }}" required>
+                                    {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors|first }}</div>{% endif %}
+                                    <span class="text-danger field-error" id="name-error"></span>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label for="distance" class="form-label">Distance</label>
+                                    <input type="text" name="distance" id="distance" class="form-control modern-input" placeholder="e.g. 12 km" value="{{ form.distance.value|default:'' }}">
+                                    {% if form.distance.errors %}<div class="text-danger small mt-1">{{ form.distance.errors|first }}</div>{% endif %}
+                                    <span class="text-danger field-error" id="distance-error"></span>
+                                </div>
+
+                                <!--
+                                    "status" and "location" removed: NearbyDestinationForm
+                                    intentionally excludes them, so posting them had no effect.
+                                -->
+
+                                <!-- Media -->
+                                <div class="col-12 mb-3 mt-2">
+                                    <h6 class="text-muted text-uppercase fw-bold small border-bottom pb-2">Media</h6>
+                                </div>
+
+                                {% if action == 'Edit' and destination.image %}
+                                <div class="col-12 mb-4">
+                                    <label class="form-label">Current Cover Image</label>
+                                    <div class="destination-image-preview mb-2">
+                                        <img src="{{ destination.image.url }}" alt="Current cover image">
+                                    </div>
+                                    <div class="form-text">
+                                        This is auto-selected at random from the gallery images below.
+                                        Uploading new gallery images will replace it with a new random pick.
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <!-- Gallery Images -->
+                                <div class="col-12 mb-3 mt-2">
+                                    <h6 class="text-muted text-uppercase fw-bold small border-bottom pb-2">Gallery Images</h6>
+                                </div>
+
+                                {% if gallery_form.non_field_errors %}
+                                <div class="col-12 mb-3">
+                                    <div class="alert alert-danger">{{ gallery_form.non_field_errors }}</div>
+                                </div>
+                                {% endif %}
+
+                                {% if action == 'Edit' and destination.images.all %}
+                                <div class="col-12 mb-4">
+                                    <label class="form-label">Current Gallery Images</label>
+                                    <div class="gallery-image-preview">
+                                        {% for img in destination.images.all %}
+                                        <div class="gallery-thumb existing-image-thumb">
+                                            <img src="{{ img.image.url }}" alt="{{ destination.name }}">
+                                            <label class="existing-image-delete" for="delete_image_{{ img.id }}">
+                                                <input type="checkbox" name="delete_image_{{ img.id }}" id="delete_image_{{ img.id }}">
+                                                Remove
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-text mt-2">Check "Remove" under any image above to delete it when you save.</div>
+                                </div>
+                                {% endif %}
+
+                                <div class="col-12 mb-4">
+                                    <div class="gallery-upload-box">
+                                        <label for="{{ gallery_form.destination_images.id_for_label }}" class="form-label">
+                                            Add Images{% if action != 'Edit' %} <span class="text-danger">*</span>{% endif %}
+                                        </label>
+                                        <input
+                                            type="file"
+                                            name="destination_images"
+                                            id="{{ gallery_form.destination_images.id_for_label }}"
+                                            class="form-control modern-input"
+                                            accept="image/*"
+                                            multiple>
+                                        {% if gallery_form.destination_images.errors %}
+                                        <div class="text-danger small mt-1">{{ gallery_form.destination_images.errors|first }}</div>
+                                        {% endif %}
+                                        <span class="text-danger field-error" id="destination_images-error"></span>
+                                        <div class="form-text mb-2">
+                                            Hold <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac) while clicking,
+                                            or drag-select, to choose more than one image at once.
+                                            One of these will be picked at random as the cover image; the rest
+                                            become gallery images. Recommended size: 1200x600 pixels. Max size: 5MB each.
+                                        </div>
+
+                                        <div class="gallery-image-preview mt-2" id="newGalleryPreview"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-12 mb-3 mt-2">
+                                    <h6 class="text-muted text-uppercase fw-bold small border-bottom pb-2">Description</h6>
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea name="description" id="description" class="form-control modern-input" rows="5" placeholder="Enter Destination Description">{{ form.description.value|default:'' }}</textarea>
+                                    {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors|first }}</div>{% endif %}
+                                    <span class="text-danger field-error" id="description-error"></span>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12 mt-4">
+                                    <div class="dashboard__form__button">
+                                        <button type="submit" class="default__button">{% if action == 'Edit' %}Save Changes{% else %}Add Destination{% endif %}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div> <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    ClassicEditor
+        .create(document.querySelector('#description'), {
+            toolbar: [
+                'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
+                '|', 'insertTable', 'blockQuote', 'undo', 'redo', 'imageUpload'
+            ]
+        })
+        .then(editor => {
+            editor.plugins.get('FileRepository').createUploadAdapter = loader => {
+                return {
+                    upload: () => loader.file
+                        .then(file => new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = () => resolve({ default: reader.result });
+                            reader.onerror = error => reject(error);
+                            reader.readAsDataURL(file);
+                        })),
+                    abort: () => {}
+                };
+            };
+        })
+        .catch(error => console.error(error));
+});
+</script>
+
+<!-- Multi-file Gallery Preview + per-file removal (keeps the input's FileList in sync) -->
+<script>
+(function () {
+    const input = document.getElementById('{{ gallery_form.destination_images.id_for_label }}');
+    const previewContainer = document.getElementById('newGalleryPreview');
+
+    if (!input || !previewContainer) return;
+
+    let selectedFiles = [];
+
+    function syncInputFiles() {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        input.files = dataTransfer.files;
+    }
+
+    function renderPreviews() {
+        previewContainer.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'gallery-thumb';
+
+            const img = document.createElement('img');
+            const reader = new FileReader();
+            reader.onload = e => { img.src = e.target.result; };
+            reader.readAsDataURL(file);
+
+            const nameTag = document.createElement('div');
+            nameTag.className = 'file-name';
+            nameTag.textContent = file.name;
+
+            const removeBtn = document.createElement('div');
+            removeBtn.className = 'gallery-thumb-remove';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.addEventListener('click', function () {
+                selectedFiles.splice(index, 1);
+                syncInputFiles();
+                renderPreviews();
+            });
+
+            thumb.appendChild(img);
+            thumb.appendChild(nameTag);
+            thumb.appendChild(removeBtn);
+            previewContainer.appendChild(thumb);
+        });
+    }
+
+    input.addEventListener('change', function () {
+        // Append newly chosen files to whatever was already selected,
+        // so picking files in multiple passes doesn't wipe earlier ones.
+        selectedFiles = selectedFiles.concat(Array.from(input.files));
+        syncInputFiles();
+        renderPreviews();
+    });
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    const isEdit = {% if action == 'Edit' %}true{% else %}false{% endif %};
+
+    const fields = {
+        name: {
+            element: document.getElementById('name'),
+            error: document.getElementById('name-error'),
+            validate: function(value) {
+                if (!value.trim()) return "Name is required.";
+                return null;
+            }
+        },
+        destination_images: {
+            element: document.getElementById('{{ gallery_form.destination_images.id_for_label }}'),
+            error: document.getElementById('destination_images-error'),
+            validate: function(files) {
+                if (!files || !files.length) {
+                    // required only on create, since the cover image
+                    // is picked from this field
+                    return isEdit ? null : "Please upload at least one image.";
+                }
+                for (const f of files) {
+                    if (!f.type.startsWith('image/')) return `'${f.name}' is not a valid image file.`;
+                    if (f.size > 5 * 1024 * 1024) return `'${f.name}' exceeds the 5MB size limit.`;
+                }
+                return null;
+            }
+        },
+        description: {
+            element: document.getElementById('description'),
+            error: document.getElementById('description-error'),
+            validate: function(value) {
+                if (!value.trim()) return "Description is required.";
+                return null;
+            }
+        }
+    };
+
+    const touchedFields = new Set();
+
+    function validateField(fieldName, showError = true) {
+        const field = fields[fieldName];
+        let value = field.element.value;
+
+        if (field.element.type === 'file') {
+            value = field.element.multiple ? field.element.files : (field.element.files[0] || null);
+        }
+
+        if (fieldName === 'description') {
+            const editor = document.querySelector('.ck-editor__editable');
+            if (editor) {
+                value = editor.textContent || '';
+            }
+        }
+
+        const error = field.validate(value);
+
+        if (showError) {
+            field.error.textContent = error || '';
+            field.error.style.display = error ? 'block' : 'none';
+
+            if (error) {
+                field.element.classList.add('field-error-border');
+            } else {
+                field.element.classList.remove('field-error-border');
+            }
+        }
+
+        return !error;
+    }
+
+    function validateForm() {
+        let isValid = true;
+        Object.keys(fields).forEach(fieldName => {
+            if (!validateField(fieldName, true)) {
+                isValid = false;
+            }
+        });
+        return isValid;
+    }
+
+    Object.keys(fields).forEach(fieldName => {
+        const field = fields[fieldName];
+
+        if (field.element.type === 'text') {
+            field.element.addEventListener('blur', function() {
+                touchedFields.add(fieldName);
+                validateField(fieldName, true);
+            });
+
+            field.element.addEventListener('input', function() {
+                if (touchedFields.has(fieldName) || field.error.textContent) {
+                    validateField(fieldName, true);
+                }
+            });
+        } else if (field.element.type === 'file') {
+            field.element.addEventListener('change', function() {
+                touchedFields.add(fieldName);
+                validateField(fieldName, true);
+            });
+        }
+
+        field.element.addEventListener('focus', function() {
+            field.error.textContent = '';
+            field.error.style.display = 'none';
+            field.element.classList.remove('field-error-border');
+        });
+    });
+
+    const descriptionEditor = document.querySelector('.ck-editor__editable');
+    if (descriptionEditor) {
+        descriptionEditor.addEventListener('blur', function() {
+            touchedFields.add('description');
+            validateField('description', true);
+        });
+
+        descriptionEditor.addEventListener('input', function() {
+            if (touchedFields.has('description') || fields.description.error.textContent) {
+                validateField('description', true);
+            }
+        });
+
+        descriptionEditor.addEventListener('focus', function() {
+            fields.description.error.textContent = '';
+            fields.description.error.style.display = 'none';
+            fields.description.element.classList.remove('field-error-border');
+        });
+    }
+
+    form.addEventListener('submit', function(e) {
+        Object.keys(fields).forEach(fieldName => {
+            touchedFields.add(fieldName);
+        });
+
+        if (!validateForm()) {
+            e.preventDefault();
+            const firstErrorField = Object.keys(fields).find(fieldName => fields[fieldName].error.textContent);
+            if (firstErrorField) {
+                fields[firstErrorField].element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        }
+    });
+
+    Object.keys(fields).forEach(fieldName => {
+        fields[fieldName].error.style.display = '';
+        fields[fieldName].error.style.display = 'none';
+    });
+});
+</script>
+
+{% endblock %}

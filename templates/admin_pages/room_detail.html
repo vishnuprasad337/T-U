@@ -1,0 +1,485 @@
+{% extends "admin_pages/base.html" %}
+{% load static %}
+
+{% block title %}{{ room.room_category }} | Room Details | Admin Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ============================================================
+       FULL-WIDTH OVERRIDE
+       Bootstrap's default `.container` (not `.container-fluid`) has
+       a max-width at every breakpoint (540px/720px/960px/1140px/1320px).
+       Many admin themes also wrap page content in an extra div like
+       .content-wrapper / .main-content / .page-wrapper / .content-page.
+       We override ALL common candidates here so this works regardless
+       of which one your base.html actually uses.
+       ============================================================ */
+
+    html, body {
+        overflow-x: hidden;
+    }
+
+    .dashboard-content,
+    .container-fluid.full__width__padding,
+    .container,
+    .content-wrapper,
+    .main-content,
+    .page-wrapper,
+    .content-page,
+    .app-content,
+    .admin-content,
+    .page-content {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Bootstrap rows/cols sometimes add negative margins + gutters
+       that reintroduce side space inside a full-width parent */
+    .dashboard > .row,
+    .dashboard-content > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .viewer-wrap {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+</style>
+<style>
+    .viewer-wrap {
+        background: var(--white);
+        border-radius: 12px;
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow);
+        padding: 24px;
+        position: relative;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--white);
+        border: 1px solid var(--gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-700);
+        text-decoration: none;
+        font-size: 18px;
+        z-index: 5;
+        transition: background 0.2s;
+    }
+
+    .close-btn:hover {
+        background: var(--gray-100);
+        color: var(--gray-900);
+    }
+
+    .viewer-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 32px;
+    }
+
+    /* ---------- Left: image viewer ---------- */
+    .main-image-frame {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--gray-100);
+    }
+
+    .main-image-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .main-image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gray-500);
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+        color: var(--gray-800);
+        box-shadow: var(--shadow);
+    }
+
+    .nav-arrow.prev { left: 12px; }
+    .nav-arrow.next { right: 12px; }
+    .nav-arrow:hover { background: var(--white); }
+
+    .dots-row {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin: 14px 0;
+    }
+
+    .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--gray-300);
+        cursor: pointer;
+    }
+
+    .dot.active { background: var(--gray-700); }
+
+    .thumb-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+        gap: 8px;
+    }
+
+    .thumb-item {
+        aspect-ratio: 1 / 1;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+    .thumb-item.active {
+        border-color: var(--primary-blue);
+    }
+
+    .thumb-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* ---------- Right: details panel ---------- */
+    .detail-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 14px;
+    }
+
+    .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .tag-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 13px;
+        color: var(--gray-700);
+    }
+
+    .tag-pill.status-active {
+        border-color: #10b981;
+        color: #10b981;
+    }
+
+    .tag-pill.status-inactive {
+        border-color: var(--gray-400);
+        color: var(--gray-500);
+    }
+
+    .detail-line {
+        font-size: 14.5px;
+        color: var(--gray-800);
+        margin-bottom: 10px;
+    }
+
+    .detail-line strong {
+        color: var(--gray-900);
+    }
+
+    .description-text {
+        font-size: 14.5px;
+        color: var(--gray-700);
+        line-height: 1.7;
+        margin: 18px 0;
+    }
+
+    .description-text img { max-width: 100%; border-radius: 6px; }
+
+    .section-heading {
+        font-weight: 600;
+        color: var(--gray-900);
+        font-size: 15px;
+        margin: 22px 0 10px;
+    }
+
+    .check-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 20px;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: var(--gray-700);
+    }
+
+    .check-item i {
+        color: #10b981;
+        font-size: 13px;
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .info-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--gray-100);
+        font-size: 14px;
+    }
+
+    .info-list li:last-child {
+        border-bottom: none;
+    }
+
+    .info-list .info-label {
+        color: var(--gray-500);
+    }
+
+    .info-list .info-value {
+        color: var(--gray-900);
+        font-weight: 500;
+    }
+
+    .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-size: 12.5px;
+        color: var(--gray-500);
+        margin-top: 14px;
+    }
+
+    .panel-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid var(--gray-100);
+    }
+
+    @media (max-width: 992px) {
+        .viewer-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard sp_bottom_100">
+    <div class="container-fluid full__width__padding">
+
+        <div class="viewer-wrap">
+            <a href="{% url 'tandj_app:room_list' %}" class="close-btn">&times;</a>
+
+            {% with room.images.all as gallery_images %}
+            <div class="viewer-grid">
+                <!-- LEFT: Image viewer -->
+                <div>
+                    <div class="main-image-frame">
+                        {% if room.main_image %}
+                            <img id="mainImage" src="{{ room.main_image.url }}" alt="{{ room.room_category }}">
+                        {% elif gallery_images %}
+                            <img id="mainImage" src="{{ gallery_images.0.image.url }}" alt="{{ room.room_category }}">
+                        {% else %}
+                            <div class="main-image-placeholder">No image uploaded</div>
+                        {% endif %}
+                        {% if room.main_image or gallery_images %}
+                        <button type="button" class="nav-arrow prev" id="prevImageBtn">&#8249;</button>
+                        <button type="button" class="nav-arrow next" id="nextImageBtn">&#8250;</button>
+                        {% endif %}
+                    </div>
+
+                    <div class="dots-row" id="dotsRow"></div>
+
+                    <div class="thumb-grid" id="thumbGrid">
+                        {% if room.main_image %}
+                        <div class="thumb-item active" data-index="0">
+                            <img src="{{ room.main_image.url }}" alt="{{ room.room_category }}">
+                        </div>
+                        {% endif %}
+                        {% for img in gallery_images %}
+                        <div class="thumb-item{% if forloop.first and not room.main_image %} active{% endif %}" data-index="{% if room.main_image %}{{ forloop.counter }}{% else %}{{ forloop.counter0 }}{% endif %}">
+                            <img src="{{ img.image.url }}" alt="{{ img.caption|default:room.room_category }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- RIGHT: Details -->
+                <div>
+                    <h1 class="detail-title">{{ room.room_category }}</h1>
+
+                    <div class="tag-row">
+                       
+                        {% if room.size_sqm %}
+                            <span class="tag-pill"><i class="fas fa-ruler-combined"></i> {{ room.size_sqm }} m&sup2;</span>
+                        {% endif %}
+                        <span class="tag-pill"><i class="fas fa-tag"></i> &#8377;{{ room.price_per_night }} / night</span>
+                       
+                    </div>
+
+                    
+                    <div class="section-heading">Details</div>
+                    <ul class="info-list">
+
+                        <div class="description-text">
+                        {{ room.description|safe|default:"No description provided."|linebreaks }}
+                    </div>
+
+                        <li><span class="info-label">Price per Night</span><span class="info-value">&#8377;{{ room.price_per_night }}</span></li>
+                       
+                      
+                    </ul>
+                     
+                    
+                    
+
+                   
+
+
+                    <div class="meta-row">
+                        <span>{{ gallery_images|length }} gallery image{{ gallery_images|length|pluralize }}</span>
+                        <span>&middot;</span>
+                        <span>Added {{ room.created_at|date:"M d, Y" }}</span>
+                        <span>&middot;</span>
+                        <span>Updated {{ room.updated_at|date:"M d, Y" }}</span>
+                    </div>
+
+                    <div class="panel-actions">
+                        <a href="{% url 'tandj_app:room_edit' room.slug %}" class="btn btn-warning btn-sm">Update</a>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteRoomModal">Delete</button>
+                        <a href="{% url 'tandj_app:room_list' %}" class="btn btn-light btn-sm">Back to List</a>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteRoomModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form method="post" action="{% url 'tandj_app:room_delete' room.slug %}">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete {{ room.room_category }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete <strong>{{ room.room_category }}</strong>?
+                    <p class="text-danger mt-2 mb-0">This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const mainImage = document.getElementById('mainImage');
+    const thumbItems = Array.from(document.querySelectorAll('.thumb-item'));
+    const dotsRow = document.getElementById('dotsRow');
+    const prevBtn = document.getElementById('prevImageBtn');
+    const nextBtn = document.getElementById('nextImageBtn');
+
+    if (!mainImage || !thumbItems.length) return;
+
+    const images = thumbItems.map(item => item.querySelector('img').src);
+    let currentIndex = 0;
+
+    // Build dot indicators
+    images.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.dataset.index = i;
+        dot.addEventListener('click', () => setActive(i));
+        dotsRow.appendChild(dot);
+    });
+
+    function setActive(index) {
+        currentIndex = index;
+        mainImage.src = images[index];
+
+        thumbItems.forEach((item, i) => item.classList.toggle('active', i === index));
+        Array.from(dotsRow.children).forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+
+    thumbItems.forEach((item, i) => {
+        item.addEventListener('click', () => setActive(i));
+    });
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            setActive((currentIndex - 1 + images.length) % images.length);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            setActive((currentIndex + 1) % images.length);
+        });
+    }
+});
+</script>
+{% endblock %}

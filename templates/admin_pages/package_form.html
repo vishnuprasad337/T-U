@@ -1,0 +1,770 @@
+{% extends "admin_pages/base.html" %}
+{% load static %}
+
+{% block title %}{{ action }} Package | Admin Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+
+<style>
+/* =====================================================
+   FORM CARD
+===================================================== */
+
+.form-card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+/* =====================================================
+   CHOICES.JS — ROOMS & ACTIVITIES
+===================================================== */
+
+.choices {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+/* Main selection box */
+.choices__inner {
+    min-height: 42px;
+    padding: 6px 7.5px 3.75px;
+    background-color: #fff !important;
+    color: #212529 !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+}
+
+/* Focus state */
+.choices__inner:focus-within,
+.is-focused .choices__inner,
+.is-open .choices__inner {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+/* Selected room/activity tags */
+.choices__list--multiple .choices__item {
+    padding: 4px 8px;
+    background-color: #0d6efd !important;
+    border: 1px solid #0d6efd !important;
+    color: #fff !important;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+    opacity: 1 !important;
+}
+
+/* Remove button inside selected tags */
+.choices__list--multiple .choices__item .choices__button {
+    border-left: 1px solid rgba(255, 255, 255, 0.55) !important;
+    opacity: 0.85;
+}
+
+.choices__list--multiple .choices__item .choices__button:hover {
+    opacity: 1;
+}
+
+/* Dropdown */
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+    width: 100%;
+    margin-top: 3px;
+    background-color: #fff !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.375rem !important;
+    color: #212529 !important;
+    z-index: 9999 !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Dropdown option — room/activity text visibility */
+.choices__list--dropdown .choices__item,
+.choices__list[aria-expanded] .choices__item {
+    padding: 11px 14px;
+    background-color: #fff !important;
+    color: #212529 !important;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Selected option */
+.choices__list--dropdown .choices__item--selected,
+.choices__list[aria-expanded] .choices__item--selected {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+}
+
+/* Hovered option */
+.choices__list--dropdown .choices__item--selectable.is-highlighted,
+.choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+    background-color: #0d6efd !important;
+    color: #fff !important;
+}
+
+/* Dropdown search field */
+.choices__list--dropdown .choices__input,
+.choices__list[aria-expanded] .choices__input {
+    width: calc(100% - 16px);
+    margin: 8px;
+    padding: 8px 10px;
+    background-color: #fff !important;
+    color: #212529 !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem;
+}
+
+/* Search placeholder */
+.choices__list--dropdown .choices__input::placeholder,
+.choices__list[aria-expanded] .choices__input::placeholder {
+    color: #6c757d !important;
+    opacity: 1;
+}
+
+/* Main input */
+.choices__input {
+    background-color: #fff !important;
+    color: #212529 !important;
+}
+
+/* Main placeholder */
+.choices__placeholder {
+    color: #6c757d !important;
+    opacity: 1 !important;
+}
+
+/* =====================================================
+   CKEDITOR FIX
+===================================================== */
+
+.ck.ck-editor__top.ck-reset_all {
+    position: relative !important;
+    top: auto !important;
+    z-index: 10 !important;
+}
+
+.ck.ck-sticky-panel .ck-sticky-panel__content {
+    position: relative !important;
+    top: auto !important;
+}
+
+.ck.ck-toolbar {
+    position: relative !important;
+    top: auto !important;
+}
+
+.ck-editor {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.ck.ck-editor__main {
+    overflow: visible !important;
+}
+
+.ck-editor__editable_inline {
+    min-height: 180px;
+    height: auto !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+}
+
+.ck-editor__top {
+    position: static !important;
+}
+
+.ck-sticky-panel {
+    position: static !important;
+}
+
+.ck.ck-editor {
+    z-index: 1 !important;
+}
+
+.ck.ck-balloon-panel {
+    z-index: 10000 !important;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 576px) {
+
+    .form-card {
+        padding: 1rem !important;
+    }
+
+    .choices__list--dropdown .choices__item,
+    .choices__list[aria-expanded] .choices__item {
+        padding: 10px 12px;
+    }
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard__form__wraper">
+
+    <!-- Page heading -->
+    <div class="create__course__title mb-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
+
+        <h4 class="mb-0">
+            {{ action }} Package
+        </h4>
+
+        <a
+            href="{% url 'ambadyestate_app:package_list' %}"
+            class="btn btn-secondary btn-sm"
+        >
+            <i class="fas fa-arrow-left"></i>
+            Back to List
+        </a>
+
+    </div>
+
+
+    <!-- Form card -->
+    <div class="form-card p-4">
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            novalidate
+        >
+
+            {% csrf_token %}
+
+
+            <!-- Non-field errors -->
+            {% if form.non_field_errors %}
+
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+
+            {% endif %}
+
+
+            <div class="row">
+
+
+                <!-- Package Name -->
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Name
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                    </label>
+
+                    {{ form.name }}
+
+                    {% if form.name.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.name.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Duration -->
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Duration
+
+                        <span class="text-muted small">
+                            (Optional)
+                        </span>
+
+                    </label>
+
+                    {{ form.duration }}
+
+                    {% if form.duration.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.duration.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Price -->
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Price
+
+                        <span class="text-muted small">
+                            (Optional)
+                        </span>
+
+                    </label>
+
+                    {{ form.price }}
+
+                    {% if form.price.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.price.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="col-12 mb-3">
+
+                    <label class="form-label">
+
+                        Description
+
+                        <span class="text-danger">
+                            *
+                        </span>
+
+                    </label>
+
+                    {{ form.description }}
+
+                    {% if form.description.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.description.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Main Image -->
+                <div class="col-12 mb-3">
+
+                    <label class="form-label">
+
+                        Main Image
+
+                        {% if action == "Create" %}
+
+                            <span class="text-danger">
+                                *
+                            </span>
+
+                        {% endif %}
+
+                    </label>
+
+                    {{ form.image }}
+
+                    {% if form.image.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.image.errors }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- Remove current image -->
+                    {% if package and package.image %}
+
+                        <div class="form-check mt-2">
+
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="image-clear"
+                                id="image-clear"
+                            >
+
+                            <label
+                                class="form-check-label"
+                                for="image-clear"
+                            >
+                                Remove current image
+                            </label>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Rooms -->
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Rooms Included
+
+                        <span class="text-muted small">
+                            (Optional)
+                        </span>
+
+                    </label>
+
+                    {{ form.rooms }}
+
+                    {% if form.rooms.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.rooms.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Activities -->
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Activities Included
+
+                        <span class="text-muted small">
+                            (Optional)
+                        </span>
+
+                    </label>
+
+                    {{ form.activities }}
+
+                    {% if form.activities.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.activities.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+            </div>
+            <!-- End row -->
+
+
+            <!-- Form buttons -->
+            <div class="d-flex gap-2 mt-3">
+
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                >
+
+                    {% if action == "Create" %}
+
+                        Create Package
+
+                    {% else %}
+
+                        Save Changes
+
+                    {% endif %}
+
+                </button>
+
+
+                <a
+                    href="{% url 'ambadyestate_app:package_list' %}"
+                    class="btn btn-secondary"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+
+        /* =================================================
+           CKEDITOR
+        ================================================= */
+
+        const descriptionField =
+            document.getElementById(
+                '{{ form.description.id_for_label }}'
+            );
+
+
+        if (descriptionField) {
+
+            ClassicEditor
+
+                .create(
+                    descriptionField,
+                    {
+
+                        toolbar: [
+
+                            'heading',
+
+                            '|',
+
+                            'bold',
+
+                            'italic',
+
+                            'link',
+
+                            'bulletedList',
+
+                            'numberedList',
+
+                            '|',
+
+                            'insertTable',
+
+                            'blockQuote',
+
+                            'undo',
+
+                            'redo',
+
+                            'imageUpload'
+
+                        ]
+
+                    }
+                )
+
+                .then(
+                    editor => {
+
+
+                        /* Local image preview upload */
+
+                        editor
+                            .plugins
+                            .get('FileRepository')
+                            .createUploadAdapter =
+                                loader => {
+
+
+                            return {
+
+                                upload: () =>
+
+                                    loader.file
+
+                                        .then(
+                                            file =>
+
+                                                new Promise(
+                                                    (
+                                                        resolve,
+                                                        reject
+                                                    ) => {
+
+                                                        const reader =
+                                                            new FileReader();
+
+
+                                                        reader.onload =
+                                                            () => {
+
+                                                            resolve({
+
+                                                                default:
+                                                                    reader.result
+
+                                                            });
+
+                                                        };
+
+
+                                                        reader.onerror =
+                                                            error => {
+
+                                                            reject(
+                                                                error
+                                                            );
+
+                                                        };
+
+
+                                                        reader.readAsDataURL(
+                                                            file
+                                                        );
+
+                                                    }
+                                                )
+                                        ),
+
+
+                                abort: () => {}
+
+                            };
+
+                        };
+
+
+                        /* Keep textarea updated */
+
+                        editor
+                            .model
+                            .document
+                            .on(
+                                'change:data',
+                                () => {
+
+                                    editor
+                                        .updateSourceElement();
+
+                                }
+                            );
+
+                    }
+                )
+
+                .catch(
+                    error => {
+
+                        console.error(
+                            error
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =================================================
+           ROOMS & ACTIVITIES — CHOICES.JS
+        ================================================= */
+
+        const roomsEl =
+            document.getElementById(
+                '{{ form.rooms.id_for_label }}'
+            );
+
+
+        const activitiesEl =
+            document.getElementById(
+                '{{ form.activities.id_for_label }}'
+            );
+
+
+        /* Rooms */
+
+        if (roomsEl) {
+
+            new Choices(
+                roomsEl,
+                {
+
+                    removeItemButton: true,
+
+                    searchEnabled: true,
+
+                    placeholder: true,
+
+                    placeholderValue:
+                        'Select rooms...',
+
+                    searchPlaceholderValue:
+                        'Search rooms...',
+
+                    shouldSort: false,
+
+                    itemSelectText:
+                        'Press to select',
+
+                    allowHTML: false
+
+                }
+            );
+
+        }
+
+
+        /* Activities */
+
+        if (activitiesEl) {
+
+            new Choices(
+                activitiesEl,
+                {
+
+                    removeItemButton: true,
+
+                    searchEnabled: true,
+
+                    placeholder: true,
+
+                    placeholderValue:
+                        'Select activities...',
+
+                    searchPlaceholderValue:
+                        'Search activities...',
+
+                    shouldSort: false,
+
+                    itemSelectText:
+                        'Press to select',
+
+                    allowHTML: false
+
+                }
+            );
+
+        }
+
+
+    }
+);
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,448 @@
+{% extends "admin_pages/base.html" %}
+{% load static %}
+
+{% block title %}Course Categories | Admin Dashboard{% endblock %}
+
+
+{% block extra_css %}
+<style>
+    * FIX: CKEditor Toolbar Sticky Position Issues */
+/* ============================================ */
+
+/* Disable default sticky behavior */
+.ck.ck-editor__top.ck-reset_all {
+    position: relative !important;
+    top: auto !important;
+    z-index: 10 !important;
+}
+
+/* Ensure toolbar stays within its container */
+.ck.ck-sticky-panel .ck-sticky-panel__content {
+    position: relative !important;
+    top: auto !important;
+}
+
+/* Remove any fixed positioning from toolbar */
+.ck.ck-toolbar {
+    position: relative !important;
+    top: auto !important;
+}
+
+/* Container for CKEditor to constrain toolbar */
+.ck-editor {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* Ensure editor main container doesn't have overflow issues */
+.ck.ck-editor__main {
+    overflow: visible !important;
+}
+
+/* Make editable area fully auto-expanding */
+.ck-editor__editable_inline {
+    min-height: 200px; /* Start with comfortable minimum height */
+    height: auto !important; /* Allow automatic expansion */
+    overflow-y: visible !important; /* No scrollbar - content expands naturally */
+    overflow-x: hidden !important;
+    position: relative !important;
+}
+
+/* Prevent toolbar from overlapping with navigation or header */
+.ck-editor__top {
+    position: static !important;
+}
+
+/* Additional fix for sticky panel */
+.ck-sticky-panel {
+    position: static !important;
+}
+
+/* Ensure proper z-index hierarchy */
+.ck.ck-editor {
+    z-index: 1 !important;
+}
+
+.ck.ck-balloon-panel {
+    z-index: 1000 !important;
+}
+</style>
+
+<style>
+/* CKEditor List Styles - Fix for bullets and numbers */
+.ck-editor__editable ul,
+.ck-editor__editable ol {
+    padding-left: 40px !important;
+}
+
+.ck-editor__editable ul {
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+}
+
+.ck-editor__editable ol {
+    list-style-type: decimal !important;
+    list-style-position: outside !important;
+}
+
+.ck-editor__editable li {
+    display: list-item !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+.ck-editor__editable ul li {
+    list-style-type: disc !important;
+}
+
+.ck-editor__editable ol li {
+    list-style-type: decimal !important;
+}
+
+/* Nested lists */
+.ck-editor__editable ul ul {
+    list-style-type: circle !important;
+}
+
+.ck-editor__editable ul ul ul {
+    list-style-type: square !important;
+}
+
+
+/* Style for error messages */
+.field-error {
+    display: none;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    color: #dc3545;
+}
+
+/* Red border for invalid fields */
+.field-error-border {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+
+/* Green border for valid fields */
+.field-valid-border {
+    border-color: #28a745 !important;
+}
+
+/* CKEditor error styling */
+.ck-editor__editable.field-error-border {
+    border: 1px solid #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+</style>
+<style>
+/* ---------------- CORE RESPONSIVENESS & SAFETY ---------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* prevent horizontal scroll */
+    -webkit-overflow-scrolling: touch;
+}
+
+.dashboard {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.container-fluid.full__width__padding {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Neutralize negative row margins */
+.dashboard > .row,
+.dashboard .row { margin-left: 0; margin-right: 0; }
+
+/* Form Wrapper */
+.form-wrapper {
+    max-width: 900px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    overflow-x: hidden;
+}
+
+/* Inputs / Textareas / Selects / Files */
+img, input, textarea, select, .form-control, .modern-input, .form-text {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    word-wrap: break-word;
+}
+
+/* CKEditor safety */
+.ck-editor__editable_inline,
+.ck-content {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* Form Inputs Style */
+.modern-input {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.modern-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+}
+
+/* Buttons */
+.dashboard__form__button {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.dashboard__form__button .default__button {
+    background: #4f46e5;
+    color: #fff;
+    padding: 0.85rem 1.6rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    transition: background 0.3s;
+}
+
+.dashboard__form__button .default__button:hover {
+    background: #4338ca;
+}
+
+/* Image Preview */
+.course-image-preview {
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.course-image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Typography safety */
+.form-text, label, .invalid-feedback {
+    word-wrap: break-word;
+}
+
+/* Section Title */
+.dashboard__section__title {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* ---------------- RESPONSIVE BREAKPOINTS ---------------- */
+@media (max-width: 1200px) { .form-wrapper { max-width: 100%; } }
+
+@media (max-width: 992px) {
+    .dashboard__form__button { flex-direction: column; align-items: stretch; }
+    .dashboard__form__button button,
+    .dashboard__form__button a { width: 100%; }
+}
+
+@media (max-width: 768px) {
+    html, body, .dashboard { overflow-x: hidden !important; }
+}
+
+@media (max-width: 576px) {
+    .dashboard__section__title h4 { font-size: 1.25rem; }
+    .modern-input { font-size: 0.95rem; padding: 0.75rem 0.9rem; }
+    .default__button { font-size: 0.95rem; padding: 0.75rem 1.2rem; }
+    body, .dashboard, .container-fluid.full__width__padding { padding-left: 0; padding-right: 0; }
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="dashboard sp_bottom_100">
+    <div class="container-fluid full__width__padding">
+        <div class="row">
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12">
+                <div class="dashboard__section__title">
+                    <h4 class="mb-0">Course Categories</h4>
+                    
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12 mb-4">
+                        <!-- Add Category Form -->
+                        <form method="post" enctype="multipart/form-data" class="needs-validation form-wrapper" novalidate>
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    {{ form.name.label_tag }}
+                                    {{ form.name }}
+                                    <div class="invalid-feedback">Please provide a category name.</div>
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    {{ form.description.label_tag }}
+                                    {{ form.description }}
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    {{ form.image.label_tag }}
+                                    {{ form.image }}
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <div class="dashboard__form__button">
+                                        <button type="submit" class="default__button">Add Category</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div> <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    ClassicEditor
+        .create(document.querySelector('#description'), {
+            toolbar: [
+                'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
+                '|', 'insertTable', 'blockQuote', 'undo', 'redo', 'imageUpload'
+            ]
+        })
+        .then(editor => {
+            // Enable Base64 image upload
+            editor.plugins.get('FileRepository').createUploadAdapter = loader => {
+                return {
+                    upload: () => loader.file
+                        .then(file => new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = () => resolve({ default: reader.result });
+                            reader.onerror = error => reject(error);
+                            reader.readAsDataURL(file);
+                        })),
+                    abort: () => {}
+                };
+            };
+        })
+        .catch(error => console.error(error));
+});
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+
+    // CKEditor instance
+    let descriptionEditor;
+    ClassicEditor
+        .create(document.querySelector('#id_description'), {
+            toolbar: [
+                'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
+                '|', 'insertTable', 'blockQuote', 'undo', 'redo', 'imageUpload'
+            ]
+        })
+        .then(editor => { descriptionEditor = editor; })
+        .catch(error => console.error(error));
+
+    // Get elements by Django default IDs
+    const nameField = document.getElementById('id_name');
+    const imageField = document.getElementById('id_image');
+
+    const errorElements = {
+        name: document.createElement('div'),
+        description: document.createElement('div'),
+        image: document.createElement('div')
+    };
+
+    Object.values(errorElements).forEach(el => {
+        el.classList.add('text-danger', 'mt-1');
+    });
+
+    nameField.insertAdjacentElement('afterend', errorElements.name);
+    imageField.insertAdjacentElement('afterend', errorElements.image);
+    // CKEditor replaces the textarea, insert error after editor container
+    document.querySelector('.ck-editor').insertAdjacentElement('afterend', errorElements.description);
+
+    function validateName() {
+        const value = nameField.value.trim();
+        let error = '';
+        if (!value) error = "Category name is required.";
+        else if (/\d/.test(value)) error = "Name must contain only letters and spaces.";
+        errorElements.name.textContent = error;
+        nameField.classList.toggle('field-error-border', !!error);
+        return !error;
+    }
+
+    function validateDescription() {
+        const value = descriptionEditor.getData().trim().replace(/<[^>]*>/g, '');
+        let error = '';
+        if (!value) error = "Description cannot be empty.";
+        errorElements.description.textContent = error;
+        document.querySelector('.ck-editor').classList.toggle('field-error-border', !!error);
+        return !error;
+    }
+
+    function validateImage() {
+        const file = imageField.files[0];
+        let error = '';
+        if (file && !file.type.startsWith('image/')) error = "Please upload a valid image.";
+        errorElements.image.textContent = error;
+        imageField.classList.toggle('field-error-border', !!error);
+        return !error;
+    }
+
+    function validateForm() {
+        const validName = validateName();
+        const validDesc = validateDescription();
+        const validImg = validateImage();
+        return validName && validDesc && validImg;
+    }
+
+    nameField.addEventListener('blur', validateName);
+    nameField.addEventListener('input', validateName);
+
+    imageField.addEventListener('change', validateImage);
+
+    form.addEventListener('submit', function (e) {
+        if (!validateForm()) {
+            e.preventDefault();
+            // focus first error
+            if (errorElements.name.textContent) nameField.focus();
+            else if (errorElements.description.textContent) descriptionEditor.editing.view.focus();
+            else if (errorElements.image.textContent) imageField.focus();
+        }
+    });
+});
+</script>
+
+
+{% endblock %}

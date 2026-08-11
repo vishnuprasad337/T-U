@@ -1,0 +1,560 @@
+{% extends "admin_pages/base.html" %}
+{% load static %}
+
+{% block title %}Create Course | Admin Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    * FIX: CKEditor Toolbar Sticky Position Issues */
+/* ============================================ */
+
+/* Disable default sticky behavior */
+.ck.ck-editor__top.ck-reset_all {
+    position: relative !important;
+    top: auto !important;
+    z-index: 10 !important;
+}
+
+/* Ensure toolbar stays within its container */
+.ck.ck-sticky-panel .ck-sticky-panel__content {
+    position: relative !important;
+    top: auto !important;
+}
+
+/* Remove any fixed positioning from toolbar */
+.ck.ck-toolbar {
+    position: relative !important;
+    top: auto !important;
+}
+
+/* Container for CKEditor to constrain toolbar */
+.ck-editor {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* Ensure editor main container doesn't have overflow issues */
+.ck.ck-editor__main {
+    overflow: visible !important;
+}
+
+/* Make editable area fully auto-expanding */
+.ck-editor__editable_inline {
+    min-height: 200px; /* Start with comfortable minimum height */
+    height: auto !important; /* Allow automatic expansion */
+    overflow-y: visible !important; /* No scrollbar - content expands naturally */
+    overflow-x: hidden !important;
+    position: relative !important;
+}
+
+/* Prevent toolbar from overlapping with navigation or header */
+.ck-editor__top {
+    position: static !important;
+}
+
+/* Additional fix for sticky panel */
+.ck-sticky-panel {
+    position: static !important;
+}
+
+/* Ensure proper z-index hierarchy */
+.ck.ck-editor {
+    z-index: 1 !important;
+}
+
+.ck.ck-balloon-panel {
+    z-index: 1000 !important;
+}
+</style>
+<style>
+/* CKEditor List Styles - Fix for bullets and numbers */
+.ck-editor__editable ul,
+.ck-editor__editable ol {
+    padding-left: 40px !important;
+}
+
+.ck-editor__editable ul {
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+}
+
+.ck-editor__editable ol {
+    list-style-type: decimal !important;
+    list-style-position: outside !important;
+}
+
+.ck-editor__editable li {
+    display: list-item !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+.ck-editor__editable ul li {
+    list-style-type: disc !important;
+}
+
+.ck-editor__editable ol li {
+    list-style-type: decimal !important;
+}
+
+/* Nested lists */
+.ck-editor__editable ul ul {
+    list-style-type: circle !important;
+}
+
+.ck-editor__editable ul ul ul {
+    list-style-type: square !important;
+}
+
+
+/* Style for error messages */
+.field-error {
+    display: none;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    color: #dc3545;
+}
+
+/* Red border for invalid fields */
+.field-error-border {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+
+/* Green border for valid fields */
+.field-valid-border {
+    border-color: #28a745 !important;
+}
+
+/* CKEditor error styling */
+.ck-editor__editable.field-error-border {
+    border: 1px solid #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+</style>
+<style>
+/* ---------------- CORE RESPONSIVENESS & SAFETY ---------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* prevent horizontal scroll */
+    -webkit-overflow-scrolling: touch;
+}
+
+.dashboard {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.container-fluid.full__width__padding {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Neutralize negative row margins */
+.dashboard > .row,
+.dashboard .row { margin-left: 0; margin-right: 0; }
+
+/* Form Wrapper */
+.form-wrapper {
+    max-width: 900px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    overflow-x: hidden;
+}
+
+/* Inputs / Textareas / Selects / Files */
+img, input, textarea, select, .form-control, .modern-input, .form-text {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    word-wrap: break-word;
+}
+
+/* CKEditor safety */
+.ck-editor__editable_inline,
+.ck-content {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* Form Inputs Style */
+.modern-input {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.modern-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+}
+
+/* Buttons */
+.dashboard__form__button {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.dashboard__form__button .default__button {
+    background: #4f46e5;
+    color: #fff;
+    padding: 0.85rem 1.6rem;
+    border-radius: 8px;
+    font-weight: 500;
+    border: none;
+    transition: background 0.3s;
+}
+
+.dashboard__form__button .default__button:hover {
+    background: #4338ca;
+}
+
+/* Image Preview */
+.course-image-preview {
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.course-image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Typography safety */
+.form-text, label, .invalid-feedback {
+    word-wrap: break-word;
+}
+
+/* Section Title */
+.dashboard__section__title {
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* ---------------- RESPONSIVE BREAKPOINTS ---------------- */
+@media (max-width: 1200px) { .form-wrapper { max-width: 100%; } }
+
+@media (max-width: 992px) {
+    .dashboard__form__button { flex-direction: column; align-items: stretch; }
+    .dashboard__form__button button,
+    .dashboard__form__button a { width: 100%; }
+}
+
+@media (max-width: 768px) {
+    html, body, .dashboard { overflow-x: hidden !important; }
+}
+
+@media (max-width: 576px) {
+    .dashboard__section__title h4 { font-size: 1.25rem; }
+    .modern-input { font-size: 0.95rem; padding: 0.75rem 0.9rem; }
+    .default__button { font-size: 0.95rem; padding: 0.75rem 1.2rem; }
+    body, .dashboard, .container-fluid.full__width__padding { padding-left: 0; padding-right: 0; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard sp_bottom_100">
+    <div class="container-fluid full__width__padding">
+        <div class="row">
+            <!-- Sidebar comes from base.html -->
+
+            <!-- Main Content -->
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12">
+                <div class="dashboard__section__title d-flex justify-content-between align-items-center flex-wrap">
+                    <h4 class="mb-0">Add Course</h4>
+                    <a href="{% url 'course_category_list_create' %}" class="default__button" style="padding: 0.5rem 1rem; font-size: 0.9rem; margin-top: 0.5rem;">Add Category</a>
+                </div>
+
+                <div class="row mt-4">
+                    <!-- Form -->
+                    <div class="col-12">
+                        <form method="post" enctype="multipart/form-data"  class="needs-validation form-wrapper" novalidate>
+                            {% csrf_token %}
+                            <div class="row">
+                                <!-- Select University -->
+                                <div class="col-12 mb-4">
+                                    <label for="university" class="form-label">University <span class="text-danger">*</span></label>
+                                    <select name="university" id="university" class="form-select modern-input" required>
+                                        <option value="">-- Select University --</option>
+                                        {% for uni in universities %}
+                                            <option value="{{ uni.id }}">{{ uni.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="invalid-feedback">Please select a university.</div>
+                                </div>
+
+                                <!-- Course Title -->
+                                <div class="col-12 mb-4">
+                                    <label for="title" class="form-label">Course Title <span class="text-danger">*</span></label>
+                                    <input type="text" name="title" id="title" class="form-control modern-input" placeholder="Enter Course Title" required>
+                                    <div class="invalid-feedback">Please provide a course title.</div>
+                                </div>
+
+                                <!-- Course Category -->
+                                <div class="col-12 mb-4">
+                                    <label for="category" class="form-label">Course Category <span class="text-danger">*</span></label>
+                                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                                        <select name="category" id="category" class="form-select modern-input" required>
+                                            <option value="">-- Select Category --</option>
+                                            {% for cat in categories %}
+                                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="invalid-feedback">Please select a course category.</div>
+                                </div>
+
+                                <!-- Course Image -->
+                                <div class="col-12 mb-4">
+                                    <label for="image" class="form-label">Course Image <span class="text-danger">*</span></label>
+                                    <input type="file" name="image" id="image" class="form-control modern-input" accept="image/*" required>
+                                    <div class="form-text">Recommended size: 300x300 pixels. Max size: 2MB</div>
+                                    {% comment %} <div id="imagePreview" class="course-image-preview mt-2"></div> {% endcomment %}
+                                </div>
+
+                                <!-- Course Duration -->
+                                <div class="col-12 mb-4">
+                                    <label for="duration" class="form-label">Duration <span class="text-danger">*</span></label>
+                                    <input type="text" name="duration" id="duration" class="form-control modern-input" placeholder="e.g. 3 Years, 6 Months" required>
+                                    <div class="invalid-feedback">Please provide the course duration.</div>
+                                </div>
+
+                                <!-- Course Description -->
+                                <div class="col-12 mb-4">
+                                    <label for="description" class="form-label">Course Description</label>
+                                    <textarea name="description" id="description" class="form-control modern-input" rows="5" placeholder="Enter Course Description"></textarea>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12 mt-4">
+                                    <div class="dashboard__form__button">
+                                        <button type="submit" class="default__button">Add Course</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div> <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    ClassicEditor
+        .create(document.querySelector('#description'), {
+            toolbar: [
+                'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
+                '|', 'insertTable', 'blockQuote', 'undo', 'redo', 'imageUpload'
+            ]
+        })
+        .then(editor => {
+            // Enable Base64 image upload
+            editor.plugins.get('FileRepository').createUploadAdapter = loader => {
+                return {
+                    upload: () => loader.file
+                        .then(file => new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = () => resolve({ default: reader.result });
+                            reader.onerror = error => reject(error);
+                            reader.readAsDataURL(file);
+                        })),
+                    abort: () => {}
+                };
+            };
+        })
+        .catch(error => console.error(error));
+});
+</script>
+
+
+<script>
+// Image preview functionality
+document.getElementById('image').addEventListener('change', function(e) {
+    const preview = document.getElementById('imagePreview');
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        }
+        reader.readAsDataURL(this.files[0]);
+    } else {
+        preview.innerHTML = '';
+    }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+
+    const fields = {
+        university: {
+            element: document.getElementById('university'),
+            error: document.createElement('div'),
+            validate: function(value) {
+                if (!value) return "Please select a university.";
+                return null;
+            }
+        },
+        title: {
+            element: document.getElementById('title'),
+            error: document.createElement('div'),
+            validate: function(value) {
+                if (!value.trim()) return "Course title is required.";
+                if (/\d/.test(value)) return "Course title must contain only letters and spaces.";
+                return null;
+            }
+        },
+        category: {
+            element: document.getElementById('category'),
+            error: document.createElement('div'),
+            validate: function(value) {
+                if (!value) return "Please select a course category.";
+                return null;
+            }
+        },
+        image: {
+            element: document.getElementById('image'),
+            error: document.createElement('div'),
+            validate: function(value) {
+                if (!value) return "Course image is required.";
+                if (!value.type.startsWith('image/')) return "Image must be a valid image file.";
+                return null;
+            }
+        },
+        duration: {
+            element: document.getElementById('duration'),
+            error: document.createElement('div'),
+            validate: function(value) {
+                if (!value.trim()) return "Course duration is required.";
+                return null;
+            }
+        },
+        description: {
+            element: document.getElementById('description'),
+            error: document.createElement('div'),
+            validate: function(value) {
+                if (!value.trim()) return "Course description is required.";
+                return null;
+            }
+        }
+    };
+
+    // Insert error elements after fields
+    Object.values(fields).forEach(f => {
+        f.error.classList.add('text-danger', 'mt-1');
+        f.element.insertAdjacentElement('afterend', f.error);
+    });
+
+    const touchedFields = new Set();
+
+    function validateField(fieldName, showError = true) {
+        const field = fields[fieldName];
+        let value = field.element.value;
+
+        if (field.element.type === 'file') {
+            value = field.element.files[0] || null;
+        }
+
+        if (fieldName === 'description') {
+            const editor = document.querySelector('.ck-editor__editable');
+            if (editor) value = editor.textContent || '';
+        }
+
+        const error = field.validate(value);
+
+        if (showError) {
+            field.error.textContent = error || '';
+            field.error.style.display = error ? 'block' : 'none';
+            if (error) field.element.classList.add('field-error-border');
+            else field.element.classList.remove('field-error-border');
+        }
+
+        return !error;
+    }
+
+    function validateForm() {
+        let isValid = true;
+        Object.keys(fields).forEach(fieldName => {
+            if (!validateField(fieldName, true)) isValid = false;
+        });
+        return isValid;
+    }
+
+    Object.keys(fields).forEach(fieldName => {
+        const field = fields[fieldName];
+        if (field.element.type === 'text' || field.element.tagName.toLowerCase() === 'select') {
+            field.element.addEventListener('blur', () => { touchedFields.add(fieldName); validateField(fieldName, true); });
+            field.element.addEventListener('input', () => { if (touchedFields.has(fieldName) || field.error.textContent) validateField(fieldName, true); });
+        } else if (field.element.type === 'file') {
+            field.element.addEventListener('change', () => { touchedFields.add(fieldName); validateField(fieldName, true); });
+        } else if (field.element.tagName.toLowerCase() === 'textarea') {
+            field.element.addEventListener('blur', () => { touchedFields.add(fieldName); validateField(fieldName, true); });
+            field.element.addEventListener('input', () => { if (touchedFields.has(fieldName) || field.error.textContent) validateField(fieldName, true); });
+        }
+
+        field.element.addEventListener('focus', () => {
+            field.error.textContent = '';
+            field.error.style.display = 'none';
+            field.element.classList.remove('field-error-border');
+        });
+    });
+
+    // CKEditor handling
+    const descriptionEditor = document.querySelector('.ck-editor__editable');
+    if (descriptionEditor) {
+        descriptionEditor.addEventListener('blur', () => { touchedFields.add('description'); validateField('description', true); });
+        descriptionEditor.addEventListener('input', () => { if (touchedFields.has('description') || fields.description.error.textContent) validateField('description', true); });
+        descriptionEditor.addEventListener('focus', () => {
+            fields.description.error.textContent = '';
+            fields.description.error.style.display = 'none';
+            fields.description.element.classList.remove('field-error-border');
+        });
+    }
+
+    form.addEventListener('submit', function(e) {
+        Object.keys(fields).forEach(fieldName => touchedFields.add(fieldName));
+        if (!validateForm()) {
+            e.preventDefault();
+            const firstErrorField = Object.keys(fields).find(fieldName => fields[fieldName].error.textContent);
+            if (firstErrorField) fields[firstErrorField].element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
+    Object.keys(fields).forEach(fieldName => { fields[fieldName].error.style.display = 'none'; });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,1292 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}Admin Dashboard | Ambady Estate Munnar | Organic Plantation Stay in Kerala{% endblock %}</title>
+     <meta name="description"
+        content="{% block meta_description %}Experience a peaceful plantation stay at Ambady Estate, Munnar. Stay in colonial cottages, enjoy organic farm-to-table dining, nature walks, and scenic mountain views in Kerala.{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="{% static 'admin-static/assets/img/T&U.png' %}" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'admin-static/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin-static/assets/css/icofont.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin-static/assets/css/style.css' %}">
+
+    <!-- Professional Dashboard CSS -->
+     <style>
+/* CKEditor List Styles - Fix for bullets and numbers */
+.ck-editor__editable ul,
+.ck-editor__editable ol {
+    padding-left: 40px !important;
+}
+
+.ck-editor__editable ul {
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+}
+
+.ck-editor__editable ol {
+    list-style-type: decimal !important;
+    list-style-position: outside !important;
+}
+
+.ck-editor__editable li {
+    display: list-item !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+.ck-editor__editable ul li {
+    list-style-type: disc !important;
+}
+
+.ck-editor__editable ol li {
+    list-style-type: decimal !important;
+}
+
+/* Nested lists */
+.ck-editor__editable ul ul {
+    list-style-type: circle !important;
+}
+
+.ck-editor__editable ul ul ul {
+    list-style-type: square !important;
+}
+
+
+/* Style for error messages */
+.field-error {
+    display: none;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    color: #dc3545;
+}
+
+/* Red border for invalid fields */
+.field-error-border {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+
+/* Green border for valid fields */
+.field-valid-border {
+    border-color: #28a745 !important;
+}
+
+/* CKEditor error styling */
+.ck-editor__editable.field-error-border {
+    border: 1px solid #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1) !important;
+}
+</style>
+
+    <style>
+        :root {
+            --primary-blue: #1f4d3a;
+            --dark-blue: #14332a;
+            --light-blue: #dcebe3;
+            --sidebar-width: 280px;
+           --header-height: 130px; 
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        /* Toastr customization */
+        .toast-success {
+            background-color: #10b981;
+        }
+        
+        .toast-error {
+            background-color: #ef4444;
+        }
+        
+        .toast-warning {
+            background-color: #f59e0b;
+        }
+        
+        .toast-info {
+            background-color: #3b82f6;
+        }
+
+        /* Header Styles */
+        .dashboard-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 20px;
+            text-decoration: none;
+            height: 100%;
+        }
+
+.logo img {
+    max-height: 200px;   /* was 95px */
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-search {
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .header-search input {
+            width: 100%;
+            padding: 8px 40px 8px 16px;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--gray-50);
+        }
+
+        .header-search input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: var(--white);
+        }
+
+        .header-search button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            cursor: pointer;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: var(--gray-50);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-profile:hover {
+            background: var(--gray-100);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray-700);
+        }
+
+        /* Sidebar Styles */
+        .dashboard-sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            overflow-y: auto;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-content {
+            padding: 24px 0;
+        }
+
+        .sidebar-section {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-title {
+            padding: 0 24px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .sidebar-menu a:hover {
+            background: var(--gray-50);
+            color: var(--primary-blue);
+        }
+
+        /* Fix for active state highlighting */
+{% comment %} .sidebar-menu a.active {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    border-right: 3px solid var(--primary-blue);
+}
+
+.submenu a.active {
+    background: var(--light-blue);
+    color: var(--primary-blue);
+    border-left: 3px solid var(--primary-blue);
+}
+
+/* Fix for dropdown arrow */
+.has-dropdown > a::after {
+    content: '\f107';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.has-dropdown.open > a::after {
+    transform: rotate(180deg);
+} {% endcomment %}
+
+        /* Fix for dropdown arrow visibility */
+        /* Replace dropdown arrow with a dot */
+.has-dropdown > a::after {
+    content: '•';
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 18px;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+    display: inline-block;
+    width: 16px;
+    text-align: center;
+}
+
+.has-dropdown.open > a::after {
+    transform: rotate(90deg);
+}
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: var(--gray-50);
+        }
+
+        .has-dropdown.open .submenu {
+            max-height: 500px;
+        }
+
+        .submenu li {
+            margin-bottom: 0;
+        }
+
+        .submenu a {
+            padding-left: 60px;
+            font-size: 14px;
+            border-left: 3px solid transparent;
+        }
+
+        .submenu a.active {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            border-left-color: var(--primary-blue);
+        }
+
+        /* Main Content Styles */
+        .dashboard-main {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+            overflow-y: auto;
+        }
+
+        .dashboard-content {
+            padding: 32px;
+        }
+
+        /* Content Cards */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .content-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .card-action {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 260px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .header-search {
+                display: none;
+            }
+
+            .dashboard-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .dashboard-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .dashboard-main {
+                margin-left: 0;
+            }
+
+            .dashboard-content {
+                padding: 20px 16px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .user-profile span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-content {
+                padding: 16px 12px;
+            }
+        }
+
+        /* Sidebar overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Hide preloader and other elements */
+        #back__preloader,
+        .theme__shadow__circle {
+            display: none !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+        }
+
+        /* Safety net: collapse any leftover fixed/sticky bar that isn't
+           part of our dashboard layout and happens to sit above it */
+        body > *:not(.dashboard-header):not(.dashboard-sidebar):not(.dashboard-main):not(.sidebar-overlay):not(#global-toast):not(.modal):not(script) {
+            max-height: 0 !important;
+            overflow: hidden !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* Scrollbar styling */
+        .dashboard-sidebar::-webkit-scrollbar,
+        .dashboard-main::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dashboard-sidebar::-webkit-scrollbar-track,
+        .dashboard-main::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+
+        .dashboard-sidebar::-webkit-scrollbar-thumb,
+        .dashboard-main::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 3px;
+        }
+
+        .dashboard-sidebar::-webkit-scrollbar-thumb:hover,
+        .dashboard-main::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
+
+
+        /* User Profile Dropdown Styles */
+.user-profile-dropdown {
+    position: relative;
+    margin-left: 10px;
+}
+
+.user-profile-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: var(--gray-50);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-profile-toggle:hover {
+    background: var(--gray-100);
+}
+
+.user-profile-toggle i {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.user-profile-dropdown.open .user-profile-toggle i {
+    transform: rotate(180deg);
+}
+
+.user-profile-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 250px;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    padding: 16px 0;
+    margin-top: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.user-profile-dropdown.open .user-profile-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px 16px;
+}
+
+.user-details {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.user-email {
+    font-size: 13px;
+    color: var(--gray-500);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 8px 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    color: var(--gray-700);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+    background: var(--gray-50);
+    color: var(--primary-blue);
+}
+
+.dropdown-item i {
+    width: 18px;
+    text-align: center;
+}
+
+.logout-btn {
+    color: #ef4444 !important;
+}
+
+.logout-btn:hover {
+    background: #fef2f2 !important;
+}
+
+/* Modal customization */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--gray-200);
+    padding: 16px 20px;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--gray-200);
+    padding: 16px 20px;
+}
+
+.btn-close {
+    background-size: 12px;
+}
+
+@media (max-width: 768px) {
+    .user-profile-toggle span {
+        display: none;
+    }
+    
+    .user-profile-menu {
+        width: 200px;
+        right: -10px;
+    }
+}
+    </style>
+
+
+    <!-- Add this CSS -->
+<style>
+.global-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 500px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    border-left: 4px solid #4CAF50;
+}
+
+.global-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.global-toast.success {
+    border-left-color: #4CAF50;
+}
+
+.global-toast.error {
+    border-left-color: #f44336;
+}
+
+.global-toast.warning {
+    border-left-color: #ff9800;
+}
+
+.global-toast.info {
+    border-left-color: #2196F3;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.toast-icon {
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+.global-toast.success .toast-icon {
+    color: #4CAF50;
+    content: '✓';
+}
+
+.global-toast.error .toast-icon {
+    color: #f44336;
+    content: '⚠';
+}
+
+.global-toast.warning .toast-icon {
+    color: #ff9800;
+    content: '⚠';
+}
+
+.global-toast.info .toast-icon {
+    color: #2196F3;
+    content: 'ℹ';
+}
+
+.toast-message {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.toast-progress:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: currentColor;
+    animation: toastProgress 5s linear forwards;
+}
+
+.global-toast.success .toast-progress:before {
+    background: #4CAF50;
+}
+
+.global-toast.error .toast-progress:before {
+    background: #f44336;
+}
+
+.global-toast.warning .toast-progress:before {
+    background: #ff9800;
+}
+
+.global-toast.info .toast-progress:before {
+    background: #2196F3;
+}
+
+@keyframes toastProgress {
+    0% { width: 100%; }
+    100% { width: 0%; }
+}
+
+/* Make sure toast appears above modals */
+.modal-open .global-toast {
+    z-index: 99999;
+}
+</style>
+
+<style>
+    /* Search box styling */
+.search-box {
+    width: 220px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Input field style */
+.search-box input {
+    width: 100%;
+    border-radius: 20px;
+    padding-left: 12px;
+    padding-right: 32px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.search-box input:focus {
+    border-color: #198754; /* Bootstrap success color */
+    box-shadow: 0 0 4px rgba(25, 135, 84, 0.4);
+}
+
+/* Small search icon inside input */
+.search-box::after {
+    content: "\f002";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    pointer-events: none;
+    font-size: 13px;
+}
+.logo img {
+    filter: 
+        drop-shadow(0 0 2px rgba(0,0,0,0.85))
+        drop-shadow(0 0 4px rgba(31,77,58,0.6))
+        drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover img {
+    filter: 
+        drop-shadow(0 0 2px rgba(0,0,0,0.9))
+        drop-shadow(0 0 6px rgba(31,77,58,0.75))
+        drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* ✅ RESPONSIVE FIXES */
+@media (max-width: 992px) { /* Tablets and below */
+    .d-flex.justify-content-end {
+        justify-content: center !important; /* Center search bar */
+    }
+    .search-box {
+        width: 260px;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 576px) { /* Mobile screens */
+    .search-box {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .search-box input {
+        font-size: 13px;
+        padding-left: 10px;
+        padding-right: 30px;
+    }
+
+    .search-box::after {
+        font-size: 12px;
+        right: 8px;
+    }
+}
+
+</style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <div id="global-toast" class="global-toast">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
+        <div class="toast-progress"></div>
+    </div>
+    <!-- Dashboard Header -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="icofont-navigation-menu"></i>
+            </button>
+            
+            <a href="/" class="logo">
+    <img src="{% static 'admin-static/assets/img/T&U.png' %}" alt="Logo">
+</a>
+        </div>
+
+        <div class="header-right">
+           
+           
+
+           <div class="user-profile-dropdown">
+    <div class="user-profile-toggle">
+        <div class="user-avatar">A</div>
+        <span>Account</span>
+        <i class="icofont-simple-down"></i>
+    </div>
+    <div class="user-profile-menu">
+        <div class="user-info">
+            <div class="user-avatar">A</div>
+            <div class="user-details">
+                <div class="user-name">{{ request.user.username }}</div>
+                <div class="user-email">{{ request.user.email }}</div>
+            </div>
+        </div>
+        
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item logout-btn">
+            <i class="icofont-logout"></i>
+            Logout
+        </a>
+    </div>
+</div>
+        </div>
+    </header>
+
+    <!-- Logout Confirmation Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Logout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{% url 'tandj_app:admin_logout' %}" class="btn btn-primary">Yes, Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Dashboard Sidebar -->
+    <aside class="dashboard-sidebar" id="dashboardSidebar">
+        <div class="sidebar-content">
+
+            <!-- Main Section -->
+            <div class="sidebar-section">
+                <h6 class="sidebar-title">Main</h6>
+                <ul class="sidebar-menu">
+                <li>
+    <a href="{% url 'tandj_app:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <i class="icofont-dashboard"></i>
+        Dashboard
+    </a>
+</li>
+                </ul>
+            </div>
+
+            <!-- Add this toast container near the end of your body, before the scripts --> <!-- Management Section -->
+            <div class="sidebar-section">
+                <h6 class="sidebar-title">Management</h6>
+                <ul class="sidebar-menu">
+                    <li>
+
+
+
+
+
+        
+    <a href="{% url 'tandj_app:room_list' %}" class="{% if request.resolver_match.url_name == 'room_list' %}active{% endif %}">
+        <i class="icofont-bed"></i>
+        Rooms
+    </a>
+</li>
+                
+                  <li>
+    <a href="{% url 'tandj_app:nearby_destination_list' %}" class="{% if request.path == '/nearby-destinations/' %}active{% endif %}">
+        <i class="icofont-map-pins"></i>
+        Nearby Destinations
+    </a>
+</li>
+
+                    <li>
+    <a href="{% url 'tandj_app:blog_list' %}" class="{% if request.resolver_match.url_name == 'blog_list' %}active{% endif %}">
+    <i class="icofont-newspaper"></i>
+    Blogs
+</a>
+</li>
+<li class="has-dropdown">
+    <a href="#">
+        <i class="icofont-picture"></i>
+        Gallery
+    </a>
+    <ul class="submenu">
+        <li>
+            <a href="{% url 'tandj_app:list_image' %}" class="{% if request.resolver_match.url_name == 'list_image' %}active{% endif %}">
+                Gallery Images
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'tandj_app:add_category' %}" class="{% if request.resolver_match.url_name == 'add_category' %}active{% endif %}">
+                Add Gallery Category
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'tandj_app:category_list' %}" class="{% if request.resolver_match.url_name == 'category_list' %}active{% endif %}">
+                Gallery Categories
+            </a>
+        </li>
+    </ul>
+</li>
+                     <li>
+    <a href="{% url 'tandj_app:activity_list' %}" class="{% if request.resolver_match.url_name == 'activity_list' %}active{% endif %}">
+        <i class="icofont-tree"></i>
+        Activities
+    </a>
+</li>
+
+<li>
+    <a href="{% url 'tandj_app:reservation_list' %}" class="{% if request.path == '/reservations/' %}active{% endif %}">
+        <i class="icofont-calendar"></i>
+        Bookings
+    </a>
+</li>
+                    <li>
+    <a href="{% url 'tandj_app:testimonial_list' %}" class="{% if request.resolver_match.url_name == 'testimonial_list' %}active{% endif %}">
+    <i class="icofont-quote-left"></i>
+    Testimonials
+</a>
+</li>
+<li>
+    <a href="{% url 'tandj_app:enquiry_list' %}" class="{% if request.path == '/enquiries/' %}active{% endif %}">
+        <i class="icofont-envelope"></i>
+        Enquiry
+    </a>
+</li>
+                  
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="dashboard-content">
+            <!-- Content Area -->
+            {% block content %}
+            <div class="content-grid">
+                <!-- Content will be overridden by child templates -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Welcome to Dashboard</h3>
+                        <a href="#" class="card-action">View All</a>
+                    </div>
+                    <p>This is your main content area. Content from child templates will appear here.</p>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+    </main>
+
+    <script src="{% static 'admin-static/assets/js/vendor/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'admin-static/assets/js/bootstrap.min.js' %}"></script>
+
+    <script>
+        // Mobile menu toggle
+        // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const dashboardSidebar = document.getElementById('dashboardSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleMobileMenu() {
+            dashboardSidebar.classList.toggle('mobile-open');
+            sidebarOverlay.classList.toggle('active');
+            document.body.style.overflow = dashboardSidebar.classList.contains('mobile-open') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            dashboardSidebar.classList.remove('mobile-open');
+            sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        // Close mobile menu on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+
+            // Dropdown menu functionality - prevent closing when clicking submenu items
+const dropdownToggles = document.querySelectorAll('.has-dropdown > a');
+
+dropdownToggles.forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        const parent = this.parentElement;
+        
+        // Close other dropdowns
+        document.querySelectorAll('.has-dropdown').forEach(item => {
+            if (item !== parent) {
+                item.classList.remove('open');
+            }
+        });
+        
+        // Toggle current dropdown
+        parent.classList.toggle('open');
+    });
+});
+
+// Close dropdowns when clicking outside, but not when clicking on submenu items
+document.addEventListener('click', function(e) {
+    const isDropdown = e.target.closest('.has-dropdown');
+    const isSubmenuLink = e.target.closest('.submenu a');
+    
+    // Only close dropdowns if clicking outside both dropdowns and submenu links
+    if (!isDropdown && !isSubmenuLink) {
+        document.querySelectorAll('.has-dropdown').forEach(item => {
+            item.classList.remove('open');
+        });
+    }
+});
+
+// Handle submenu link clicks - don't close the parent dropdown
+document.querySelectorAll('.submenu a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        // Allow the link to work normally but keep the dropdown open
+        const dropdown = this.closest('.has-dropdown');
+        if (dropdown) {
+            dropdown.classList.add('open');
+        }
+    });
+});
+
+
+        });
+    </script>
+
+    <script>
+        // User Profile Dropdown functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const userProfileDropdown = document.querySelector('.user-profile-dropdown');
+    const userProfileToggle = document.querySelector('.user-profile-toggle');
+    const logoutBtn = document.querySelector('.logout-btn');
+    
+    // Toggle dropdown
+    if (userProfileToggle) {
+        userProfileToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userProfileDropdown.classList.toggle('open');
+        });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-profile-dropdown')) {
+            userProfileDropdown.classList.remove('open');
+        }
+    });
+    
+    // Logout button click - show modal
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            userProfileDropdown.classList.remove('open');
+            
+            // Show logout confirmation modal
+            const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            logoutModal.show();
+        });
+    }
+    
+    // Prevent dropdown close when clicking inside dropdown
+    const userProfileMenu = document.querySelector('.user-profile-menu');
+    if (userProfileMenu) {
+        userProfileMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+});
+    </script>
+
+    
+    <script>
+    // Simple toast function for Django messages
+    function showGlobalToast(message, type = 'success') {
+        const toast = document.getElementById('global-toast');
+        const toastMessage = toast.querySelector('.toast-message');
+        const toastIcon = toast.querySelector('.toast-icon');
+        
+        // Set message
+        toastMessage.textContent = message;
+        
+        // Remove all type classes
+        toast.classList.remove('success', 'error', 'warning', 'info');
+        
+        // Add the correct type class
+        toast.classList.add(type);
+        
+        // Set appropriate icon
+        switch(type) {
+            case 'success':
+                toastIcon.className = 'toast-icon';
+                toastIcon.style.content = '"✓"';
+                break;
+            case 'error':
+                toastIcon.className = 'toast-icon';
+                toastIcon.style.content = '"⚠"';
+                break;
+            case 'warning':
+                toastIcon.className = 'toast-icon';
+                toastIcon.style.content = '"⚠"';
+                break;
+            case 'info':
+                toastIcon.className = 'toast-icon';
+                toastIcon.style.content = '"ℹ"';
+                break;
+        }
+        
+        // Show toast
+        toast.classList.add('show');
+        
+        // Remove toast after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 5000);
+    }
+
+    // Close toast when clicking on it
+    document.getElementById('global-toast').addEventListener('click', function() {
+        this.classList.remove('show');
+    });
+
+    // Show Django messages on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check for Django messages
+        {% if messages %}
+            {% for message in messages %}
+                showGlobalToast("{{ message }}", "{{ message.tags }}");
+            {% endfor %}
+        {% endif %}
+    });
+    </script>
+
+    <script>
+    window.addEventListener("pageshow", function (event) {
+        // If the page was loaded from back/forward cache
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+</script>
+
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
