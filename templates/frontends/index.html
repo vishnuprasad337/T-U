@@ -18,122 +18,218 @@
     </div>
 </section>
 			<!-- Intro / Hero Frame Sequence end -->
-
-			<style>
-				.hero-frames-section {
-					position: relative;
-					width: 100%;
-					height: 100vh;
-					overflow: hidden;
-					background: #000;
-				}
-				.hero-frames-canvas {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					z-index: 0;
-					display: block;
-					filter: brightness(1.25) contrast(1.08) saturate(1.05);
-				}
-				.hero-frames-section .hero-mask {
-					z-index: 1;
-				}
-				.hero-video-scroll-hint {
-					position: absolute;
-					bottom: 40px;
-					left: 50%;
-					transform: translateX(-50%);
-					z-index: 2;
-					text-align: center;
-					animation: heroScrollBounce 1.8s infinite;
-				}
-				@keyframes heroScrollBounce {
-					0%, 100% { transform: translate(-50%, 0); }
-					50% { transform: translate(-50%, 10px); }
-				}
-                @media (max-width: 576px) {
-	/* Shrink About-section buttons (Know More / Book Now) for mobile */
-	.col-lg-6 .d-inline-flex.align-items-center.gap-4 {
-		flex-wrap: wrap;
-		gap: 12px !important;
+<style>
+	/* ===== Prevent page-wide horizontal overflow ===== */
+	html, body {
+		max-width: 100%;
+		overflow-x: hidden;
 	}
+	.container, .container-fluid, .container-xxl {
+		max-width: 100%;
+		overflow-x: hidden;
+	}
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+	.hero-frames-section {
+		position: relative;
+		width: 100%;
+		height: 100vh;
+		overflow: hidden;
+		background: #000;
+	}
+	.hero-frames-canvas {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		display: block;
+		filter: brightness(1.25) contrast(1.08) saturate(1.05);
+	}
+	.hero-frames-section .hero-mask {
+		z-index: 1;
+	}
+	.hero-video-scroll-hint {
+		position: absolute;
+		bottom: 40px;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 2;
+		text-align: center;
+		animation: heroScrollBounce 1.8s infinite;
+	}
+	@keyframes heroScrollBounce {
+		0%, 100% { transform: translate(-50%, 0); }
+		50% { transform: translate(-50%, 10px); }
+	}
+	.hero-frames-logo {
+		position: absolute;
+		top: 80px;   /* was 60px */
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 2;
+		max-height: 100px;
+		width: auto;
+		filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+	}
+	/* ===== About-section buttons: shrink on mobile ===== */
+	@media (max-width: 576px) {
+		.hero-frames-logo {
+			max-height: 62px;
+			top: 55px;   /* was 40px */
+		}
+		.col-lg-6 .d-inline-flex.align-items-center.gap-4 {
+			flex-wrap: wrap;
+			gap: 12px !important;
+		}
+		.col-lg-6 .d-inline-flex.align-items-center.gap-4 .btn {
+			padding: 8px 16px !important;
+			font-size: 0.8rem !important;
+		}
+		.col-lg-6 .d-inline-flex.align-items-center.gap-4 .btn .btn-icon {
+			width: 26px !important;
+			height: 26px !important;
+			font-size: 0.65rem !important;
+		}
+		/* Let the call-us block drop to its own line if space is tight */
+		.col-lg-6 .d-inline-flex.align-items-center.gap-4 .d-flex.align-items-center.gap-3 {
+			flex-basis: 100%;
+			justify-content: flex-start;
+			margin-top: 4px;
+		}
+	}
+	/* ===== Activities section buttons: inline (not stacked) on mobile & tablet ===== */
+	@media (max-width: 991px) {
+		.activities-row .d-flex.flex-wrap.align-items-center.gap-2 {
+			flex-wrap: nowrap !important;
+			gap: 8px !important;
+		}
+		.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn {
+			padding: 6px 10px !important;
+			font-size: 0.72rem !important;
+			flex: 1 1 0;
+			white-space: nowrap;
+			justify-content: center;
+		}
+		.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn .btn-icon {
+			width: 22px !important;
+			height: 22px !important;
+			font-size: 0.6rem !important;
+			margin-left: 6px;
+		}
+	}
+	@media (max-width: 400px) {
+		.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn {
+			padding: 6px 8px !important;
+			font-size: 0.65rem !important;
+		}
+	}
+	/* ===== Section titles: left align on mobile =====
+	   Every section heading block on this page uses the pattern
+	   `.mx-auto.text-center.mb-5` (eyebrow pill + <h2>). Center-aligned
+	   text/margins look cramped on narrow screens, so switch to flush-left. */
+	@media (max-width: 576px) {
+		.section .mx-auto.text-center.mb-5 {
+			margin-left: 0 !important;
+			margin-right: 0 !important;
+			text-align: left !important;
+		}
+		.section .mx-auto.text-center.mb-5 br {
+			display: none;
+		}
+	}
+	/* ===== Fix activities image overflowing off-screen on mobile ===== */
+	@media (max-width: 767px) {
+		.activities-row {
+			--bs-gutter-x: 1.5rem; /* shrink the gx-5 gutter so the row fits the viewport */
+			margin-left: 0;
+			margin-right: 0;
+		}
+		.activities-row > div {
+			padding-left: calc(var(--bs-gutter-x) * 0.5);
+			padding-right: calc(var(--bs-gutter-x) * 0.5);
+		}
+		.activities-row .activity-img-col a {
+			max-height: 260px;
+			min-height: 220px;
+		}
+	}
+	/* ===== Activities image: curved corners (forced, in case Bootstrap/img-fluid overrides) ===== */
+	.activities-row .activity-img-col a {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border-radius: 1.5rem !important;
+		overflow: hidden;
+	}
+	.activities-row .activity-img-col img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		border-radius: 1.5rem !important;
+	}
+	@media (max-width: 767px) {
+		.activities-row .activity-img-col a,
+		.activities-row .activity-img-col img {
+			border-radius: 1.25rem !important;
+		}
+	}
+	/* Belt-and-braces: never allow the section to cause horizontal scroll */
+	.section {
+		overflow-x: hidden;
+	}
+    /* ===== Global button sizing: tablet & mobile ===== */
 
-	.col-lg-6 .d-inline-flex.align-items-center.gap-4 .btn {
+/* Tablet (≤991px) */
+@media (max-width: 991px) {
+	.btn-new {
+		padding: 10px 20px !important;
+		font-size: 0.85rem !important;
+	}
+	.btn-new .btn-icon {
+		width: 28px !important;
+		height: 28px !important;
+		font-size: 0.7rem !important;
+	}
+}
+
+/* Mobile (≤576px) */
+@media (max-width: 576px) {
+	.btn-new {
 		padding: 8px 16px !important;
 		font-size: 0.8rem !important;
 	}
-
-	.col-lg-6 .d-inline-flex.align-items-center.gap-4 .btn .btn-icon {
+	.btn-new .btn-icon {
 		width: 26px !important;
 		height: 26px !important;
 		font-size: 0.65rem !important;
 	}
-
-	/* Let the call-us block drop to its own line if space is tight */
-	.col-lg-6 .d-inline-flex.align-items-center.gap-4 .d-flex.align-items-center.gap-3 {
-		flex-basis: 100%;
-		justify-content: flex-start;
-		margin-top: 4px;
+	/* Buttons that sit alone/centered (Amenities, Experience, Blog, 
+	   "View all Rooms", Contact) shouldn't stretch full width, but 
+	   should still get breathing room from neighboring content */
+	.text-center .btn-new,
+	.d-grid .btn-new {
+		display: inline-flex;
 	}
 }
-.hero-frames-logo {
-    position: absolute;
-    top: 80px;   /* was 60px */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-    max-height: 100px;
-    width: auto;
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
-}
-@media (max-width: 576px) {
-    .hero-frames-logo {
-        max-height: 62px;
-        top: 55px;   /* was 40px */
-    }
-}
 
-/* ===== Activities section: match image height to content column ===== */
-.activities-row {
-    align-items: stretch;
+/* Extra-small phones (≤400px) */
+@media (max-width: 400px) {
+	.btn-new {
+		padding: 7px 14px !important;
+		font-size: 0.75rem !important;
+	}
+	.btn-new .btn-icon {
+		width: 24px !important;
+		height: 24px !important;
+		font-size: 0.6rem !important;
+	}
 }
-.activities-row .activity-img-col {
-    display: flex;
-}
-.activities-row .activity-img-col a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    max-height: 360px;
-    min-height: 280px;
-    border-radius: 1.5rem;
-    overflow: hidden;
-}
-.activities-row .activity-img-col img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-/* ===== Section titles: left align on mobile =====
-   Every section heading block on this page uses the pattern
-   `.mx-auto.text-center.mb-5` (eyebrow pill + <h2>). Center-aligned
-   text/margins look cramped on narrow screens, so switch to flush-left. */
-@media (max-width: 576px) {
-    .section .mx-auto.text-center.mb-5 {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        text-align: left !important;
-    }
-    .section .mx-auto.text-center.mb-5 br {
-        display: none;
-    }
-}
-			</style>
-
+</style>
 			<script>
 	document.addEventListener('DOMContentLoaded', function () {
 		// ---- CONFIG ----

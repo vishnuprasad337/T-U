@@ -164,5 +164,83 @@
     object-fit: cover;
     display: block;
 }
+/* ===== Room card — tablet & mobile ===== */
+@media (max-width: 991px) {
+	.room-items-wrap .room-item .p-4.m-2 {
+		padding: 1.25rem !important;
+		margin: 0.5rem !important;
+	}
+	.room-items-wrap .room-item h3.text-8 {
+		font-size: 1.5rem !important;
+		line-height: 1.25 !important;
+		margin-bottom: 0.5rem !important;
+	}
+	.room-items-wrap .room-item .text-body-secondary {
+		font-size: 0.9rem !important;
+		line-height: 1.5 !important;
+	}
+	.room-items-wrap .room-item .room-item-img {
+		min-height: 240px;
+	}
+}
+
+@media (max-width: 576px) {
+	.room-items-wrap .room-item .p-4.m-2 {
+		padding: 1rem !important;
+		margin: 0.35rem !important;
+	}
+	.room-items-wrap .room-item h3.text-8 {
+		font-size: 1.3rem !important;
+	}
+	.room-items-wrap .room-item .text-body-secondary {
+		font-size: 0.85rem !important;
+	}
+
+	/* Feature list: stop mid-word truncation, let it wrap on its own line */
+	.room-items-wrap .room-item .row.g-2.text-3 {
+		row-gap: 0.5rem !important;
+	}
+	.room-items-wrap .room-item .row.g-2.text-3 .col-6 {
+		flex: 0 0 100% !important;
+		max-width: 100% !important;
+		font-size: 0.85rem !important;
+		white-space: normal !important;
+	}
+
+	/* Price + Details row: stack instead of squeezing side by side */
+	.room-items-wrap .room-item .d-flex.align-items-center.justify-content-between.w-100 {
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		gap: 14px !important;
+	}
+	.room-items-wrap .room-item .text-7.fw-600 {
+		font-size: 1.4rem !important;
+	}
+	.room-items-wrap .room-item .btn-new {
+		align-self: stretch;
+		justify-content: center;
+	}
+	.room-items-wrap .room-item .room-item-img {
+		min-height: 200px;
+	}
+}
+@media (max-width: 576px) {
+	.room-items-wrap .room-item .d-flex.align-items-center.justify-content-between.w-100 {
+		flex-direction: column !important;
+		align-items: flex-start !important;
+		gap: 12px !important;
+	}
+	.room-items-wrap .room-item .btn-new {
+		align-self: flex-start !important;
+		justify-content: center;
+		padding: 10px 20px !important;
+		font-size: 0.85rem !important;
+	}
+	.room-items-wrap .room-item .btn-new .btn-icon {
+		width: 28px !important;
+		height: 28px !important;
+		font-size: 0.7rem !important;
+	}
+}
 </style>
 {% endblock %}
