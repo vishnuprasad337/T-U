@@ -6,7 +6,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
-    <link href="{% static 'tandu-main/tandu.png' %}" rel="icon">
+<link rel="icon" href="{% static 'tandu-main/favicons/favicon.ico' %}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'tandu-main/favicons/favicon-32.png' %}">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'tandu-main/favicons/favicon-16.png' %}">
+<link rel="apple-touch-icon" href="{% static 'tandu-main/favicons/apple-touch-icon.png' %}">
     <title>{% block title %}The Mist - Luxury Hotel HTML Template{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}">
     <meta name="author" content="harnishdesign.net">
@@ -26,9 +29,15 @@
     <!-- Custom Header/Logo Scroll Behavior
 	============================== -->
  <style>
-        /* Logo image: always the same max size, so it can never render "big" */
+        /* Navbar logo */
         #header .logo img {
-            max-height: 168px;
+            max-height: 170px;
+            width: auto;
+            display: block;
+        }
+        /* Footer logo */
+        #footer .footer-logo img {
+            max-height: 180px;
             width: auto;
             display: block;
         }
@@ -172,32 +181,16 @@
 </li>
                           <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:activities' %}">Activities</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:nearby_destinations' %}">Nearby Destinations</a></li>
-                            <li class="nav-item"><a class="nav-link" href="spa.html">Spa</a></li>
-                            <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#">Pages</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="services.html">Services</a></li>
-                                    <li><a class="dropdown-item" href="facilities.html">Facilities</a></li>
-									<li><a class="dropdown-item" href="gallery.html">Gallery</a></li>
-									<li><a class="dropdown-item" href="faqs.html">FAQs</a></li>
-									<li><a class="dropdown-item" href="testimonials.html">testimonials</a></li>
-									<li class="dropdown"><a class="dropdown-item dropdown-toggle" href="#">Blog</a>
-										<ul class="dropdown-menu">
-											<li><a class="dropdown-item" href="blog.html">Blog</a></li>
-											<li><a class="dropdown-item" href="blog-grid.html">Blog - Grid</a></li>
-											<li><a class="dropdown-item" href="blog-single-post.html">Blog Single Post</a></li>
-										</ul>
-									</li>
-									<li><a class="dropdown-item" href="404.html">404</a></li>
-									<li><a class="dropdown-item" href="coming-soon.html">Coming Soon</a></li>
-									
-                                </ul>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:gallery_public' %}">Gallery</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:blogs' %}">Blog</a></li>
+                            
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:contact' %}">Contact</a></li>
                         </ul>
                     </div>
 
                     <!-- Button -->
-                    <a href="contact.html" class="btn btn-new btn-primary text-capitalize rounded-pill text-nowrap ms-auto">
+                    <a href="#" class="btn btn-new btn-primary text-capitalize rounded-pill text-nowrap ms-auto"
+                       data-bs-toggle="modal" data-bs-target="#bookNowModal">
 						<span class="btn-text"><span>Book Now</span></span>
 						<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
 					</a>
@@ -229,31 +222,34 @@
                     <div class="container">
                         <div class="row gy-4">
                             <div class="col-sm-7 col-md-6 col-lg-4">
-                                <div class="mb-4"><a href="index.html"><img src="{% static 'tandu-main/images/logo.png' %}" alt=""></a></div>
-                                <p class="text-3">Welcome uncover a luxurious haven at Hotel The Mist, United States. Nestled in Los Ageless heart, our hotel offers modern elegance and warm hospitality.</p>
+                                <div class="footer-logo mb-2"><a href="{% url 'tandj_app:index' %}"><img src="{% static 'tandu-main/tandu.png' %}" alt=""></a></div>
+                                <p class="text-3">Welcome uncover a luxurious haven at T & U Leisure Hotel, Munnar, Kerala. Nestled amidst the tea hills, our hotel offers modern elegance and warm hospitality.</p>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-3 ms-auto">
+                                <h5 class="text-4 fw-600 mb-3">Connect With Us</h5>
                                 <ul class="nav flex-column fw-500">
-                                    <li class="nav-item"> <a class="nav-link" href="about-us.html">About Us</a></li>
-                                    <li class="nav-item"> <a class="nav-link" href="rooms.html">Rooms</a></li>
-                                    <li class="nav-item"> <a class="nav-link" href="restaurant.html">Restaurant</a></li>
-                                    <li class="nav-item"> <a class="nav-link" href="banquets.html">Banquets</a></li>
-                                    <li class="nav-item"> <a class="nav-link" href="spa.html">Spa <span class="badge bg-primary text-1 fw-600 rounded-pill text-uppercase ms-1">New</span></a></li>
-                                    <li class="nav-item"> <a class="nav-link" href="contact-us.html">Contact Us</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:about' %}">About</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:rooms' %}">Rooms</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:activities' %}">Activities</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:nearby_destinations' %}">Nearby Destinations</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:gallery_public' %}">Gallery</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:blogs' %}">Blog</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:contact' %}">Contact</a></li>
                                 </ul>
                             </div>
                             <div class="col-12 col-lg-4">
+                                <h5 class="text-4 fw-600 mb-3">Get In Touch</h5>
                                 <div class="d-flex gap-4 mb-3">
                                     <span class="text-7 me-1"><i class="fa-solid fa-location-dot"></i></span>
-                                    <div class="text-3 lh-lg">423 W 9th St, Los Angeles, CA 90014, United States</div>
+                                    <div class="text-3 lh-lg">T &amp; U Leisure Hotel, Maximunnar Pvt Ltd, Mattupetty Road, Munnar, Kerala &ndash; 685612</div>
                                 </div>
                                 <a href="#" class="d-flex align-items-center gap-4 mb-1 link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
                                     <span class="text-6"><i class="fa-solid fa-phone-volume"></i></span>
-                                    <div class="text-5 fw-700 lh-lg">(+060) 444 5346</div>
+                                    <div class="text-5 fw-700 lh-lg">+91 9188954770</div>
                                 </a>
-                                <a href="mailto:info@themist.com" class="d-flex align-items-center gap-4 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
+                                <a href="mailto:mail@tanduleisurehotel.in" class="d-flex align-items-center gap-4 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
                                     <span class="text-6"><i class="fa-solid fa-envelope"></i></span>
-                                    <div class="text-5 fw-600 lh-lg">info@themist.com</div>
+                                    <div class="text-5 fw-600 lh-lg">mail@tanduleisurehotel.in</div>
                                 </a>
                                 <div class="mt-3">
                                     <ul class="social-icons social-icons-light">
@@ -270,8 +266,8 @@
                         <div class="container">
                             <div class="row gy-3">
                                 <div class="col-lg">
-                                    <p class="text-3 text-center mb-2">Copyright &copy; 2026 <a class="fw-500 link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="#">The Mist</a>. All Rights Reserved.</p>
-                                    <p class="text-3 text-center mb-0">Designed by <a class="fw-500 link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="https://harnishdesign.net/">Harnish Design</a></p>
+                                    <p class="text-3 text-center mb-2">Copyright &copy; 2026 <a class="fw-500 link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="#">T & U Leisure Hotel</a>. All Rights Reserved.</p>
+                                    <p class="text-3 text-center mb-0">Designed by <a class="fw-500 link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-100-hover" href="https://vynzora.com/">Vynzora</a></p>
                                 </div>
                             </div>
                         </div>
@@ -280,6 +276,233 @@
             </div>
         </footer>
         <!-- Footer end -->
+
+        <!-- Book Now Modal (site-wide: lives in base.html so every page,
+             not just the homepage, can open it from the navbar button) -->
+        <div class="modal fade" id="bookNowModal" tabindex="-1" aria-labelledby="bookNowModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-5 border-0" style="overflow: hidden;">
+                    <div class="modal-header border-0 px-4 pt-4 pb-0">
+                        <h3 class="modal-title text-8 fw-600" id="bookNowModalLabel">Book Your <span class="text-primary">Stay</span></h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body px-4 pb-4" style="overscroll-behavior: contain;">
+                        <p class="text-body-secondary mb-4">Fill in your details and we'll confirm your reservation over WhatsApp.</p>
+                        <form id="bookNowForm">
+    {% csrf_token %}
+    <div class="row gy-3">
+        <div class="col-12">
+            <label class="form-label text-3 fw-600" for="guestName">Full Name</label>
+            <input type="text" name="guest_name" class="form-control rounded-pill" id="guestName" required placeholder="Your full name">
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="guestEmail">Email</label>
+            <input type="email" name="guest_email" class="form-control rounded-pill" id="guestEmail" required placeholder="you@example.com">
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="guestPhone">Phone</label>
+            <input type="tel" name="guest_phone" class="form-control rounded-pill" id="guestPhone" placeholder="Your phone number">
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="checkIn">Check In</label>
+            <input type="date" name="check_in" class="form-control rounded-pill" id="checkIn" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="checkOut">Check Out</label>
+            <input type="date" name="check_out" class="form-control rounded-pill" id="checkOut" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="numGuests">Number of Guests</label>
+            <input type="number" name="num_guests" min="1" value="1" class="form-control rounded-pill" id="numGuests" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="roomSelect">Room <span class="text-body-secondary fw-400">(optional)</span></label>
+            <select name="room_id" class="form-select rounded-pill" id="roomSelect">
+                <option value="" data-room-name="">General Inquiry</option>
+                {% if rooms %}
+                    {% for room in rooms %}
+                        <option value="{{ room.id }}" data-room-name="{{ room.room_category }}">{{ room.room_category }}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+        <div class="col-12">
+            <label class="form-label text-3 fw-600" for="specialRequests">Special Requests</label>
+            <textarea name="special_requests" class="form-control rounded-4" id="specialRequests" rows="3" placeholder="Any special requests? (optional)"></textarea>
+        </div>
+        <div class="col-12 d-grid mt-2">
+            <button type="submit" class="btn btn-new btn-primary rounded-pill">
+                <span class="btn-text"><span>Send via WhatsApp</span></span>
+                <span class="btn-icon"><i class="fa-brands fa-whatsapp"></i></span>
+            </button>
+        </div>
+    </div>
+</form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var bookNowModalEl = document.getElementById('bookNowModal');
+            if (bookNowModalEl) {
+                var lockedScrollY = 0;
+                var modalContentEl = bookNowModalEl.querySelector('.modal-content');
+                var modalHeaderEl = bookNowModalEl.querySelector('.modal-header');
+                var modalBodyEl = bookNowModalEl.querySelector('.modal-body');
+
+                function sizeModal() {
+                    if (!modalContentEl || !modalBodyEl) return;
+                    var margin = 56; // total top+bottom breathing room
+                    var maxContentHeight = window.innerHeight - margin;
+                    modalContentEl.style.height = 'auto';
+                    modalContentEl.style.maxHeight = maxContentHeight + 'px';
+
+                    var headerHeight = modalHeaderEl ? modalHeaderEl.offsetHeight : 0;
+                    modalBodyEl.style.maxHeight = (maxContentHeight - headerHeight) + 'px';
+                    modalBodyEl.style.overflowY = 'auto';
+                }
+
+                bookNowModalEl.addEventListener('show.bs.modal', function (event) {
+                    lockedScrollY = window.scrollY || window.pageYOffset || 0;
+                    document.body.style.overflow = 'hidden';
+                    document.body.style.position = 'fixed';
+                    document.body.style.top = (-lockedScrollY) + 'px';
+                    document.body.style.left = '0';
+                    document.body.style.right = '0';
+                    document.body.style.width = '100%';
+
+                    // Pre-select the room whose "Book Now" button triggered
+                    // this modal (falls back to "General Inquiry" if the
+                    // modal was opened generically, e.g. header button).
+                    var trigger = event.relatedTarget;
+                    var roomSelectEl = document.getElementById('roomSelect');
+                    var specialRequestsEl = document.getElementById('specialRequests');
+                    if (trigger && roomSelectEl) {
+                        var roomId = trigger.getAttribute('data-room-id') || '';
+                        if (roomId && roomSelectEl.querySelector('option[value="' + roomId + '"]')) {
+                            roomSelectEl.value = roomId;
+                        } else {
+                            roomSelectEl.value = '';
+                        }
+                    } else if (roomSelectEl) {
+                        roomSelectEl.value = '';
+                    }
+
+                    // If a specific activity's "Book Now" button triggered
+                    // this modal, pre-fill Special Requests with the
+                    // activity name so staff know what the guest is
+                    // enquiring about (activities have no room to select).
+                    if (specialRequestsEl) {
+                        var activityName = trigger ? trigger.getAttribute('data-activity-name') : null;
+                        if (activityName) {
+                            specialRequestsEl.value = 'Interested in activity: ' + activityName;
+                        } else if (!trigger || !trigger.getAttribute('data-room-id')) {
+                            specialRequestsEl.value = '';
+                        }
+                    }
+                });
+                bookNowModalEl.addEventListener('shown.bs.modal', sizeModal);
+                window.addEventListener('resize', function () {
+                    if (bookNowModalEl.classList.contains('show')) sizeModal();
+                });
+                bookNowModalEl.addEventListener('hidden.bs.modal', function () {
+                    document.body.style.overflow = '';
+                    document.body.style.position = '';
+                    document.body.style.top = '';
+                    document.body.style.left = '';
+                    document.body.style.right = '';
+                    document.body.style.width = '';
+                    window.scrollTo(0, lockedScrollY);
+                });
+            }
+
+            var bookNowForm = document.getElementById('bookNowForm');
+            if (!bookNowForm) return;
+
+            var WHATSAPP_NUMBER = '919633870962'; // country code 91 + 9633870962
+
+            bookNowForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                var name = document.getElementById('guestName').value.trim();
+                var email = document.getElementById('guestEmail').value.trim();
+                var phone = document.getElementById('guestPhone').value.trim();
+                var checkIn = document.getElementById('checkIn').value;
+                var checkOut = document.getElementById('checkOut').value;
+                var numGuests = document.getElementById('numGuests').value;
+                var roomSelectEl = document.getElementById('roomSelect');
+                var roomName = roomSelectEl.options[roomSelectEl.selectedIndex].getAttribute('data-room-name');
+                var requests = document.getElementById('specialRequests').value.trim();
+
+                if (checkOut <= checkIn) {
+                    alert('Check-out date must be after check-in date.');
+                    return;
+                }
+
+                var submitBtn = bookNowForm.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = true;
+
+                // Save the booking to the database first...
+                var formData = new FormData(bookNowForm);
+
+                fetch("{% url 'tandj_app:reservation_ajax_create' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (submitBtn) submitBtn.disabled = false;
+
+                    if (!data.success) {
+                        var msg = 'Please check your details and try again.';
+                        if (data.errors) {
+                            msg = Object.values(data.errors).map(function (v) {
+                                return Array.isArray(v) ? v.join(' ') : v;
+                            }).join('\n');
+                        }
+                        alert(msg);
+                        return;
+                    }
+
+                    // ...then, once it's saved, hand off to WhatsApp same as before
+                    var lines = [
+                        'New Booking Request — The Mist',
+                        '',
+                        'Name: ' + name,
+                        'Email: ' + email,
+                        'Phone: ' + (phone || 'N/A'),
+                        'Room: ' + (roomName || 'General Inquiry'),
+                        'Guests: ' + numGuests,
+                        'Check In: ' + checkIn,
+                        'Check Out: ' + checkOut
+                    ];
+                    if (requests) {
+                        lines.push('Special Requests: ' + requests);
+                    }
+
+                    var message = encodeURIComponent(lines.join('\n'));
+                    var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+
+                    window.open(waUrl, '_blank');
+
+                    var modalEl = document.getElementById('bookNowModal');
+                    var modalInstance = bootstrap.Modal.getInstance(modalEl);
+                    if (modalInstance) modalInstance.hide();
+
+                    bookNowForm.reset();
+                })
+                .catch(function () {
+                    if (submitBtn) submitBtn.disabled = false;
+                    alert('Network error — please try again.');
+                });
+            });
+        });
+        </script>
+        <!-- Book Now Modal end -->
+
     </div>
     <!-- Document Wrapper end -->
 

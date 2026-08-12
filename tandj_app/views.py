@@ -709,18 +709,16 @@ from .forms import ContactForm, ReplyForm
 # ---------------------------------------------------------------------
 # PUBLIC VIEW — visitor submits the contact form (CREATE)
 def contact_view(request):
-    """Handles new contact enquiry submissions from the Add Contact modal."""
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Thank you! Your message has been received.")
-            return redirect("tandj_app:home")
+            return redirect("tandj_app:index")   # was "tandj_app:home"
         else:
             messages.error(request, "Please correct the errors and try again.")
             return enquiry_list(request, add_form=form)
-    return redirect("tandj_app:home")
- 
+    return redirect("tandj_app:index")  
 # ---------------------------------------------------------------------
 # STAFF VIEW — everything (list, reply, edit, delete) happens on ONE page
 # via Bootstrap modals. Only enquiry_list renders a template; the rest
@@ -800,14 +798,22 @@ from .models import Room
 def index(request):
     # Fetch rooms without status filter
     rooms = Room.objects.all()[:3]
-    
+
+    # Latest 3 activities for the homepage "Activities" section
+    activities = Activity.objects.all().order_by("-created_at")[:3]
+
     context = {
         'rooms': rooms,
+        'activities': activities,
     }
-    
+
     return render(request, "frontends/index.html", context)
 def about(request):
-    return render(request,"frontends/about.html")
+    activities = Activity.objects.all().order_by("-created_at")[:3]
+    context ={
+        'activities':activities
+    }
+    return render(request,"frontends/about.html",context)
 
 def rooms(request):
     """List all rooms."""
@@ -864,3 +870,168 @@ def nearby_destination_detail_public(request, slug):
         "destination_images": destination_images,
         "other_destinations": other_destinations,
     })
+
+def gallery_public(request):
+    """Public gallery page — shows all categories with their images."""
+    categories = Category.objects.all().prefetch_related("images")
+
+    category_data = []
+    for category in categories:
+        images_qs = category.images.all().order_by("-uploaded_at")
+        paginator = Paginator(images_qs, 24)
+        page_number = request.GET.get(f"page_{category.id}", 1)
+
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        category_data.append({"category": category, "page_obj": page_obj})
+
+    return render(
+        request,
+        "frontends/gallery.html",
+        {
+            "categories": categories,
+            "category_data": category_data,
+        },
+    )
+def blogs_public(request):
+    """List all blog posts on the public site."""
+    blogs_qs = Blog.objects.all().order_by("-created_at")
+    paginator = Paginator(blogs_qs, 6)
+    page_number = request.GET.get("page")
+    blogs = paginator.get_page(page_number)
+    return render(request, "frontends/blog.html", {"blogs": blogs})
+
+
+def blog_detail_public(request, slug):
+    """Show a single blog post to visitors."""
+    blog = get_object_or_404(Blog, slug=slug)
+    other_blogs = Blog.objects.exclude(pk=blog.pk).order_by("-created_at")[:3]
+    return render(
+        request,
+        "frontends/blog_single.html",
+        {
+            "blog": blog,
+            "other_blogs": other_blogs,
+        },
+    )
+
+import json
+from django.http import JsonResponse
+from django.core.exceptions import ValidationError
+from django.views.decorators.http import require_POST
+
+
+@require_POST
+def reservation_ajax_create(request):
+    guest_name = (request.POST.get("guest_name") or "").strip()
+    guest_email = (request.POST.get("guest_email") or "").strip()
+    guest_phone = (request.POST.get("guest_phone") or "").strip()
+    num_guests = request.POST.get("num_guests") or 1
+    room_id = request.POST.get("room_id") or None
+    check_in = request.POST.get("check_in")
+    check_out = request.POST.get("check_out")
+    special_requests = (request.POST.get("special_requests") or "").strip()
+
+    errors = {}
+    if not guest_name:
+        errors["guest_name"] = "Name is required."
+    if not guest_email:
+        errors["guest_email"] = "Email is required."
+    if not check_in:
+        errors["check_in"] = "Check-in date is required."
+    if not check_out:
+        errors["check_out"] = "Check-out date is required."
+
+    room = None
+    if room_id:
+        room = Room.objects.filter(pk=room_id).first()
+
+    if errors:
+        return JsonResponse({"success": False, "errors": errors}, status=400)
+
+    reservation = Reservation(
+        guest_name=guest_name,
+        guest_email=guest_email,
+        guest_phone=guest_phone,
+        num_guests=num_guests or 1,
+        room=room,
+        check_in=check_in,
+        check_out=check_out,
+        special_requests=special_requests,
+    )
+
+    try:
+        reservation.full_clean()
+    except ValidationError as e:
+        return JsonResponse({"success": False, "errors": e.message_dict}, status=400)
+
+    reservation.save()
+    return JsonResponse({"success": True, "reservation_id": reservation.pk})
+
+def contact_page(request):
+    """Public 'Contact Us' page."""
+    return render(request, "frontends/contact.html")
+
+
+from django.conf import settings
+from django.core.mail import send_mail
+
+@require_POST
+def contact_ajax_create(request):
+    first_name = (request.POST.get("first_name") or "").strip()
+    last_name = (request.POST.get("last_name") or "").strip()
+    email = (request.POST.get("email") or "").strip()
+    phone_number = (request.POST.get("phone_number") or "").strip()
+    message = (request.POST.get("message") or "").strip()
+
+    errors = {}
+    if not first_name:
+        errors["first_name"] = "First name is required."
+    if not last_name:
+        errors["last_name"] = "Last name is required."
+    if not email:
+        errors["email"] = "Email is required."
+    if not message:
+        errors["message"] = "Message is required."
+
+    if errors:
+        return JsonResponse({"success": False, "errors": errors}, status=400)
+
+    contact = Contact(
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        phone_number=phone_number,
+        message=message,
+    )
+
+    try:
+        contact.full_clean()
+    except ValidationError as e:
+        return JsonResponse({"success": False, "errors": e.message_dict}, status=400)
+
+    contact.save()
+
+    try:
+        send_mail(
+            subject=f"New Contact Enquiry — {contact.full_name}",
+            message=(
+                f"You've received a new enquiry from The T&U contact page.\n\n"
+                f"Name: {contact.full_name}\n"
+                f"Email: {contact.email}\n"
+                f"Phone: {contact.phone_number or 'N/A'}\n\n"
+                f"Message:\n{contact.message}"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[getattr(settings, "CONTACT_NOTIFY_EMAIL", settings.DEFAULT_FROM_EMAIL)],
+            fail_silently=True,
+        )
+    except Exception:
+        pass
+
+    return JsonResponse({"success": True, "contact_id": contact.pk})

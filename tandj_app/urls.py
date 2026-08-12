@@ -96,5 +96,11 @@ path("rooms/", views.room_list, name="room_list"),
     path("our-activities/<slug:slug>/", views.activity_detail_public, name="activity_detail_public"),
         path("our-nearby-destinations/", views.nearby_destinations_public, name="nearby_destinations"),
     path("our-nearby-destinations/<slug:slug>/", views.nearby_destination_detail_public, name="nearby_destination_detail_public"),
+    path("gallery/", views.gallery_public, name="gallery_public"),
+     path("our-blog/", views.blogs_public, name="blogs"),
+    path("our-blog/<slug:slug>/", views.blog_detail_public, name="blog_detail_public"),
+    path('reservation/ajax-create/', views.reservation_ajax_create, name='reservation_ajax_create'),
+path("contact-us/", views.contact_page, name="contact"),
+path("contact/ajax-create/", views.contact_ajax_create, name="contact_ajax_create"),
 
 ]

@@ -1,0 +1,721 @@
+{% extends "frontends/base.html" %}
+{% load static %}
+
+{% block title %}Contact Us - T&U Leisure Hotel{% endblock %}
+{% block meta_description %}Get in touch with T&U Leisure Hotel, Munnar — send us a message and we'll get back to you.{% endblock %}
+
+{% block content %}
+
+		<!-- Page Header
+		============================================= -->
+		<section class="page-header page-header-text-light py-0 mb-0">
+			<div class="hero-wrap py-5">
+				<div class="hero-mask opacity-6 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
+				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+					<div class="container text-center mt-5 pt-5 pb-2">
+						<h1 class="text-17 mb-4 wow fadeInUp">Contact Us</h1>
+						<ul class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay=".2s">
+							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
+							<li class="active">Contact Us</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Page Header end -->
+
+		<!-- Contact Intro
+		============================================= -->
+		<section class="section pb-0">
+			<div class="container">
+				<div class="mx-auto text-center mb-5 contact-intro">
+					<p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Get In Touch</span></p>
+					<h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">We'd Love To <span class="text-primary">Hear From You</span></h2>
+					<p class="text-body-secondary mt-3 wow fadeInUp" data-wow-delay=".3s">Have a question about your stay, an upcoming event, or just want to say hello? Send us a message below and our team will get back to you shortly.</p>
+				</div>
+			</div>
+		</section>
+		<!-- Contact Intro end -->
+
+		<!-- Contact Info Cards
+		============================================= -->
+		<section class="section pt-0 pb-0">
+			<div class="container">
+				<div class="row g-4">
+					<div class="col-md-4 wow fadeInUp">
+						<div class="contact-info-card">
+							<div class="contact-info-head">
+								<span class="contact-info-icon"><i class="fa-solid fa-phone-volume"></i></span>
+								<h4>Call Us</h4>
+							</div>
+							<p>+91 9188954770</p>
+						</div>
+					</div>
+					<div class="col-md-4 wow fadeInUp" data-wow-delay=".15s">
+						<div class="contact-info-card">
+							<div class="contact-info-head">
+								<span class="contact-info-icon"><i class="fa-solid fa-map-location-dot"></i></span>
+								<h4>Visit Us</h4>
+							</div>
+							<p>T &amp; U Leisure Hotel<br>Maximunnar Pvt Ltd<br>Mattupetty Road,<br>Munnar, Kerala – 685612</p>
+						</div>
+					</div>
+					<div class="col-md-4 wow fadeInUp" data-wow-delay=".3s">
+						<div class="contact-info-card">
+							<div class="contact-info-head">
+								<span class="contact-info-icon"><i class="fa-solid fa-envelope"></i></span>
+								<h4>Email Direct</h4>
+							</div>
+							<p>mail@tanduleisurehotel.in</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Contact Info Cards end -->
+
+		<!-- Map + Contact Form
+		============================================= -->
+		<section class="section">
+			<div class="container">
+				<div class="row g-4 g-lg-5 align-items-stretch">
+					<!-- Map -->
+					<div class="col-lg-6 wow fadeInLeft">
+						<div class="contact-map-wrap">
+							<iframe
+								src="https://www.google.com/maps?q=MaxiMunnar+T%26U+Leisure+Hotel,+Mattupetty+Road,+Munnar,+Kerala+685612&output=embed"
+								class="contact-map-frame"
+								style="border:0;"
+								allowfullscreen=""
+								loading="lazy"
+								referrerpolicy="no-referrer-when-downgrade"
+								title="T&U Leisure Hotel Location"></iframe>
+						</div>
+						<a href="https://maps.app.goo.gl/oP4oJA4i8SzsoFg58" target="_blank" rel="noopener" class="btn btn-new btn-outline-primary rounded-pill mt-3">
+							<span class="btn-text"><span>Get Directions</span></span>
+							<span class="btn-icon"><i class="fa-solid fa-diamond-turn-right"></i></span>
+						</a>
+					</div>
+
+					<!-- Contact Form -->
+					<div class="col-lg-6 wow fadeInRight" data-wow-delay=".1s">
+						<div class="contact-form-card h-100">
+							<h3 class="text-7 fw-600 mb-4">Send Us a Message</h3>
+
+							<form id="contactForm" class="contact-form" novalidate>
+								{% csrf_token %}
+
+								<div class="contact-form-row">
+									<div class="contact-form-field">
+										<label for="firstName"><i class="fa-solid fa-user"></i> First Name</label>
+										<input type="text" id="firstName" name="first_name" placeholder="Your first name" required>
+										<span class="contact-form-error" data-field-error="first_name"></span>
+									</div>
+									<div class="contact-form-field">
+										<label for="lastName"><i class="fa-solid fa-user"></i> Last Name</label>
+										<input type="text" id="lastName" name="last_name" placeholder="Your last name" required>
+										<span class="contact-form-error" data-field-error="last_name"></span>
+									</div>
+								</div>
+
+								<div class="contact-form-row">
+									<div class="contact-form-field">
+										<label for="contactEmail"><i class="fa-solid fa-envelope"></i> Email</label>
+										<input type="email" id="contactEmail" name="email" placeholder="you@example.com" required>
+										<span class="contact-form-error" data-field-error="email"></span>
+									</div>
+									<div class="contact-form-field">
+										<label for="contactPhone"><i class="fa-solid fa-phone"></i> Phone <span class="contact-form-optional-tag">optional</span></label>
+										<input type="tel" id="contactPhone" name="phone_number" placeholder="Your phone number">
+									</div>
+								</div>
+
+								<div class="contact-form-field">
+									<label for="contactMessage"><i class="fa-solid fa-comment-dots"></i> Message</label>
+									<textarea id="contactMessage" name="message" placeholder="Tell us how we can help…" required></textarea>
+									<span class="contact-form-error" data-field-error="message"></span>
+								</div>
+
+								<button type="submit" class="contact-form-submit">
+									<span class="btn-label">Send Message</span>
+									<i class="fa-solid fa-paper-plane"></i>
+								</button>
+
+								<div id="contactFormMsg" class="contact-form-msg" role="status" aria-live="polite"></div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Map + Contact Form end -->
+
+		<!-- Success Modal
+		============================================= -->
+		<div id="contactSuccessOverlay" class="contact-success-overlay" aria-hidden="true">
+			<div class="contact-success-modal" role="dialog" aria-modal="true" aria-labelledby="contactSuccessTitle">
+				<button type="button" class="contact-success-close" aria-label="Close">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
+				<div class="contact-success-icon">
+					<i class="fa-solid fa-check"></i>
+				</div>
+				<h3 id="contactSuccessTitle" class="contact-success-title">Success</h3>
+				<p class="contact-success-text">We are delighted to let you know that your message has been received. Our team will get back to you shortly.</p>
+			</div>
+		</div>
+		<!-- Success Modal end -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	var form = document.getElementById('contactForm');
+	var msgBox = document.getElementById('contactFormMsg');
+	var submitBtn = form ? form.querySelector('.contact-form-submit') : null;
+	var btnLabel = submitBtn ? submitBtn.querySelector('.btn-label') : null;
+
+	var overlay = document.getElementById('contactSuccessOverlay');
+	var closeBtn = overlay ? overlay.querySelector('.contact-success-close') : null;
+
+	function showSuccessModal() {
+		if (!overlay) return;
+		overlay.classList.add('is-visible');
+		overlay.setAttribute('aria-hidden', 'false');
+		document.body.classList.add('contact-modal-open');
+	}
+
+	function hideSuccessModal() {
+		if (!overlay) return;
+		overlay.classList.remove('is-visible');
+		overlay.setAttribute('aria-hidden', 'true');
+		document.body.classList.remove('contact-modal-open');
+	}
+
+	if (closeBtn) closeBtn.addEventListener('click', hideSuccessModal);
+	if (overlay) {
+		overlay.addEventListener('click', function (e) {
+			if (e.target === overlay) hideSuccessModal();
+		});
+	}
+	document.addEventListener('keydown', function (e) {
+		if (e.key === 'Escape') hideSuccessModal();
+	});
+
+	if (!form) return;
+
+	form.addEventListener('submit', function (e) {
+		e.preventDefault();
+
+		form.querySelectorAll('[data-field-error]').forEach(function (el) {
+			el.textContent = '';
+		});
+		msgBox.textContent = '';
+		msgBox.classList.remove('success', 'error');
+
+		var firstName = document.getElementById('firstName').value.trim();
+		var lastName = document.getElementById('lastName').value.trim();
+		var email = document.getElementById('contactEmail').value.trim();
+		var message = document.getElementById('contactMessage').value.trim();
+
+		var hasError = false;
+		if (!firstName) {
+			hasError = true;
+			form.querySelector('[data-field-error="first_name"]').textContent = 'This field is required.';
+		}
+		if (!lastName) {
+			hasError = true;
+			form.querySelector('[data-field-error="last_name"]').textContent = 'This field is required.';
+		}
+		if (!email) {
+			hasError = true;
+			form.querySelector('[data-field-error="email"]').textContent = 'This field is required.';
+		}
+		if (!message) {
+			hasError = true;
+			form.querySelector('[data-field-error="message"]').textContent = 'This field is required.';
+		}
+
+		if (hasError) {
+			msgBox.textContent = 'Please fill in the required fields.';
+			msgBox.classList.add('error');
+			return;
+		}
+
+		submitBtn.disabled = true;
+		var originalLabel = btnLabel.textContent;
+		btnLabel.textContent = 'Sending…';
+
+		var formData = new FormData(form);
+
+		fetch("{% url 'tandj_app:contact_ajax_create' %}", {
+			method: 'POST',
+			body: formData,
+			headers: { 'X-Requested-With': 'XMLHttpRequest' }
+		})
+		.then(function (res) { return res.json(); })
+		.then(function (data) {
+			submitBtn.disabled = false;
+			btnLabel.textContent = originalLabel;
+
+			if (!data.success) {
+				if (data.errors) {
+					Object.keys(data.errors).forEach(function (key) {
+						var span = form.querySelector('[data-field-error="' + key + '"]');
+						var val = data.errors[key];
+						var text = Array.isArray(val) ? val.join(' ') : val;
+						if (span) {
+							span.textContent = text;
+						}
+					});
+				}
+				msgBox.textContent = 'Please check your details and try again.';
+				msgBox.classList.add('error');
+				return;
+			}
+
+			form.reset();
+			showSuccessModal();
+		})
+		.catch(function () {
+			submitBtn.disabled = false;
+			btnLabel.textContent = originalLabel;
+			msgBox.textContent = 'Network error — please try again.';
+			msgBox.classList.add('error');
+		});
+	});
+});
+</script>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.page-header .hero-wrap {
+	min-height: 550px;
+}
+
+.contact-intro {
+	max-width: 780px;
+}
+
+@media (max-width: 991.98px) {
+	.section .mx-auto.text-center,
+	.contact-intro {
+		text-align: left !important;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		max-width: none !important;
+	}
+}
+
+/* ===== Contact Info Cards ===== */
+/* All cards are white by default. A single olive-green "spotlight"
+   moves from card to card in sequence, on an endless loop. */
+.contact-info-card {
+	border-radius: 24px;
+	padding: 32px 28px;
+	height: 100%;
+	background-color: #fff;
+	color: #212529;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+	border: 1.5px solid rgba(0, 0, 0, 0.06);
+	animation: cardSpotlightCycle 9s ease-in-out infinite;
+}
+
+.contact-info-card:nth-of-type(1) { animation-delay: 0s; }
+.contact-info-card:nth-of-type(2) { animation-delay: 3s; }
+.contact-info-card:nth-of-type(3) { animation-delay: 6s; }
+
+@keyframes cardSpotlightCycle {
+	0%   { background-color: #fff; color: #212529; border-color: rgba(0, 0, 0, 0.06); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); }
+	5%   { background-color: #6B8E23; color: #fff;  border-color: transparent;         box-shadow: 0 16px 40px rgba(85, 107, 47, 0.3); }
+	28%  { background-color: #556B2F; color: #fff;  border-color: transparent;         box-shadow: 0 16px 40px rgba(85, 107, 47, 0.3); }
+	33%  { background-color: #fff; color: #212529; border-color: rgba(0, 0, 0, 0.06); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); }
+	100% { background-color: #fff; color: #212529; border-color: rgba(0, 0, 0, 0.06); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.contact-info-card {
+		animation: none;
+		background-color: #fff;
+		color: #212529;
+	}
+}
+
+.contact-info-head {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 14px;
+}
+
+.contact-info-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	flex-shrink: 0;
+	border-radius: 16px;
+	background: rgba(107, 142, 35, 0.12);
+	color: #556B2F;
+	font-size: 1.4rem;
+	animation: iconSpotlightCycle 9s ease-in-out infinite;
+}
+
+.contact-info-card:nth-of-type(1) .contact-info-icon { animation-delay: 0s; }
+.contact-info-card:nth-of-type(2) .contact-info-icon { animation-delay: 3s; }
+.contact-info-card:nth-of-type(3) .contact-info-icon { animation-delay: 6s; }
+
+@keyframes iconSpotlightCycle {
+	0%   { background: rgba(107, 142, 35, 0.12); color: #556B2F; }
+	5%   { background: rgba(255, 255, 255, 0.18); color: #fff; }
+	28%  { background: rgba(255, 255, 255, 0.18); color: #fff; }
+	33%  { background: rgba(107, 142, 35, 0.12); color: #556B2F; }
+	100% { background: rgba(107, 142, 35, 0.12); color: #556B2F; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.contact-info-icon {
+		animation: none;
+		background: rgba(107, 142, 35, 0.12);
+		color: #556B2F;
+	}
+}
+
+.contact-info-card h4 {
+	font-weight: 800;
+	font-size: 1.3rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: 0;
+	color: inherit;
+}
+
+.contact-info-card p {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.7;
+	letter-spacing: 0.3px;
+	color: inherit;
+	opacity: 0.9;
+}
+
+/* ===== Map ===== */
+.contact-map-wrap {
+	border-radius: 24px;
+	overflow: hidden;
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+	height: 420px;
+}
+.contact-map-frame {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+/* ===== Contact Form Card ===== */
+.contact-form-card {
+	background: #fff;
+	border-radius: 24px;
+	padding: 40px;
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+}
+
+.contact-form {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+.contact-form-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 18px;
+}
+
+.contact-form-field label {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #212529;
+	margin-bottom: 8px;
+}
+
+.contact-form-field label i {
+	color: var(--bs-primary, #0d6efd);
+	font-size: 0.85rem;
+	width: 14px;
+	text-align: center;
+}
+
+.contact-form-optional-tag {
+	font-size: 0.68rem;
+	font-weight: 600;
+	color: #6c757d;
+	text-transform: none;
+	letter-spacing: 0;
+	background: rgba(0, 0, 0, 0.05);
+	padding: 2px 8px;
+	border-radius: 20px;
+	margin-left: auto;
+}
+
+.contact-form-field input,
+.contact-form-field textarea {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 14px 16px;
+	border: 1.5px solid rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+	font-size: max(16px, 0.92rem);
+	color: #212529;
+	background: #f7f7f9;
+	outline: none;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+.contact-form-field textarea {
+	min-height: 140px;
+	resize: vertical;
+	line-height: 1.6;
+}
+
+.contact-form-field input:focus,
+.contact-form-field textarea:focus {
+	border-color: var(--bs-primary, #0d6efd);
+	box-shadow: 0 0 0 4px rgba(var(--bs-primary-rgb, 13, 110, 253), 0.1);
+	background: #fff;
+}
+
+.contact-form-error {
+	display: block;
+	font-size: 0.78rem;
+	color: #d64545;
+	margin-top: 6px;
+	min-height: 15px;
+}
+
+.contact-form-submit {
+	margin-top: 8px;
+	padding: 16px 30px;
+	background: var(--bs-primary, #0d6efd);
+	color: #fff;
+	border: none;
+	border-radius: 100px;
+	font-size: 0.95rem;
+	font-weight: 700;
+	letter-spacing: 0.3px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	cursor: pointer;
+	align-self: flex-start;
+	transition: background 0.3s ease, gap 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+	box-shadow: 0 10px 24px rgba(var(--bs-primary-rgb, 13, 110, 253), 0.18);
+}
+
+.contact-form-submit:hover:not(:disabled) {
+	gap: 16px;
+	transform: translateY(-2px);
+	box-shadow: 0 14px 30px rgba(var(--bs-primary-rgb, 13, 110, 253), 0.28);
+}
+
+.contact-form-submit:disabled {
+	opacity: 0.65;
+	cursor: not-allowed;
+}
+
+.contact-form-msg {
+	margin-top: 4px;
+	font-size: 0.9rem;
+	font-weight: 600;
+	min-height: 18px;
+}
+
+.contact-form-msg.success { color: #198754; }
+.contact-form-msg.error { color: #d64545; }
+
+@media (max-width: 991.98px) {
+	.contact-map-wrap {
+		height: 320px;
+	}
+}
+
+@media (max-width: 767.98px) {
+	.contact-form-card {
+		padding: 26px 22px;
+	}
+	.contact-form-row {
+		grid-template-columns: 1fr;
+		gap: 18px;
+	}
+	.contact-form-submit {
+		width: 100%;
+		align-self: stretch;
+	}
+	.contact-info-card {
+		padding: 26px 22px;
+	}
+	.contact-info-head {
+		gap: 12px;
+	}
+	.contact-info-icon {
+		width: 46px;
+		height: 46px;
+		font-size: 1.15rem;
+	}
+	.contact-info-card h4 {
+		font-size: 1.1rem;
+	}
+}
+
+/* ===== Success Modal ===== */
+body.contact-modal-open {
+	overflow: hidden;
+}
+
+.contact-success-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 2000;
+	background: rgba(15, 20, 12, 0.55);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.contact-success-overlay.is-visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+.contact-success-modal {
+	position: relative;
+	background: #fff;
+	border-radius: 20px;
+	max-width: 380px;
+	width: 100%;
+	padding: 44px 32px 36px;
+	text-align: center;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+	transform: translateY(16px) scale(0.96);
+	transition: transform 0.28s ease;
+}
+
+.contact-success-overlay.is-visible .contact-success-modal {
+	transform: translateY(0) scale(1);
+}
+
+.contact-success-close {
+	position: absolute;
+	top: 14px;
+	right: 16px;
+	background: none;
+	border: none;
+	font-size: 1rem;
+	color: #9aa5a3;
+	cursor: pointer;
+	line-height: 1;
+	padding: 6px;
+}
+.contact-success-close:hover {
+	color: #556B2F;
+}
+
+.contact-success-icon {
+	width: 76px;
+	height: 76px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #6B8E23, #556B2F);
+	color: #fff;
+	font-size: 1.9rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto 20px;
+	box-shadow: 0 8px 20px rgba(107, 142, 35, 0.35);
+}
+
+.contact-success-title {
+	font-weight: 800;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #556B2F;
+	font-size: 1.25rem;
+	margin-bottom: 10px;
+}
+
+.contact-success-text {
+	color: #6c757d;
+	font-size: 0.95rem;
+	line-height: 1.6;
+	margin: 0;
+}
+
+/* ===== Repeatable scroll-reveal for .wow elements ===== */
+.wow {
+	opacity: 0 !important;
+	transition: opacity .7s ease, transform .7s ease;
+	will-change: opacity, transform;
+}
+.wow.fadeInUp    { transform: translateY(40px); }
+.wow.fadeInLeft  { transform: translateX(-50px); }
+.wow.fadeInRight { transform: translateX(50px); }
+.wow.fadeInDown  { transform: translateY(-40px); }
+.wow.wow-visible {
+	opacity: 1 !important;
+	transform: translate(0, 0) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+	.wow {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+	}
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	if (window.WOW) {
+		try { new WOW({ live: false }).init = function () {}; } catch (e) {}
+	}
+
+	var wowEls = document.querySelectorAll('.wow');
+	if (!wowEls.length) return;
+
+	if (!('IntersectionObserver' in window)) {
+		wowEls.forEach(function (el) { el.classList.add('wow-visible'); });
+		return;
+	}
+
+	var observer = new IntersectionObserver(function (entries) {
+		entries.forEach(function (entry) {
+			var el = entry.target;
+			var delay = parseFloat(el.getAttribute('data-wow-delay') || '0') * 1000;
+			if (entry.isIntersecting) {
+				if (delay) {
+					setTimeout(function () { el.classList.add('wow-visible'); }, delay);
+				} else {
+					el.classList.add('wow-visible');
+				}
+			} else {
+				el.classList.remove('wow-visible');
+			}
+		});
+	}, { threshold: 0.15 });
+
+	wowEls.forEach(function (el) { observer.observe(el); });
+});
+</script>
+{% endblock %}

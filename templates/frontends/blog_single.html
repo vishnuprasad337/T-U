@@ -1,0 +1,333 @@
+{% extends "frontends/base.html" %}
+{% load static %}
+
+{% block title %}{{ blog.title|default:"Blog" }} - The Mist Luxury Hotel{% endblock %}
+{% block meta_description %}{{ blog.description|striptags|truncatewords:20 }}{% endblock %}
+
+{% block content %}
+
+		<!-- Page Header
+		============================================= -->
+		<section class="page-header page-header-text-light py-0 mb-0">
+			<div class="hero-wrap py-5">
+				<div class="hero-mask opacity-3 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% if blog.image %}{{ blog.image.url }}{% else %}{% static 'tandu-main/images/slider/slide-2.jpg' %}{% endif %}'); background-size:cover; background-position:center;"></div>
+				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+					<div class="container text-center mt-5 pt-5 pb-2">
+						<h1 class="text-17 mb-4 reveal reveal-fadeInUp">{{ blog.title|default:"Blog" }}</h1>
+						<ul class="breadcrumb justify-content-center mb-0 reveal reveal-fadeInUp" data-reveal-delay="200">
+							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
+							<li><a href="{% url 'tandj_app:blogs' %}">Blog</a></li>
+							<li class="active">{{ blog.title|default:"Blog" }}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Page Header end -->
+
+            <!-- Blog Details
+			============================================= -->
+            <section class="section blog-detail-section">
+                <div class="container">
+                    <div class="blog-items-wrap">
+						<div class="row gx-4 gy-5">
+							<div class="col-lg-8 col-xl-9 reveal reveal-fade">
+								<!-- Main Image -->
+								<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
+									{% if blog.image %}
+									<img class="img-fluid d-block w-100 rounded-5" src="{{ blog.image.url }}" alt="{{ blog.title }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+									{% else %}
+									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/slider/slide-2.jpg' %}" alt="{{ blog.title }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+									{% endif %}
+								</div>
+
+								<!-- Blog Details -->
+								<h2 class="text-13 fw-600 reveal reveal-fadeInUp">{{ blog.title }}</h2>
+								
+								<!-- Blog Meta Info -->
+								<div class="row gy-2 gx-5 text-body-secondary mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
+									{% if blog.created_at %}
+									<div class="col-6 col-md-auto d-flex align-items-center">
+										<span class="text-primary text-6 me-2"><i class="fa-solid fa-calendar"></i></span>
+										{{ blog.created_at|date:"M d, Y" }}
+									</div>
+									{% endif %}
+									{% if blog.author %}
+									<div class="col-6 col-md-auto d-flex align-items-center">
+										<span class="text-primary text-6 me-2"><i class="fa-solid fa-user"></i></span>
+										{{ blog.author }}
+									</div>
+									{% endif %}
+									{% if blog.category %}
+									<div class="col-6 col-md-auto d-flex align-items-center">
+										<span class="text-primary text-6 me-2"><i class="fa-solid fa-tag"></i></span>
+										{{ blog.category }}
+									</div>
+									{% endif %}
+								</div>
+
+								<!-- Blog Content -->
+								<div class="blog-content text-body-secondary lh-lg reveal reveal-fadeInUp" data-reveal-delay="200">
+									{{ blog.description|safe }}
+								</div>
+
+								<hr class="opacity-1 my-4">
+
+								<!-- Share Section -->
+								<div class="blog-share-section reveal reveal-fadeInUp" data-reveal-delay="300">
+									<div class="d-flex align-items-center gap-3 flex-wrap">
+										
+									</div>
+								</div>
+							</div>
+
+							<div class="col-lg-4 col-xl-3 reveal reveal-fade">
+								<div class="row blog-sidebar-sticky" style="z-index: 10;">
+									<div class="col-sm-6 col-lg-12">
+										<!-- Other Blogs Link -->
+										<div class="bg-white rounded-5 p-4 mb-4">
+											<h4 class="text-7 fw-600">Related Posts</h4>
+											<ul class="list-link">
+												{% for other in other_blogs %}
+												<li><a href="{% url 'tandj_app:blog_detail_public' other.slug %}">{{ other.title }}</a></li>
+												{% empty %}
+												<li><a href="{% url 'tandj_app:blogs' %}">View All Posts</a></li>
+												{% endfor %}
+											</ul>
+										</div>
+									</div>
+									<div class="col-sm-6 col-lg-12">
+										<!-- Help -->
+										<div class="hero-wrap rounded-5">
+											<div class="hero-mask opacity-6 bg-black"></div>
+											<img class="img-fluid d-flex rounded-5" src="{% static 'tandu-main/images/help-bg.jpg' %}" alt="">
+											<div class="hero-content position-absolute top-50 start-50 translate-middle w-100">
+												<div class="container py-5 px-4 text-center">
+													<span class="text-primary text-13"><i class="fa-solid fa-circle-question"></i></span>
+													<h3 class="text-white text-6 fw-600 mb-3">Need Help?</h3>
+													<div class="text-6 fw-700 text-primary mb-1">+91 9188954770</div>
+													<div class="fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">info@themist.com</div>
+													<a class="btn btn-new btn-sm btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
+														<span class="btn-text"><span>Contact Us</span></span>
+														<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Blog Details end -->
+
+<style>
+
+/* ===== BLOG DETAIL PAGE STYLES ===== */
+
+.page-header .hero-wrap {
+    min-height: 550px;
+}
+
+/* Blog detail section: override global overflow:hidden for sticky sidebar */
+.blog-detail-section {
+    overflow: visible !important;
+}
+
+/* Sidebar only sticks on large screens */
+.blog-sidebar-sticky {
+    position: static;
+}
+
+@media (min-width: 992px) {
+    .blog-sidebar-sticky {
+        position: sticky;
+        top: 90px;
+    }
+}
+
+/* Header above sticky content */
+#header {
+    z-index: 1000 !important;
+}
+
+/* Crisp image rendering */
+.blog-items-wrap img {
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* Blog content typography */
+.blog-content {
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.blog-content p {
+    margin-bottom: 1.5rem;
+}
+
+.blog-content h2,
+.blog-content h3,
+.blog-content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.blog-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+    border-radius: 12px;
+}
+
+.blog-content a {
+    color: var(--bs-primary, #b08d57);
+    text-decoration: none;
+    border-bottom: 1px solid var(--bs-primary, #b08d57);
+    transition: all 0.3s ease;
+}
+
+.blog-content a:hover {
+    color: #1a1a1a;
+    border-bottom-color: #1a1a1a;
+}
+
+/* Share section */
+.blog-share-section {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
+}
+
+/* List Link Styles */
+.list-link {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.list-link li {
+    margin-bottom: 12px;
+}
+
+.list-link a {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.list-link a::before {
+    content: '→';
+    color: var(--bs-primary, #b08d57);
+    font-weight: bold;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.list-link a:hover {
+    color: var(--bs-primary, #b08d57);
+    padding-left: 8px;
+}
+
+.list-link a:hover::before {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .blog-content {
+        font-size: 0.95rem;
+    }
+
+    .blog-content h2,
+    .blog-content h3,
+    .blog-content h4 {
+        margin-top: 1.5rem;
+        font-size: 1.25rem;
+    }
+
+    .blog-share-section {
+        flex-direction: column;
+    }
+}
+
+/* Reveal animation styles */
+.reveal {
+    opacity: 0;
+    transition: opacity .6s ease, transform .6s ease;
+    will-change: opacity, transform;
+}
+
+.reveal-fade {
+    transition: opacity .6s ease;
+}
+
+.reveal-fadeInUp {
+    transform: translateY(30px);
+}
+
+.reveal-fadeInLeft {
+    transform: translateX(-40px);
+}
+
+.reveal-fadeInRight {
+    transform: translateX(40px);
+}
+
+.reveal.reveal-visible {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var revealEls = document.querySelectorAll('.reveal');
+    if (!revealEls.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+        // Fallback: just show everything immediately.
+        revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
+        return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            var el = entry.target;
+            var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+            if (entry.isIntersecting) {
+                if (delay) {
+                    setTimeout(function () { el.classList.add('reveal-visible'); }, delay);
+                } else {
+                    el.classList.add('reveal-visible');
+                }
+            } else {
+                // Leaving the viewport resets it so it fades in again
+                el.classList.remove('reveal-visible');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(function (el) { observer.observe(el); });
+});
+</script>
+
+{% endblock %}

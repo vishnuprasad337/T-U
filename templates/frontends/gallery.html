@@ -1,0 +1,193 @@
+{% extends "frontends/base.html" %}
+{% load static %}
+
+{% block title %}Gallery - The Mist Luxury Hotel{% endblock %}
+{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+
+{% block content %}
+
+		<!-- Page Header
+		============================================= -->
+		<section class="page-header page-header-text-light py-0 mb-0">
+			<div class="hero-wrap py-5">
+				<div class="hero-mask opacity-6 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
+				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+					<div class="container text-center mt-5 pt-5 pb-2">
+						<h1 class="text-17 mb-4 wow fadeInUp">Gallery</h1>
+						<ul class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay=".2s">
+							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
+							<li class="active">Gallery</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Page Header end -->
+
+            <!-- Image Gallery
+			============================================= -->
+            <section class="section">
+                <div class="container">
+					<!-- Heading -->
+                    <div class="mx-auto text-center mb-5">
+                        <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Images</span></p>
+                        <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Image <span class="text-primary">Gallery</span></h2>
+                    </div>
+                    <!-- Heading End -->
+
+					{% if categories %}
+					<!-- Category Filters -->
+					<div class="gallery-filters text-center mb-5 wow fadeInUp">
+						<button type="button" class="btn btn-sm rounded-pill filter-btn active me-2 mb-2" data-filter="all">All</button>
+						{% for category in categories %}
+						<button type="button" class="btn btn-sm rounded-pill filter-btn me-2 mb-2" data-filter="cat-{{ category.id }}">{{ category.name }}</button>
+						{% endfor %}
+					</div>
+					<!-- Category Filters end -->
+
+					<div class="gallery">
+					  <div class="row g-4" id="galleryGrid">
+						{% for entry in category_data %}
+							{% for image in entry.page_obj %}
+							<div class="col-md-4 gallery-grid-item scroll-reveal" data-category="cat-{{ entry.category.id }}">
+								<div class="gallery-item rounded-5">
+									<a class="glightbox" href="{{ image.image.url }}" data-gallery="hotel-gallery" data-title="{{ image.title|default:entry.category.name }}">
+										<img class="img-fluid d-block" src="{{ image.image.url }}" alt="{{ image.title|default:entry.category.name }}">
+										<div class="overlay-details">
+											<span class="text-6"><i class="fa-solid fa-plus"></i></span>
+										</div>
+									</a>
+								</div>
+							</div>
+							{% endfor %}
+						{% endfor %}
+					  </div>
+					</div>
+
+					{% if not categories %}
+					<div class="text-center py-5">
+						<p class="text-body-secondary">No images available right now. Please check back soon.</p>
+					</div>
+					{% endif %}
+					{% else %}
+					<div class="text-center py-5">
+						<p class="text-body-secondary">No images available right now. Please check back soon.</p>
+					</div>
+					{% endif %}
+                </div>
+            </section>
+            <!-- Image Gallery end -->
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header .hero-wrap {
+  min-height: 550px;
+}
+.gallery-filters .filter-btn {
+    border: 1px solid rgba(0,0,0,.1);
+    background: transparent;
+    color: #333;
+    transition: all .2s ease;
+}
+.gallery-filters .filter-btn.active,
+.gallery-filters .filter-btn:hover {
+    background-color: var(--bs-primary, #b08d57);
+    color: #fff;
+    border-color: transparent;
+}
+.gallery-grid-item {
+    display: block;
+}
+.gallery-grid-item.d-none {
+    display: none !important;
+}
+.gallery-item {
+    overflow: hidden;
+    position: relative;
+}
+.gallery-item img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s ease;
+}
+.gallery-item:hover img {
+    transform: scale(1.08);
+}
+.gallery-item .overlay-details {
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+.gallery-item:hover .overlay-details {
+    opacity: 1;
+}
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity .7s cubic-bezier(.25,.8,.25,1), transform .7s cubic-bezier(.25,.8,.25,1);
+}
+.scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.scroll-reveal:nth-child(3n+2) {
+    transition-delay: .1s;
+}
+.scroll-reveal:nth-child(3n+3) {
+    transition-delay: .2s;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var filterButtons = document.querySelectorAll(".filter-btn");
+    var galleryItems = document.querySelectorAll(".gallery-grid-item");
+
+    filterButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            var filter = btn.getAttribute("data-filter");
+
+            filterButtons.forEach(function (b) { b.classList.remove("active"); });
+            btn.classList.add("active");
+
+            galleryItems.forEach(function (item) {
+                if (filter === "all" || item.getAttribute("data-category") === filter) {
+                    item.classList.remove("d-none");
+                } else {
+                    item.classList.add("d-none");
+                }
+            });
+        });
+    });
+
+    // Replay fade-in animation every time an item scrolls into/out of view
+    if ("IntersectionObserver" in window) {
+        var revealItems = document.querySelectorAll(".scroll-reveal");
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-visible");
+                } else {
+                    entry.target.classList.remove("is-visible");
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealItems.forEach(function (item) {
+            observer.observe(item);
+        });
+    } else {
+        // Fallback: just show everything if IntersectionObserver isn't supported
+        document.querySelectorAll(".scroll-reveal").forEach(function (item) {
+            item.classList.add("is-visible");
+        });
+    }
+});
+</script>
+{% endblock %}

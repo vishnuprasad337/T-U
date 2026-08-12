@@ -1,0 +1,456 @@
+{% extends "frontends/base.html" %}
+{% load static %}
+
+{% block title %}Blog - The Mist Luxury Hotel{% endblock %}
+{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+
+{% block content %}
+
+		<!-- Page Header
+		============================================= -->
+		<section class="page-header page-header-text-light py-0 mb-0">
+			<div class="hero-wrap py-5">
+				<div class="hero-mask opacity-6 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
+				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+					<div class="container text-center mt-5 pt-5 pb-2">
+						<h1 class="text-17 mb-4 wow fadeInUp">Blog</h1>
+						<ul class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay=".2s">
+							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
+							<li class="active">Blog</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Page Header end -->
+
+            <!-- Blog Grid
+			============================================= -->
+            <section class="section">
+                <div class="container">
+                    <div class="row g-4">
+						{% for blog in blogs %}
+						<div class="col-md-6 col-lg-4">
+							<div class="blog-card-new rounded-5 d-block position-relative overflow-hidden">
+								<!-- Background Image -->
+								{% if blog.image %}
+								<img class="blog-card-new-img" src="{{ blog.image.url }}" alt="{{ blog.title }}">
+								{% else %}
+								<img class="blog-card-new-img" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ blog.title }}">
+								{% endif %}
+
+								<!-- Dark Overlay Gradient -->
+								<div class="blog-card-new-overlay"></div>
+
+								<!-- Settings Icon (Top Right) -->
+								<div class="blog-card-new-settings">
+									<i class="fa-solid fa-gear"></i>
+								</div>
+
+								<!-- Content Container -->
+								<div class="blog-card-new-content position-absolute w-100 h-100 d-flex flex-column justify-content-between p-4 p-lg-5">
+									<!-- Title -->
+									<div class="blog-card-new-title-wrapper">
+										<h3 class="blog-card-new-title text-7 fw-700 text-uppercase text-white mb-0 lh-sm">{{ blog.title }}</h3>
+									</div>
+
+									<!-- Description & Button (Hidden on desktop, visible on mobile) -->
+									<div class="blog-card-new-expanded">
+										<p class="blog-card-new-description text-3 text-white text-opacity-85 mb-4">{{ blog.description|striptags|truncatewords:25 }}</p>
+										
+										<!-- View More Button - Same style as About page -->
+										<div class="blog-card-new-footer">
+											<a href="{% url 'tandj_app:blog_detail_public' blog.slug %}" class="btn btn-new btn-primary rounded-pill">
+												<span class="btn-text"><span>View More</span></span>
+												<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+											</a>
+										</div>
+									</div>
+
+									<!-- Three Dots Indicator (Bottom Left) -->
+									<div class="blog-card-new-dots">
+										<span class="dot"></span>
+										<span class="dot"></span>
+										<span class="dot"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% empty %}
+						<div class="text-center py-5">
+							<p class="text-body-secondary">No blog posts available right now. Please check back soon.</p>
+						</div>
+						{% endfor %}
+                    </div>
+
+					{% if blogs.has_other_pages %}
+					<nav class="mt-5">
+						<ul class="pagination justify-content-center">
+							{% if blogs.has_previous %}
+							<li class="page-item"><a class="page-link rounded-circle" href="?page={{ blogs.previous_page_number }}"><i class="fa-solid fa-arrow-left"></i></a></li>
+							{% endif %}
+							{% for num in blogs.paginator.page_range %}
+							<li class="page-item {% if blogs.number == num %}active{% endif %}"><a class="page-link rounded-circle" href="?page={{ num }}">{{ num }}</a></li>
+							{% endfor %}
+							{% if blogs.has_next %}
+							<li class="page-item"><a class="page-link rounded-circle" href="?page={{ blogs.next_page_number }}"><i class="fa-solid fa-arrow-right"></i></a></li>
+							{% endif %}
+						</ul>
+					</nav>
+					{% endif %}
+                </div>
+            </section>
+            <!-- Blog Grid end -->
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .page-header .hero-wrap {
+        min-height: 550px;
+    }
+
+    /* ========== NEW BLOG CARD STYLES ========== */
+    
+    .blog-card-new {
+        height: 480px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(100px) scale(0.88);
+        filter: blur(10px);
+    }
+
+    /* Background Image */
+    .blog-card-new-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .blog-card-new:hover .blog-card-new-img {
+        transform: scale(1.08);
+    }
+
+    /* Dark Overlay Gradient */
+    .blog-card-new-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(20, 30, 20, 0.9) 0%,
+            rgba(20, 30, 20, 0.7) 40%,
+            rgba(20, 30, 20, 0.3) 75%,
+            rgba(20, 30, 20, 0) 100%
+        );
+        z-index: 1;
+        transition: background 0.4s ease;
+    }
+
+    .blog-card-new:hover .blog-card-new-overlay,
+    .blog-card-new.active .blog-card-new-overlay {
+        background: linear-gradient(
+            to top,
+            rgba(20, 30, 20, 0.95) 0%,
+            rgba(20, 30, 20, 0.8) 40%,
+            rgba(20, 30, 20, 0.5) 75%,
+            rgba(20, 30, 20, 0.1) 100%
+        );
+    }
+
+    /* Content Container */
+    .blog-card-new-content {
+        z-index: 2;
+        align-items: flex-start;
+    }
+
+    /* Title Wrapper */
+    .blog-card-new-title-wrapper {
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .blog-card-new-title {
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .blog-card-new:hover .blog-card-new-title,
+    .blog-card-new.active .blog-card-new-title {
+        transform: translateY(-20px);
+    }
+
+    /* Description & Button (Hidden by default) */
+    .blog-card-new-expanded {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .blog-card-new:hover .blog-card-new-expanded,
+    .blog-card-new.active .blog-card-new-expanded {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    /* Description Text */
+    .blog-card-new-description {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        word-spacing: 0.05em;
+    }
+
+    /* Footer with View More Button */
+    .blog-card-new-footer {
+        display: flex;
+        align-items: center;
+    }
+
+    .blog-card-new-footer .btn-new {
+        font-size: 0.85rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    .blog-card-new-footer .btn-new .btn-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    /* Three Dots Indicator (Bottom Left) */
+    .blog-card-new-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        display: flex;
+        gap: 6px;
+        z-index: 3;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .blog-card-new-dots .dot {
+        width: 6px;
+        height: 6px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .blog-card-new-dots .dot:nth-child(2) {
+        animation: dot-pulse 1.5s ease-in-out 0.15s infinite;
+    }
+
+    .blog-card-new-dots .dot:nth-child(3) {
+        animation: dot-pulse 1.5s ease-in-out 0.3s infinite;
+    }
+
+    .blog-card-new:hover .blog-card-new-dots,
+    .blog-card-new.active .blog-card-new-dots {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    /* Settings Icon - HIDDEN */
+    .blog-card-new-settings {
+        display: none;
+    }
+
+    @keyframes dot-pulse {
+        0%, 100% {
+            opacity: 0.6;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+    }
+
+    /* ========== RESPONSIVE ADJUSTMENTS ========== */
+    
+    @media (max-width: 991px) {
+        .blog-card-new {
+            height: 420px;
+        }
+
+        .blog-card-new-title {
+            font-size: 1.3rem;
+        }
+
+        .blog-card-new-description {
+            font-size: 0.85rem;
+        }
+
+        .blog-card-new-footer .btn-new {
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .blog-card-new-footer .btn-new .btn-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 0.7rem;
+        }
+
+        .blog-card-new-settings {
+            width: 40px;
+            height: 40px;
+            top: 16px;
+            right: 16px;
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .blog-card-new {
+            height: 420px;
+        }
+
+        /* Show description and button on mobile by default */
+        .blog-card-new-expanded {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
+        }
+
+        .blog-card-new-title {
+            font-size: 1.25rem;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card-new-title-wrapper {
+            flex: 0 0 auto;
+        }
+
+        .blog-card-new-description {
+            font-size: 0.85rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .blog-card-new-footer .btn-new {
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .blog-card-new-footer .btn-new .btn-icon {
+            width: 26px;
+            height: 26px;
+            font-size: 0.65rem;
+        }
+
+        .blog-card-new-dots {
+            display: none !important;
+        }
+
+        .blog-card-new-settings {
+            width: 38px;
+            height: 38px;
+            top: 14px;
+            right: 14px;
+            font-size: 0.95rem;
+        }
+
+        /* Overlay stronger on mobile for better text visibility */
+        .blog-card-new-overlay {
+            background: linear-gradient(
+                to top,
+                rgba(20, 30, 20, 0.95) 0%,
+                rgba(20, 30, 20, 0.85) 40%,
+                rgba(20, 30, 20, 0.6) 75%,
+                rgba(20, 30, 20, 0.2) 100%
+            ) !important;
+        }
+    }
+
+    /* Touch devices - auto-activate on tap */
+    @media (hover: none) and (pointer: coarse) {
+        .blog-card-new {
+            touch-action: manipulation;
+        }
+    }
+
+    /* ========== ENHANCED SCROLL FADE-IN ANIMATIONS ========== */
+    
+    /* Apply animation when card enters viewport */
+    .blog-card-new.in-view {
+        animation: fadeInUpEnhanced 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation-delay: var(--card-delay, 0s);
+    }
+
+    @keyframes fadeInUpEnhanced {
+        0% {
+            opacity: 0;
+            transform: translateY(100px) scale(0.88);
+            filter: blur(10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const blogCards = document.querySelectorAll('.blog-card-new');
+    
+    // Intersection Observer for fade-in animation on scroll
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Card enters viewport - add in-view class to trigger animation
+                entry.target.classList.add('in-view');
+            } else {
+                // Card leaves viewport - remove class so animation can replay
+                entry.target.classList.remove('in-view');
+            }
+        });
+    }, observerOptions);
+
+    blogCards.forEach((card, index) => {
+        // Set CSS variable for staggered delay (0.2s between each card)
+        const delay = Math.min(index * 0.2, 1.2); // max 1.2s
+        card.style.setProperty('--card-delay', delay + 's');
+        
+        // Check if card is in viewport on page load
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            card.classList.add('in-view');
+        }
+        
+        observer.observe(card);
+
+        // For touch devices
+        card.addEventListener('touchstart', function(e) {
+            blogCards.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            e.preventDefault();
+        });
+    });
+
+    // Remove active state when clicking outside on mobile
+    document.addEventListener('touchstart', function(e) {
+        if (!e.target.closest('.blog-card-new')) {
+            blogCards.forEach(c => c.classList.remove('active'));
+        }
+    });
+});
+</script>
+
+{% endblock %}

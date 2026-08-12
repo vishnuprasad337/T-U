@@ -6,6 +6,31 @@
 
 {% block content %}
 
+<style>
+/* ===== Activities section: match image height to content column ===== */
+.activities-row {
+    align-items: stretch;
+}
+.activities-row .activity-img-col {
+    display: flex;
+}
+.activities-row .activity-img-col a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 360px;
+    min-height: 280px;
+    border-radius: 1.5rem;
+    overflow: hidden;
+}
+.activities-row .activity-img-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+</style>
+
 		<!-- Page Header
 		============================================= -->
 		<section class="page-header page-header-text-light py-0 mb-0">
@@ -39,12 +64,18 @@
 							<p class="text-5 text-body-secondary">Uncover a luxurious haven at Hotel The Mist, United States. Nestled in Los Ageless heart, our hotel offers modern elegance and warm hospitality.</p>
                             <p class="text-body-secondary mb-4">Experience comfort in stylish rooms, savor culinary delights at our restaurant, and host memorable events in our versatile spaces. Unwind at our wellness center or explore nearby attractions easily. With impeccable service and a prime location, Hotel The Mist ensures a delightful.</p>
 
-                            <div class="d-inline-flex align-items-center gap-4">
+                            <div class="d-inline-flex align-items-center gap-4 flex-wrap">
                                 <!-- Button -->
-                                <a class="btn btn-new btn-primary rounded-pill" href="rooms.html">
+                                <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:rooms' %}">
 									<span class="btn-text"><span>Rooms & Suites</span></span>
 									<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
 								</a>
+
+                                <!-- Book Now Button -->
+                                <a class="btn btn-new btn-outline-primary rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#bookNowModal">
+                                    <span class="btn-text"><span>Book Now</span></span>
+                                    <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
+                                </a>
 
                                 <!-- Call us -->
                                 <div class="d-flex align-items-center gap-3 ms-sm-2 h-100">
@@ -88,6 +119,228 @@
             </section>
             <!-- About end -->
 
+            <!-- Book Now Modal -->
+            <div class="modal fade" id="bookNowModal" tabindex="-1" aria-labelledby="bookNowModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-5 border-0" style="overflow: hidden;">
+                        <div class="modal-header border-0 px-4 pt-4 pb-0">
+                            <h3 class="modal-title text-8 fw-600" id="bookNowModalLabel">Book Your <span class="text-primary">Stay</span></h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body px-4 pb-4" style="overscroll-behavior: contain;">
+                            <p class="text-body-secondary mb-4">Fill in your details and we'll confirm your reservation over WhatsApp.</p>
+                            <form id="bookNowForm">
+    {% csrf_token %}
+    <div class="row gy-3">
+        <div class="col-12">
+            <label class="form-label text-3 fw-600" for="guestName">Full Name</label>
+            <input type="text" name="guest_name" class="form-control rounded-pill" id="guestName" required placeholder="Your full name">
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="guestEmail">Email</label>
+            <input type="email" name="guest_email" class="form-control rounded-pill" id="guestEmail" required placeholder="you@example.com">
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="guestPhone">Phone</label>
+            <input type="tel" name="guest_phone" class="form-control rounded-pill" id="guestPhone" placeholder="Your phone number">
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="checkIn">Check In</label>
+            <input type="date" name="check_in" class="form-control rounded-pill" id="checkIn" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="checkOut">Check Out</label>
+            <input type="date" name="check_out" class="form-control rounded-pill" id="checkOut" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="numGuests">Number of Guests</label>
+            <input type="number" name="num_guests" min="1" value="1" class="form-control rounded-pill" id="numGuests" required>
+        </div>
+        <div class="col-12 col-sm-6">
+            <label class="form-label text-3 fw-600" for="roomSelect">Room <span class="text-body-secondary fw-400">(optional)</span></label>
+            <select name="room_id" class="form-select rounded-pill" id="roomSelect">
+                <option value="" data-room-name="">General Inquiry</option>
+                {% if rooms %}
+                    {% for room in rooms %}
+                        <option value="{{ room.id }}" data-room-name="{{ room.room_category }}">{{ room.room_category }}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+        <div class="col-12">
+            <label class="form-label text-3 fw-600" for="specialRequests">Special Requests</label>
+            <textarea name="special_requests" class="form-control rounded-4" id="specialRequests" rows="3" placeholder="Any special requests? (optional)"></textarea>
+        </div>
+        <div class="col-12 d-grid mt-2">
+            <button type="submit" class="btn btn-new btn-primary rounded-pill">
+                <span class="btn-text"><span>Send via WhatsApp</span></span>
+                <span class="btn-icon"><i class="fa-brands fa-whatsapp"></i></span>
+            </button>
+        </div>
+    </div>
+</form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var bookNowModalEl = document.getElementById('bookNowModal');
+                if (bookNowModalEl) {
+                    var lockedScrollY = 0;
+                    var modalContentEl = bookNowModalEl.querySelector('.modal-content');
+                    var modalHeaderEl = bookNowModalEl.querySelector('.modal-header');
+                    var modalBodyEl = bookNowModalEl.querySelector('.modal-body');
+
+                    function sizeModal() {
+                        if (!modalContentEl || !modalBodyEl) return;
+                        var margin = 56; // total top+bottom breathing room
+                        var maxContentHeight = window.innerHeight - margin;
+                        modalContentEl.style.height = 'auto';
+                        modalContentEl.style.maxHeight = maxContentHeight + 'px';
+
+                        var headerHeight = modalHeaderEl ? modalHeaderEl.offsetHeight : 0;
+                        modalBodyEl.style.maxHeight = (maxContentHeight - headerHeight) + 'px';
+                        modalBodyEl.style.overflowY = 'auto';
+                    }
+
+                    bookNowModalEl.addEventListener('show.bs.modal', function (event) {
+                        lockedScrollY = window.scrollY || window.pageYOffset || 0;
+                        document.body.style.overflow = 'hidden';
+                        document.body.style.position = 'fixed';
+                        document.body.style.top = (-lockedScrollY) + 'px';
+                        document.body.style.left = '0';
+                        document.body.style.right = '0';
+                        document.body.style.width = '100%';
+
+                        // Pre-select the room whose "Book Now" button triggered
+                        // this modal (falls back to "General Inquiry" if the
+                        // modal was opened generically).
+                        var trigger = event.relatedTarget;
+                        var roomSelectEl = document.getElementById('roomSelect');
+                        var specialRequestsEl = document.getElementById('specialRequests');
+                        if (trigger && roomSelectEl) {
+                            var roomId = trigger.getAttribute('data-room-id') || '';
+                            if (roomId && roomSelectEl.querySelector('option[value="' + roomId + '"]')) {
+                                roomSelectEl.value = roomId;
+                            } else {
+                                roomSelectEl.value = '';
+                            }
+                        } else if (roomSelectEl) {
+                            roomSelectEl.value = '';
+                        }
+
+                        // If a specific activity's "Book Now" button triggered
+                        // this modal, pre-fill Special Requests with the
+                        // activity name (activities have no room to select).
+                        if (specialRequestsEl) {
+                            var activityName = trigger ? trigger.getAttribute('data-activity-name') : null;
+                            if (activityName) {
+                                specialRequestsEl.value = 'Interested in activity: ' + activityName;
+                            } else if (!trigger || !trigger.getAttribute('data-room-id')) {
+                                specialRequestsEl.value = '';
+                            }
+                        }
+                    });
+                    bookNowModalEl.addEventListener('shown.bs.modal', sizeModal);
+                    window.addEventListener('resize', function () {
+                        if (bookNowModalEl.classList.contains('show')) sizeModal();
+                    });
+                    bookNowModalEl.addEventListener('hidden.bs.modal', function () {
+                        document.body.style.overflow = '';
+                        document.body.style.position = '';
+                        document.body.style.top = '';
+                        document.body.style.left = '';
+                        document.body.style.right = '';
+                        document.body.style.width = '';
+                        window.scrollTo(0, lockedScrollY);
+                    });
+                }
+
+                var bookNowForm = document.getElementById('bookNowForm');
+                if (!bookNowForm) return;
+
+                var WHATSAPP_NUMBER = '919633870962'; // country code 91 + 9633870962
+
+                bookNowForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    var name = document.getElementById('guestName').value.trim();
+                    var email = document.getElementById('guestEmail').value.trim();
+                    var phone = document.getElementById('guestPhone').value.trim();
+                    var checkIn = document.getElementById('checkIn').value;
+                    var checkOut = document.getElementById('checkOut').value;
+                    var numGuests = document.getElementById('numGuests').value;
+                    var roomSelectEl = document.getElementById('roomSelect');
+                    var roomName = roomSelectEl.options[roomSelectEl.selectedIndex].getAttribute('data-room-name');
+                    var requests = document.getElementById('specialRequests').value.trim();
+
+                    if (checkOut <= checkIn) {
+                        alert('Check-out date must be after check-in date.');
+                        return;
+                    }
+
+                    var submitBtn = bookNowForm.querySelector('button[type="submit"]');
+                    if (submitBtn) submitBtn.disabled = true;
+
+                    // Save the booking to the database first...
+                    var formData = new FormData(bookNowForm);
+
+                    fetch("{% url 'tandj_app:reservation_ajax_create' %}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if (submitBtn) submitBtn.disabled = false;
+
+                        if (!data.success) {
+                            var msg = 'Please check your details and try again.';
+                            if (data.errors) {
+                                msg = Object.values(data.errors).map(function (v) {
+                                    return Array.isArray(v) ? v.join(' ') : v;
+                                }).join('\n');
+                            }
+                            alert(msg);
+                            return;
+                        }
+
+                        // ...then, once it's saved, hand off to WhatsApp same as before
+                        var lines = [
+                            'New Booking Request — The Mist',
+                            '',
+                            'Name: ' + name,
+                            'Email: ' + email,
+                            'Phone: ' + (phone || 'N/A'),
+                            'Room: ' + (roomName || 'General Inquiry'),
+                            'Guests: ' + numGuests,
+                            'Check In: ' + checkIn,
+                            'Check Out: ' + checkOut
+                        ];
+                        if (requests) {
+                            lines.push('Special Requests: ' + requests);
+                        }
+
+                        var message = encodeURIComponent(lines.join('\n'));
+                        var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+
+                        window.open(waUrl, '_blank');
+
+                        var modalEl = document.getElementById('bookNowModal');
+                        var modalInstance = bootstrap.Modal.getInstance(modalEl);
+                        if (modalInstance) modalInstance.hide();
+
+                        bookNowForm.reset();
+                    })
+                    .catch(function () {
+                        if (submitBtn) submitBtn.disabled = false;
+                        alert('Network error — please try again.');
+                    });
+                });
+            });
+            </script>
             <!-- Amenities
 			============================================= -->
             <section class="section bg-light-1">
@@ -156,68 +409,90 @@
             </section>
             <!-- Amenities end -->
 
-            <!-- Services
+            <!-- Activities
 			============================================= -->
             <section class="section">
                 <div class="container">
                     <!-- Heading -->
                     <div class="mx-auto text-center mb-5">
-                        <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Services</span></p>
-                        <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">We provide <span class="text-primary">Top Class <br class="d-none d-md-block">Facility</span> for You</h2>
+                        <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Activities</span></p>
+                        <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Exciting <span class="text-primary">Activities <br class="d-none d-md-block">& Experiences</span> Await You</h2>
                     </div>
                     <!-- Heading End -->
 
-                    <!-- Restaurant -->
-					<div class="row gx-5 gy-4 gy-lg-5 mb-5">
-                        <div class="col-lg-6 text-center wow fadeInLeft">
-                            <img class="img-fluid rounded-5" src="{% static 'tandu-main/images/restaurant/restaurant-about.jpg' %}" alt="">
+                    {% if activities %}
+                        {% for activity in activities %}
+                        <!-- Activity {{ forloop.counter }} -->
+                        <div class="row gx-5 gy-4 gy-lg-5 activities-row{% if not forloop.last %} mb-5{% endif %}">
+                            {% if forloop.counter|divisibleby:2 %}
+                                <!-- Even items: content left, image right -->
+                                <div class="col-lg-6 align-content-center order-2 order-lg-1 wow fadeInLeft">
+                                    <p><span class="d-inline-flex text-2 text-uppercase fw-500 rounded-pill border border-dark border-opacity-10 px-3">Explore More</span></p>
+                                    <h3 class="heading-font-family text-8 fw-600 mb-3">{{ activity.title }}</h3>
+                                    <p class="text-3 text-body-secondary">{{ activity.description|striptags|truncatewords:30|safe }}</p>
+                                    <div class="d-flex flex-wrap align-items-center gap-2">
+                                        <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
+                                            <span class="btn-text"><span>Read More</span></span>
+                                            <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+                                        </a>
+                                        <a class="btn btn-new btn-outline-primary rounded-pill activity-book-now-btn"
+                                           href="#"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#bookNowModal"
+                                           data-activity-name="{{ activity.title }}">
+                                            <span class="btn-text"><span>Book Now</span></span>
+                                            <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 activity-img-col order-1 order-lg-2 wow fadeInRight">
+                                    <a href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
+                                        {% if activity.image %}
+                                            <img src="{{ activity.image.url }}" alt="{{ activity.title }}">
+                                        {% else %}
+                                            <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="">
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            {% else %}
+                                <!-- Odd items: image left, content right -->
+                                <div class="col-lg-6 activity-img-col wow fadeInLeft">
+                                    <a href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
+                                        {% if activity.image %}
+                                            <img src="{{ activity.image.url }}" alt="{{ activity.title }}">
+                                        {% else %}
+                                            <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="">
+                                        {% endif %}
+                                    </a>
+                                </div>
+                                <div class="col-lg-6 align-content-center wow fadeInRight">
+                                    <p><span class="d-inline-flex text-2 text-uppercase fw-500 rounded-pill border border-dark border-opacity-10 px-3">Explore More</span></p>
+                                    <h3 class="heading-font-family text-8 fw-600 mb-3">{{ activity.title }}</h3>
+                                    <p class="text-3 text-body-secondary">{{ activity.description|striptags|truncatewords:30|safe }}</p>
+                                    <div class="d-flex flex-wrap align-items-center gap-2">
+                                        <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
+                                            <span class="btn-text"><span>Read More</span></span>
+                                            <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+                                        </a>
+                                        <a class="btn btn-new btn-outline-primary rounded-pill activity-book-now-btn"
+                                           href="#"
+                                           data-bs-toggle="modal"
+                                           data-bs-target="#bookNowModal"
+                                           data-activity-name="{{ activity.title }}">
+                                            <span class="btn-text"><span>Book Now</span></span>
+                                            <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
-                        <div class="col-lg-6 align-content-center wow fadeInRight">
-                            <p><span class="d-inline-flex text-2 text-uppercase fw-500 rounded-pill border border-dark border-opacity-10 px-3">Meal With Us</span></p>
-                            <h3 class="heading-font-family text-8 fw-600">The Restaurant</h3>
-                            <p class="text-3 text-body-secondary">The Mist introduces guests to a memorable experience in dining out, fast becoming a preferred choice in dining out, The Mist offers a choice of dining options available to our guests with a zest for the good life.</p>
-                            <a class="btn btn-new btn-primary rounded-pill" href="restaurant.html">
-								<span class="btn-text"><span>Read More</span></span>
-								<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-							</a>
-                        </div>
-                    </div>
-                    <!-- Banquet Hall -->
-					<div class="row gx-5 gy-4 gy-lg-5 mb-5">
-                        <div class="col-lg-6 align-content-center order-2 order-lg-1 wow fadeInLeft">
-                            <p><span class="d-inline-flex text-2 text-uppercase fw-500 rounded-pill border border-dark border-opacity-10 px-3">We Find Happiness</span></p>
-                            <h3 class="heading-font-family text-8 fw-600 mb-3">Banquet Hall</h3>
-                            <!-- Heading End -->
-                            <p class="text-3 text-body-secondary">The Mist offers a choice of banqueting venues, with extensive facilities for wedding functions, social gatherings, parties, conferences, and seminars to suit all needs. From booking inquiries to the finale.</p>
-
-                            <!-- Button -->
-                            <a class="btn btn-new btn-primary rounded-pill" href="banquets.html">
-								<span class="btn-text"><span>Read More</span></span>
-								<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-							</a>
-                        </div>
-                        <div class="col-lg-6 text-center order-1 order-lg-2 wow fadeInRight">
-                            <img class="img-fluid rounded-5" src="{% static 'tandu-main/images/banquets/banquets.jpg' %}" alt="">
-                        </div>
-                    </div>
-                    <!-- Spa -->
-					<div class="row gx-5 gy-4 gy-lg-5">
-                        <div class="col-lg-6 text-center wow fadeInLeft">
-                            <img class="img-fluid rounded-5" src="{% static 'tandu-main/images/spa/spa.jpg' %}" alt="">
-                        </div>
-                        <div class="col-lg-6 align-content-center wow fadeInRight">
-                            <p><span class="d-inline-flex text-2 text-uppercase fw-500 rounded-pill border border-dark border-opacity-10 px-3">Stay in great shape</span></p>
-                            <h3 class="heading-font-family text-8 fw-600 mb-3">Spa</h3>
-                            <p class="text-3 text-body-secondary">Welcome to holistic rejuvenation through relaxing regimens with our natural range of treatments. Each spa experience is customised to recharge and refresh you both physically and mentally and to bring out your inner radiance.</p>
-							<a class="btn btn-new btn-primary rounded-pill" href="spa.html">
-								<span class="btn-text"><span>Read More</span></span>
-								<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-							</a>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-body-secondary">No activities available at the moment.</div>
+                    {% endif %}
                 </div>
             </section>
-            <!-- Services end -->
+            <!-- Activities end -->
 
             <!-- Our Experience	============================================= -->
             <section class="hero-wrap section">
@@ -367,5 +642,156 @@
     .page-header .hero-wrap {
   min-height: 550px;
 }
+
 </style>
+<style>
+/* ===== Activities section: match image height to content column ===== */
+.activities-row {
+    align-items: stretch;
+}
+.activities-row .activity-img-col {
+    display: flex;
+}
+.activities-row .activity-img-col a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: 360px;
+    min-height: 280px;
+    border-radius: 1.5rem;
+    overflow: hidden;
+}
+.activities-row .activity-img-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===== Buttons: smaller on mobile & tablet ===== */
+@media (max-width: 991px) {
+    .btn-new {
+        padding: 0.55rem 1.1rem;
+        font-size: 0.8rem;
+    }
+    .btn-new .btn-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .btn-new {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+    }
+    .btn-new .btn-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 0.65rem;
+    }
+    .d-inline-flex.align-items-center.gap-4 {
+        gap: 0.75rem !important;
+    }
+}
+
+/* ===== Section headings: left-align on mobile (hero/page-header excluded) ===== */
+@media (max-width: 767px) {
+    .section .mx-auto.text-center {
+        text-align: left !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+</style>
+<style>
+/* Scroll-reveal system (slightly reduced intensity) */
+.scroll-feel {
+    opacity: 0;
+    transform: translateY(35px) scale(0.96);
+    filter: blur(3px);
+    transition:
+        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity, filter;
+}
+
+.scroll-feel.in-view {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+}
+
+/* alternate directions for variety left/right rows */
+.scroll-feel.dir-left {
+    transform: translateX(-50px) scale(0.96);
+}
+.scroll-feel.dir-left.in-view {
+    transform: translateX(0) scale(1);
+}
+.scroll-feel.dir-right {
+    transform: translateX(50px) scale(0.96);
+}
+.scroll-feel.dir-right.in-view {
+    transform: translateX(0) scale(1);
+}
+
+/* punchy pop for cards/icons */
+.scroll-feel.pop {
+    transform: scale(0.88) rotate(-1deg);
+}
+.scroll-feel.pop.in-view {
+    transform: scale(1) rotate(0deg);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var groups = [
+        { selector: '.featured-box', variant: 'pop' },
+        { selector: '.activities-row .col-lg-6:nth-child(1)', variant: 'dir-left' },
+        { selector: '.activities-row .col-lg-6:nth-child(2)', variant: 'dir-right' },
+        { selector: '.swiper-slide', variant: 'pop' },
+        { selector: '.circle-text', variant: 'pop' },
+        { selector: 'h2, h3', variant: '' },
+        { selector: '.wow', variant: '' }
+    ];
+
+    var seen = new Set();
+    groups.forEach(function (group) {
+        document.querySelectorAll(group.selector).forEach(function (el, i) {
+            if (seen.has(el)) return;
+            seen.add(el);
+            el.classList.add('scroll-feel');
+            if (group.variant) el.classList.add(group.variant);
+            el.dataset.staggerDelay = (i % 4) * 0.1; // cascade across rows
+        });
+    });
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            var el = entry.target;
+            var delay = parseFloat(el.dataset.staggerDelay) || 0;
+
+            if (entry.isIntersecting) {
+                setTimeout(function () {
+                    el.classList.add('in-view');
+                }, delay * 1000);
+            } else {
+                el.classList.remove('in-view'); // resets so it replays every scroll
+            }
+        });
+    }, {
+        threshold: 0.25,
+        rootMargin: '0px 0px -100px 0px'
+    });
+
+    document.querySelectorAll('.scroll-feel').forEach(function (el) {
+        observer.observe(el);
+    });
+});
+</script>
+
 {% endblock %}
