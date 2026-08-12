@@ -25,21 +25,20 @@
 
     <!-- Custom Header/Logo Scroll Behavior
 	============================== -->
-    <style>
-        /* Logo sizing - HERO state only, doesn't affect scrolled logo */
-        #header:not(.scrolled) .logo img {
-    max-height: 440px;
-    width: auto;
-    display: block;
-    margin-top: 60px; /* increased gap further */
-    background: transparent; /* ensure no bg box behind logo */
-    transition: max-height 0.3s ease;
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
-}
-
-#header:not(.scrolled) .logo {
-    background: transparent; /* ensure wrapper has no bg either */
-}
+ <style>
+        /* Logo image: always the same max size, so it can never render "big" */
+        #header .logo img {
+            max-height: 168px;
+            width: auto;
+            display: block;
+        }
+        /* Logo hidden in HERO state only - INSTANT, no transition, so it can't flash large */
+        #header:not(.scrolled) .logo {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none;
+            transition: none !important;
+        }
         /* Make container relative so we can absolutely position the logo */
         #header .primary-menu .container {
             position: relative;
@@ -67,7 +66,6 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            transition: all 0.3s ease;
             z-index: 2;
         }
         /* Default state = hero: hide nav links and Book Now button, show only the logo */
@@ -99,9 +97,9 @@
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
-        }
-        #header.scrolled .logo img {
-            max-height: 168px;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         #header.scrolled #header-nav,
         #header.scrolled .btn-new,
@@ -114,21 +112,25 @@
         #content {
             padding-top: 0;
         }
-        /* Shrink the hero logo on mobile so it doesn't dominate the screen */
-@media (max-width: 576px) {
-	#header:not(.scrolled) .logo img {
-		max-height: 260px !important;
-		margin-top: 45px !important;
-	}
+        /* Scrolled navbar: white background, olive green nav links */
+#header.scrolled .primary-menu {
+    background-color: #fff !important;
 }
+#header.scrolled #header-nav .nav-link {
+    color: #6B8E23 !important;
+}
+#header.scrolled #header-nav .nav-link:hover,
+#header.scrolled #header-nav .nav-link.active {
+    color: #556B2F !important;
+}
+#header.scrolled .navbar-toggler span {
+    background-color: #6B8E23 !important;
+}
+/* Active nav link: underline indicator */
 
-@media (min-width: 577px) and (max-width: 991px) {
-	#header:not(.scrolled) .logo img {
-		max-height: 320px !important;
-		margin-top: 55px !important;
-	}
-}
+
     </style>
+    
     {% block extra_css %}{% endblock %}
 </head>
 
@@ -169,7 +171,7 @@
     <a class="nav-link" href="{% url 'tandj_app:rooms' %}">Rooms</a>
 </li>
                           <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:activities' %}">Activities</a></li>
-                            <li class="nav-item"><a class="nav-link" href="banquets.html">Banquets</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:nearby_destinations' %}">Nearby Destinations</a></li>
                             <li class="nav-item"><a class="nav-link" href="spa.html">Spa</a></li>
                             <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#">Pages</a>
                                 <ul class="dropdown-menu">
@@ -306,17 +308,26 @@
     <script>
         (function () {
             var header = document.getElementById('header');
-            var scrollThreshold = 100; // px scrolled before switching states
+            var addThreshold = 100;   // scroll down past this to switch to scrolled
+            var removeThreshold = 60; // scroll up past this to switch back to hero
+            var ticking = false;
 
             function updateHeaderState() {
-                if (window.scrollY > scrollThreshold) {
+                var y = window.scrollY;
+                if (y > addThreshold) {
                     header.classList.add('scrolled');
-                } else {
+                } else if (y < removeThreshold) {
                     header.classList.remove('scrolled');
                 }
+                ticking = false;
             }
 
-            window.addEventListener('scroll', updateHeaderState);
+            window.addEventListener('scroll', function () {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateHeaderState);
+                    ticking = true;
+                }
+            });
             document.addEventListener('DOMContentLoaded', updateHeaderState);
         })();
     </script>

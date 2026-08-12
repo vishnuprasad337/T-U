@@ -50,10 +50,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 :root,
 [data-bs-theme="light"] {
- --bs-themecolor: #0b5c35;
---bs-themecolor-rgb: 11, 92, 53;
---bs-themehovercolor: #0a7048;
---bs-themehovercolor-rgb: 10, 112, 72;
+ --bs-themecolor: #6B8E23;
+--bs-themecolor-rgb: 107, 142, 35;
+--bs-themehovercolor: #556B2F;
+--bs-themehovercolor-rgb: 85, 107, 47;
   --bs-link-color: var(--bs-themecolor);
   --bs-link-color-rgb: var(--bs-themecolor-rgb);
   --bs-link-hover-color: var(--bs-themehovercolor);
@@ -74,7 +74,6 @@
   --bs-heading-font-family: Poppins, sans-serif;
   --bs-body-font-size: 1.125rem;
 }
-
 [data-bs-theme="dark"] {
   color-scheme: dark;
   --bs-link-color: var(--bs-themecolor);

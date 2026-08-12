@@ -847,3 +847,20 @@ def activity_detail_public(request, slug):
             "other_activities": other_activities,
         },
     )
+def nearby_destinations_public(request):
+    destinations = NearbyDestination.objects.filter(status="active")
+    return render(request, "frontends/nearby_destinations.html", {
+        "destinations": destinations,
+    })
+
+
+def nearby_destination_detail_public(request, slug):
+    destination = get_object_or_404(NearbyDestination, slug=slug, status="active")
+    destination_images = destination.images.all()
+    other_destinations = NearbyDestination.objects.filter(status="active").exclude(pk=destination.pk)[:5]
+
+    return render(request, "frontends/nearby_destination_detail.html", {
+        "destination": destination,
+        "destination_images": destination_images,
+        "other_destinations": other_destinations,
+    })

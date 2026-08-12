@@ -94,4 +94,7 @@ path("rooms/", views.room_list, name="room_list"),
     path("our-rooms/<slug:slug>/", views.room_detail_public, name="room_detail_public"),
     path("our-activities/", views.activities, name="activities"),
     path("our-activities/<slug:slug>/", views.activity_detail_public, name="activity_detail_public"),
+        path("our-nearby-destinations/", views.nearby_destinations_public, name="nearby_destinations"),
+    path("our-nearby-destinations/<slug:slug>/", views.nearby_destination_detail_public, name="nearby_destination_detail_public"),
+
 ]

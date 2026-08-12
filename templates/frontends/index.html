@@ -9,13 +9,14 @@
 			<!-- Intro / Hero Frame Sequence
 			============================================= -->
 			<section class="hero-wrap hero-frames-section" id="heroFramesSection">
-				<canvas id="heroCanvas" class="hero-frames-canvas"></canvas>
-				<div class="hero-mask bg-dark opacity-2"></div>
-				<div class="hero-video-scroll-hint">
-					<span class="text-light text-2 text-uppercase fw-600 ls-2 d-block mb-2">Scroll Down</span>
-					<i class="fa-solid fa-chevron-down text-light"></i>
-				</div>
-			</section>
+    <canvas id="heroCanvas" class="hero-frames-canvas"></canvas>
+    <div class="hero-mask bg-dark opacity-2"></div>
+    <img src="{% static 'tandu-main/tanduwhite.png' %}" alt="The Mist" id="heroFramesLogo" class="hero-frames-logo">
+    <div class="hero-video-scroll-hint">
+        <span class="text-light text-2 text-uppercase fw-600 ls-2 d-block mb-2">Scroll Down</span>
+        <i class="fa-solid fa-chevron-down text-light"></i>
+    </div>
+</section>
 			<!-- Intro / Hero Frame Sequence end -->
 
 			<style>
@@ -76,6 +77,22 @@
 		justify-content: flex-start;
 		margin-top: 4px;
 	}
+}
+.hero-frames-logo {
+    position: absolute;
+    top: 80px;   /* was 60px */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    max-height: 100px;
+    width: auto;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+@media (max-width: 576px) {
+    .hero-frames-logo {
+        max-height: 62px;
+        top: 55px;   /* was 40px */
+    }
 }
 			</style>
 
@@ -561,10 +578,7 @@
 											</a>
 											<!-- Discount Badge -->
 											<div class="position-absolute top-0 start-0 pt-3 ps-3">
-												<div class="d-inline-flex align-items-center gap-1 text-2 fw-500 text-white rounded-pill border border-white border-opacity-75" style="background-color: rgba(0, 0, 0, 0.3); padding: 6px 12px;">
-													<i class="fa-solid fa-tag"></i>
-													<span>5% OFF</span>
-												</div>
+												
 											</div>
 										</div>
 										

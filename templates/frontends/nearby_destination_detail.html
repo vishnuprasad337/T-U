@@ -1,7 +1,7 @@
 {% extends "frontends/base.html" %}
 {% load static %}
 
-{% block title %}{{ room.room_category|default:"Room" }} - The Mist Luxury Hotel{% endblock %}
+{% block title %}{{ destination.name }} - The Mist Luxury Hotel{% endblock %}
 {% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
 
 {% block content %}
@@ -11,14 +11,14 @@
 		<section class="page-header page-header-text-light py-0 mb-0">
 			<div class="hero-wrap py-5">
 				<div class="hero-mask opacity-3 bg-black"></div>
-				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% if room.main_image %}{{ room.main_image.url }}{% else %}{% static 'tandu-main/images/rooms/room-3.jpg' %}{% endif %}'); background-size:cover; background-position:center;"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% if destination.image %}{{ destination.image.url }}{% else %}{% static 'tandu-main/images/destinations/default.jpg' %}{% endif %}'); background-size:cover; background-position:center;"></div>
 				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
 					<div class="container text-center mt-5 pt-5 pb-2">
-						<h1 class="text-17 mb-4 reveal reveal-fadeInUp">{{ room.room_category|default:"Room" }}</h1>
+						<h1 class="text-17 mb-4 reveal reveal-fadeInUp">{{ destination.name }}</h1>
 						<ul class="breadcrumb justify-content-center mb-0 reveal reveal-fadeInUp" data-reveal-delay="200">
 							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
-							<li><a href="{% url 'tandj_app:rooms' %}">Rooms</a></li>
-							<li class="active">{{ room.room_category|default:"Room" }}</li>
+							<li><a href="{% url 'tandj_app:nearby_destinations' %}">Nearby Destinations</a></li>
+							<li class="active">{{ destination.name }}</li>
 						</ul>
 					</div>
 				</div>
@@ -26,7 +26,7 @@
 		</section>
 		<!-- Page Header end -->
 
-            <!-- Rooms & Suites
+            <!-- Nearby Destination Detail
 			============================================= -->
             <section class="section room-detail-section">
                 <div class="container">
@@ -35,51 +35,49 @@
 							<div class="col-lg-8 col-xl-9 reveal reveal-fade">
 								<!-- Main Image -->
 								<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
-									{% if room.main_image %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{{ room.main_image.url }}" alt="{{ room.room_category }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+									{% if destination.image %}
+									<img class="img-fluid d-block w-100 rounded-5" src="{{ destination.image.url }}" alt="{{ destination.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
 									{% else %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/rooms/room-3.jpg' %}" alt="{{ room.room_category }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
 									{% endif %}
 								</div>
 
 								<!-- Thumbnail Gallery -->
-								{% if room_images %}
+								{% if destination_images %}
 								<div class="row g-2 mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
-									{% for img in room_images %}
+									{% for img in destination_images %}
 									<div class="col-3 col-md-2">
-										<a href="{{ img.image.url }}" class="glightbox d-block" data-gallery="room-gallery">
-											<img class="img-fluid rounded-4 w-100" src="{{ img.image.url }}" alt="{{ img.caption|default:room.room_category }}" style="height:90px; object-fit:cover;" loading="lazy" decoding="async">
+										<a href="{{ img.image.url }}" class="glightbox d-block" data-gallery="destination-gallery">
+											<img class="img-fluid rounded-4 w-100" src="{{ img.image.url }}" alt="{{ img.caption|default:destination.name }}" style="height:90px; object-fit:cover;" loading="lazy" decoding="async">
 										</a>
 									</div>
 									{% endfor %}
 								</div>
 								{% endif %}
 
-								<!-- Rooms Details -->
-								<h2 class="text-13 fw-600 reveal reveal-fadeInUp">{{ room.room_category|default:"Room" }}</h2>
+								<!-- Destination Details -->
+								<h2 class="text-13 fw-600 reveal reveal-fadeInUp">{{ destination.name }}</h2>
 								<div class="row gy-2 gx-5 text-body-secondary mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
-									{% if room.bedroom_beds %}
+									{% if destination.location %}
 									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-bed"></i></span>{{ room.bedroom_beds }}
+										<span class="text-primary text-6 me-2"><i class="fa-solid fa-map-pin"></i></span>{{ destination.location }}
 									</div>
 									{% endif %}
-									{% if room.living_room_beds %}
+									{% if destination.distance %}
 									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-couch"></i></span>{{ room.living_room_beds }}
-									</div>
-									{% endif %}
-									{% if room.rating_average %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-star"></i></span>{{ room.rating_average }} Rating
+										<span class="text-primary text-6 me-2"><i class="fa-solid fa-route"></i></span>{{ destination.distance }}
 									</div>
 									{% endif %}
 								</div>
-								<div class="text-body-secondary lh-lg reveal reveal-fadeInUp" data-reveal-delay="200">{{ room.description|safe }}</div>
+								<div class="text-body-secondary lh-lg reveal reveal-fadeInUp" data-reveal-delay="200">{{ destination.description|safe }}</div>
 
 								<hr class="opacity-1 my-4">
 								<div class="room-price-book-bar d-flex flex-wrap align-items-center justify-content-between gap-3 w-100 reveal reveal-fadeInUp" data-reveal-delay="300">
-									<div class="text-9 fw-600 d-flex align-items-center gap-1 flex-shrink-0">₹{{ room.price_per_night }} <span class="text-3 fw-500 text-body-tertiary text-uppercase">/ Per Night</span></div>
-									<a href="javascript:void(0)" class="btn btn-new btn-primary rounded-pill flex-shrink-0 js-open-booking-modal" data-room-id="{{ room.id }}">
+									<div class="text-7 fw-600 d-flex align-items-center gap-2 flex-shrink-0">
+										<span class="text-primary text-9"><i class="fa-solid fa-compass"></i></span>
+										Plan your visit to {{ destination.name }}
+									</div>
+									<a href="javascript:void(0)" class="btn btn-new btn-primary rounded-pill flex-shrink-0 js-open-booking-modal">
 										<span class="btn-text"><span>Book Now</span></span>
 										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
 									</a>
@@ -90,12 +88,12 @@
 									<div class="col-sm-6 col-lg-12">
 										<!-- Other Link -->
 										<div class="bg-white rounded-5 p-4 mb-4">
-											<h4 class="text-7 fw-600">Other Rooms</h4>
+											<h4 class="text-7 fw-600">Other Destinations</h4>
 											<ul class="list-link">
-												{% for other in other_rooms %}
-												<li><a href="{% url 'tandj_app:room_detail_public' other.slug %}">{{ other.room_category|default:"Room" }}</a></li>
+												{% for other in other_destinations %}
+												<li><a href="{% url 'tandj_app:nearby_destination_detail_public' other.slug %}">{{ other.name }}</a></li>
 												{% empty %}
-												<li><a href="{% url 'tandj_app:rooms' %}">View All Rooms</a></li>
+												<li><a href="{% url 'tandj_app:nearby_destinations' %}">View All Destinations</a></li>
 												{% endfor %}
 											</ul>
 										</div>
@@ -125,7 +123,7 @@
                     </div>
                 </div>
             </section>
-            <!-- Rooms & Suites end -->
+            <!-- Nearby Destination Detail end -->
 
             <!-- ===== BOOKING MODAL (overlay-based — same reliable pattern used
                  elsewhere on the site; opened by any .js-open-booking-modal
@@ -139,8 +137,8 @@
                     <!-- Header -->
                     <div class="booking-modal-header">
                         <span class="booking-modal-eyebrow">The Mist</span>
-                        <h3 id="bookingModalTitle" class="booking-modal-title">Book Your <span class="text-primary">Stay</span></h3>
-                        <p class="booking-modal-sub">Fill in your details and we'll confirm your reservation over WhatsApp.</p>
+                        <h3 id="bookingModalTitle" class="booking-modal-title">Book Your <span class="text-primary">Visit</span></h3>
+                        <p class="booking-modal-sub">Fill in your details and we'll confirm over WhatsApp.</p>
                     </div>
 
                     <form class="booking-modal-form" id="bookNowForm" novalidate>
@@ -164,42 +162,24 @@
                             <span class="booking-modal-error" data-field-error="guest_email"></span>
                         </div>
 
-                        <div class="booking-modal-section-label">Stay Details</div>
+                        <div class="booking-modal-section-label">Visit Details</div>
                         <div class="booking-modal-row">
                             <div class="booking-modal-field">
-                                <label for="checkIn"><i class="fa-solid fa-calendar-check"></i> Check In</label>
+                                <label for="checkIn"><i class="fa-solid fa-calendar-check"></i> Visit Date</label>
                                 <input type="date" id="checkIn" name="check_in" required>
                                 <span class="booking-modal-error" data-field-error="check_in"></span>
                             </div>
                             <div class="booking-modal-field">
-                                <label for="checkOut"><i class="fa-solid fa-calendar-xmark"></i> Check Out</label>
+                                <label for="checkOut"><i class="fa-solid fa-calendar-xmark"></i> Return Date</label>
                                 <input type="date" id="checkOut" name="check_out" required>
                                 <span class="booking-modal-error" data-field-error="check_out"></span>
                             </div>
                         </div>
 
-                        <div class="booking-modal-row">
-                            <div class="booking-modal-field">
-                                <label for="numGuests"><i class="fa-solid fa-users"></i> Guests</label>
-                                <input type="number" min="1" value="1" id="numGuests" name="num_guests" required>
-                                <span class="booking-modal-error" data-field-error="num_guests"></span>
-                            </div>
-                            <div class="booking-modal-field">
-                                <label for="roomSelect">
-                                    <i class="fa-solid fa-bed"></i> Room
-                                    <span class="booking-modal-optional-tag">optional</span>
-                                </label>
-                                <select id="roomSelect" name="room">
-                                    <option value="" data-room-name="">General Inquiry</option>
-                                    {% if rooms %}
-                                        {% for r in rooms %}
-                                            <option value="{{ r.id }}" data-room-name="{{ r.room_category }}" {% if room and r.id == room.id %}selected{% endif %}>{{ r.room_category }}</option>
-                                        {% endfor %}
-                                    {% elif room %}
-                                        <option value="{{ room.id }}" data-room-name="{{ room.room_category }}" selected>{{ room.room_category }}</option>
-                                    {% endif %}
-                                </select>
-                            </div>
+                        <div class="booking-modal-field">
+                            <label for="numGuests"><i class="fa-solid fa-users"></i> Guests</label>
+                            <input type="number" min="1" value="1" id="numGuests" name="num_guests" required>
+                            <span class="booking-modal-error" data-field-error="num_guests"></span>
                         </div>
 
                         <div class="booking-modal-field">
@@ -207,7 +187,7 @@
                                 <i class="fa-solid fa-comment-dots"></i> Special Requests
                                 <span class="booking-modal-optional-tag">optional</span>
                             </label>
-                            <textarea id="specialRequests" name="special_requests" placeholder="Any special requests? (optional)"></textarea>
+                            <textarea id="specialRequests" name="special_requests" placeholder="Any special requests? (optional)">Interested in visiting {{ destination.name }}</textarea>
                         </div>
 
                         <button type="submit" class="booking-modal-submit">
@@ -228,14 +208,13 @@
                 var msgBox = document.getElementById('bookingModalMsg');
                 var submitBtn = form ? form.querySelector('.booking-modal-submit') : null;
                 var btnLabel = submitBtn ? submitBtn.querySelector('.btn-label') : null;
-                var roomSelectEl = document.getElementById('roomSelect');
 
                 if (!overlay || !form) return;
 
                 var lockedScrollY = 0;
                 var WHATSAPP_NUMBER = '919633870962'; // country code 91 + 9633870962
 
-                function openModal(roomId) {
+                function openModal() {
                     lockedScrollY = window.scrollY || window.pageYOffset || 0;
                     document.body.style.overflow = 'hidden';
                     document.body.style.position = 'fixed';
@@ -243,10 +222,6 @@
                     document.body.style.left = '0';
                     document.body.style.right = '0';
                     document.body.style.width = '100%';
-
-                    if (roomId && roomSelectEl) {
-                        roomSelectEl.value = roomId;
-                    }
 
                     overlay.classList.add('active');
                     overlay.setAttribute('aria-hidden', 'false');
@@ -268,7 +243,7 @@
                 document.querySelectorAll('.js-open-booking-modal').forEach(function (trigger) {
                     trigger.addEventListener('click', function (e) {
                         e.preventDefault();
-                        openModal(trigger.getAttribute('data-room-id'));
+                        openModal();
                     });
                 });
 
@@ -297,7 +272,6 @@
                     var checkIn = document.getElementById('checkIn').value;
                     var checkOut = document.getElementById('checkOut').value;
                     var numGuests = document.getElementById('numGuests').value;
-                    var roomName = roomSelectEl.options[roomSelectEl.selectedIndex].getAttribute('data-room-name');
                     var requests = document.getElementById('specialRequests').value.trim();
 
                     var hasError = false;
@@ -323,7 +297,7 @@
                     }
                     if (checkIn && checkOut && checkOut <= checkIn) {
                         hasError = true;
-                        form.querySelector('[data-field-error="check_out"]').textContent = 'Must be after check-in.';
+                        form.querySelector('[data-field-error="check_out"]').textContent = 'Must be after visit date.';
                     }
 
                     if (hasError) {
@@ -333,15 +307,15 @@
                     }
 
                     var lines = [
-                        'New Booking Request — The Mist',
+                        'New Destination Inquiry — The Mist',
                         '',
                         'Name: ' + name,
                         'Email: ' + email,
                         'Phone: ' + (phone || 'N/A'),
-                        'Room: ' + (roomName || 'General Inquiry'),
+                        'Destination: {{ destination.name }}',
                         'Guests: ' + numGuests,
-                        'Check In: ' + checkIn,
-                        'Check Out: ' + checkOut
+                        'Visit Date: ' + checkIn,
+                        'Return Date: ' + checkOut
                     ];
                     if (requests) {
                         lines.push('Special Requests: ' + requests);
@@ -369,8 +343,6 @@
             </script>
 
 <style>
-
-
 /* ===== BOOKING MODAL (overlay-based, same pattern as the rest of the site) ===== */
 .booking-modal-overlay {
     position: fixed;
@@ -546,14 +518,6 @@
     -webkit-appearance: none;
 }
 
-.booking-modal-field select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23444' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    padding-right: 36px;
-    cursor: pointer;
-}
-
 .booking-modal-field textarea {
     min-height: 90px;
     resize: vertical;
@@ -617,14 +581,14 @@
 
 .booking-modal-msg.success { color: #198754; }
 .booking-modal-msg.error { color: #d64545; }
-/* Bigger, easier-to-grab scrollbar for the booking modal */
+
 .booking-modal-box {
-    scrollbar-width: auto;          /* Firefox: thin -> auto (wider) */
+    scrollbar-width: auto;
     scrollbar-color: var(--bs-primary, #0d6efd) rgba(0, 0, 0, 0.08);
 }
 
 .booking-modal-box::-webkit-scrollbar {
-    width: 12px;                    /* increase from default ~6-8px */
+    width: 12px;
 }
 
 .booking-modal-box::-webkit-scrollbar-track {
@@ -635,15 +599,13 @@
 .booking-modal-box::-webkit-scrollbar-thumb {
     background: var(--bs-primary, #0d6efd);
     border-radius: 20px;
-    border: 2px solid #fff;         /* gives it a bit of padding, feels less cramped */
+    border: 2px solid #fff;
 }
 
 .booking-modal-box::-webkit-scrollbar-thumb:hover {
-    background: #25D366;            /* matches your WhatsApp-green hover accent */
+    background: #25D366;
 }
 
-/* On touch devices the native scrollbar is usually invisible anyway,
-   so make it a bit wider there too where supported */
 @media (max-width: 575px) {
     .booking-modal-box::-webkit-scrollbar {
         width: 14px;
@@ -674,16 +636,10 @@
     .page-header .hero-wrap {
   min-height: 550px;
 }
-/* .section has overflow:hidden globally, which breaks position:sticky.
-   Override it just for this page's room-detail section. */
 .room-detail-section {
 	overflow: visible !important;
 }
 
-/* Sidebar only sticks on large screens (matches the col-lg-4 breakpoint
-   where it sits beside the main content). On mobile it just flows in
-   normal document order below the room info instead of sticking early
-   and jumping into view right after the hero image. */
 .room-sidebar-sticky {
 	position: static;
 }
@@ -694,12 +650,10 @@
 	}
 }
 
-/* Header must always render above sticky content */
 #header {
 	z-index: 1000 !important;
 }
 
-/* Sharper hero background rendering */
 .page-header .hero-bg {
 	background-size: cover !important;
 	background-position: center center !important;
@@ -708,13 +662,10 @@
 	image-rendering: crisp-edges;
 }
 
-/* Sharper main/thumbnail room images */
 .room-items-wrap img {
 	image-rendering: -webkit-optimize-contrast;
 }
 
-/* Price + Book Now bar: wrap instead of overflowing off-screen on
-   narrow phones where price + pill button don't both fit on one row. */
 .room-price-book-bar {
 	min-width: 0;
 }
@@ -728,8 +679,6 @@
 	}
 }
 
-/* Compact button on mobile: smaller padding, text, and icon circle so it
-   doesn't dominate the screen. */
 @media (max-width: 576px) {
 	.room-price-book-bar .btn {
 		padding: 10px 20px !important;
@@ -740,25 +689,13 @@
 		height: 28px !important;
 		font-size: 0.7rem !important;
 	}
-	.room-price-book-bar .text-9 {
-		font-size: 1.75rem !important;
-	}
 }
 
-/* ---- Repeatable fade-in reveal animation ----
-   Unlike WOW.js (which animates an element once and leaves it), these
-   elements fade in every time they scroll into view and reset when they
-   scroll back out, so the effect replays on every pass, not just on
-   first page load. Controlled by the IntersectionObserver script below. */
 .reveal {
 	opacity: 0;
 	transition: opacity .6s ease, transform .6s ease;
 	will-change: opacity, transform;
 }
-/* Opacity-only variant — no transform. Use this on any wrapper that is an
-   ancestor of a position:sticky element: a transform on an ancestor
-   (even translate(0,0)) creates a new containing block and silently
-   breaks position:sticky on descendants. */
 .reveal-fade {
 	transition: opacity .6s ease;
 }
@@ -790,7 +727,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	if (!revealEls.length) return;
 
 	if (!('IntersectionObserver' in window)) {
-		// Fallback: just show everything immediately.
 		revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
 		return;
 	}
@@ -806,8 +742,6 @@ document.addEventListener('DOMContentLoaded', function () {
 					el.classList.add('reveal-visible');
 				}
 			} else {
-				// Leaving the viewport resets it so it fades in again
-				// next time it's scrolled back into view.
 				el.classList.remove('reveal-visible');
 			}
 		});

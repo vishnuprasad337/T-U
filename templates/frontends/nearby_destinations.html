@@ -1,0 +1,273 @@
+{% extends "frontends/base.html" %}
+{% load static %}
+
+{% block title %}Nearby Destinations - The Mist Luxury Hotel{% endblock %}
+{% block meta_description %}Explore top attractions and destinations near The Mist luxury hotel.{% endblock %}
+
+{% block content %}
+
+		<!-- Page Header
+		============================================= -->
+		<section class="page-header page-header-text-light py-0 mb-0">
+			<div class="hero-wrap py-5">
+				<div class="hero-mask opacity-6 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
+				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+					<div class="container text-center mt-5 pt-5 pb-2">
+						<h1 class="text-17 mb-4 wow fadeInUp">Nearby Destinations</h1>
+						<ul class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay=".2s">
+							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
+							<li class="active">Nearby Destinations</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Page Header end -->
+
+		<!-- Nearby Destinations Grid
+		============================================= -->
+		<section class="section">
+			<div class="container">
+				<div class="row g-4">
+					{% for destination in destinations %}
+					<div class="col-md-6 col-lg-4 wow fadeInUp">
+						<div class="destination-item">
+							<!-- Image -->
+							<a class="destination-item-img" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
+								{% if destination.image %}
+									<img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+								{% else %}
+									<img src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}">
+								{% endif %}
+							</a>
+
+							<!-- Content -->
+							<div class="destination-item-body">
+								<div class="destination-item-meta">
+									{% if destination.location %}
+									<span><i class="fa-solid fa-location-dot"></i>{{ destination.location }}</span>
+									{% endif %}
+									{% if destination.distance %}
+									<span><i class="fa-solid fa-route"></i>{{ destination.distance }}</span>
+									{% endif %}
+								</div>
+
+								<h3 class="destination-item-title">{{ destination.name }}</h3>
+								<p class="destination-item-desc">{{ destination.description|safe|truncatewords_html:20 }}</p>
+
+								<div class="destination-item-footer">
+									<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
+										<span class="btn-text"><span>Explore</span></span>
+										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% empty %}
+					<div class="col-12">
+						<div class="alert alert-info text-center">
+							<p class="mb-0">No nearby destinations available right now. Please check back soon.</p>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</section>
+		<!-- Nearby Destinations Grid end -->
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+	.page-header .hero-wrap {
+		min-height: 550px;
+	}
+
+	/* ===== Destination Card — inset image with concave bottom-right notch ===== */
+	.destination-item {
+		background: #fff;
+		border-radius: 24px;
+		padding: 16px;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+		transition: box-shadow 0.3s ease, transform 0.3s ease;
+	}
+	.destination-item:hover {
+		box-shadow: 0 14px 34px rgba(0, 0, 0, 0.1);
+		transform: translateY(-4px);
+	}
+
+	.destination-item-img {
+		display: block;
+		position: relative;
+		height: 340px;
+		overflow: hidden;
+		border-radius: 18px;
+	}
+	.destination-item-img img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.5s ease;
+	}
+	.destination-item:hover .destination-item-img img {
+		transform: scale(1.06);
+	}
+
+	/* The concave "notch" — a white quarter-circle laid over the inset
+	   image's bottom-right corner, eating an inward curve out of the photo. */
+	.destination-item-img::after {
+		content: '';
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		width: 32px;
+		height: 32px;
+		background: #fff;
+		border-top-left-radius: 32px;
+		pointer-events: none;
+	}
+
+	.destination-item-body {
+		padding: 26px 10px 8px;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.destination-item-meta {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		font-size: 0.82rem;
+		color: #6c757d;
+		margin-bottom: 12px;
+	}
+	.destination-item-meta span {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+	}
+	.destination-item-meta i {
+		color: #b8956a;
+	}
+
+	.destination-item-title {
+		font-weight: 800;
+		font-size: 1.35rem;
+		color: #1a1a1a;
+		margin-bottom: 12px;
+		line-height: 1.3;
+	}
+
+	.destination-item-desc {
+		color: #6c757d;
+		font-size: 0.95rem;
+		line-height: 1.65;
+		margin-bottom: 20px;
+		flex: 1;
+	}
+
+	.destination-item-footer {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		padding-top: 16px;
+		border-top: 1px solid #f0f0f0;
+	}
+
+	@media (max-width: 991px) {
+		.destination-item-footer .btn {
+			padding: 9px 18px !important;
+			font-size: 0.85rem !important;
+		}
+		.destination-item-footer .btn .btn-icon {
+			width: 28px !important;
+			height: 28px !important;
+			font-size: 0.7rem !important;
+		}
+	}
+
+	@media (max-width: 576px) {
+		.destination-item-footer .btn {
+			padding: 8px 16px !important;
+			font-size: 0.8rem !important;
+		}
+		.destination-item-footer .btn .btn-icon {
+			width: 26px !important;
+			height: 26px !important;
+			font-size: 0.65rem !important;
+		}
+	}
+
+	/* ===== Repeatable scroll-reveal for all .wow elements on this page =====
+	   WOW.js only ever animates an element once. This overrides that:
+	   elements fade in every time they scroll into view and reset (fade out)
+	   when they scroll back out, so it replays on every pass. */
+	.wow {
+		opacity: 0 !important;
+		transition: opacity .7s ease, transform .7s ease;
+		will-change: opacity, transform;
+	}
+	.wow.fadeInUp    { transform: translateY(40px); }
+	.wow.fadeInLeft  { transform: translateX(-50px); }
+	.wow.fadeInRight { transform: translateX(50px); }
+	.wow.fadeInDown  { transform: translateY(-40px); }
+	.wow.bounceIn    { transform: scale(0.85); }
+	.wow.fadeIn      { transform: none; }
+
+	.wow.wow-visible {
+		opacity: 1 !important;
+		transform: translate(0, 0) scale(1) !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.wow {
+			opacity: 1 !important;
+			transform: none !important;
+			transition: none !important;
+		}
+	}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	// Stop WOW.js from permanently marking these as "animated" and
+	// leaving them alone — we drive visibility ourselves instead.
+	if (window.WOW) {
+		try { new WOW({ live: false }).init = function () {}; } catch (e) {}
+	}
+
+	var wowEls = document.querySelectorAll('.wow');
+	if (!wowEls.length) return;
+
+	if (!('IntersectionObserver' in window)) {
+		wowEls.forEach(function (el) { el.classList.add('wow-visible'); });
+		return;
+	}
+
+	var observer = new IntersectionObserver(function (entries) {
+		entries.forEach(function (entry) {
+			var el = entry.target;
+			var delay = parseFloat(el.getAttribute('data-wow-delay') || '0') * 1000;
+			if (entry.isIntersecting) {
+				if (delay) {
+					setTimeout(function () { el.classList.add('wow-visible'); }, delay);
+				} else {
+					el.classList.add('wow-visible');
+				}
+			} else {
+				el.classList.remove('wow-visible');
+			}
+		});
+	}, { threshold: 0.15 });
+
+	wowEls.forEach(function (el) { observer.observe(el); });
+});
+</script>
+{% endblock %}
