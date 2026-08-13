@@ -104,6 +104,29 @@ body::-webkit-scrollbar {
 	height: 0 !important;
 }
 
+/* ===== FIX: restore a visible, working scrollbar inside the Book Now
+   modal body. The global "* { scrollbar: none }" rule above was hiding
+   the scrollbar here too, which — combined with the hero wheel-lock —
+   made the modal look like it couldn't scroll at all. ===== */
+#bookNowModal .modal-body {
+	scrollbar-width: thin !important;
+	-ms-overflow-style: auto !important;
+}
+#bookNowModal .modal-body::-webkit-scrollbar {
+	display: block !important;
+	width: 6px !important;
+}
+#bookNowModal .modal-body::-webkit-scrollbar-track {
+	background: transparent;
+}
+#bookNowModal .modal-body::-webkit-scrollbar-thumb {
+	background: rgba(0, 0, 0, 0.25);
+	border-radius: 3px;
+}
+#bookNowModal .modal-body::-webkit-scrollbar-thumb:hover {
+	background: rgba(0, 0, 0, 0.4);
+}
+
 img {
 	max-width: 100%;
 	height: auto;
@@ -562,6 +585,9 @@ img {
 
 		function handleWheel(e) {
 			if (sequenceDone) return;
+			// FIX: don't hijack scroll while a Bootstrap modal (e.g. Book Now)
+			// is open — otherwise the modal body can't be scrolled at all.
+			if (document.body.classList.contains('modal-open')) return;
 			e.preventDefault();
 
 			wheelDeltaAccum += e.deltaY;
@@ -590,6 +616,8 @@ img {
 		var TOUCH_STEP_PX = 25;
 		function handleTouchMove(e) {
 			if (sequenceDone) return;
+			// FIX: same modal guard as handleWheel above, for touch devices.
+			if (document.body.classList.contains('modal-open')) return;
 			e.preventDefault();
 			if (touchStartY === null) { touchStartY = e.touches[0].clientY; return; }
 
