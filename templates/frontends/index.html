@@ -9,9 +9,45 @@
 			<!-- Intro / Hero Frame Sequence
 			============================================= -->
 			<section class="hero-wrap hero-frames-section" id="heroFramesSection">
+                <svg width="0" height="0" style="position:absolute;">
+        <filter id="heroFrameSharpen">
+            <feConvolveMatrix order="3" preserveAlpha="true"
+                kernelMatrix="0 -1 0 -1 5 -1 0 -1 0" />
+        </filter>
+    </svg>
     <canvas id="heroCanvas" class="hero-frames-canvas"></canvas>
     <div class="hero-mask bg-dark opacity-2"></div>
     <img src="{% static 'tandu-main/tanduwhite.png' %}" alt="The Mist" id="heroFramesLogo" class="hero-frames-logo">
+
+    <div class="hero-frames-content">
+        <div class="hero-frames-caption hero-frames-caption--left" data-frame-range="7-10">
+            <div class="hero-frames-caption-inner">
+                <span class="hero-caption-eyebrow">Welcome To</span>
+                <h2 class="heading-font-family hero-caption-heading">T&amp;U Leisure Hotel</h2>
+                <span class="hero-caption-divider"></span>
+                <p class="hero-caption-sub">Set among rolling green hills, T&amp;U Leisure Hotel welcomes you with warm hospitality, thoughtfully designed spaces, and a peaceful retreat away from the everyday rush.</p>
+            </div>
+        </div>
+
+        <div class="hero-frames-caption hero-frames-caption--right" data-frame-range="21-50">
+            <div class="hero-frames-caption-inner">
+                <span class="hero-caption-eyebrow">Our Rooms</span>
+                <h2 class="heading-font-family hero-caption-heading">Rest, Reimagined</h2>
+                <span class="hero-caption-divider"></span>
+                <p class="hero-caption-sub">Every room at T&amp;U Leisure Hotel is crafted for comfort — soft linens, warm lighting, and quiet interiors that turn a simple stay into a proper escape.</p>
+            </div>
+        </div>
+
+        <div class="hero-frames-caption hero-frames-caption--left" data-frame-range="60-80">
+            <div class="hero-frames-caption-inner">
+                <span class="hero-caption-eyebrow">By Night</span>
+                <h2 class="heading-font-family hero-caption-heading">Unwind Under the Stars</h2>
+                <span class="hero-caption-divider"></span>
+                <p class="hero-caption-sub">As evening falls, T&amp;U Leisure Hotel glows softly against the night sky — the perfect setting to relax, reflect, and slow down.</p>
+            </div>
+        </div>
+    </div>
+
     <div class="hero-video-scroll-hint">
         <span class="text-light text-2 text-uppercase fw-600 ls-2 d-block mb-2">Scroll Down</span>
         <i class="fa-solid fa-chevron-down text-light"></i>
@@ -19,172 +55,330 @@
 </section>
 			<!-- Intro / Hero Frame Sequence end -->
 <style>
-	/* ===== Prevent page-wide horizontal overflow ===== */
-	html, body {
-		max-width: 100%;
-		overflow-x: hidden;
-	}
+/* ===== Prevent page-wide horizontal overflow ===== */
+html, body {
+	max-width: 100%;
+	overflow-x: hidden;
+}
+.container, .container-fluid, .container-xxl {
+	overflow-x: hidden;
+}
+.hero-wrap {
+	position: relative;
+	overflow: hidden;
+}
+.hero-wrap .jarallax,
+.hero-wrap .hero-bg {
+	overflow: hidden;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+.hero-wrap .jarallax::-webkit-scrollbar,
+.hero-wrap .hero-bg::-webkit-scrollbar {
+	display: none;
+	width: 0;
+	height: 0;
+}
+@media (max-width: 767px) {
 	.container, .container-fluid, .container-xxl {
 		max-width: 100%;
-		overflow-x: hidden;
 	}
-	img {
-		max-width: 100%;
-		height: auto;
-	}
-	.hero-frames-section {
-		position: relative;
-		width: 100%;
-		height: 100vh;
-		overflow: hidden;
-		background: #000;
-	}
-	.hero-frames-canvas {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 0;
-		display: block;
-		filter: brightness(1.25) contrast(1.08) saturate(1.05);
-	}
-	.hero-frames-section .hero-mask {
-		z-index: 1;
-	}
-	.hero-video-scroll-hint {
-		position: absolute;
-		bottom: 40px;
-		left: 50%;
-		transform: translateX(-50%);
-		z-index: 2;
-		text-align: center;
-		animation: heroScrollBounce 1.8s infinite;
-	}
-	@keyframes heroScrollBounce {
-		0%, 100% { transform: translate(-50%, 0); }
-		50% { transform: translate(-50%, 10px); }
-	}
-	.hero-frames-logo {
-		position: absolute;
-		top: 80px;   /* was 60px */
-		left: 50%;
-		transform: translateX(-50%);
-		z-index: 2;
-		max-height: 100px;
-		width: auto;
-		filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
-	}
-	/* ===== About-section buttons: shrink on mobile ===== */
-	@media (max-width: 576px) {
-		.hero-frames-logo {
-			max-height: 62px;
-			top: 55px;   /* was 40px */
-		}
-		.col-lg-6 .d-inline-flex.align-items-center.gap-4 {
-			flex-wrap: wrap;
-			gap: 12px !important;
-		}
-		.col-lg-6 .d-inline-flex.align-items-center.gap-4 .btn {
-			padding: 8px 16px !important;
-			font-size: 0.8rem !important;
-		}
-		.col-lg-6 .d-inline-flex.align-items-center.gap-4 .btn .btn-icon {
-			width: 26px !important;
-			height: 26px !important;
-			font-size: 0.65rem !important;
-		}
-		/* Let the call-us block drop to its own line if space is tight */
-		.col-lg-6 .d-inline-flex.align-items-center.gap-4 .d-flex.align-items-center.gap-3 {
-			flex-basis: 100%;
-			justify-content: flex-start;
-			margin-top: 4px;
-		}
-	}
-	/* ===== Activities section buttons: inline (not stacked) on mobile & tablet ===== */
-	@media (max-width: 991px) {
-		.activities-row .d-flex.flex-wrap.align-items-center.gap-2 {
-			flex-wrap: nowrap !important;
-			gap: 8px !important;
-		}
-		.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn {
-			padding: 6px 10px !important;
-			font-size: 0.72rem !important;
-			flex: 1 1 0;
-			white-space: nowrap;
-			justify-content: center;
-		}
-		.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn .btn-icon {
-			width: 22px !important;
-			height: 22px !important;
-			font-size: 0.6rem !important;
-			margin-left: 6px;
-		}
-	}
-	@media (max-width: 400px) {
-		.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn {
-			padding: 6px 8px !important;
-			font-size: 0.65rem !important;
-		}
-	}
-	/* ===== Section titles: left align on mobile =====
-	   Every section heading block on this page uses the pattern
-	   `.mx-auto.text-center.mb-5` (eyebrow pill + <h2>). Center-aligned
-	   text/margins look cramped on narrow screens, so switch to flush-left. */
-	@media (max-width: 576px) {
-		.section .mx-auto.text-center.mb-5 {
-			margin-left: 0 !important;
-			margin-right: 0 !important;
-			text-align: left !important;
-		}
-		.section .mx-auto.text-center.mb-5 br {
-			display: none;
-		}
-	}
-	/* ===== Fix activities image overflowing off-screen on mobile ===== */
-	@media (max-width: 767px) {
-		.activities-row {
-			--bs-gutter-x: 1.5rem; /* shrink the gx-5 gutter so the row fits the viewport */
-			margin-left: 0;
-			margin-right: 0;
-		}
-		.activities-row > div {
-			padding-left: calc(var(--bs-gutter-x) * 0.5);
-			padding-right: calc(var(--bs-gutter-x) * 0.5);
-		}
-		.activities-row .activity-img-col a {
-			max-height: 260px;
-			min-height: 220px;
-		}
-	}
-	/* ===== Activities image: curved corners (forced, in case Bootstrap/img-fluid overrides) ===== */
-	.activities-row .activity-img-col a {
-		display: block;
-		width: 100%;
-		height: 100%;
-		border-radius: 1.5rem !important;
-		overflow: hidden;
-	}
-	.activities-row .activity-img-col img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-		border-radius: 1.5rem !important;
-	}
-	@media (max-width: 767px) {
-		.activities-row .activity-img-col a,
-		.activities-row .activity-img-col img {
-			border-radius: 1.25rem !important;
-		}
-	}
-	/* Belt-and-braces: never allow the section to cause horizontal scroll */
-	.section {
-		overflow-x: hidden;
-	}
-    /* ===== Global button sizing: tablet & mobile ===== */
+}
+html, body {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+	display: none;
+	width: 0;
+	height: 0;
+}
+* {
+	scrollbar-width: none !important;
+	-ms-overflow-style: none !important;
+}
+*::-webkit-scrollbar {
+	display: none !important;
+	width: 0 !important;
+	height: 0 !important;
+}
 
-/* Tablet (≤991px) */
+img {
+	max-width: 100%;
+	height: auto;
+}
+.hero-frames-section {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+	background: #000;
+}
+.hero-frames-canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+	display: block;
+	filter: url(#heroFrameSharpen) contrast(1.08) saturate(1.08) brightness(1.01);
+}
+.hero-frames-section .hero-mask {
+	z-index: 1;
+}
+
+.hero-frames-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2;
+	pointer-events: none;
+}
+.hero-frames-caption {
+	position: absolute;
+	top: auto;
+	bottom: 14%;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
+	max-width: 520px;
+	width: 100%;
+}
+.hero-frames-caption.hero-content-active {
+	opacity: 1;
+	visibility: visible;
+}
+.hero-frames-caption--left {
+	left: 6%;
+	transform: translateX(-24px);
+}
+.hero-frames-caption--left.hero-content-active {
+	transform: translateX(0);
+}
+.hero-frames-caption--right {
+	right: 6%;
+	transform: translateX(24px);
+}
+.hero-frames-caption--right.hero-content-active {
+	transform: translateX(0);
+}
+.hero-frames-caption--right .hero-frames-caption-inner {
+	text-align: right;
+	margin-left: auto;
+}
+.hero-frames-caption--left .hero-frames-caption-inner {
+	text-align: left;
+}
+.hero-caption-eyebrow {
+	display: block;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 0.95rem;
+	font-weight: 600;
+	letter-spacing: 3px;
+	opacity: 0.85;
+	margin-bottom: 14px;
+}
+.hero-caption-heading {
+	color: #fff;
+	font-weight: 700;
+	font-size: 3.6rem;
+	line-height: 1.1;
+	margin-bottom: 20px;
+	text-shadow: 0 3px 14px rgba(0,0,0,0.4);
+}
+.hero-caption-divider {
+	display: inline-block;
+	width: 56px;
+	height: 3px;
+	background: rgba(255,255,255,0.65);
+	margin-bottom: 20px;
+}
+.hero-frames-caption--right .hero-caption-divider {
+	margin-left: auto;
+}
+.hero-caption-sub {
+	color: #eaeaea;
+	font-size: 1.15rem;
+	line-height: 1.55;
+	opacity: 0.9;
+	margin: 0;
+}
+@media (max-width: 991px) {
+	.hero-caption-heading {
+		font-size: 2.8rem;
+	}
+	.hero-caption-sub {
+		font-size: 1.05rem;
+	}
+}
+@media (max-width: 767px) {
+	.hero-frames-caption {
+		max-width: 90%;
+	}
+	.hero-frames-caption--left,
+	.hero-frames-caption--right {
+		left: 5%;
+		right: 5%;
+		transform: translateY(-50%);
+	}
+	.hero-frames-caption--left.hero-content-active,
+	.hero-frames-caption--right.hero-content-active {
+		transform: translateY(-50%);
+	}
+	.hero-frames-caption--right .hero-frames-caption-inner,
+	.hero-frames-caption--left .hero-frames-caption-inner {
+		text-align: left;
+	}
+	.hero-frames-caption--right .hero-caption-divider {
+		margin-left: 0;
+	}
+	.hero-caption-heading {
+		font-size: 2.2rem;
+	}
+	.hero-caption-sub {
+		font-size: 1rem;
+	}
+}
+
+.hero-video-scroll-hint {
+	position: absolute;
+	bottom: 40px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 2;
+	text-align: center;
+	animation: heroScrollBounce 1.8s infinite;
+}
+@keyframes heroScrollBounce {
+	0%, 100% { transform: translate(-50%, 0); }
+	50% { transform: translate(-50%, 10px); }
+}
+.activities-row .activity-img-col a {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1.5 / 1;
+	border-radius: 1.5rem !important;
+	overflow: hidden;
+}
+.activities-row .activity-img-col img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	border-radius: 1.5rem !important;
+}
+@media (min-width: 768px) {
+	.activities-row {
+		margin-left: 0;
+		margin-right: 0;
+	}
+}
+@media (min-width: 992px) {
+	.activities-row .activity-img-col {
+		padding-left: 80px;
+		padding-right: 24px;
+	}
+	.activities-row > *:not(.activity-img-col) {
+		padding-right: 80px;
+	}
+	.activities-row p {
+		max-width: 520px;
+	}
+}
+.hero-frames-logo {
+	position: absolute;
+	top: 80px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 2;
+	max-height: 100px;
+	width: auto;
+	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+@media (max-width: 576px) {
+	.hero-frames-logo {
+		max-height: 62px;
+		top: 55px;
+	}
+	.col-lg-6 .d-inline-flex.align-items-center.gap-4 {
+		flex-wrap: wrap;
+		gap: 12px !important;
+	}
+	.col-lg-6 .d-inline-flex.align-items-center.gap-4 .btn {
+		padding: 8px 16px !important;
+		font-size: 0.8rem !important;
+	}
+	.col-lg-6 .d-inline-flex.align-items-center.gap-4 .btn .btn-icon {
+		width: 26px !important;
+		height: 26px !important;
+		font-size: 0.65rem !important;
+	}
+	.col-lg-6 .d-inline-flex.align-items-center.gap-4 .d-flex.align-items-center.gap-3 {
+		flex-basis: 100%;
+		justify-content: flex-start;
+		margin-top: 4px;
+	}
+}
+@media (max-width: 991px) {
+	.activities-row .d-flex.flex-wrap.align-items-center.gap-2 {
+		flex-wrap: nowrap !important;
+		gap: 8px !important;
+	}
+	.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn {
+		padding: 6px 10px !important;
+		font-size: 0.72rem !important;
+		flex: 1 1 0;
+		white-space: nowrap;
+		justify-content: center;
+	}
+	.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn .btn-icon {
+		width: 22px !important;
+		height: 22px !important;
+		font-size: 0.6rem !important;
+		margin-left: 6px;
+	}
+}
+@media (max-width: 400px) {
+	.activities-row .d-flex.flex-wrap.align-items-center.gap-2 .btn {
+		padding: 6px 8px !important;
+		font-size: 0.65rem !important;
+	}
+}
+@media (max-width: 576px) {
+	.section .mx-auto.text-center.mb-5 {
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		text-align: left !important;
+	}
+	.section .mx-auto.text-center.mb-5 br {
+		display: none;
+	}
+}
+@media (max-width: 767px) {
+	.activities-row {
+		--bs-gutter-x: 1.5rem;
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.activities-row > div {
+		padding-left: calc(var(--bs-gutter-x) * 0.5);
+		padding-right: calc(var(--bs-gutter-x) * 0.5);
+	}
+}
+@media (max-width: 767px) {
+	.activities-row .activity-img-col a,
+	.activities-row .activity-img-col img {
+		border-radius: 1.25rem !important;
+	}
+}
+.section {
+	overflow-x: hidden;
+}
 @media (max-width: 991px) {
 	.btn-new {
 		padding: 10px 20px !important;
@@ -196,8 +390,6 @@
 		font-size: 0.7rem !important;
 	}
 }
-
-/* Mobile (≤576px) */
 @media (max-width: 576px) {
 	.btn-new {
 		padding: 8px 16px !important;
@@ -208,16 +400,11 @@
 		height: 26px !important;
 		font-size: 0.65rem !important;
 	}
-	/* Buttons that sit alone/centered (Amenities, Experience, Blog, 
-	   "View all Rooms", Contact) shouldn't stretch full width, but 
-	   should still get breathing room from neighboring content */
 	.text-center .btn-new,
 	.d-grid .btn-new {
 		display: inline-flex;
 	}
 }
-
-/* Extra-small phones (≤400px) */
 @media (max-width: 400px) {
 	.btn-new {
 		padding: 7px 14px !important;
@@ -233,9 +420,14 @@
 			<script>
 	document.addEventListener('DOMContentLoaded', function () {
 		// ---- CONFIG ----
-		// Frames live directly in tandu-main/images/ as frame_001.jpg ... frame_081.jpg
-		var FRAME_NUMBERS = Array.from({length: 81}, function (_, i) { return i + 1; });
-		var FRAME_PAD = 3; // frame_008 -> 3-digit padding
+		var FRAME_NUMBERS = [
+			7, 8, 9, 10,
+			21, 29, 30,
+			42, 43, 44, 45, 46, 47, 48, 49, 50,
+			60, 61,
+			76,77,79, 80
+		];
+		var FRAME_PAD = 3;
 		var FRAME_BASE = "{% static 'tandu-main/images/frame_' %}";
 		var FRAME_EXT = '.jpg';
 
@@ -243,15 +435,17 @@
 		var canvas = document.getElementById('heroCanvas');
 		var ctx = canvas.getContext('2d');
 		var scrollHint = document.querySelector('.hero-video-scroll-hint');
+		var contentEls = document.querySelectorAll('.hero-frames-content [data-frame-range]');
 
 		var FRAME_COUNT = FRAME_NUMBERS.length;
 		var images = [];
 		var loadedCount = 0;
-		var currentIndex = 0;      // integer, position within FRAME_NUMBERS
-		var sequenceDone = false;
+		var currentIndex = 0;
+		var sequenceDone = false;   // true = sequence finished, page scroll unlocked
+		var sequenceArmed = false;  // true = currently mid-sequence (locked & listening)
 		var ticking = false;
-		var wheelLocked = false;   // debounce: one wheel "tick" = one frame
-		var WHEEL_LOCK_MS = 60;    // min time between frame steps on wheel
+		var listenersAttached = false;
+		var suppressNextRearm = false; // guards against re-triggering right after unlocking
 
 		function frameUrl(frameNumber) {
 			var num = String(frameNumber);
@@ -265,21 +459,28 @@
 				img.src = frameUrl(FRAME_NUMBERS[i]);
 				img.onload = function () {
 					loadedCount++;
-					if (loadedCount === 1) drawFrame(images[0]); // paint first frame ASAP
+					if (loadedCount === 1) drawFrame(images[0]);
 				};
 				images.push(img);
 			}
 		}
 
 		function resizeCanvas() {
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
+			var dpr = window.devicePixelRatio || 1;
+			var cssW = window.innerWidth;
+			var cssH = window.innerHeight;
+			canvas.width = Math.round(cssW * dpr);
+			canvas.height = Math.round(cssH * dpr);
+			canvas.style.width = cssW + 'px';
+			canvas.style.height = cssH + 'px';
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			drawFrame(images[Math.round(currentIndex)]);
+			updateHeroContent(Math.round(currentIndex));
 		}
 
 		function drawFrame(img) {
 			if (!img || !img.complete || !img.naturalWidth) return;
-			var cw = canvas.width, ch = canvas.height;
+			var cw = window.innerWidth, ch = window.innerHeight;
 			var canvasRatio = cw / ch;
 			var imgRatio = img.naturalWidth / img.naturalHeight;
 			var dw, dh, ox, oy;
@@ -293,13 +494,41 @@
 				ox = 0; oy = (ch - dh) / 2;
 			}
 			ctx.clearRect(0, 0, cw, ch);
+			ctx.imageSmoothingEnabled = true;
+			ctx.imageSmoothingQuality = 'high';
 			ctx.drawImage(img, ox, oy, dw, dh);
 		}
 
 		function renderCurrent() {
 			var idx = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(currentIndex)));
 			drawFrame(images[idx]);
+			updateHeroContent(idx);
 			ticking = false;
+		}
+
+		var activeContentBlock = null;
+		function updateHeroContent(idx) {
+			if (!contentEls.length) return;
+			var frameNumber = FRAME_NUMBERS[idx];
+			var target = null;
+			contentEls.forEach(function (el) {
+				var range = el.getAttribute('data-frame-range').split('-');
+				var min = parseInt(range[0], 10);
+				var max = parseInt(range[1], 10);
+				if (frameNumber >= min && frameNumber <= max) target = el;
+			});
+			if (target === activeContentBlock) return;
+
+			contentEls.forEach(function (el) { el.classList.remove('hero-content-active'); });
+			activeContentBlock = target;
+			if (!target) return;
+
+			void target.offsetWidth;
+			requestAnimationFrame(function () {
+				requestAnimationFrame(function () {
+					target.classList.add('hero-content-active');
+				});
+			});
 		}
 
 		function requestRender() {
@@ -309,19 +538,6 @@
 			}
 		}
 
-		// Only lock the page if the hero section is the thing actually in view
-		// on load. Prevents getting stuck if the page loads scrolled down
-		// (hash link, browser scroll restoration, etc.)
-		function heroIsAtTop() {
-			var rect = heroSection.getBoundingClientRect();
-			return rect.top <= 0 && rect.bottom > window.innerHeight * 0.5;
-		}
-
-		// position:fixed lock instead of overflow:hidden. overflow:hidden on
-		// body does NOT reliably stop touch/trackpad momentum scrolling in
-		// every browser, which let the page creep into the About section
-		// before the frame sequence finished. Pinning body to a fixed
-		// position makes it truly immovable until we explicitly release it.
 		var lockScrollY = 0;
 		function lockScroll() {
 			lockScrollY = window.scrollY || window.pageYOffset || 0;
@@ -340,49 +556,26 @@
 			window.scrollTo(0, lockScrollY);
 		}
 
-		if (heroIsAtTop()) {
-			lockScroll();
-		} else {
-			sequenceDone = true;
-			if (scrollHint) scrollHint.style.display = 'none';
-		}
-
-		// unlockScroll optionally carries over the leftover scroll delta that
-		// completed the sequence, so the page continues moving into the next
-		// section immediately instead of requiring an extra, separate scroll.
-		// This only ever runs once currentIndex has actually hit the last
-		// frame, so the page cannot advance to the About section any earlier.
-		function unlockScroll(carryDelta) {
-			if (sequenceDone) return;
-			sequenceDone = true;
-			releaseScrollLockStyles();
-			if (scrollHint) scrollHint.style.display = 'none';
-			window.removeEventListener('wheel', handleWheel);
-			window.removeEventListener('touchmove', handleTouchMove);
-			window.removeEventListener('keydown', handleKeys);
-
-			if (carryDelta) {
-				window.scrollBy(0, carryDelta);
-			}
-		}
+		// ===== Wheel / touch / key handlers =====
+		var WHEEL_STEP_THRESHOLD = 60;
+		var wheelDeltaAccum = 0;
 
 		function handleWheel(e) {
 			if (sequenceDone) return;
 			e.preventDefault();
-			if (wheelLocked) return; // ignore extra ticks until the debounce window passes
 
-			var dir = e.deltaY > 0 ? 1 : (e.deltaY < 0 ? -1 : 0);
-			if (dir === 0) return;
+			wheelDeltaAccum += e.deltaY;
+			if (Math.abs(wheelDeltaAccum) < WHEEL_STEP_THRESHOLD) return;
 
-			wheelLocked = true;
-			setTimeout(function () { wheelLocked = false; }, WHEEL_LOCK_MS);
+			var dir = wheelDeltaAccum > 0 ? 1 : -1;
+			wheelDeltaAccum = wheelDeltaAccum - (dir * WHEEL_STEP_THRESHOLD);
 
-			currentIndex += dir; // exactly one frame per scroll tick
+			currentIndex += dir;
 
 			if (currentIndex >= FRAME_COUNT - 1) {
 				currentIndex = FRAME_COUNT - 1;
 				requestRender();
-				unlockScroll(e.deltaY); // hand off leftover momentum to the page
+				unlockScroll(e.deltaY);
 				return;
 			}
 			if (currentIndex < 0) {
@@ -394,24 +587,24 @@
 		}
 
 		var touchStartY = null;
-		var TOUCH_STEP_PX = 12; // px of touch movement needed to advance one frame
+		var TOUCH_STEP_PX = 25;
 		function handleTouchMove(e) {
 			if (sequenceDone) return;
 			e.preventDefault();
 			if (touchStartY === null) { touchStartY = e.touches[0].clientY; return; }
 
 			var deltaY = touchStartY - e.touches[0].clientY;
-			if (Math.abs(deltaY) < TOUCH_STEP_PX) return; // not enough movement yet for one frame
+			if (Math.abs(deltaY) < TOUCH_STEP_PX) return;
 
 			var dir = deltaY > 0 ? 1 : -1;
-			touchStartY = e.touches[0].clientY; // reset baseline after each frame step
+			touchStartY = e.touches[0].clientY;
 
-			currentIndex += dir; // exactly one frame per step
+			currentIndex += dir;
 
 			if (currentIndex >= FRAME_COUNT - 1) {
 				currentIndex = FRAME_COUNT - 1;
 				requestRender();
-				unlockScroll(deltaY); // hand off leftover momentum to the page
+				unlockScroll(deltaY);
 				return;
 			}
 			if (currentIndex < 0) {
@@ -427,8 +620,8 @@
 			var blockedKeys = [32, 33, 34, 35, 36, 37, 38, 39, 40];
 			if (blockedKeys.indexOf(e.keyCode) === -1) return;
 			e.preventDefault();
-			var dir = (e.keyCode === 38 || e.keyCode === 33) ? -1 : 1; // up/pageUp = back
-			currentIndex += dir; // one frame per key press
+			var dir = (e.keyCode === 38 || e.keyCode === 33) ? -1 : 1;
+			currentIndex += dir;
 
 			if (currentIndex >= FRAME_COUNT - 1) {
 				currentIndex = FRAME_COUNT - 1;
@@ -440,16 +633,108 @@
 			requestRender();
 		}
 
-		// Safety fallback: don't trap the user if frames fail to load
+		function attachSequenceListeners() {
+			if (listenersAttached) return;
+			listenersAttached = true;
+			window.addEventListener('wheel', handleWheel, { passive: false });
+			window.addEventListener('touchmove', handleTouchMove, { passive: false });
+			window.addEventListener('keydown', handleKeys, false);
+		}
+		function detachSequenceListeners() {
+			if (!listenersAttached) return;
+			listenersAttached = false;
+			window.removeEventListener('wheel', handleWheel);
+			window.removeEventListener('touchmove', handleTouchMove);
+			window.removeEventListener('keydown', handleKeys);
+		}
+
+		function unlockScroll(carryDelta) {
+			if (sequenceDone) return;
+			sequenceDone = true;
+			sequenceArmed = false;
+			releaseScrollLockStyles();
+			if (scrollHint) scrollHint.style.display = 'none';
+			detachSequenceListeners();
+
+			if (carryDelta) {
+				window.scrollBy(0, carryDelta);
+			}
+
+			// Briefly ignore re-arm triggers right after unlocking, so the
+			// scroll motion that JUST finished the sequence (and is still
+			// carrying the page past the hero) doesn't immediately re-lock
+			// it again before the user has actually left the section.
+			suppressNextRearm = true;
+			setTimeout(function () { suppressNextRearm = false; }, 400);
+		}
+
+		// ===== Re-arm the full cycle every time the hero is reached =====
+		// Uses IntersectionObserver so it fires the SAME way whether the
+		// hero is reached by scrolling down into it from above, or by
+		// scrolling back UP into it from a section further down the page —
+		// there is no scrollY===0 requirement any more. Threshold lowered
+		// from 0.9 to 0.5: the cycle now restarts as soon as roughly half
+		// the hero section is in view, rather than waiting for it to
+		// almost completely fill the screen — feels more responsive on
+		// slower scrolls and shorter viewports.
+		function armSequence() {
+			if (sequenceArmed) return;
+			if (suppressNextRearm) return;
+
+			sequenceDone = false;
+			sequenceArmed = true;
+			currentIndex = 0;
+			wheelDeltaAccum = 0;
+			touchStartY = null;
+			if (scrollHint) scrollHint.style.display = '';
+			lockScroll();
+			attachSequenceListeners();
+			requestRender();
+		}
+
+		function disarmIfLeftWithoutFinishing() {
+			// If the hero scrolls out of view while still "armed" but not
+			// yet finished (e.g. user scrolled fast via keyboard/other means
+			// and bypassed our own scroll lock), make sure state doesn't get
+			// stuck — treat it as done so a future re-entry can re-arm cleanly.
+			if (sequenceArmed && !sequenceDone) {
+				sequenceDone = true;
+				sequenceArmed = false;
+				detachSequenceListeners();
+				releaseScrollLockStyles();
+				if (scrollHint) scrollHint.style.display = 'none';
+			}
+		}
+
+		if ('IntersectionObserver' in window) {
+    var heroObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            // Only re-arm once the hero completely fills the viewport,
+            // not merely half-visible. This prevents the lock from
+            // grabbing scroll mid-transition — whether entering from
+            // above (scrolling down) or from below (scrolling up).
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.98) {
+                armSequence();
+            } else if (!entry.isIntersecting) {
+                disarmIfLeftWithoutFinishing();
+            }
+        });
+    }, { threshold: [0, 0.5, 0.98, 1] });
+    heroObserver.observe(heroSection);
+} else {
+			// Fallback for browsers without IntersectionObserver: just run
+			// once on load, same as before.
+			if (heroSection.getBoundingClientRect().top <= 0) {
+				armSequence();
+			}
+		}
+
 		var safetyTimer = setTimeout(function () {
-			if (loadedCount === 0) unlockScroll();
+			if (loadedCount === 0 && sequenceArmed) unlockScroll();
 		}, 15000);
 
 		window.addEventListener('resize', resizeCanvas);
-		window.addEventListener('wheel', handleWheel, { passive: false });
 		window.addEventListener('touchstart', function (e) { touchStartY = e.touches[0].clientY; }, { passive: true });
-		window.addEventListener('touchmove', handleTouchMove, { passive: false });
-		window.addEventListener('keydown', handleKeys, false);
 
 		resizeCanvas();
 		preload();
@@ -462,7 +747,7 @@
                     <div class="row g-5">
                         <div class="col-lg-6 wow fadeInLeft">
                             <!-- Heading -->
-                            <p><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">About The Mist</span></p>
+                            <p><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">About The T&U</span></p>
                             <h2 class="heading-font-family text-13 fw-600 lh-sm mb-4">Discover <span class="text-primary">unique holidays</span> enhanced by personalized</h2>
                             <!-- Heading End -->
                             
@@ -498,17 +783,7 @@
 
                                 <div class="position-absolute top-0 end-0">
                                     <!-- Circle Text -->
-                                    <div class="circle-text bg-white border border-2 border-primary mt-5 me-5 wow bounceIn" data-wow-delay="0.5s">
-                                        <svg viewBox="0 0 500 500">
-                                            <defs>
-                                                <path id="circlePath" d="M50,250c0-110.5,89.5-200,200-200s200,89.5,200,200s-89.5,200-200,200S50,360.5,50,250"></path>
-                                            </defs>
-                                            <text class="text-uppercase fw-700 ls-4">
-                                                <textPath xlink:href="#circlePath">Luxury Hotel ✦ Experience ✦</textPath>
-                                            </text>
-                                        </svg>
-                                        <div class="circle-icon text-bg-primary translate-middle"><i class="fa-solid fa-bell-concierge"></i></div>
-                                    </div>
+                                  
                                     <!-- Circle Text End -->
                                 </div>
 								
@@ -1166,80 +1441,74 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <!-- Testimonial
 			============================================= -->
-            <section class="section">
-                <div class="container">
-                    <!-- Heading -->
-                    <div class="mx-auto text-center mb-5">
-                        <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Our Testimonials</span></p>
-                        <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">What Our <span class="text-primary">Client Says <br class="d-none d-md-block">About</span> Hotel The Mist</h2>
+           <!-- Testimonial ============================================= -->
+<section class="section">
+    <div class="container">
+        <!-- Heading -->
+        <div class="mx-auto text-center mb-5">
+            <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Our Testimonials</span></p>
+            <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">What Our <span class="text-primary">Client Says <br class="d-none d-md-block">About</span> Hotel The Mist</h2>
+        </div>
+        <!-- Heading End -->
+        
+        <div class="swiper wow fadeInUp" data-loop="true" data-autoplay="true" data-margin="30" data-items-xs="1" data-items-sm="1" data-items-md="1" data-items-lg="2">
+            <div class="swiper-wrapper">
+                {% if testimonials %}
+                    {% for testimonial in testimonials %}
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-5 p-5">
+                            <!-- Star Rating -->
+                            <div class="mb-3">
+                                {% for i in "12345" %}
+                                    {% if i|add:"0" <= testimonial.rating %}
+                                        <i class="fa-solid fa-star text-warning"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-star text-warning"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Review Text -->
+                            <p class="lh-lg">"{{ testimonial.review }}"</p>
+                            
+                            <!-- Client Info -->
+                            <div class="d-flex align-items-center gap-3">
+                                {% if testimonial.image %}
+                                    <img class="rounded-circle w-auto" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h3 class="text-4 fw-600 mb-1">{{ testimonial.name }}</h3>
+                                    <div class="text-3 fw-500 text-body-tertiary">{{ testimonial.created_at|date:"M d, Y" }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Heading End -->
-					
-					<div class="swiper wow fadeInUp" data-loop="true" data-autoplay="true" data-margin="30" data-items-xs="1" data-items-sm="1" data-items-md="1" data-items-lg="2">
-						<div class="swiper-wrapper">
-							<div class="swiper-slide">
-								<div class="bg-white rounded-5 p-5">
-									<p class="lh-lg">"Easy to use, reasonably priced simply dummy text of the printing and typesetting industry. Quidam lisque persius interesset his et, in quot quidam possim iriure. Simply dummy text of the printing and typesetting industry."</p>
-									<div class="d-flex align-items-center gap-3">
-										<img class="rounded-circle w-auto" src="{% static 'tandu-main/images/testimonial/client-sm-1.jpg' %}" alt="">
-										<div>
-											<h3 class="text-4 fw-600 mb-1">Dennis Jacques</h3>
-											<div class="text-3 fw-500 text-body-tertiary">From Australia</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="swiper-slide">
-								<div class="bg-white rounded-5 p-5">
-									<p class="lh-lg">"We hosted our anniversary celebration here, and it was simply perfect. The event team handled every detail flawlessly. Our guests are still talking about how beautiful everything was. It truly felt like a home away from home."</p>
-									<div class="d-flex align-items-center gap-3">
-										<img class="rounded-circle w-auto" src="{% static 'tandu-main/images/testimonial/client-sm-2.jpg' %}" alt="">
-										<div>
-											<h3 class="text-4 fw-600 mb-1">Patrick Cary</h3>
-											<div class="text-3 fw-500 text-body-tertiary">From USA</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="swiper-slide">
-								<div class="bg-white rounded-5 p-5">
-									<p class="lh-lg">"We traveled as a family and couldn't have asked for a better place to stay. The staff was incredibly kind, the amenities were perfect for both adults and kids, and we felt right at home the entire time."</p>
-									<div class="d-flex align-items-center gap-3">
-										<img class="rounded-circle w-auto" src="{% static 'tandu-main/images/testimonial/client-sm-3.jpg' %}" alt="">
-										<div>
-											<h3 class="text-4 fw-600 mb-1">Sarah Mitchell</h3>
-											<div class="text-3 fw-500 text-body-tertiary">From Spain</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="swiper-slide">
-								<div class="bg-white rounded-5 p-5">
-									<p class="lh-lg">"As a frequent business traveler, I appreciate efficiency and comfort — and this hotel delivers both flawlessly. Fast check-in, reliable Wi-Fi, and a peaceful atmosphere made my trip productive and stress-free."</p>
-									<div class="d-flex align-items-center gap-3">
-										<img class="rounded-circle w-auto" src="{% static 'tandu-main/images/testimonial/client-sm-4.jpg' %}" alt="">
-										<div>
-											<h3 class="text-4 fw-600 mb-1">Olivia Bennett</h3>
-											<div class="text-3 fw-500 text-body-tertiary">From United Kingdom</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Navigation -->
-						<div class="swiper-button-next mt-n5"><i class="fa-solid fa-angle-right"></i></div>
-						<div class="swiper-button-prev mt-n5"><i class="fa-solid fa-angle-left"></i></div>
-						<!-- Pagination (optional) -->
-						<div class="swiper-pagination position-relative mt-4"></div>
-					</div>
-
-                    <!-- View More Link -->
-					<div class="fw-500 text-center mt-4 wow fadeInUp">
-                        View On <a href="#" class="fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Tripadvisor</a>
+                    {% endfor %}
+                {% else %}
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-5 p-5 text-center">
+                            <p class="text-body-secondary">No testimonials available yet.</p>
+                        </div>
                     </div>
-                </div>
-            </section>
+                {% endif %}
+            </div>
+
+            <!-- Navigation -->
+            <div class="swiper-button-next mt-n5"><i class="fa-solid fa-angle-right"></i></div>
+            <div class="swiper-button-prev mt-n5"><i class="fa-solid fa-angle-left"></i></div>
+            <!-- Pagination -->
+            <div class="swiper-pagination position-relative mt-4"></div>
+        </div>
+
+        <!-- View More Link -->
+        
+    </div>
+</section>
+<!-- Testimonial end -->
             <!-- Testimonial end -->
 
 
@@ -1257,7 +1526,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="row justify-content-center g-4">
                         <div class="col-md-6 col-lg-4 wow fadeInUp">
 							<div class="blog-post card h-100 rounded-5 shadow-none border-0">
-								<a class="d-flex rounded-5 overflow-hidden" href="blog-single-post.html">
+								<a class="d-flex rounded-5 overflow-hidden" href="">
 									<img class="card-img-top rounded-5" src="{% static 'tandu-main/images/blog/post-1.jpg' %}" alt="">
 									<div class="position-absolute top-0 start-0 text-2 fw-600 bg-primary text-light rounded-pill px-2 py-0 mt-4 ms-4">Event</div>
 								</a>
@@ -1266,15 +1535,15 @@ document.addEventListener('DOMContentLoaded', function () {
 										<li><i class="fa-solid fa-calendar-alt"></i> 27 Nov 2025</li>
 										<li><a href="#"><i class="fa-solid fa-user"></i> Admin</a></li>
 									</ul>
-									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="blog-single-post.html">Recap of Recent Events Hosted at Our Hotel</a></h3>
+									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="">Recap of Recent Events Hosted at Our Hotel</a></h3>
 									<p class="text-3 text-body-secondary mb-1">Step inside the highlights of the unforgettable moments recently...</p>
-									<a href="blog-single-post.html" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
+									<a href="" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
 								</div>
 							</div>
                         </div>
 						<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".2s">
 							<div class="blog-post card h-100 rounded-5 shadow-none border-0">
-								<a class="d-flex rounded-5 overflow-hidden" href="blog-single-post.html">
+								<a class="d-flex rounded-5 overflow-hidden" href="">
 									<img class="card-img-top rounded-5" src="{% static 'tandu-main/images/blog/post-2.jpg' %}" alt="">
 									<div class="position-absolute top-0 start-0 text-2 fw-600 bg-primary text-light rounded-pill px-2 py-0 mt-4 ms-4">Restaurant</div>
 								</a>
@@ -1283,15 +1552,15 @@ document.addEventListener('DOMContentLoaded', function () {
 										<li><i class="fa-solid fa-calendar-alt"></i> 14 Oct 2025</li>
 										<li><a href="#"><i class="fa-solid fa-user"></i> Admin</a></li>
 									</ul>
-									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="blog-single-post.html">Meet Our Chef: Culinary Inspiration Stories</a></h3>
+									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="">Meet Our Chef: Culinary Inspiration Stories</a></h3>
 									<p class="text-3 text-body-secondary mb-1">Discover the passion, creativity, and flavors behind our kitchen...</p>
-									<a href="blog-single-post.html" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
+									<a href="" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
 								</div>
 							</div>
                         </div>
 						<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".4s">
 							<div class="blog-post card h-100 rounded-5 shadow-none border-0">
-								<a class="d-flex rounded-5 overflow-hidden" href="blog-single-post.html">
+								<a class="d-flex rounded-5 overflow-hidden" href="">
 									<img class="card-img-top rounded-5" src="{% static 'tandu-main/images/blog/post-3.jpg' %}" alt="">
 									<div class="position-absolute top-0 start-0 text-2 fw-600 bg-primary text-light rounded-pill px-2 py-0 mt-4 ms-4">Travel</div>
 								</a>
@@ -1300,15 +1569,15 @@ document.addEventListener('DOMContentLoaded', function () {
 										<li><i class="fa-solid fa-calendar-alt"></i> 15 Jul 2025</li>
 										<li><a href="#"><i class="fa-solid fa-user"></i> Admin</a></li>
 									</ul>
-									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="blog-single-post.html">Business Travel Tips for a Productive Stay</a></h3>
+									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="">Business Travel Tips for a Productive Stay</a></h3>
 									<p class="text-3 text-body-secondary mb-1">Make the most of every work trip with our expert tips designed..</p>
-									<a href="blog-single-post.html" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
+									<a href="" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
 								</div>
 							</div>
 						</div>
                     </div>
                     <div class="text-center mt-5 wow fadeInUp">
-                        <a class="btn btn-new btn-primary rounded-pill" href="blog.html">
+                        <a class="btn btn-new btn-primary rounded-pill" href="">
 							<span class="btn-text"><span>View all News</span></span>
 							<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
 						</a>

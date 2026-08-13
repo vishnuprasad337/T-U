@@ -95,17 +95,7 @@
 
                                 <div class="position-absolute top-0 end-0">
                                     <!-- Circle Text -->
-                                    <div class="circle-text bg-white border border-2 border-primary mt-5 me-5 wow bounceIn" data-wow-delay="0.5s">
-                                        <svg viewBox="0 0 500 500">
-                                            <defs>
-                                                <path id="circlePath" d="M50,250c0-110.5,89.5-200,200-200s200,89.5,200,200s-89.5,200-200,200S50,360.5,50,250"></path>
-                                            </defs>
-                                            <text class="text-uppercase fw-700 ls-4">
-                                                <textPath xlink:href="#circlePath">Luxury Hotel ✦ Experience ✦</textPath>
-                                            </text>
-                                        </svg>
-                                        <div class="circle-icon text-bg-primary translate-middle"><i class="fa-solid fa-bell-concierge"></i></div>
-                                    </div>
+                                    
                                     <!-- Circle Text End -->
                                 </div>
 								
@@ -542,84 +532,73 @@
                 </div>
             </section>
             <!-- Our Experience end -->
-
-            <!-- Testimonial
-			============================================= -->
-            <section class="section">
-                <div class="container">
-                    <!-- Heading -->
-                    <div class="mx-auto text-center mb-5">
-                        <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Our Testimonials</span></p>
-                        <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">What Our <span class="text-primary">Client Says <br class="d-none d-md-block">About</span> Hotel The Mist</h2>
+           <!-- Testimonial ============================================= -->
+<section class="section">
+    <div class="container">
+        <!-- Heading -->
+        <div class="mx-auto text-center mb-5">
+            <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Our Testimonials</span></p>
+            <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">What Our <span class="text-primary">Client Says <br class="d-none d-md-block">About</span> Hotel The Mist</h2>
+        </div>
+        <!-- Heading End -->
+        
+        <div class="swiper wow fadeInUp" data-loop="true" data-autoplay="true" data-margin="30" data-items-xs="1" data-items-sm="1" data-items-md="1" data-items-lg="2">
+            <div class="swiper-wrapper">
+                {% if testimonials %}
+                    {% for testimonial in testimonials %}
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-5 p-5">
+                            <!-- Star Rating -->
+                            <div class="mb-3">
+                                {% for i in "12345" %}
+                                    {% if i|add:"0" <= testimonial.rating %}
+                                        <i class="fa-solid fa-star text-warning"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-star text-warning"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Review Text -->
+                            <p class="lh-lg">"{{ testimonial.review }}"</p>
+                            
+                            <!-- Client Info -->
+                            <div class="d-flex align-items-center gap-3">
+                                {% if testimonial.image %}
+                                    <img class="rounded-circle w-auto" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <h3 class="text-4 fw-600 mb-1">{{ testimonial.name }}</h3>
+                                    <div class="text-3 fw-500 text-body-tertiary">{{ testimonial.created_at|date:"M d, Y" }}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Heading End -->
-					
-					<div class="swiper wow fadeInUp" data-loop="true" data-autoplay="true" data-margin="30" data-items-xs="1" data-items-sm="1" data-items-md="1" data-items-lg="2">
-						<div class="swiper-wrapper">
-							<div class="swiper-slide">
-								<div class="bg-white rounded-5 p-5">
-									<p class="lh-lg">"Easy to use, reasonably priced simply dummy text of the printing and typesetting industry. Quidam lisque persius interesset his et, in quot quidam possim iriure. Simply dummy text of the printing and typesetting industry."</p>
-									<div class="d-flex align-items-center gap-3">
-										<img class="rounded-circle w-auto" src="{% static 'tandu-main/images/testimonial/client-sm-1.jpg' %}" alt="">
-										<div>
-											<h3 class="text-4 fw-600 mb-1">Dennis Jacques</h3>
-											<div class="text-3 fw-500 text-body-tertiary">From Australia</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="swiper-slide">
-								<div class="bg-white rounded-5 p-5">
-									<p class="lh-lg">"We hosted our anniversary celebration here, and it was simply perfect. The event team handled every detail flawlessly. Our guests are still talking about how beautiful everything was. It truly felt like a home away from home."</p>
-									<div class="d-flex align-items-center gap-3">
-										<img class="rounded-circle w-auto" src="{% static 'tandu-main/images/testimonial/client-sm-2.jpg' %}" alt="">
-										<div>
-											<h3 class="text-4 fw-600 mb-1">Patrick Cary</h3>
-											<div class="text-3 fw-500 text-body-tertiary">From USA</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="swiper-slide">
-								<div class="bg-white rounded-5 p-5">
-									<p class="lh-lg">"We traveled as a family and couldn't have asked for a better place to stay. The staff was incredibly kind, the amenities were perfect for both adults and kids, and we felt right at home the entire time."</p>
-									<div class="d-flex align-items-center gap-3">
-										<img class="rounded-circle w-auto" src="{% static 'tandu-main/images/testimonial/client-sm-3.jpg' %}" alt="">
-										<div>
-											<h3 class="text-4 fw-600 mb-1">Sarah Mitchell</h3>
-											<div class="text-3 fw-500 text-body-tertiary">From Spain</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="swiper-slide">
-								<div class="bg-white rounded-5 p-5">
-									<p class="lh-lg">"As a frequent business traveler, I appreciate efficiency and comfort — and this hotel delivers both flawlessly. Fast check-in, reliable Wi-Fi, and a peaceful atmosphere made my trip productive and stress-free."</p>
-									<div class="d-flex align-items-center gap-3">
-										<img class="rounded-circle w-auto" src="{% static 'tandu-main/images/testimonial/client-sm-4.jpg' %}" alt="">
-										<div>
-											<h3 class="text-4 fw-600 mb-1">Olivia Bennett</h3>
-											<div class="text-3 fw-500 text-body-tertiary">From United Kingdom</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Navigation -->
-						<div class="swiper-button-next mt-n5"><i class="fa-solid fa-angle-right"></i></div>
-						<div class="swiper-button-prev mt-n5"><i class="fa-solid fa-angle-left"></i></div>
-						<!-- Pagination (optional) -->
-						<div class="swiper-pagination position-relative mt-4"></div>
-					</div>
-
-                    <!-- View More Link -->
-					<div class="fw-500 text-center mt-4 wow fadeInUp">
-                        View On <a href="#" class="fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Tripadvisor</a>
+                    {% endfor %}
+                {% else %}
+                    <div class="swiper-slide">
+                        <div class="bg-white rounded-5 p-5 text-center">
+                            <p class="text-body-secondary">No testimonials available yet.</p>
+                        </div>
                     </div>
-                </div>
-            </section>
-            <!-- Testimonial end -->
+                {% endif %}
+            </div>
+
+            <!-- Navigation -->
+            <div class="swiper-button-next mt-n5"><i class="fa-solid fa-angle-right"></i></div>
+            <div class="swiper-button-prev mt-n5"><i class="fa-solid fa-angle-left"></i></div>
+            <!-- Pagination -->
+            <div class="swiper-pagination position-relative mt-4"></div>
+        </div>
+
+        <!-- View More Link -->
+       
+    </div>
+</section>
 			
 			<!-- Call to Action
 			============================================= -->
@@ -627,7 +606,7 @@
 				<div class="container text-center">
 					<h2 class="text-14 fw-600 text-white lh-sm wow fadeInUp mb-3">The Most Memorable <span class="text-black">Rest <br class="d-none d-md-block">Time</span> Starts at The Mist</h2>
 					<div class="wow fadeInUp" data-wow-delay=".2s">
-						<a class="btn btn-new btn-dark rounded-pill" href="contact-us.html">
+						<a class="btn btn-new btn-dark rounded-pill"  href="{% url 'tandj_app:contact' %}">
 							<span class="btn-text"><span>Contact Us</span></span>
 							<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
 						</a>

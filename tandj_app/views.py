@@ -801,17 +801,23 @@ def index(request):
 
     # Latest 3 activities for the homepage "Activities" section
     activities = Activity.objects.all().order_by("-created_at")[:3]
+    
+    # Fetch approved testimonials (top-rated first)
+    testimonials = Testimonial.objects.all().order_by("-rating", "-created_at")[:6]
 
     context = {
         'rooms': rooms,
         'activities': activities,
+        'testimonials': testimonials,  # Add this
     }
 
     return render(request, "frontends/index.html", context)
 def about(request):
     activities = Activity.objects.all().order_by("-created_at")[:3]
+    testimonials = Testimonial.objects.all().order_by("-rating", "-created_at")[:6]
     context ={
-        'activities':activities
+        'activities':activities,
+        'testimonials': testimonials,  # Add this
     }
     return render(request,"frontends/about.html",context)
 

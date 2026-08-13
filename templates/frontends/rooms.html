@@ -242,5 +242,79 @@
 		font-size: 0.7rem !important;
 	}
 }
+
+/* ===== Repeatable scroll-fade animation =====
+   Unlike WOW.js's `wow fadeInUp` (which only ever plays once per page
+   load), elements tagged `.reveal-on-scroll` here fade/slide/unblur in
+   every time they cross into the viewport — scrolling back up and
+   passing them again replays the animation too. */
+.reveal-on-scroll {
+    opacity: 0;
+    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+    filter: blur(6px);
+}
+.reveal-on-scroll.reveal-up {
+    transform: translateY(60px) scale(0.96);
+}
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+    }
+}
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ===== Repeatable scroll-fade animation =====
+   WOW.js (used elsewhere on the site via the `wow` class) only ever plays
+   its fade-in once per page load. On this page we swap that out for an
+   IntersectionObserver-driven version so each room card's image and
+   details fade in individually every time they scroll into view —
+   including scrolling back up past them and down again. */
+document.addEventListener('DOMContentLoaded', function () {
+    var targets = [];
+
+    // Each room card's two halves (image + details) fade/slide in
+    // individually, staggered against each other, instead of the whole
+    // card moving as one block.
+    document.querySelectorAll('.room-items-wrap .room-item').forEach(function (item, cardIndex) {
+        var cols = item.querySelectorAll(':scope > .row.g-0 > [class*="col-"]');
+        cols.forEach(function (col, colIndex) {
+            col.classList.add('reveal-on-scroll', 'reveal-up');
+            col.style.transitionDelay = (Math.min(cardIndex, 4) * 0.12 + colIndex * 0.15) + 's';
+            targets.push(col);
+        });
+    });
+
+    if (!('IntersectionObserver' in window) || targets.length === 0) {
+        // Fallback: just show everything if the browser can't observe.
+        targets.forEach(function (el) { el.classList.add('is-visible'); });
+        return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            entry.target.classList.toggle('is-visible', entry.isIntersecting);
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -8% 0px'
+    });
+
+    targets.forEach(function (el) { observer.observe(el); });
+});
+</script>
 {% endblock %}

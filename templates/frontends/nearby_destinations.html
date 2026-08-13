@@ -46,17 +46,11 @@
 					{% for destination in destinations %}
 					<div class="col-md-6 col-lg-4 wow fadeInUp">
 						<div class="destination-item">
-							<!-- Image -->
-							<a class="destination-item-img" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
-								{% if destination.image %}
-									<img src="{{ destination.image.url }}" alt="{{ destination.name }}">
-								{% else %}
-									<img src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}">
-								{% endif %}
-							</a>
 
 							<!-- Content -->
 							<div class="destination-item-body">
+								<h3 class="destination-item-title">{{ destination.name }}</h3>
+
 								<div class="destination-item-meta">
 									{% if destination.location %}
 									<span><i class="fa-solid fa-location-dot"></i>{{ destination.location }}</span>
@@ -66,20 +60,31 @@
 									{% endif %}
 								</div>
 
-								<h3 class="destination-item-title">{{ destination.name }}</h3>
-								<p class="destination-item-desc">{{ destination.description|safe|truncatewords_html:20 }}</p>
-
-								<div class="destination-item-footer">
-									<a class="btn btn-new btn-outline-primary rounded-pill js-open-booking-modal" href="javascript:void(0)" data-destination-name="{{ destination.name }}">
-										<span class="btn-text"><span>Book Now</span></span>
-										<span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
-									</a>
-									<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
-										<span class="btn-text"><span>Explore</span></span>
-										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-									</a>
-								</div>
+								<p class="destination-item-desc">{{ destination.description|safe|truncatewords_html:16 }}</p>
 							</div>
+
+							<!-- Image -->
+							<div class="destination-item-img">
+								<a class="destination-item-img-link" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
+									{% if destination.image %}
+										<img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+									{% else %}
+										<img src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}">
+									{% endif %}
+								</a>
+
+								<!-- Explore — sits fully inside the image, top-left -->
+								<a class="destination-item-cta" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
+									<span class="destination-item-cta-text">Explore</span>
+									<span class="destination-item-cta-icon"><i class="fa-solid fa-arrow-right"></i></span>
+								</a>
+
+								<!-- Book Now — floating badge on the image so the booking flow stays one tap away -->
+								<button type="button" class="destination-item-book js-open-booking-modal" data-destination-name="{{ destination.name }}" title="Book Now" aria-label="Book Now for {{ destination.name }}">
+									<i class="fa-solid fa-calendar-check"></i>
+								</button>
+							</div>
+
 						</div>
 					</div>
 					{% empty %}
@@ -651,6 +656,9 @@
 {% endblock %}
 
 {% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap" rel="stylesheet">
 <style>
 	.page-header .hero-wrap {
 		min-height: 550px;
@@ -672,28 +680,85 @@
 		}
 	}
 
-	/* ===== Destination Card — inset image with concave bottom-right notch ===== */
+	/* ===== Destination Card — matches reference layout:
+	   title -> meta -> description -> pill CTA (overlapping image) -> image ===== */
 	.destination-item {
 		background: #fff;
-		border-radius: 24px;
-		padding: 16px;
+		border-radius: 28px;
+		padding: 22px 22px 0;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
-		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+		box-shadow: 0 6px 28px rgba(0, 0, 0, 0.07);
 		transition: box-shadow 0.3s ease, transform 0.3s ease;
+		overflow: hidden;
 	}
 	.destination-item:hover {
-		box-shadow: 0 14px 34px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 16px 38px rgba(0, 0, 0, 0.11);
 		transform: translateY(-4px);
 	}
 
+	.destination-item-body {
+		padding-bottom: 4px;
+	}
+
+	.destination-item-title {
+		font-family: 'Poppins', 'Segoe UI', sans-serif;
+		font-weight: 800;
+		font-size: 1.6rem;
+		text-transform: uppercase;
+		letter-spacing: 0.2px;
+		color: #1a1a1a;
+		margin-bottom: 12px;
+		line-height: 1.15;
+	}
+
+	.destination-item-meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 14px;
+	}
+	.destination-item-meta span {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 0.78rem;
+		font-weight: 600;
+		color: #495057;
+		background: #f4f4f6;
+		border-radius: 100px;
+		padding: 6px 12px;
+	}
+	.destination-item-meta i {
+		color: var(--bs-primary, #0d6efd);
+		font-size: 0.78rem;
+	}
+
+	.destination-item-desc {
+		color: #6c757d;
+		font-size: 0.92rem;
+		line-height: 1.6;
+		margin-bottom: 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
 	.destination-item-img {
-		display: block;
 		position: relative;
 		height: 340px;
+		margin: 18px -22px 0;
+		z-index: 1;
+	}
+	.destination-item-img-link {
+		display: block;
+		width: 100%;
+		height: 100%;
 		overflow: hidden;
-		border-radius: 18px;
+		border-radius: 20px;
 	}
 	.destination-item-img img {
 		width: 100%;
@@ -706,98 +771,100 @@
 		transform: scale(1.06);
 	}
 
-	/* The concave "notch" — a white quarter-circle laid over the inset
-	   image's bottom-right corner, eating an inward curve out of the photo. */
-	.destination-item-img::after {
-		content: '';
+	/* Explore — pill CTA positioned inside the image, top-left, so it
+	   always reads on top of the photo (no white card background peeking through) */
+	.destination-item-img a.destination-item-cta {
 		position: absolute;
-		right: 0;
-		bottom: 0;
-		width: 32px;
-		height: 32px;
-		background: #fff;
-		border-top-left-radius: 32px;
-		pointer-events: none;
-	}
-
-	.destination-item-body {
-		padding: 26px 10px 8px;
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.destination-item-meta {
-		display: flex;
-		align-items: center;
-		gap: 14px;
-		font-size: 0.82rem;
-		color: #6c757d;
-		margin-bottom: 12px;
-	}
-	.destination-item-meta span {
+		top: 16px;
+		left: 16px;
+		z-index: 10;
 		display: inline-flex;
 		align-items: center;
-		gap: 5px;
+		gap: 12px;
+		background: #ffffff;
+		border-radius: 100px;
+		padding: 6px 6px 6px 20px;
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+		text-decoration: none;
+		transition: background 0.3s ease, gap 0.3s ease, box-shadow 0.3s ease;
 	}
-	.destination-item-meta i {
-		color: #b8956a;
+	.destination-item-img a.destination-item-cta:hover {
+		gap: 18px;
+		box-shadow: 0 10px 26px rgba(0, 0, 0, 0.32);
 	}
-
-	.destination-item-title {
-		font-weight: 800;
-		font-size: 1.35rem;
+	.destination-item-cta-text {
+		font-weight: 700;
+		font-size: 0.92rem;
 		color: #1a1a1a;
-		margin-bottom: 12px;
-		line-height: 1.3;
+		white-space: nowrap;
+		line-height: 1.4;
 	}
-
-	.destination-item-desc {
-		color: #6c757d;
-		font-size: 0.95rem;
-		line-height: 1.65;
-		margin-bottom: 20px;
-		flex: 1;
-	}
-
-	.destination-item-footer {
+	.destination-item-cta-icon {
 		display: flex;
 		align-items: center;
-		justify-content: flex-end;
-		gap: 8px;
-		padding-top: 16px;
-		border-top: 1px solid #f0f0f0;
+		justify-content: center;
+		width: 38px;
+		height: 38px;
+		min-width: 38px;
+		border-radius: 50%;
+		background: #6b8e4e;
+		color: #fff;
+		font-size: 0.85rem;
+		flex-shrink: 0;
+		transition: background 0.3s ease, transform 0.3s ease;
+	}
+	.destination-item-cta:hover .destination-item-cta-icon {
+		background: #55703d;
+		transform: rotate(-45deg);
 	}
 
-	/* Book Now + Explore buttons: responsive, inline, and compact on mobile & tablet */
-	@media (max-width: 991px) {
-		.destination-item-footer {
-			flex-wrap: nowrap;
-		}
-		.destination-item-footer .btn {
-			flex: 1 1 auto;
-			min-width: 0;
-			justify-content: center;
-			white-space: nowrap;
-			padding: 9px 16px !important;
-			font-size: 0.85rem !important;
-		}
-		.destination-item-footer .btn .btn-icon {
-			width: 28px !important;
-			height: 28px !important;
-			font-size: 0.7rem !important;
-		}
+	/* Book Now — floating circular badge on the image, top-right.
+	   Solid (non-transparent) so it always stays legible over any photo. */
+	.destination-item-book {
+		position: absolute;
+		top: 16px;
+		right: 16px;
+		z-index: 5;
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		border: 2px solid #fff;
+		background: #6b8e4e;
+		color: #fff;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1rem;
+		cursor: pointer;
+		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+		transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+	}
+	.destination-item-book:hover {
+		background: #55703d;
+		transform: scale(1.08);
 	}
 
 	@media (max-width: 576px) {
-		.destination-item-footer .btn {
-			padding: 8px 14px !important;
-			font-size: 0.8rem !important;
+		.destination-item {
+			padding: 18px 18px 0;
+			border-radius: 22px;
 		}
-		.destination-item-footer .btn .btn-icon {
-			width: 26px !important;
-			height: 26px !important;
-			font-size: 0.65rem !important;
+		.destination-item-title {
+			font-size: 1.3rem;
+		}
+		.destination-item-img {
+			height: 280px;
+			margin: 14px -18px 0;
+			border-radius: 16px;
+		}
+		.destination-item-img a.destination-item-cta {
+			top: 12px;
+			left: 12px;
+			padding: 5px 5px 5px 16px;
+		}
+		.destination-item-cta-icon {
+			width: 34px;
+			height: 34px;
 		}
 	}
 

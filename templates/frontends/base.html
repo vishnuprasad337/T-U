@@ -24,7 +24,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/daterangepicker.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/stylesheet.css' %}">
 	<!-- Here goes your Colors Css -->
-	<link id="color-switcher" rel="stylesheet" type="text/css" href="#">
+	
 
     <!-- Custom Header/Logo Scroll Behavior
 	============================== -->
@@ -37,7 +37,7 @@
         }
         /* Footer logo */
         #footer .footer-logo img {
-            max-height: 180px;
+            max-height: 150px;
             width: auto;
             display: block;
         }
@@ -63,13 +63,13 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
         }
         #header .primary-menu {
-            background-color: transparent;
-            transition: all 0.3s ease;
-            height: 90px;
-            display: flex;
-            align-items: center;
-            overflow: visible;
-        }
+    background-color: transparent;
+    transition: all 0.3s ease;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    overflow: visible;
+}
         #header .logo {
             position: absolute;
             left: 50%;
@@ -122,57 +122,154 @@
             padding-top: 0;
         }
         /* Scrolled navbar: white background, olive green nav links */
-#header.scrolled .primary-menu {
-    background-color: #fff !important;
+        #header.scrolled .primary-menu {
+            background-color: #fff !important;
+        }
+        #header.scrolled #header-nav .nav-link {
+            color: #6B8E23 !important;
+        }
+        #header.scrolled #header-nav .nav-link:hover,
+        #header.scrolled #header-nav .nav-link.active {
+            color: #556B2F !important;
+        }
+        #header.scrolled .navbar-toggler span {
+            background-color: #6B8E23 !important;
+        }
+
+/* ===== Footer — compact base layout (all screens) ===== */
+#footer .hero-wrap.section {
+	padding-top: 2.5rem !important;
+	padding-bottom: 0 !important;
 }
-#header.scrolled #header-nav .nav-link {
-    color: #6B8E23 !important;
+#footer .row.gy-4 {
+	--bs-gutter-y: 1.5rem !important;
 }
-#header.scrolled #header-nav .nav-link:hover,
-#header.scrolled #header-nav .nav-link.active {
-    color: #556B2F !important;
+#footer .footer-logo {
+	margin-bottom: 0.5rem !important;
 }
-#header.scrolled .navbar-toggler span {
-    background-color: #6B8E23 !important;
+#footer h5.text-4 {
+	font-size: 1.15rem !important;
+	margin-bottom: 0.75rem !important;
 }
-/* Active nav link: underline indicator */
-/* ===== Footer "Get In Touch" — mobile & tablet ===== */
+#footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
+	font-size: 1rem !important;
+	line-height: 1.6 !important;
+}
+#footer .nav.flex-column .nav-link {
+	padding: 0.2rem 0 !important;
+	font-size: 1rem !important;
+}
+#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 {
+	margin-bottom: 0.6rem !important;
+}
+#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
+	font-size: 1rem !important;
+	line-height: 1.6 !important;
+}
+#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 {
+	margin-bottom: 0.5rem !important;
+}
+#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
+	font-size: 1.05rem !important;
+}
+#footer .social-icons.social-icons-light li a {
+	width: 38px !important;
+	height: 38px !important;
+	font-size: 0.9rem !important;
+}
+#footer .social-icons.social-icons-light {
+	gap: 0.5rem !important;
+	margin-top: 0.4rem !important;
+}
+#footer .footer-copyright {
+	padding: 0.9rem 0 !important;
+	margin-top: 1.25rem !important;
+}
+#footer .footer-copyright p.text-3 {
+	font-size: 0.9rem !important;
+	margin-bottom: 0.25rem !important;
+}
+
+/* ===== Footer — redesigned mobile & tablet layout ===== */
 @media (max-width: 991px) {
-	#footer .col-12.col-lg-4 h5 {
-		font-size: 1.1rem !important;
-		margin-bottom: 1rem !important;
+	#footer .hero-wrap.section {
+		padding-top: 1.5rem !important;
+		padding-bottom: 0 !important;
+	}
+	#footer .row.gy-4 {
+		--bs-gutter-y: 1.1rem !important;
+	}
+
+	/* Logo + about column */
+	#footer .footer-logo {
+		margin-bottom: 0.3rem !important;
+	}
+	#footer .footer-logo img {
+		max-height: 190px !important;
+	}
+
+	#footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
+		font-size: 1.05rem !important;
+		line-height: 1.55 !important;
+		margin-bottom: 0 !important;
+		color: #d0d0d0 !important;
+	}
+
+	/* Connect With Us + Get In Touch: stacked full-width for readability
+	   at this larger type size, rather than a cramped 50/50 split */
+	#footer .col-sm-4.col-md-4.col-lg-3.ms-auto,
+	#footer .col-12.col-lg-4:last-child {
+		flex: 0 0 100% !important;
+		max-width: 100% !important;
+		margin-left: 0 !important;
+	}
+
+	#footer h5.text-4 {
+		font-size: 1.25rem !important;
+		margin-bottom: 0.5rem !important;
+		color: #ffffff !important;
+	}
+
+	/* Nav link list */
+	#footer .nav.flex-column .nav-link {
+		padding: 0.12rem 0 !important;
+		font-size: 1.05rem !important;
+		color: #d0d0d0 !important;
 	}
 
 	/* Address row */
 	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 {
-		gap: 0.75rem !important;
+		gap: 0.7rem !important;
 		align-items: flex-start !important;
+		margin-bottom: 0.4rem !important;
 	}
 	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 .text-7 {
-		font-size: 1.1rem !important;
+		font-size: 1.3rem !important;
 		flex: 0 0 auto;
 		margin-top: 2px;
+		color: #d0d0d0 !important;
 	}
 	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
-		font-size: 0.85rem !important;
+		font-size: 1.05rem !important;
 		line-height: 1.5 !important;
 		flex: 1 1 auto;
 		min-width: 0;
 		word-break: break-word;
 		overflow-wrap: break-word;
+		color: #d0d0d0 !important;
 	}
 
 	/* Phone & email rows */
 	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 {
-		gap: 0.75rem !important;
-		margin-bottom: 0.75rem !important;
+		gap: 0.7rem !important;
+		margin-bottom: 0.4rem !important;
 	}
 	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 .text-6 {
-		font-size: 1rem !important;
+		font-size: 1.25rem !important;
 		flex: 0 0 auto;
 	}
 	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
-		font-size: 0.9rem !important;
+		font-size: 1.05rem !important;
 		line-height: 1.4 !important;
 		min-width: 0;
 		word-break: break-word;
@@ -181,120 +278,58 @@
 
 	/* Social icons */
 	#footer .social-icons.social-icons-light {
-		gap: 0.5rem !important;
+		gap: 0.45rem !important;
+		margin-top: 0.25rem !important;
 	}
 	#footer .social-icons.social-icons-light li a {
 		width: 38px !important;
 		height: 38px !important;
-		font-size: 0.85rem !important;
-	}
-}
-
-/* ===== Footer — compact layout for tablet & mobile ===== */
-@media (max-width: 991px) {
-	#footer .hero-wrap.section {
-		padding-top: 2.5rem !important;
-		padding-bottom: 0 !important;
-	}
-	#footer .row.gy-4 {
-		--bs-gutter-y: 1.75rem !important;
-	}
-
-	/* Logo + about column */
-	#footer .footer-logo img {
-		max-height: 130px !important;
-	}
-	#footer .footer-logo {
-		margin-bottom: 0.5rem !important;
-	}
-	#footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
-		font-size: 0.85rem !important;
-		line-height: 1.5 !important;
-		margin-bottom: 0 !important;
-		color: #d0d0d0 !important;
-	}
-
-	/* Put "Connect With Us" and "Get In Touch" side by side instead of
-	   stacking full-width, so there's no big empty gap between them */
-	#footer .col-sm-4.col-md-4.col-lg-3.ms-auto {
-		flex: 0 0 50% !important;
-		max-width: 50% !important;
-		margin-left: 0 !important;
-	}
-	#footer .col-12.col-lg-4:last-child {
-		flex: 0 0 50% !important;
-		max-width: 50% !important;
-	}
-
-	#footer h5.text-4 {
 		font-size: 0.95rem !important;
-		margin-bottom: 0.75rem !important;
-		color: #ffffff !important;
-	}
-
-	/* Nav link list */
-	#footer .nav.flex-column .nav-link {
-		padding: 0.2rem 0 !important;
-		font-size: 0.85rem !important;
-		color: #d0d0d0 !important;
-	}
-
-	/* Tighten address/phone/email block spacing */
-	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 {
-		margin-bottom: 0.75rem !important;
-	}
-	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
-		color: #d0d0d0 !important;
-	}
-	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 {
-		margin-bottom: 0.5rem !important;
-	}
-	#footer .col-12.col-lg-4 .mt-3 {
-		margin-top: 0.75rem !important;
 	}
 
 	/* Copyright bar */
 	#footer .footer-copyright {
-		padding: 1rem 0 !important;
-		margin-top: 1.5rem !important;
+		padding: 0.7rem 0 !important;
+		margin-top: 0.9rem !important;
 	}
 	#footer .footer-copyright p.text-3 {
-		font-size: 0.75rem !important;
-		margin-bottom: 0.3rem !important;
+		font-size: 0.9rem !important;
+		margin-bottom: 0.25rem !important;
 	}
 }
 
 @media (max-width: 576px) {
 	#footer .hero-wrap.section {
-		padding-top: 2rem !important;
+		padding-top: 1.1rem !important;
 	}
 	#footer .footer-logo img {
-		max-height: 110px !important;
-	}
-	/* Stack Connect/Get In Touch back to full width only on very small
-	   phones where 50/50 gets too cramped */
-	#footer .col-sm-4.col-md-4.col-lg-3.ms-auto,
-	#footer .col-12.col-lg-4:last-child {
-		flex: 0 0 100% !important;
-		max-width: 100% !important;
+		max-height: 150px !important;
 	}
 	#footer .row.gy-4 {
-		--bs-gutter-y: 1.25rem !important;
+		--bs-gutter-y: 0.9rem !important;
+	}
+	#footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
+		font-size: 1rem !important;
+	}
+	#footer h5.text-4 {
+		font-size: 1.15rem !important;
+	}
+	#footer .nav.flex-column .nav-link {
+		font-size: 1rem !important;
 	}
 	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
-		font-size: 0.8rem !important;
+		font-size: 1rem !important;
 	}
 	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
-		font-size: 0.85rem !important;
+		font-size: 1rem !important;
 	}
 	#footer .social-icons.social-icons-light li a {
-		width: 34px !important;
-		height: 34px !important;
-		font-size: 0.75rem !important;
+		width: 36px !important;
+		height: 36px !important;
+		font-size: 0.9rem !important;
 	}
 }
-
-    </style>
+</style>
     
     {% block extra_css %}{% endblock %}
 </head>
@@ -382,7 +417,7 @@
                                 <p class="text-3">Welcome uncover a luxurious haven at T & U Leisure Hotel, Munnar, Kerala. Nestled amidst the tea hills, our hotel offers modern elegance and warm hospitality.</p>
                             </div>
                             <div class="col-sm-4 col-md-4 col-lg-3 ms-auto">
-                                <h5 class="text-4 fw-600 mb-3">Connect With Us</h5>
+                              
                                 <ul class="nav flex-column fw-500">
                                     <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:about' %}">About</a></li>
                                     <li class="nav-item"> <a class="nav-link" href="{% url 'tandj_app:rooms' %}">Rooms</a></li>
@@ -394,7 +429,7 @@
                                 </ul>
                             </div>
                             <div class="col-12 col-lg-4">
-                                <h5 class="text-4 fw-600 mb-3">Get In Touch</h5>
+                               
                                 <div class="d-flex gap-4 mb-3">
                                     <span class="text-7 me-1"><i class="fa-solid fa-location-dot"></i></span>
                                     <div class="text-3 lh-lg">T &amp; U Leisure Hotel, Maximunnar Pvt Ltd, Mattupetty Road, Munnar, Kerala &ndash; 685612</div>
@@ -681,8 +716,7 @@
 	
     <!-- Custom Script -->
     <script src="{% static 'tandu-main/js/main.js' %}"></script>
-	<script src="{% static 'tandu-main/js/switcher.min.js' %}"></script>
-
+	
     <!-- Header scroll behavior: centered logo on hero -> normal navbar on scroll -->
     <script>
         (function () {
