@@ -684,7 +684,7 @@ from .forms import ReservationForm
 
 @login_required
 def reservation_list(request):
-    reservations = Reservation.objects.select_related("package").all()
+    reservations = Reservation.objects.select_related("room").all()
     form = ReservationForm()
     return render(request, "admin_pages/reservation_list.html", {
         "reservations": reservations,

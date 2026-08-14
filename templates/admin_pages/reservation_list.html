@@ -34,7 +34,7 @@
                     <th scope="col">Guest Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
-                    <th scope="col">Package</th>
+                    <th scope="col">Room</th>
                     <th scope="col">Check-in</th>
                     <th scope="col">Check-out</th>
                     <th scope="col">Guests</th>
@@ -47,7 +47,7 @@
                     <td>{{ reservation.guest_name }}</td>
                     <td>{{ reservation.guest_email }}</td>
                     <td>{{ reservation.guest_phone|default:"-" }}</td>
-                    <td>{{ reservation.package.name|default:"General Inquiry" }}</td>
+                    <td>{{ reservation.room.room_category|default:"General Inquiry" }}</td>
                     <td>{{ reservation.check_in|date:"M d, Y" }}</td>
                     <td>{{ reservation.check_out|date:"M d, Y" }}</td>
                     <td>{{ reservation.num_guests }}</td>
@@ -83,8 +83,8 @@
                                         <span class="fw-semibold text-break">{{ reservation.guest_phone|default:"-" }}</span>
                                     </div>
                                     <div class="col-md-6">
-                                        <small class="text-muted d-block">Package</small>
-                                        <span class="fw-semibold text-break">{{ reservation.package.name|default:"General Inquiry" }}</span>
+                                        <small class="text-muted d-block">Room</small>
+                                        <span class="fw-semibold text-break">{{ reservation.room.room_category|default:"General Inquiry" }}</span>
                                     </div>
                                     <div class="col-md-6">
                                         <small class="text-muted d-block">Check-in</small>
@@ -118,7 +118,7 @@
                                    class="btn btn-whatsapp btn-whatsapp-link"
                                    data-phone="{{ reservation.guest_phone }}"
                                    data-name="{{ reservation.guest_name|escapejs }}"
-                                   data-package="{{ reservation.package.name|default:'General Inquiry'|escapejs }}"
+                                   data-package="{{ reservation.room.room_category|default:'General Inquiry'|escapejs }}"
                                    data-checkin="{{ reservation.check_in|date:'M d, Y' }}"
                                    data-checkout="{{ reservation.check_out|date:'M d, Y' }}"
                                    data-guests="{{ reservation.num_guests }}">
@@ -209,9 +209,9 @@
                             {% if form.guest_phone.errors %}<div class="text-danger small mt-1">{{ form.guest_phone.errors|join:", " }}</div>{% endif %}
                         </div>
                         <div class="col-md-6">
-                            <label for="{{ form.package.id_for_label }}" class="form-label fw-semibold">Package</label>
-                            {{ form.package }}
-                            {% if form.package.errors %}<div class="text-danger small mt-1">{{ form.package.errors|join:", " }}</div>{% endif %}
+                            <label for="{{ form.room.id_for_label }}" class="form-label fw-semibold">Room</label>
+                            {{ form.room }}
+                            {% if form.room.errors %}<div class="text-danger small mt-1">{{ form.room.errors|join:", " }}</div>{% endif %}
                         </div>
                         <div class="col-md-6">
                             <label for="{{ form.check_in.id_for_label }}" class="form-label fw-semibold">Check-in</label>
@@ -365,7 +365,7 @@
                 const message =
                     'Hello ' + name + ',\n\n' +
                     'Here are your reservation details with us:\n' +
-                    'Package: ' + pkg + '\n' +
+                    'Room: ' + pkg + '\n' +
                     'Check-in: ' + checkin + '\n' +
                     'Check-out: ' + checkout + '\n' +
                     'Guests: ' + guests + '\n\n' +
