@@ -30,7 +30,7 @@
 		<section class="section pb-0">
 			<div class="container">
 				<div class="mx-auto text-center mb-5 destinations-intro">
-					<p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">About T&amp;U Hotels Nearby Destinations</span></p>
+					<p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">About  Nearby Destinations</span></p>
 					<h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Explore <span class="text-primary">Places</span> Around Your Stay</h2>
 					<p class="text-body-secondary mt-3 wow fadeInUp" data-wow-delay=".3s">Beyond the comfort of your room, T&amp;U Hotels puts you close to some of the most beautiful sights and attractions in the region. From scenic viewpoints to local landmarks, our nearby destinations make it easy to turn a relaxing stay into a memorable trip. Browse the destinations below and let us help you plan your visit.</p>
 				</div>
@@ -711,8 +711,12 @@
 		color: #1a1a1a;
 		margin-bottom: 12px;
 		line-height: 1.15;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		min-height: calc(1.6rem * 1.15 * 2);
 	}
-
 	.destination-item-meta {
 		display: flex;
 		flex-wrap: wrap;
@@ -749,8 +753,9 @@
 
 	.destination-item-img {
 		position: relative;
-		height: 340px;
-		margin: 18px -22px 0;
+		flex: 1;
+		min-height: 260px;
+		margin: 18px -22px -1px;
 		z-index: 1;
 	}
 	.destination-item-img-link {
@@ -758,7 +763,7 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
-		border-radius: 20px;
+		border-radius: 20px 20px 6px 6px;
 	}
 	.destination-item-img img {
 		width: 100%;
@@ -854,7 +859,7 @@
 		}
 		.destination-item-img {
 			height: 280px;
-			margin: 14px -18px 0;
+			margin: 14px -18px -1px;
 			border-radius: 16px;
 		}
 		.destination-item-img a.destination-item-cta {
@@ -897,7 +902,6 @@
 		}
 	}
 </style>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 	// Stop WOW.js from permanently marking these as "animated" and

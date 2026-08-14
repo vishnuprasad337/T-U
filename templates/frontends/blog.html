@@ -57,7 +57,7 @@
 
 									<!-- Description & Button (Hidden on desktop, visible on mobile) -->
 									<div class="blog-card-new-expanded">
-										<p class="blog-card-new-description text-3 text-white text-opacity-85 mb-4">{{ blog.description|striptags|truncatewords:25 }}</p>
+										<p class="blog-card-new-description text-3 text-white text-opacity-85 mb-4">{{ blog.description|striptags|truncatewords:13 }}</p>
 										
 										<!-- View More Button - Same style as About page -->
 										<div class="blog-card-new-footer">
@@ -115,8 +115,7 @@
     
     .blog-card-new {
         height: 480px;
-        width: calc(100% + 24px);
-        margin-left: -12px;
+        width: 100%;
         cursor: pointer;
         position: relative;
         overflow: hidden;
