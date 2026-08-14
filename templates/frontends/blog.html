@@ -171,6 +171,7 @@
     .blog-card-new-content {
         z-index: 2;
         align-items: flex-start;
+        justify-content: flex-end !important;
     }
 
     /* Title Wrapper */
@@ -187,18 +188,31 @@
         transform: translateY(-20px);
     }
 
-    /* Description & Button (Hidden by default) */
+    /* Description & Button (Hidden by default, and collapsed so it
+       doesn't reserve layout space while hidden) */
     .blog-card-new-expanded {
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(20px);
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 1;
+    visibility: visible;
+    max-height: none;
+    margin-top: 1rem;
+    transform: translateY(0);
+
+        transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    visibility 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    margin-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                    transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
+    /* Raised from 220px so the description + View More button never
+       get clipped by overflow: hidden — scales with the card's own
+       height via min(), and caps out at 320px on tall desktop cards */
     .blog-card-new:hover .blog-card-new-expanded,
     .blog-card-new.active .blog-card-new-expanded {
         opacity: 1;
         visibility: visible;
+        max-height: min(60%, 320px);
+        margin-top: 1rem;
         transform: translateY(0);
     }
 
@@ -318,10 +332,13 @@
             margin-left: -8px;
         }
 
-        /* Show description and button on mobile by default */
+        /* Show description and button on mobile by default, and lift
+           the max-height cap so it isn't clipped */
         .blog-card-new-expanded {
             opacity: 1 !important;
             visibility: visible !important;
+            max-height: none !important;
+            margin-top: 1rem !important;
             transform: translateY(0) !important;
         }
 
@@ -404,7 +421,6 @@
         }
     }
 </style>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const blogCards = document.querySelectorAll('.blog-card-new');
