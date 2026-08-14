@@ -24,11 +24,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/daterangepicker.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/stylesheet.css' %}">
 	<!-- Here goes your Colors Css -->
-	
+
+    <!-- Navbar font (reference-matched: clean geometric sans, medium weight) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Custom Header/Logo Scroll Behavior
 	============================== -->
- <style>
+<style>
         /* Navbar logo */
         #header .logo img {
             max-height: 170px;
@@ -37,7 +40,7 @@
         }
         /* Footer logo */
         #footer .footer-logo img {
-            max-height: 100px;
+            max-height: 80px;
             width: auto;
             display: block;
         }
@@ -63,13 +66,13 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
         }
         #header .primary-menu {
-    background-color: transparent;
-    transition: all 0.3s ease;
-    height: 130px;
-    display: flex;
-    align-items: center;
-    overflow: visible;
-}
+            background-color: transparent;
+            transition: all 0.3s ease;
+            height: 130px !important;
+            display: flex;
+            align-items: center;
+            overflow: visible;
+        }
         #header .logo {
             position: absolute;
             left: 50%;
@@ -136,200 +139,302 @@
             background-color: #6B8E23 !important;
         }
 
-//* ===== Footer — compact base layout (all screens) ===== */
-#footer .hero-wrap.section {
-	padding-top: 2.5rem !important;
-	padding-bottom: 0 !important;
-}
-#footer .row.gy-4 {
-	--bs-gutter-y: 1.5rem !important;
-}
-#footer .footer-logo {
-	margin-bottom: 2rem !important;
-}
-#footer h5.text-4 {
-	font-size: 1.15rem !important;
-	margin-bottom: 1.5rem !important;
-}
-#footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
-	font-size: 1rem !important;
-	line-height: 1.6 !important;
-}
-#footer .nav.flex-column .nav-link {
-	padding: 0.2rem 0 !important;
-	font-size: 1rem !important;
-}
-#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 {
-	margin-bottom: 1.25rem !important;
-}
-#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
-	font-size: 1rem !important;
-	line-height: 1.6 !important;
-}
-#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 {
-	margin-bottom: 1.1rem !important;
-}
-#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
-	font-size: 1.05rem !important;
-}
-#footer .social-icons.social-icons-light li a {
-	width: 38px !important;
-	height: 38px !important;
-	font-size: 0.9rem !important;
-}
-#footer .social-icons.social-icons-light {
-	gap: 0.5rem !important;
-	margin-top: 0.4rem !important;
-}
-#footer .footer-copyright {
-	padding: 0.9rem 0 !important;
-	margin-top: 1.25rem !important;
-}
-#footer .footer-copyright p.text-3 {
-	font-size: 0.9rem !important;
-	margin-bottom: 0.25rem !important;
-}
+        /* ===== Navbar link font — matched to reference (clean modern
+           sans, regular weight, minimal letter-spacing, like the RIXOS
+           reference). Loaded via the Google Fonts <link> tags added above
+           in <head>. */
+        #header #header-nav .nav-link,
+        #header .btn-new .btn-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            font-size: 1.1rem;
+            letter-spacing: 0.01em;
+        }
 
-/* ===== Footer — redesigned mobile & tablet layout ===== */
-@media (max-width: 991px) {
-	#footer .hero-wrap.section {
-		padding-top: 1.5rem !important;
-		padding-bottom: 0 !important;
-	}
-	#footer .row.gy-4 {
-		--bs-gutter-y: 1.1rem !important;
-	}
+        /* Taller navbar on tablet/mobile too, scaled down slightly from desktop */
+        @media (max-width: 991px) {
+            #header .primary-menu {
+                height: 130px !important;
+            }
+        }
+        @media (max-width: 576px) {
+            #header .primary-menu {
+                height: 110px !important;
+            }
+        }
 
-	/* Logo + about column */
-	#footer .footer-logo {
-		margin-bottom: 1.25rem !important;
-	}
-	#footer .footer-logo img {
-		max-height: 130px !important;
-	}
+        /* ===== Footer background image fix =====
+           The template's default ".opacity-9" mask class was blocking ~90%
+           of the background photo with black, so the image barely showed.
+           This scopes a lighter mask + proper image rendering just to the
+           footer so the photo is actually visible behind the dark overlay. */
+        #footer .hero-wrap.section {
+            position: relative;
+            padding-top: 2.5rem !important;
+            padding-bottom: 0 !important;
+        }
+        #footer .hero-mask {
+            opacity: 0.55 !important; /* was effectively ~0.9 via .opacity-9 */
+        }
+        #footer .hero-bg {
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+        #footer .hero-content {
+            position: relative;
+            z-index: 2;
+        }
 
-	#footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
-		font-size: 1.05rem !important;
-		line-height: 1.55 !important;
-		margin-bottom: 0 !important;
-		color: #d0d0d0 !important;
-	}
+        /* ===== Footer — compact base layout (all screens) ===== */
+        #footer .row.gy-4 {
+            --bs-gutter-y: 1.5rem !important;
+        }
+        #footer .footer-logo {
+            margin-bottom: 1.5rem !important;
+        }
+        #footer h5.text-4 {
+            font-size: 1.15rem !important;
+            margin-bottom: 1.5rem !important;
+        }
+        #footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
+            font-size: 1rem !important;
+            line-height: 1.6 !important;
+        }
+        #footer .nav.flex-column .nav-link {
+            padding: 0.2rem 0 !important;
+            font-size: 1rem !important;
+        }
+        #footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 {
+            margin-bottom: 1.25rem !important;
+        }
+        #footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
+            font-size: 1rem !important;
+            line-height: 1.6 !important;
+        }
+        #footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 {
+            margin-bottom: 1.1rem !important;
+        }
+        #footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
+            font-size: 1.05rem !important;
+        }
+        #footer .social-icons.social-icons-light li a {
+            width: 38px !important;
+            height: 38px !important;
+            font-size: 0.9rem !important;
+        }
+        #footer .social-icons.social-icons-light {
+            gap: 0.5rem !important;
+            margin-top: 0.4rem !important;
+        }
+        #footer .footer-copyright {
+            padding: 0.9rem 0 !important;
+            margin-top: 1.25rem !important;
+        }
+        #footer .footer-copyright p.text-3 {
+            font-size: 0.9rem !important;
+            margin-bottom: 0.25rem !important;
+        }
 
-	/* Connect With Us + Get In Touch: stacked full-width for readability
-	   at this larger type size, rather than a cramped 50/50 split */
-	#footer .col-sm-4.col-md-4.col-lg-3.ms-auto,
-	#footer .col-12.col-lg-4:last-child {
-		flex: 0 0 100% !important;
-		max-width: 100% !important;
-		margin-left: 0 !important;
-	}
+        /* ===== Footer — redesigned mobile & tablet layout ===== */
+        @media (max-width: 991px) {
+            #footer .hero-wrap.section {
+                padding-top: 1.5rem !important;
+                padding-bottom: 0 !important;
+            }
+            #footer .row.gy-4 {
+                --bs-gutter-y: 1.1rem !important;
+            }
 
-	#footer h5.text-4 {
-		font-size: 1.25rem !important;
-		margin-bottom: 1.25rem !important;
-		color: #ffffff !important;
-	}
+            /* Logo + about column */
+            #footer .footer-logo {
+                margin-bottom: 1.1rem !important;
+            }
+            #footer .footer-logo img {
+                max-height: 33px !important;
+            }
 
-	/* Nav link list */
-	#footer .nav.flex-column .nav-link {
-		padding: 0.12rem 0 !important;
-		font-size: 1.05rem !important;
-		color: #d0d0d0 !important;
-	}
+            #footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
+                font-size: 1.05rem !important;
+                line-height: 1.55 !important;
+                margin-bottom: 0 !important;
+                color: #d0d0d0 !important;
+            }
 
-	/* Address row */
-	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 {
-		gap: 0.7rem !important;
-		align-items: flex-start !important;
-		margin-bottom: 1.1rem !important;
-	}
-	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 .text-7 {
-		font-size: 1.3rem !important;
-		flex: 0 0 auto;
-		margin-top: 2px;
-		color: #d0d0d0 !important;
-	}
-	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
-		font-size: 1.05rem !important;
-		line-height: 1.5 !important;
-		flex: 1 1 auto;
-		min-width: 0;
-		word-break: break-word;
-		overflow-wrap: break-word;
-		color: #d0d0d0 !important;
-	}
+            /* Logo/about + Quick Links sit side by side (50/50) on tablet;
+               Contact Us drops to its own full-width row below since it
+               has the longest content (address, phone, email).
+               Scoped to tablet only (577px–991px) — mobile below reverts
+               these to full-width stacked. */
+            #footer .col-12.col-lg-4:last-child {
+                flex: 0 0 100% !important;
+                max-width: 100% !important;
+                margin-left: 0 !important;
+            }
+        }
 
-	/* Phone & email rows */
-	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 {
-		gap: 0.7rem !important;
-		margin-bottom: 1rem !important;
-	}
-	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 .text-6 {
-		font-size: 1.25rem !important;
-		flex: 0 0 auto;
-	}
-	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
-		font-size: 1.05rem !important;
-		line-height: 1.4 !important;
-		min-width: 0;
-		word-break: break-word;
-		overflow-wrap: break-word;
-	}
+        @media (min-width: 577px) and (max-width: 991px) {
+            #footer .col-sm-7.col-md-6.col-lg-4 {
+                flex: 0 0 50% !important;
+                max-width: 50% !important;
+            }
+            #footer .col-sm-4.col-md-4.col-lg-3.ms-auto {
+                flex: 0 0 50% !important;
+                max-width: 50% !important;
+                margin-left: 0 !important;
+            }
+        }
 
-	/* Social icons */
-	#footer .social-icons.social-icons-light {
-		gap: 0.45rem !important;
-		margin-top: 0.25rem !important;
-	}
-	#footer .social-icons.social-icons-light li a {
-		width: 38px !important;
-		height: 38px !important;
-		font-size: 0.95rem !important;
-	}
+        @media (max-width: 991px) {
 
-	/* Copyright bar */
-	#footer .footer-copyright {
-		padding: 0.7rem 0 !important;
-		margin-top: 0.9rem !important;
-	}
-	#footer .footer-copyright p.text-3 {
-		font-size: 0.9rem !important;
-		margin-bottom: 0.25rem !important;
-	}
-}
+            #footer h5.text-4 {
+                font-size: 1.25rem !important;
+                margin-bottom: 1.25rem !important;
+                color: #ffffff !important;
+            }
 
-@media (max-width: 576px) {
-	#footer .hero-wrap.section {
-		padding-top: 1.1rem !important;
-	}
-	#footer .footer-logo img {
-		max-height: 100px !important;
-	}
-	#footer .row.gy-4 {
-		--bs-gutter-y: 0.9rem !important;
-	}
-	#footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
-		font-size: 1rem !important;
-	}
-	#footer h5.text-4 {
-		font-size: 1.15rem !important;
-	}
-	#footer .nav.flex-column .nav-link {
-		font-size: 1rem !important;
-	}
-	#footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
-		font-size: 1rem !important;
-	}
-	#footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
-		font-size: 1rem !important;
-	}
-	#footer .social-icons.social-icons-light li a {
-		width: 36px !important;
-		height: 36px !important;
-		font-size: 0.9rem !important;
-	}
-}
-</style>
+            /* Nav link list */
+            #footer .nav.flex-column .nav-link {
+                padding: 0.12rem 0 !important;
+                font-size: 1.05rem !important;
+                color: #d0d0d0 !important;
+            }
+
+            /* Address row */
+            #footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 {
+                gap: 0.7rem !important;
+                align-items: flex-start !important;
+                margin-bottom: 1.1rem !important;
+            }
+            #footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 .text-7 {
+                font-size: 1.3rem !important;
+                flex: 0 0 auto;
+                margin-top: 2px;
+                color: #d0d0d0 !important;
+            }
+            #footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
+                font-size: 1.05rem !important;
+                line-height: 1.5 !important;
+                flex: 1 1 auto;
+                min-width: 0;
+                word-break: break-word;
+                overflow-wrap: break-word;
+                color: #d0d0d0 !important;
+            }
+
+            /* Phone & email rows */
+            #footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 {
+                gap: 0.7rem !important;
+                margin-bottom: 1rem !important;
+            }
+            #footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 .text-6 {
+                font-size: 1.25rem !important;
+                flex: 0 0 auto;
+            }
+            #footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
+                font-size: 1.05rem !important;
+                line-height: 1.4 !important;
+                min-width: 0;
+                word-break: break-word;
+                overflow-wrap: break-word;
+            }
+
+            /* Social icons */
+            #footer .social-icons.social-icons-light {
+                gap: 0.45rem !important;
+                margin-top: 0.25rem !important;
+            }
+            #footer .social-icons.social-icons-light li a {
+                width: 38px !important;
+                height: 38px !important;
+                font-size: 0.95rem !important;
+            }
+
+            /* Copyright bar */
+            #footer .footer-copyright {
+                padding: 0.7rem 0 !important;
+                margin-top: 0.9rem !important;
+            }
+            #footer .footer-copyright p.text-3 {
+                font-size: 0.9rem !important;
+                margin-bottom: 0.25rem !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            #footer .hero-wrap.section {
+                padding-top: 1.1rem !important;
+            }
+            #footer .footer-logo img {
+                max-height: 33px !important;
+            }
+            #footer .row.gy-4 {
+                --bs-gutter-y: 0.9rem !important;
+            }
+            /* Mobile: back to old stacked full-width layout (the
+               side-by-side split above is tablet-only) */
+            #footer .col-sm-7.col-md-6.col-lg-4,
+            #footer .col-sm-4.col-md-4.col-lg-3.ms-auto {
+                flex: 0 0 100% !important;
+                max-width: 100% !important;
+                margin-left: 0 !important;
+            }
+            #footer .col-sm-7.col-md-6.col-lg-4 p.text-3 {
+                font-size: 1rem !important;
+            }
+            #footer h5.text-4 {
+                font-size: 1.15rem !important;
+            }
+            #footer .nav.flex-column .nav-link {
+                font-size: 1rem !important;
+            }
+            #footer .col-12.col-lg-4 .d-flex.gap-4.mb-3 > div {
+                font-size: 1rem !important;
+            }
+            #footer .col-12.col-lg-4 a.d-flex.align-items-center.gap-4 div {
+                font-size: 1rem !important;
+            }
+            #footer .social-icons.social-icons-light li a {
+                width: 36px !important;
+                height: 36px !important;
+                font-size: 0.9rem !important;
+            }
+        }
+
+        /* ===== Footer readability fix on tablet/mobile =====
+           On small screens the columns stack full-width right on top of
+           the bed photo with no side padding to fall back on, so the
+           lighter 0.55 mask (fine on desktop, where columns are narrower
+           and surrounded by more image) makes text hard to read here.
+           Bump the mask back up + add a soft dark gradient behind the
+           text block so the photo still peeks through at the edges. */
+        @media (max-width: 991px) {
+            #footer .hero-mask {
+                opacity: 0.45 !important;
+            }
+            #footer .hero-content {
+                background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.4) 100%);
+            }
+        }
+        @media (max-width: 576px) {
+            #footer .hero-mask {
+                opacity: 0.5 !important;
+            }
+        }
+
+        /* ===== Navbar logo — mobile/tablet: keep it from looking oversized
+           in the compact scrolled header ===== */
+        @media (max-width: 991px) {
+            #header .logo img {
+                max-height: 120px;
+            }
+        }
+        @media (max-width: 576px) {
+            #header .logo img {
+                max-height: 130px;
+            }
+        }
+    </style>
     
     {% block extra_css %}{% endblock %}
 </head>
@@ -408,7 +513,7 @@
         <footer id="footer" class="footer-dark">
             <div class="hero-wrap section pb-0">
                 <div class="hero-mask opacity-9 bg-black"></div>
-                <div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/footer-bg.jpg' %}');"></div>
+                <div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/villa.png' %}');"></div>
                 <div class="hero-content">
                     <div class="container">
                         <div class="row gy-4">

@@ -580,7 +580,7 @@ img {
 		}
 
 		// ===== Wheel / touch / key handlers =====
-		var WHEEL_STEP_THRESHOLD = 60;
+		var WHEEL_STEP_THRESHOLD = 130;
 		var wheelDeltaAccum = 0;
 
 		function handleWheel(e) {
@@ -613,7 +613,7 @@ img {
 		}
 
 		var touchStartY = null;
-		var TOUCH_STEP_PX = 25;
+		var TOUCH_STEP_PX = 55;
 		function handleTouchMove(e) {
 			if (sequenceDone) return;
 			// FIX: same modal guard as handleWheel above, for touch devices.
@@ -805,21 +805,21 @@ img {
                                 <!-- Call us End -->
                             </div>
                         </div>
-                        <div class="col-lg-6 text-center wow fadeInRight">
-                            <div class="position-relative d-inline-flex">
-                                <img class="img-fluid rounded-5" src="{% static 'tandu-main/images/about.jpg' %}" alt="">
+                        <div class="col-lg-6 wow fadeInRight">
+    <div class="position-relative about-img-wrap">
+        <img class="rounded-5 about-img" src="{% static 'tandu-main/room.png' %}" alt="">
 
-                                <div class="position-absolute top-0 end-0">
-                                    <!-- Circle Text -->
-                                  
-                                    <!-- Circle Text End -->
-                                </div>
-								
-								<div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
-                                    <div class="text-light text-start bg-dark bg-opacity-50 rounded-5 m-5 p-4 wow fadeInUp">A new kind of hospitality experience, crafted for business and leisure travellers alike.</div>
-                                </div>
-                            </div>
-                        </div>
+        <div class="position-absolute top-0 end-0">
+            <!-- Circle Text -->
+          
+            <!-- Circle Text End -->
+        </div>
+		
+		<div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
+            <div class="text-light text-start bg-dark bg-opacity-50 rounded-5 m-5 p-4 wow fadeInUp">A new kind of hospitality experience, crafted for business and leisure travellers alike.</div>
+        </div>
+    </div>
+</div>
                     </div>
                 </div>
             </section>
@@ -1051,6 +1051,21 @@ img {
 <!-- Rooms & Suites (DYNAMIC - STYLED LIKE IMAGE 2)
 ============================================= -->
 <style>
+    .about-img-wrap {
+    height: 100%;
+    min-height: 420px;
+}
+.about-img-wrap .about-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+@media (max-width: 991px) {
+    .about-img-wrap {
+        min-height: 320px;
+    }
+}
 /* Smaller variant of the site-wide .btn-new pill so it fits neatly
    side-by-side inside a room card */
 .room-item .btn-new {
@@ -1336,7 +1351,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			============================================= -->
             <section class="hero-wrap section">
                 <div class="hero-mask opacity-5 bg-black"></div>
-                <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
+                <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/villa.png' %}');"></div>
                 <div class="hero-content">
                     <div class="container text-center">
                         <!-- Video Button -->
@@ -1420,52 +1435,52 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <!-- Our Experience	============================================= -->
             <section class="hero-wrap section">
-                <div class="hero-mask opacity-7 bg-black"></div>
-                <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/images/experience-bg.jpg' %}');"></div>
-                <div class="hero-content">
-                    <div class="container-xxl px-4">
-                        <div class="row g-5">
-                            <div class="col-lg-6 text-center wow fadeInLeft">
-                                <div class="position-relative d-inline-flex">
-                                    <img class="img-fluid rounded-5" src="{% static 'tandu-main/images/experience.jpg' %}" alt="">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 align-content-center wow fadeInRight">
-                                <!-- Heading -->
-                                <p><span class="text-3 text-light text-uppercase fw-600 rounded-pill border border-light border-opacity-25  px-3 py-1">Our Experience</span></p>
-                                <h2 class="heading-font-family text-white text-13 fw-600 lh-sm mb-4">Our Years of Experience Will <span class="text-primary">Serve the Best</span></h2>
-                                <!-- Heading End -->
-                                <p class="text-7 text-light fw-500 lh-sm">We have <span class="text-primary">10+ years</span> of experience & we have great memories</p>
-                                <p class="text-light mb-4">With years of experience in hospitality, The Mist is committed to delivering exceptional service to every guest. Backed by many years of industry expertise, we ensure a comfortable and memorable stay for all our guests. With extensive experience in hotel management, we provide reliable, high-quality service you can trust.</p>
+    <div class="hero-mask opacity-7 bg-black"></div>
+    <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/room.png' %}');"></div>
+    <div class="hero-content">
+        <div class="container-xxl px-4">
+            <div class="row g-5">
+            <div class="col-lg-6 wow fadeInLeft">
+    <div class="position-relative experience-img-wrap">
+        <img class="rounded-5 experience-img" src="{% static 'tandu-main/villa.png' %}" alt="">
+    </div>
+</div>
+                <div class="col-lg-6 align-content-center wow fadeInRight">
+                    <!-- Heading -->
+                    <p><span class="text-3 text-light text-uppercase fw-600 rounded-pill border border-light border-opacity-25  px-3 py-1">Our Experience</span></p>
+                    <h2 class="heading-font-family text-white text-13 fw-600 lh-sm mb-4">Our Years of Experience Will <span class="text-primary">Serve the Best</span></h2>
+                    <!-- Heading End -->
+                    <p class="text-7 text-light fw-500 lh-sm">We have <span class="text-primary">10+ years</span> of experience & we have great memories</p>
+                    <p class="text-light mb-4">With years of experience in hospitality, The Mist is committed to delivering exceptional service to every guest. Backed by many years of industry expertise, we ensure a comfortable and memorable stay for all our guests. With extensive experience in hotel management, we provide reliable, high-quality service you can trust.</p>
 
-                                <p class="mb-4">
-									<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:contact' %}">
-										<span class="btn-text"><span>Contact Us</span></span>
-										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-									</a>
-								</p>
+                    <p class="mb-4">
+                        <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:contact' %}">
+                            <span class="btn-text"><span>Contact Us</span></span>
+                            <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
+                    </p>
 
-                                <!-- Number -->
-								<div class="row g-4">
-                                    <div class="col-6 col-sm-4">
-                                        <h3 class="text-11 text-white fw-600 mb-0">95K+</h3>
-                                        <p class="text-light lh-sm mb-0">Happy Clients</p>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <h3 class="text-11 text-white fw-600 mb-0">800+</h3>
-                                        <p class="text-light lh-sm mb-0">Functions Arranged</p>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <h3 class="text-11 text-white fw-600 mb-0">32+</h3>
-                                        <p class="text-light lh-sm mb-0">Hotel Rooms</p>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Number -->
+                    <div class="row g-4">
+                        <div class="col-6 col-sm-4">
+                            <h3 class="text-11 text-white fw-600 mb-0">95K+</h3>
+                            <p class="text-light lh-sm mb-0">Happy Clients</p>
+                        </div>
+                        <div class="col-6 col-sm-4">
+                            <h3 class="text-11 text-white fw-600 mb-0">800+</h3>
+                            <p class="text-light lh-sm mb-0">Functions Arranged</p>
+                        </div>
+                        <div class="col-6 col-sm-4">
+                            <h3 class="text-11 text-white fw-600 mb-0">32+</h3>
+                            <p class="text-light lh-sm mb-0">Hotel Rooms</p>
                         </div>
                     </div>
                 </div>
-            </section>
-            <!-- Our Experience end -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Our Experience end -->
 
             <!-- Testimonial
 			============================================= -->
@@ -1619,6 +1634,26 @@ document.addEventListener('DOMContentLoaded', function () {
 			============================================= -->
             
 <style>
+.experience-img-wrap {
+    width: 100%;
+    height: 100%;
+    min-height: 480px;
+    overflow: hidden;
+    position: relative;
+    border-radius: var(--bs-border-radius-xl, 1.5rem);
+}
+.experience-img-wrap .experience-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+    display: block;
+}
+@media (max-width: 991px) {
+    .experience-img-wrap {
+        min-height: 320px;
+    }
+}
 /* ===== Repeatable scroll-reveal for all .wow sections on this page =====
    WOW.js only ever animates an element once. This replaces that behavior:
    elements fade in every time they scroll into view and reset (fade out)
