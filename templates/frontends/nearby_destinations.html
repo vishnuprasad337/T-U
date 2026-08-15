@@ -14,7 +14,7 @@
 				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
 				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
 					<div class="container text-center mt-5 pt-5 pb-2">
-						<h1 class="text-17 mb-4 wow fadeInUp">Nearby Destinations</h1>
+						<h1 class="text-17 mb-4 wow fadeInUp">Site Seeing</h1>
 						<ul class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay=".2s">
 							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
 							<li class="active">Nearby Destinations</li>
@@ -45,44 +45,52 @@
 				<div class="row g-4">
 					{% for destination in destinations %}
 					<div class="col-md-6 col-lg-4 wow fadeInUp">
-						<div class="destination-item">
+						<div class="destination-card">
 
-							<!-- Content -->
-							<div class="destination-item-body">
-								<h3 class="destination-item-title">{{ destination.name }}</h3>
+							<!-- Full-bleed photo -->
+							<a href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}" class="destination-card-media" aria-label="Explore {{ destination.name }}">
+								{% if destination.image %}
+									<img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+								{% else %}
+									<img src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}">
+								{% endif %}
+							</a>
 
-								<div class="destination-item-meta">
-									{% if destination.location %}
-									<span><i class="fa-solid fa-location-dot"></i>{{ destination.location }}</span>
-									{% endif %}
-									{% if destination.distance %}
-									<span><i class="fa-solid fa-route"></i>{{ destination.distance }}</span>
+							<!-- Book Now — floating badge on the image so the booking flow stays one tap away -->
+							<button type="button" class="destination-card-book js-open-booking-modal" data-destination-name="{{ destination.name }}" title="Book Now" aria-label="Book Now for {{ destination.name }}">
+								<i class="fa-solid fa-calendar-check"></i>
+							</button>
+
+							<!-- Overlay: name + button always visible. Description/meta reveal on hover (desktop) or tap (touch). -->
+							<div class="destination-card-overlay">
+
+								<h3 class="destination-card-title">{{ destination.name }}</h3>
+
+								<div class="destination-card-reveal">
+									{% if destination.description %}
+									<div class="destination-card-desc">{{ destination.description|safe|truncatewords_html:16 }}</div>
 									{% endif %}
 								</div>
 
-								<p class="destination-item-desc">{{ destination.description|safe|truncatewords_html:16 }}</p>
-							</div>
+								<div class="destination-card-footer">
+									<div class="destination-card-meta destination-card-reveal">
+										{% if destination.rating_average %}
+										<span><i class="fa-solid fa-star"></i>{{ destination.rating_average }}</span>
+										{% endif %}
+										{% if destination.location %}
+										<span><i class="fa-solid fa-location-dot"></i>{{ destination.location }}</span>
+										{% endif %}
+										{% if destination.distance %}
+										<span><i class="fa-solid fa-route"></i>{{ destination.distance }}</span>
+										{% endif %}
+									</div>
 
-							<!-- Image -->
-							<div class="destination-item-img">
-								<a class="destination-item-img-link" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
-									{% if destination.image %}
-										<img src="{{ destination.image.url }}" alt="{{ destination.name }}">
-									{% else %}
-										<img src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}">
-									{% endif %}
-								</a>
+									<a class="destination-card-cta" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
+										<span class="destination-card-cta-text">Explore</span>
+										<span class="destination-card-cta-icon"><i class="fa-solid fa-arrow-right"></i></span>
+									</a>
+								</div>
 
-								<!-- Explore — sits fully inside the image, top-left -->
-								<a class="destination-item-cta" href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}">
-									<span class="destination-item-cta-text">Explore</span>
-									<span class="destination-item-cta-icon"><i class="fa-solid fa-arrow-right"></i></span>
-								</a>
-
-								<!-- Book Now — floating badge on the image so the booking flow stays one tap away -->
-								<button type="button" class="destination-item-book js-open-booking-modal" data-destination-name="{{ destination.name }}" title="Book Now" aria-label="Book Now for {{ destination.name }}">
-									<i class="fa-solid fa-calendar-check"></i>
-								</button>
 							</div>
 
 						</div>
@@ -227,6 +235,7 @@
 			document.querySelectorAll('.js-open-booking-modal').forEach(function (trigger) {
 				trigger.addEventListener('click', function (e) {
 					e.preventDefault();
+					e.stopPropagation();
 					openModal(trigger.getAttribute('data-destination-name'));
 				});
 			});
@@ -680,152 +689,60 @@
 		}
 	}
 
-	/* ===== Destination Card — matches reference layout:
-	   title -> meta -> description -> pill CTA (overlapping image) -> image ===== */
-	.destination-item {
-		background: #fff;
-		border-radius: 28px;
-		padding: 22px 22px 0;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		box-shadow: 0 6px 28px rgba(0, 0, 0, 0.07);
-		transition: box-shadow 0.3s ease, transform 0.3s ease;
-		overflow: hidden;
-	}
-	.destination-item:hover {
-		box-shadow: 0 16px 38px rgba(0, 0, 0, 0.11);
-		transform: translateY(-4px);
-	}
-
-	.destination-item-body {
-		padding-bottom: 4px;
-	}
-
-	.destination-item-title {
-		font-family: 'Poppins', 'Segoe UI', sans-serif;
-		font-weight: 800;
-		font-size: 1.6rem;
-		text-transform: uppercase;
-		letter-spacing: 0.2px;
-		color: #1a1a1a;
-		margin-bottom: 12px;
-		line-height: 1.15;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-		min-height: calc(1.6rem * 1.15 * 2);
-	}
-	.destination-item-meta {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 8px;
-		margin-bottom: 14px;
-	}
-	.destination-item-meta span {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		font-size: 0.78rem;
-		font-weight: 600;
-		color: #495057;
-		background: #f4f4f6;
-		border-radius: 100px;
-		padding: 6px 12px;
-	}
-	.destination-item-meta i {
-		color: var(--bs-primary, #0d6efd);
-		font-size: 0.78rem;
-	}
-
-	.destination-item-desc {
-		color: #6c757d;
-		font-size: 0.92rem;
-		line-height: 1.6;
-		margin-bottom: 0;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
-
-	.destination-item-img {
+	/* =====================================================================
+	   Destination Card — full-bleed photo. By default only the NAME and
+	   the Explore button are visible; hovering (desktop) or tapping
+	   (touch) reveals the description + rating/location, matching the
+	   reference design.
+	   ===================================================================== */
+	.destination-card {
 		position: relative;
-		flex: 1;
-		min-height: 260px;
-		margin: 18px -22px -1px;
-		z-index: 1;
-	}
-	.destination-item-img-link {
-		display: block;
 		width: 100%;
-		height: 100%;
+		height: 600px;
+		border-radius: 28px;
 		overflow: hidden;
-		border-radius: 20px 20px 6px 6px;
+		background: #1a1a1a;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+		transition: box-shadow 0.35s ease, transform 0.35s ease;
 	}
-	.destination-item-img img {
+	.destination-card:hover {
+		box-shadow: 0 20px 44px rgba(0, 0, 0, 0.22);
+	}
+
+	.destination-card-media {
+		position: absolute;
+		inset: 0;
+		display: block;
+	}
+	.destination-card-media img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		transition: transform 0.5s ease;
+		transition: transform 0.6s ease;
 	}
-	.destination-item:hover .destination-item-img img {
+	.destination-card:hover .destination-card-media img {
 		transform: scale(1.06);
 	}
 
-	/* Explore — pill CTA positioned inside the image, top-left, so it
-	   always reads on top of the photo (no white card background peeking through) */
-	.destination-item-img a.destination-item-cta {
+	/* Gradient scrim: always present so the title stays legible on any photo,
+	   deepens slightly on reveal for extra contrast behind the description */
+	.destination-card::after {
+		content: '';
 		position: absolute;
-		top: 16px;
-		left: 16px;
-		z-index: 10;
-		display: inline-flex;
-		align-items: center;
-		gap: 12px;
-		background: #ffffff;
-		border-radius: 100px;
-		padding: 6px 6px 6px 20px;
-		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-		text-decoration: none;
-		transition: background 0.3s ease, gap 0.3s ease, box-shadow 0.3s ease;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+		pointer-events: none;
+		transition: background 0.35s ease;
+		z-index: 1;
 	}
-	.destination-item-img a.destination-item-cta:hover {
-		gap: 18px;
-		box-shadow: 0 10px 26px rgba(0, 0, 0, 0.32);
-	}
-	.destination-item-cta-text {
-		font-weight: 700;
-		font-size: 0.92rem;
-		color: #1a1a1a;
-		white-space: nowrap;
-		line-height: 1.4;
-	}
-	.destination-item-cta-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 38px;
-		height: 38px;
-		min-width: 38px;
-		border-radius: 50%;
-		background: #6b8e4e;
-		color: #fff;
-		font-size: 0.85rem;
-		flex-shrink: 0;
-		transition: background 0.3s ease, transform 0.3s ease;
-	}
-	.destination-item-cta:hover .destination-item-cta-icon {
-		background: #55703d;
-		transform: rotate(-45deg);
+	.destination-card.is-revealed::after,
+	.destination-card:hover::after {
+		background: linear-gradient(180deg, rgba(0,0,0,0.05) 20%, rgba(0,0,0,0.85) 100%);
 	}
 
-	/* Book Now — floating circular badge on the image, top-right.
-	   Solid (non-transparent) so it always stays legible over any photo. */
-	.destination-item-book {
+	/* Book Now — floating circular badge on the image, top-right */
+	.destination-card-book {
 		position: absolute;
 		top: 16px;
 		right: 16px;
@@ -844,32 +761,197 @@
 		box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 		transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 	}
-	.destination-item-book:hover {
+	.destination-card-book:hover {
 		background: #55703d;
 		transform: scale(1.08);
 	}
 
+	/* Overlay content sits above the gradient */
+	.destination-card-overlay {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 2;
+		padding: 16px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.destination-card-title {
+		font-family: 'Poppins', 'Segoe UI', sans-serif;
+		font-weight: 800;
+		font-size: 1.9rem;
+		color: #ffffff !important;
+		letter-spacing: 0.2px;
+		line-height: 1.2;
+		margin: 0 0 8px;
+		text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+	}
+
+	/* ===== Description reveal: line-clamp keeps clipping on whole lines,
+	   justify + hyphens make every line run flush to the card's edge ===== */
+
+	.destination-card-reveal {
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+	.destination-card:hover .destination-card-reveal,
+	.destination-card.is-revealed .destination-card-reveal {
+		opacity: 1;
+	}
+
+	div.destination-card-desc {
+		display: -webkit-box;
+		display: box;
+		-webkit-box-orient: vertical;
+		box-orient: vertical;
+		-webkit-line-clamp: 4;
+		line-clamp: 4;
+		overflow: hidden;
+		color: #ffffff !important;
+		font-size: 1.75rem;
+		line-height: 1.4;
+		margin: 0 0 10px;
+		text-align: justify;
+		text-justify: inter-word;
+		-webkit-hyphens: auto;
+		hyphens: auto;
+	}
+
+	/* Force every possible nested tag from the rich-text field onto the
+	   same baseline/line-height/alignment so lines stay evenly spaced and
+	   flush to the edge no matter what markup the CMS content contains */
+	.destination-card-desc,
+	.destination-card-desc * {
+		color: #ffffff !important;
+		background: transparent !important;
+		line-height: inherit !important;
+		font-size: inherit !important;
+		vertical-align: baseline !important;
+		text-align: inherit !important;
+	}
+	.destination-card-desc p,
+	.destination-card-desc span,
+	.destination-card-desc div,
+	.destination-card-desc strong,
+	.destination-card-desc em,
+	.destination-card-desc li,
+	.destination-card-desc ul,
+	.destination-card-desc ol {
+		margin: 0;
+		padding: 0;
+		display: inline;
+	}
+	.destination-card-desc br {
+		content: '';
+		display: block;
+		height: 0;
+	}
+
+	.destination-card-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.4s ease;
+	}
+	.destination-card:hover .destination-card-meta,
+	.destination-card.is-revealed .destination-card-meta {
+		max-height: 60px;
+		margin-bottom: 4px;
+	}
+	.destination-card-meta span {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 0.76rem;
+		font-weight: 600;
+		color: #fff;
+		background: rgba(255,255,255,0.16);
+		backdrop-filter: blur(4px);
+		border-radius: 100px;
+		padding: 5px 11px;
+		white-space: nowrap;
+	}
+	.destination-card-meta i {
+		color: #ffd166;
+		font-size: 0.76rem;
+	}
+
+	.destination-card-footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+	}
+
+	/* Explore — always visible pill CTA */
+	.destination-card-cta {
+		flex-shrink: 0;
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		background: #ffffff;
+		border-radius: 100px;
+		padding: 6px 6px 6px 18px;
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+		text-decoration: none;
+		transition: background 0.3s ease, gap 0.3s ease, box-shadow 0.3s ease;
+		margin-left: auto;
+	}
+	.destination-card-cta:hover {
+		gap: 15px;
+		box-shadow: 0 10px 26px rgba(0, 0, 0, 0.38);
+	}
+	.destination-card-cta-text {
+		font-weight: 700;
+		font-size: 0.88rem;
+		color: #1a1a1a;
+		white-space: nowrap;
+		line-height: 1.4;
+	}
+	.destination-card-cta-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 34px;
+		height: 34px;
+		min-width: 34px;
+		border-radius: 50%;
+		background: #6b8e4e;
+		color: #fff;
+		font-size: 0.8rem;
+		flex-shrink: 0;
+		transition: background 0.3s ease, transform 0.3s ease;
+	}
+	.destination-card-cta:hover .destination-card-cta-icon {
+		background: #55703d;
+		transform: rotate(-45deg);
+	}
+
 	@media (max-width: 576px) {
-		.destination-item {
-			padding: 18px 18px 0;
+		.destination-card {
+			height: 520px;
 			border-radius: 22px;
 		}
-		.destination-item-title {
-			font-size: 1.3rem;
+		.destination-card-title {
+			font-size: 1.5rem;
 		}
-		.destination-item-img {
-			height: 280px;
-			margin: 14px -18px -1px;
-			border-radius: 16px;
+		.destination-card-overlay {
+			padding: 16px;
 		}
-		.destination-item-img a.destination-item-cta {
+		.destination-card-book {
+			width: 40px;
+			height: 40px;
 			top: 12px;
-			left: 12px;
-			padding: 5px 5px 5px 16px;
+			right: 12px;
 		}
-		.destination-item-cta-icon {
-			width: 34px;
-			height: 34px;
+		div.destination-card-desc {
+			font-size: 1.45rem;
+			-webkit-line-clamp: 3;
+			line-clamp: 3;
 		}
 	}
 
@@ -911,30 +993,59 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	var wowEls = document.querySelectorAll('.wow');
-	if (!wowEls.length) return;
+	if (wowEls.length) {
+		if (!('IntersectionObserver' in window)) {
+			wowEls.forEach(function (el) { el.classList.add('wow-visible'); });
+		} else {
+			var wowObserver = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					var el = entry.target;
+					var delay = parseFloat(el.getAttribute('data-wow-delay') || '0') * 1000;
+					if (entry.isIntersecting) {
+						if (delay) {
+							setTimeout(function () { el.classList.add('wow-visible'); }, delay);
+						} else {
+							el.classList.add('wow-visible');
+						}
+					} else {
+						el.classList.remove('wow-visible');
+					}
+				});
+			}, { threshold: 0.15 });
 
-	if (!('IntersectionObserver' in window)) {
-		wowEls.forEach(function (el) { el.classList.add('wow-visible'); });
-		return;
+			wowEls.forEach(function (el) { wowObserver.observe(el); });
+		}
 	}
 
-	var observer = new IntersectionObserver(function (entries) {
-		entries.forEach(function (entry) {
-			var el = entry.target;
-			var delay = parseFloat(el.getAttribute('data-wow-delay') || '0') * 1000;
-			if (entry.isIntersecting) {
-				if (delay) {
-					setTimeout(function () { el.classList.add('wow-visible'); }, delay);
-				} else {
-					el.classList.add('wow-visible');
-				}
-			} else {
-				el.classList.remove('wow-visible');
-			}
-		});
-	}, { threshold: 0.15 });
+	// ===== Destination card: tap-to-reveal on touch devices =====
+	// Desktop gets the reveal via CSS :hover. Touch devices don't have
+	// hover, so the first tap on a card reveals the description/meta;
+	// tapping the Explore link or Book button still works immediately
+	// (they stop propagation so they don't just toggle the reveal).
+	var isTouchDevice = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-	wowEls.forEach(function (el) { observer.observe(el); });
+	if (isTouchDevice) {
+		document.querySelectorAll('.destination-card').forEach(function (card) {
+			card.addEventListener('click', function (e) {
+				var isCta = e.target.closest('.destination-card-cta');
+				var isBook = e.target.closest('.destination-card-book');
+
+				if (isBook) {
+					return; // handled by its own listener (opens booking modal)
+				}
+
+				if (!card.classList.contains('is-revealed')) {
+					// First tap: reveal info instead of navigating away
+					if (isCta) e.preventDefault();
+					document.querySelectorAll('.destination-card.is-revealed').forEach(function (other) {
+						if (other !== card) other.classList.remove('is-revealed');
+					});
+					card.classList.add('is-revealed');
+				}
+				// Second tap on Explore (already revealed) navigates normally.
+			});
+		});
+	}
 });
 </script>
 {% endblock %}

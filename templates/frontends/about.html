@@ -526,7 +526,8 @@
 </section>
 <!-- Our Experience end -->
             <!-- Our Experience end -->
-           <!-- Testimonial ============================================= -->
+           <!-- Testimonial
+============================================= -->
 <section class="section">
     <div class="container">
         <!-- Heading -->
@@ -535,40 +536,104 @@
             <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">What Our <span class="text-primary">Client Says <br class="d-none d-md-block">About</span> Hotel The Mist</h2>
         </div>
         <!-- Heading End -->
-        
+
+        <style>
+            .testimonial-card {
+                background: #fff;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 15px 35px rgba(0,0,0,.08);
+                position: relative;
+            }
+            .testimonial-card .quote-top {
+                padding: 2.5rem 2rem 5.5rem 2rem;
+                position: relative;
+                min-height: 180px;
+            }
+            .testimonial-card .quote-mark {
+                position: absolute;
+                right: 20px;
+                top: 55%;
+                font-size: 4rem;
+                font-family: Georgia, serif;
+                color: rgba(0,0,0,.08);
+                line-height: 1;
+            }
+            .testimonial-card .client-band {
+                position: relative;
+                padding: 60px 1.5rem 1.5rem 1.5rem;
+                text-align: center;
+                color: #fff;
+            }
+            .testimonial-card .client-avatar {
+                width: 110px;
+                height: 110px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 6px solid #fff;
+                position: absolute;
+                top: -55px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #fff;
+                box-shadow: 0 6px 18px rgba(0,0,0,.25);
+            }
+            .testimonial-card .client-avatar-fallback {
+                width: 110px;
+                height: 110px;
+                border-radius: 50%;
+                border: 6px solid #fff;
+                position: absolute;
+                top: -55px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #eee;
+                color: #999;
+                font-size: 2rem;
+                box-shadow: 0 6px 18px rgba(0,0,0,.25);
+            }
+            /* Olive -> Green (used on all cards) */
+            .band-olive-green {
+                background: linear-gradient(135deg, #6b7a2a 0%, #4c7a2e 50%, #1f9d55 100%);
+            }
+        </style>
+
         <div class="swiper wow fadeInUp" data-loop="true" data-autoplay="true" data-margin="30" data-items-xs="1" data-items-sm="1" data-items-md="1" data-items-lg="2">
             <div class="swiper-wrapper">
                 {% if testimonials %}
                     {% for testimonial in testimonials %}
                     <div class="swiper-slide">
-                        <div class="bg-white rounded-5 p-5">
-                            <!-- Star Rating -->
-                            <div class="mb-3">
-                                {% for i in "12345" %}
-                                    {% if i|add:"0" <= testimonial.rating %}
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                    {% else %}
-                                        <i class="fa-regular fa-star text-warning"></i>
-                                    {% endif %}
-                                {% endfor %}
+                        <div class="testimonial-card">
+                            <!-- Quote Section -->
+                            <div class="quote-top">
+                                <!-- Star Rating -->
+                                <div class="mb-3">
+                                    {% for i in "12345" %}
+                                        {% if i|add:"0" <= testimonial.rating %}
+                                            <i class="fa-solid fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="fa-regular fa-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <p class="lh-lg mb-0">{{ testimonial.review|safe }}</p>
+                                <span class="quote-mark">&rdquo;</span>
                             </div>
-                            
-                            <!-- Review Text -->
-                            <p class="lh-lg">"{{ testimonial.review }}"</p>
-                            
-                            <!-- Client Info -->
-                            <div class="d-flex align-items-center gap-3">
+
+                            <!-- Client Band -->
+                            <div class="client-band band-olive-green">
                                 {% if testimonial.image %}
-                                    <img class="rounded-circle w-auto" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                    <img class="client-avatar" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}">
                                 {% else %}
-                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <div class="client-avatar-fallback">
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                 {% endif %}
-                                <div>
-                                    <h3 class="text-4 fw-600 mb-1">{{ testimonial.name }}</h3>
-                                    <div class="text-3 fw-500 text-body-tertiary">{{ testimonial.created_at|date:"M d, Y" }}</div>
-                                </div>
+                                <h3 class="text-4 fw-600 mb-1 mt-2 text-white">{{ testimonial.name }}</h3>
+                                <div class="text-3 fw-500 text-white text-opacity-75">{{ testimonial.created_at|date:"M d, Y" }}</div>
                             </div>
                         </div>
                     </div>
@@ -590,9 +655,10 @@
         </div>
 
         <!-- View More Link -->
-       
+
     </div>
 </section>
+<!-- Testimonial end -->
 			
 			<!-- Call to Action
 			============================================= -->

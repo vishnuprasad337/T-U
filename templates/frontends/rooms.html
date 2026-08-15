@@ -25,296 +25,426 @@
 		</section>
 		<!-- Page Header end -->
 
-            <!-- Rooms & Suites
-			============================================= -->
-            <section class="section">
-                <div class="container">
-                    <div class="room-items-wrap">
+		<!-- Rooms & Suites
+		============================================= -->
+		<section class="section">
+			<div class="container">
+				<div class="room-items-wrap">
+					<div class="row g-5">
 						{% for room in rooms %}
-						<div class="room-item bg-white rounded-5 {% if not forloop.last %}mb-5{% endif %}">
-							<div class="row g-0">
-								{% if forloop.counter|divisibleby:2 %}
-								<div class="col-lg-6 align-content-center">
-									<!-- Rooms Details -->
-									<div class="p-4 m-2">
-										<h3 class="text-8 fw-600">{{ room.room_category|default:"Room" }}</h3>
-										<div class="text-body-secondary">{{ room.description|safe|truncatewords_html:25 }}</div>
-										<div class="row g-2 text-3 text-body-secondary mb-3">
+						<div class="col-lg-6 col-md-12 col-sm-12">
+							<!-- Room Card -->
+							<div class="room-card bg-white rounded-4 shadow-sm h-100 overflow-hidden transition-all hover-lift reveal-on-scroll reveal-up" style="transition-delay: {{ forloop.counter0|add:0 }}s;">
+								<!-- Image Container -->
+								<div class="room-card-img-wrapper position-relative overflow-hidden">
+									<a href="{% url 'tandj_app:room_detail_public' room.slug %}" class="d-block">
+										{% if room.main_image %}
+										<img class="img-fluid d-block room-card-img" src="{{ room.main_image.url }}" alt="{{ room.room_category }}" loading="lazy">
+										{% else %}
+										<img class="img-fluid d-block room-card-img" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ room.room_category }}" loading="lazy">
+										{% endif %}
+									</a>
+								</div>
+
+								<!-- Card Body -->
+								<div class="room-card-body p-4">
+									<!-- Room Name -->
+									<h3 class="text-6 fw-600 mb-2 room-title-clamp">{{ room.room_category|default:"Room" }}</h3>
+
+									<!-- Description (HTML stripped + entities decoded, then truncated as plain text so it never cuts mid-tag) -->
+									<p class="text-body-secondary mb-3 room-desc-text">{{ room.description|striptags|truncatewords:40|safe }}</p>
+
+									<!-- Features Row -->
+									{% if room.bedroom_beds or room.living_room_beds or room.rating_average %}
+									<div class="features-row mb-3 pb-3 border-bottom">
+										<div class="row g-2">
 											{% if room.bedroom_beds %}
-											<div class="col-6 col-xl-4 d-flex align-items-center">
-												<span class="text-primary text-5 me-2"><i class="fa-solid fa-bed"></i></span>
-												{{ room.bedroom_beds }}
+											<div class="col-6">
+												<div class="d-flex align-items-center text-3">
+													<span class="text-primary text-5 me-2"><i class="fa-solid fa-bed"></i></span>
+													<span class="text-body-secondary">{{ room.bedroom_beds }}</span>
+												</div>
 											</div>
 											{% endif %}
 											{% if room.living_room_beds %}
-											<div class="col-6 col-xl-4 d-flex align-items-center">
-												<span class="text-primary text-5 me-2"><i class="fa-solid fa-couch"></i></span>
-												{{ room.living_room_beds }}
+											<div class="col-6">
+												<div class="d-flex align-items-center text-3">
+													<span class="text-primary text-5 me-2"><i class="fa-solid fa-couch"></i></span>
+													<span class="text-body-secondary">{{ room.living_room_beds }}</span>
+												</div>
 											</div>
 											{% endif %}
 											{% if room.rating_average %}
-											<div class="col-6 col-xl-4 d-flex align-items-center">
-												<span class="text-primary text-5 me-2"><i class="fa-solid fa-star"></i></span>
-												{{ room.rating_average }} Rating
+											<div class="col-6">
+												<div class="d-flex align-items-center text-3">
+													<span class="text-warning text-5 me-2"><i class="fa-solid fa-star"></i></span>
+													<span class="text-body-secondary">{{ room.rating_average }}</span>
+												</div>
 											</div>
 											{% endif %}
 										</div>
-										<hr class="opacity-1">
-										<div class="d-flex align-items-center justify-content-between w-100 bottom-0 start-0">
-											<div class="text-7 fw-600 d-flex align-items-center gap-1">₹{{ room.price_per_night }} <span class="text-3 fw-500 text-body-tertiary text-uppercase">/ Per Night</span></div>
-											<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:room_detail_public' room.slug %}">
-												<span class="btn-text"><span>Details</span></span>
-												<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-											</a>
-										</div>
 									</div>
-								</div>
-								<div class="col-lg-6">
-									<!-- Image -->
-									<div class="room-item-img rounded-5">
-										<a href="{% url 'tandj_app:room_detail_public' room.slug %}">
-											{% if room.main_image %}
-											<img class="img-fluid d-block" src="{{ room.main_image.url }}" alt="{{ room.room_category }}">
-											{% else %}
-											<img class="img-fluid d-block" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ room.room_category }}">
-											{% endif %}
+									{% endif %}
+									{% if not room.bedroom_beds and not room.living_room_beds and not room.rating_average %}
+									<div class="no-features-spacer"></div>
+									{% endif %}
+
+									<!-- Details Button -->
+									<div class="room-card-btn-wrap">
+										<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:room_detail_public' room.slug %}">
+											<span class="btn-text"><span>View Details</span></span>
+											<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
 										</a>
 									</div>
 								</div>
-								{% else %}
-								<div class="col-lg-6">
-									<!-- Image -->
-									<div class="room-item-img rounded-5">
-										<a href="{% url 'tandj_app:room_detail_public' room.slug %}">
-											{% if room.main_image %}
-											<img class="img-fluid d-block" src="{{ room.main_image.url }}" alt="{{ room.room_category }}">
-											{% else %}
-											<img class="img-fluid d-block" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ room.room_category }}">
-											{% endif %}
-										</a>
-									</div>
-								</div>
-								<div class="col-lg-6 align-content-center">
-									<!-- Rooms Details -->
-									<div class="p-4 m-2">
-										<h3 class="text-8 fw-600">{{ room.room_category|default:"Room" }}</h3>
-										<div class="text-body-secondary">{{ room.description|safe|truncatewords_html:25 }}</div>
-										<div class="row g-2 text-3 text-body-secondary mb-3">
-											{% if room.bedroom_beds %}
-											<div class="col-6 col-xl-4 d-flex align-items-center">
-												<span class="text-primary text-5 me-2"><i class="fa-solid fa-bed"></i></span>
-												{{ room.bedroom_beds }}
-											</div>
-											{% endif %}
-											{% if room.living_room_beds %}
-											<div class="col-6 col-xl-4 d-flex align-items-center">
-												<span class="text-primary text-5 me-2"><i class="fa-solid fa-couch"></i></span>
-												{{ room.living_room_beds }}
-											</div>
-											{% endif %}
-											{% if room.rating_average %}
-											<div class="col-6 col-xl-4 d-flex align-items-center">
-												<span class="text-primary text-5 me-2"><i class="fa-solid fa-star"></i></span>
-												{{ room.rating_average }} Rating
-											</div>
-											{% endif %}
-										</div>
-										<hr class="opacity-1">
-										<div class="d-flex align-items-center justify-content-between w-100 bottom-0 start-0">
-											<div class="text-7 fw-600 d-flex align-items-center gap-1">₹{{ room.price_per_night }} <span class="text-3 fw-500 text-body-tertiary text-uppercase">/ Per Night</span></div>
-											<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:room_detail_public' room.slug %}">
-												<span class="btn-text"><span>Details</span></span>
-												<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-											</a>
-										</div>
-									</div>
-								</div>
-								{% endif %}
 							</div>
+							<!-- Room Card End -->
 						</div>
 						{% empty %}
-						<div class="text-center py-5">
-							<p class="text-body-secondary">No rooms available right now. Please check back soon.</p>
+						<div class="col-12">
+							<div class="text-center py-5">
+								<p class="text-body-secondary text-5">No rooms available right now. Please check back soon.</p>
+							</div>
 						</div>
 						{% endfor %}
-                    </div>
-                </div>
-            </section>
-            <!-- Rooms & Suites end -->
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Rooms & Suites end -->
 
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .page-header .hero-wrap {
-  min-height: 550px;
-}
-.room-items-wrap .room-item .row.g-0 {
-    align-items: stretch;
-}
-
-.room-items-wrap .room-item .room-item-img {
-    height: 100%;
-    min-height: 320px;
-}
-
-.room-items-wrap .room-item .room-item-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-/* ===== Room card — tablet & mobile ===== */
-@media (max-width: 991px) {
-	.room-items-wrap .room-item .p-4.m-2 {
-		padding: 1.25rem !important;
-		margin: 0.5rem !important;
-	}
-	.room-items-wrap .room-item h3.text-8 {
-		font-size: 1.5rem !important;
-		line-height: 1.25 !important;
-		margin-bottom: 0.5rem !important;
-	}
-	.room-items-wrap .room-item .text-body-secondary {
-		font-size: 0.9rem !important;
-		line-height: 1.5 !important;
-	}
-	.room-items-wrap .room-item .room-item-img {
-		min-height: 240px;
-	}
-}
-
-@media (max-width: 576px) {
-	.room-items-wrap .room-item .p-4.m-2 {
-		padding: 1rem !important;
-		margin: 0.35rem !important;
-	}
-	.room-items-wrap .room-item h3.text-8 {
-		font-size: 1.3rem !important;
-	}
-	.room-items-wrap .room-item .text-body-secondary {
-		font-size: 0.85rem !important;
+	.page-header .hero-wrap {
+		min-height: 550px;
 	}
 
-	/* Feature list: stop mid-word truncation, let it wrap on its own line */
-	.room-items-wrap .room-item .row.g-2.text-3 {
-		row-gap: 0.5rem !important;
+	/* ===== Room Card Grid Layout ===== */
+	.room-items-wrap .row.g-4 {
+		margin: 0;
 	}
-	.room-items-wrap .room-item .row.g-2.text-3 .col-6 {
-		flex: 0 0 100% !important;
+
+	.room-card {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.room-card:hover {
+		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+		transform: translateY(-4px);
+	}
+
+	/* Image Container */
+	.room-card-img-wrapper {
+		position: relative;
+		width: 100%;
+		padding-bottom: 56.25%; /* 16:9 aspect ratio - larger image */
+		background-color: #f5f5f5;
+	}
+
+	.room-card-img-wrapper img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.4s ease;
+	}
+
+	.room-card-img-wrapper a:hover img {
+		transform: scale(1.05);
+	}
+
+	/* Card Body */
+	.room-card-body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		padding: 2rem !important;
+	}
+
+	.room-card-body h3 {
+		color: #1a1a1a;
+		line-height: 1.3;
+		font-size: 2.1rem !important;
+		margin-bottom: 1rem !important;
+		font-weight: 700;
+	}
+
+	/* Title clamp: keeps long room names from stretching/breaking card layout */
+	.room-title-clamp {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		min-height: 2.6em;
+	}
+
+	.room-card-body p {
+		flex: 1;
+		width: 100% !important;
 		max-width: 100% !important;
-		font-size: 0.85rem !important;
-		white-space: normal !important;
-	}
-
-	/* Price + Details row: stack instead of squeezing side by side */
-	.room-items-wrap .room-item .d-flex.align-items-center.justify-content-between.w-100 {
-		flex-direction: column !important;
-		align-items: flex-start !important;
-		gap: 14px !important;
-	}
-	.room-items-wrap .room-item .text-7.fw-600 {
+		margin-bottom: 1.5rem !important;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
 		font-size: 1.4rem !important;
+		line-height: 1.5 !important;
+		color: #666 !important;
 	}
-	.room-items-wrap .room-item .btn-new {
-		align-self: stretch;
+
+	/* Features Row */
+	.features-row {
+		margin-top: auto;
+		padding-top: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.features-row .d-flex {
+		gap: 1rem;
+		font-size: 1rem;
+		padding: 0.5rem 0;
+	}
+
+	.features-row .text-primary {
+		color: #ff6b6b !important;
+	}
+
+	.features-row .text-warning {
+		color: #ffc107 !important;
+	}
+
+	.features-row .text-5 {
+		font-size: 1.5rem !important;
+	}
+
+	.no-features-spacer {
+		margin-top: auto;
+	}
+
+	/* Button Styling */
+	.room-card-btn-wrap {
+		display: flex;
 		justify-content: center;
 	}
-	.room-items-wrap .room-item .room-item-img {
-		min-height: 200px;
-	}
-}
-@media (max-width: 576px) {
-	.room-items-wrap .room-item .d-flex.align-items-center.justify-content-between.w-100 {
-		flex-direction: column !important;
-		align-items: flex-start !important;
-		gap: 12px !important;
-	}
-	.room-items-wrap .room-item .btn-new {
-		align-self: flex-start !important;
+
+	.room-card .btn-new {
+		margin-top: 0;
+		width: 40%;
+		padding: 10px 18px;
+		font-weight: 600;
+		font-size: 0.9rem;
+		text-align: center;
 		justify-content: center;
-		padding: 10px 20px !important;
-		font-size: 0.85rem !important;
+		transition: all 0.3s ease;
+		border-radius: 50px !important;
 	}
-	.room-items-wrap .room-item .btn-new .btn-icon {
-		width: 28px !important;
-		height: 28px !important;
-		font-size: 0.7rem !important;
+
+	.room-card .btn-new:hover {
+		transform: translateX(4px);
 	}
-}
 
-/* ===== Repeatable scroll-fade animation =====
-   Unlike WOW.js's `wow fadeInUp` (which only ever plays once per page
-   load), elements tagged `.reveal-on-scroll` here fade/slide/unblur in
-   every time they cross into the viewport — scrolling back up and
-   passing them again replays the animation too. */
-.reveal-on-scroll {
-    opacity: 0;
-    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform, filter;
-    filter: blur(6px);
-}
-.reveal-on-scroll.reveal-up {
-    transform: translateY(60px) scale(0.96);
-}
-.reveal-on-scroll.is-visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-}
+	.room-card .btn-new .btn-text {
+		font-weight: 600;
+	}
 
-@media (prefers-reduced-motion: reduce) {
-    .reveal-on-scroll {
-        opacity: 1 !important;
-        transform: none !important;
-        filter: none !important;
-        transition: none !important;
-    }
-}
+	/* ===== Room card — tablet ===== */
+	@media (max-width: 991px) {
+		.room-card-body {
+			padding: 1.75rem !important;
+		}
+
+		.room-card-body h3 {
+			font-size: 1.75rem !important;
+			margin-bottom: 0.875rem !important;
+		}
+
+		.room-card-body p {
+			font-size: 1.2rem !important;
+		}
+
+		.room-card-img-wrapper {
+			padding-bottom: 60%;
+		}
+
+		.room-card .btn-new {
+			width: 40%;
+			padding: 8px 14px !important;
+			font-size: 0.8rem !important;
+		}
+	}
+
+	/* ===== Room card — mobile ===== */
+	@media (max-width: 576px) {
+		.room-card-body {
+			padding: 1.5rem !important;
+		}
+
+		.room-card-body h3 {
+			font-size: 1.55rem !important;
+			margin-bottom: 0.75rem !important;
+		}
+
+		.room-card-body p {
+			font-size: 1.05rem !important;
+			line-height: 1.4;
+			-webkit-line-clamp: 2;
+		}
+
+		.room-card-img-wrapper {
+			padding-bottom: 70%;
+		}
+
+		.features-row {
+			padding-top: 1rem;
+			margin-bottom: 1rem;
+		}
+
+		.features-row .d-flex {
+			font-size: 0.9rem !important;
+		}
+
+		.features-row .d-flex .text-5 {
+			font-size: 1.25rem !important;
+		}
+
+		.room-card .btn-new {
+			width: 50%;
+			padding: 6px 12px !important;
+			font-size: 0.75rem !important;
+		}
+
+		.room-card .btn-icon {
+			width: 26px !important;
+			height: 26px !important;
+		}
+	}
+
+	/* ===== Repeatable scroll-fade animation ===== */
+	.reveal-on-scroll {
+		opacity: 0;
+		transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+					transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+					filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+		will-change: opacity, transform, filter;
+		filter: blur(10px);
+	}
+
+	.reveal-on-scroll.reveal-up {
+		transform: translateY(90px) scale(0.92);
+	}
+
+	.reveal-on-scroll.is-visible {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		filter: blur(0);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.reveal-on-scroll {
+			opacity: 1 !important;
+			transform: none !important;
+			filter: none !important;
+			transition: none !important;
+		}
+	}
+
+	/* Line clamp helper */
+	.line-clamp-2 {
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+
+	/* Hover lift effect */
+	.hover-lift {
+		transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+					transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+	}
 </style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-/* ===== Repeatable scroll-fade animation =====
-   WOW.js (used elsewhere on the site via the `wow` class) only ever plays
-   its fade-in once per page load. On this page we swap that out for an
-   IntersectionObserver-driven version so each room card's image and
-   details fade in individually every time they scroll into view —
-   including scrolling back up past them and down again. */
-document.addEventListener('DOMContentLoaded', function () {
-    var targets = [];
+	/* ===== Repeatable scroll-fade animation ===== */
+	document.addEventListener('DOMContentLoaded', function () {
+		var targets = [];
 
-    // Each room card's two halves (image + details) fade/slide in
-    // individually, staggered against each other, instead of the whole
-    // card moving as one block.
-    document.querySelectorAll('.room-items-wrap .room-item').forEach(function (item, cardIndex) {
-        var cols = item.querySelectorAll(':scope > .row.g-0 > [class*="col-"]');
-        cols.forEach(function (col, colIndex) {
-            col.classList.add('reveal-on-scroll', 'reveal-up');
-            col.style.transitionDelay = (Math.min(cardIndex, 4) * 0.12 + colIndex * 0.15) + 's';
-            targets.push(col);
-        });
-    });
+		// Each room card fades/slides in individually
+		document.querySelectorAll('.room-items-wrap .room-card').forEach(function (card, cardIndex) {
+			card.classList.add('reveal-on-scroll', 'reveal-up');
+			card.dataset.enterDelay = (cardIndex % 2) * 0.15;
+			targets.push(card);
+		});
 
-    if (!('IntersectionObserver' in window) || targets.length === 0) {
-        // Fallback: just show everything if the browser can't observe.
-        targets.forEach(function (el) { el.classList.add('is-visible'); });
-        return;
-    }
+		if (!('IntersectionObserver' in window) || targets.length === 0) {
+			// Fallback: just show everything if the browser can't observe
+			targets.forEach(function (el) { el.classList.add('is-visible'); });
+			return;
+		}
 
-    var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            entry.target.classList.toggle('is-visible', entry.isIntersecting);
-        });
-    }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -8% 0px'
-    });
+		var observer = new IntersectionObserver(function (entries) {
+			entries.forEach(function (entry) {
+				var el = entry.target;
+				if (entry.isIntersecting) {
+					el.style.transitionDelay = el.dataset.enterDelay + 's';
+					el.classList.add('is-visible');
+				} else {
+					el.style.transitionDelay = '0s';
+					el.classList.remove('is-visible');
+				}
+			});
+		}, {
+			threshold: 0.2,
+			rootMargin: '0px 0px -15% 0px'
+		});
 
-    targets.forEach(function (el) { observer.observe(el); });
-});
+		targets.forEach(function (el) { observer.observe(el); });
+	});
+
+	/* ===== Image Modal/Lightbox on Click ===== */
+	document.addEventListener('DOMContentLoaded', function () {
+		// Create modal HTML if not exists
+		if (!document.getElementById('roomImageModal')) {
+			var modalHTML = `
+				<div class="modal fade" id="roomImageModal" tabindex="-1">
+					<div class="modal-dialog modal-lg modal-dialog-centered">
+						<div class="modal-content bg-transparent border-0">
+							<button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"></button>
+							<div class="modal-body p-0">
+								<img id="modalRoomImage" src="" alt="Room Image" class="img-fluid rounded-4 w-100">
+							</div>
+						</div>
+					</div>
+				</div>
+			`;
+			document.body.insertAdjacentHTML('beforeend', modalHTML);
+		}
+
+		// Add click event to all room card images
+		document.querySelectorAll('.room-card-img-wrapper a').forEach(function (link) {
+			link.addEventListener('click', function (e) {
+				e.preventDefault();
+				var img = this.querySelector('img');
+				var imgSrc = img.src;
+				var imgAlt = img.alt;
+
+				document.getElementById('modalRoomImage').src = imgSrc;
+				document.getElementById('modalRoomImage').alt = imgAlt;
+
+				var modal = new bootstrap.Modal(document.getElementById('roomImageModal'));
+				modal.show();
+			});
+		});
+	});
 </script>
 {% endblock %}

@@ -1,49 +1,45 @@
 {% extends "frontends/base.html" %}
 {% load static %}
 
-{% block title %}The Mist - Luxury Hotel HTML Template{% endblock %}
-{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+{% block title %}MaxiMunnar T&U Leisure Hotel - Luxury Hotel HTML Template{% endblock %}
+{% block meta_description %}MaxiMunnar T&U Leisure Hotel is a luxury hotel nestled amidst the tea hills of Munnar, Kerala.{% endblock %}
 
 {% block content %}
 
-			<!-- Intro / Hero Frame Sequence
+			<!-- Intro / Hero Video
 			============================================= -->
-			<section class="hero-wrap hero-frames-section" id="heroFramesSection">
-                <svg width="0" height="0" style="position:absolute;">
-        <filter id="heroFrameSharpen">
-            <feConvolveMatrix order="3" preserveAlpha="true"
-                kernelMatrix="0 -1 0 -1 5 -1 0 -1 0" />
-        </filter>
-    </svg>
-    <canvas id="heroCanvas" class="hero-frames-canvas"></canvas>
+			<section class="hero-wrap hero-video-section" id="heroFramesSection">
+    <video class="hero-frames-video" id="heroVideo" autoplay muted loop playsinline preload="auto">
+        <source src="{% static 'tandu-main/hero.mp4' %}" type="video/mp4">
+    </video>
     <div class="hero-mask bg-dark opacity-2"></div>
-    <img src="{% static 'tandu-main/tanduwhite.png' %}" alt="The Mist" id="heroFramesLogo" class="hero-frames-logo">
+    <img src="{% static 'tandu-main/tanduwhite.png' %}" alt="MaxiMunnar T&U Leisure Hotel" id="heroFramesLogo" class="hero-frames-logo">
 
     <div class="hero-frames-content">
-        <div class="hero-frames-caption hero-frames-caption--left" data-frame-range="7-10">
+        <div class="hero-frames-caption hero-frames-caption--left" data-caption-index="0">
             <div class="hero-frames-caption-inner">
                 <span class="hero-caption-eyebrow">Welcome To</span>
-                <h2 class="heading-font-family hero-caption-heading">T&amp;U Leisure Hotel</h2>
+                <h2 class="heading-font-family hero-caption-heading">MaxiMunnar T&amp;U Leisure Hotel</h2>
                 <span class="hero-caption-divider"></span>
-                <p class="hero-caption-sub">Set among rolling green hills, T&amp;U Leisure Hotel welcomes you with warm hospitality, thoughtfully designed spaces, and a peaceful retreat away from the everyday rush.</p>
+                <p class="hero-caption-sub">Set among rolling green hills, MaxiMunnar T&amp;U Leisure Hotel welcomes you with warm hospitality, thoughtfully designed spaces, and a peaceful retreat away from the everyday rush.</p>
             </div>
         </div>
 
-        <div class="hero-frames-caption hero-frames-caption--right" data-frame-range="21-50">
+        <div class="hero-frames-caption hero-frames-caption--right" data-caption-index="1">
             <div class="hero-frames-caption-inner">
                 <span class="hero-caption-eyebrow">Our Rooms</span>
                 <h2 class="heading-font-family hero-caption-heading">Rest, Reimagined</h2>
                 <span class="hero-caption-divider"></span>
-                <p class="hero-caption-sub">Every room at T&amp;U Leisure Hotel is crafted for comfort — soft linens, warm lighting, and quiet interiors that turn a simple stay into a proper escape.</p>
+                <p class="hero-caption-sub">Every room at MaxiMunnar T&amp;U Leisure Hotel is crafted for comfort — soft linens, warm lighting, and quiet interiors that turn a simple stay into a proper escape.</p>
             </div>
         </div>
 
-        <div class="hero-frames-caption hero-frames-caption--left" data-frame-range="60-80">
+        <div class="hero-frames-caption hero-frames-caption--left" data-caption-index="2">
             <div class="hero-frames-caption-inner">
                 <span class="hero-caption-eyebrow">By Night</span>
                 <h2 class="heading-font-family hero-caption-heading">Unwind Under the Stars</h2>
                 <span class="hero-caption-divider"></span>
-                <p class="hero-caption-sub">As evening falls, T&amp;U Leisure Hotel glows softly against the night sky — the perfect setting to relax, reflect, and slow down.</p>
+                <p class="hero-caption-sub">As evening falls, MaxiMunnar T&amp;U Leisure Hotel glows softly against the night sky — the perfect setting to relax, reflect, and slow down.</p>
             </div>
         </div>
     </div>
@@ -53,7 +49,7 @@
         <i class="fa-solid fa-chevron-down text-light"></i>
     </div>
 </section>
-			<!-- Intro / Hero Frame Sequence end -->
+			<!-- Intro / Hero Video end -->
 <style>
 /* ===== Prevent page-wide horizontal overflow ===== */
 html, body {
@@ -106,8 +102,7 @@ body::-webkit-scrollbar {
 
 /* ===== FIX: restore a visible, working scrollbar inside the Book Now
    modal body. The global "* { scrollbar: none }" rule above was hiding
-   the scrollbar here too, which — combined with the hero wheel-lock —
-   made the modal look like it couldn't scroll at all. ===== */
+   the scrollbar here too. ===== */
 #bookNowModal .modal-body {
 	scrollbar-width: thin !important;
 	-ms-overflow-style: auto !important;
@@ -131,24 +126,31 @@ img {
 	max-width: 100%;
 	height: auto;
 }
-.hero-frames-section {
+
+/* ===== Hero video section =====
+   Replaces the old frame-by-frame canvas sequence. The video plays on
+   loop as a normal background — it is NOT tied to scroll position and
+   does not lock page scrolling. The page scrolls completely normally
+   over/past this section. */
+.hero-video-section {
 	position: relative;
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
 	background: #000;
 }
-.hero-frames-canvas {
+.hero-frames-video {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
+	object-fit: cover;
+	object-position: center;
 	z-index: 0;
 	display: block;
-	filter: url(#heroFrameSharpen) contrast(1.08) saturate(1.08) brightness(1.01);
 }
-.hero-frames-section .hero-mask {
+.hero-video-section .hero-mask {
 	z-index: 1;
 }
 
@@ -276,6 +278,7 @@ img {
 	z-index: 2;
 	text-align: center;
 	animation: heroScrollBounce 1.8s infinite;
+	transition: opacity 0.4s ease;
 }
 @keyframes heroScrollBounce {
 	0%, 100% { transform: translate(-50%, 0); }
@@ -442,111 +445,21 @@ img {
 </style>
 			<script>
 	document.addEventListener('DOMContentLoaded', function () {
-		// ---- CONFIG ----
-		var FRAME_NUMBERS = [
-			7, 8, 9, 10,
-			21, 29, 30,
-			42, 43, 44, 45, 46, 47, 48, 49, 50,
-			60, 61,
-			76,77,79, 80
-		];
-		var FRAME_PAD = 3;
-		var FRAME_BASE = "{% static 'tandu-main/images/frame_' %}";
-		var FRAME_EXT = '.jpg';
+		// ===== Hero caption cycler =====
+		// Replaces the old frame-range-based caption switching. The
+		// captions now just rotate on a timer, independent of scroll —
+		// the hero video plays continuously in the background and the
+		// page scrolls completely normally.
+		var captions = document.querySelectorAll('.hero-frames-content [data-caption-index]');
+		var currentCaptionIndex = 0;
+		var captionInterval = null;
+		var CAPTION_DURATION = 5000; // ms each caption stays on screen
 
-		var heroSection = document.getElementById('heroFramesSection');
-		var canvas = document.getElementById('heroCanvas');
-		var ctx = canvas.getContext('2d');
-		var scrollHint = document.querySelector('.hero-video-scroll-hint');
-		var contentEls = document.querySelectorAll('.hero-frames-content [data-frame-range]');
-
-		var FRAME_COUNT = FRAME_NUMBERS.length;
-		var images = [];
-		var loadedCount = 0;
-		var currentIndex = 0;
-		var sequenceDone = false;   // true = sequence finished, page scroll unlocked
-		var sequenceArmed = false;  // true = currently mid-sequence (locked & listening)
-		var ticking = false;
-		var listenersAttached = false;
-		var suppressNextRearm = false; // guards against re-triggering right after unlocking
-
-		function frameUrl(frameNumber) {
-			var num = String(frameNumber);
-			while (num.length < FRAME_PAD) num = '0' + num;
-			return FRAME_BASE + num + FRAME_EXT;
-		}
-
-		function preload() {
-			for (var i = 0; i < FRAME_COUNT; i++) {
-				var img = new Image();
-				img.src = frameUrl(FRAME_NUMBERS[i]);
-				img.onload = function () {
-					loadedCount++;
-					if (loadedCount === 1) drawFrame(images[0]);
-				};
-				images.push(img);
-			}
-		}
-
-		function resizeCanvas() {
-			var dpr = window.devicePixelRatio || 1;
-			var cssW = window.innerWidth;
-			var cssH = window.innerHeight;
-			canvas.width = Math.round(cssW * dpr);
-			canvas.height = Math.round(cssH * dpr);
-			canvas.style.width = cssW + 'px';
-			canvas.style.height = cssH + 'px';
-			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-			drawFrame(images[Math.round(currentIndex)]);
-			updateHeroContent(Math.round(currentIndex));
-		}
-
-		function drawFrame(img) {
-			if (!img || !img.complete || !img.naturalWidth) return;
-			var cw = window.innerWidth, ch = window.innerHeight;
-			var canvasRatio = cw / ch;
-			var imgRatio = img.naturalWidth / img.naturalHeight;
-			var dw, dh, ox, oy;
-			if (imgRatio > canvasRatio) {
-				dh = ch;
-				dw = img.naturalWidth * (ch / img.naturalHeight);
-				ox = (cw - dw) / 2; oy = 0;
-			} else {
-				dw = cw;
-				dh = img.naturalHeight * (cw / img.naturalWidth);
-				ox = 0; oy = (ch - dh) / 2;
-			}
-			ctx.clearRect(0, 0, cw, ch);
-			ctx.imageSmoothingEnabled = true;
-			ctx.imageSmoothingQuality = 'high';
-			ctx.drawImage(img, ox, oy, dw, dh);
-		}
-
-		function renderCurrent() {
-			var idx = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(currentIndex)));
-			drawFrame(images[idx]);
-			updateHeroContent(idx);
-			ticking = false;
-		}
-
-		var activeContentBlock = null;
-		function updateHeroContent(idx) {
-			if (!contentEls.length) return;
-			var frameNumber = FRAME_NUMBERS[idx];
-			var target = null;
-			contentEls.forEach(function (el) {
-				var range = el.getAttribute('data-frame-range').split('-');
-				var min = parseInt(range[0], 10);
-				var max = parseInt(range[1], 10);
-				if (frameNumber >= min && frameNumber <= max) target = el;
-			});
-			if (target === activeContentBlock) return;
-
-			contentEls.forEach(function (el) { el.classList.remove('hero-content-active'); });
-			activeContentBlock = target;
+		function showCaption(idx) {
+			captions.forEach(function (el) { el.classList.remove('hero-content-active'); });
+			var target = captions[idx];
 			if (!target) return;
-
-			void target.offsetWidth;
+			void target.offsetWidth; // reflow to restart transition
 			requestAnimationFrame(function () {
 				requestAnimationFrame(function () {
 					target.classList.add('hero-content-active');
@@ -554,218 +467,53 @@ img {
 			});
 		}
 
-		function requestRender() {
-			if (!ticking) {
-				ticking = true;
-				requestAnimationFrame(renderCurrent);
+		function startCaptionCycle() {
+			if (!captions.length || captionInterval) return;
+			showCaption(currentCaptionIndex);
+			captionInterval = setInterval(function () {
+				currentCaptionIndex = (currentCaptionIndex + 1) % captions.length;
+				showCaption(currentCaptionIndex);
+			}, CAPTION_DURATION);
+		}
+
+		function stopCaptionCycle() {
+			if (captionInterval) {
+				clearInterval(captionInterval);
+				captionInterval = null;
 			}
 		}
 
-		var lockScrollY = 0;
-		function lockScroll() {
-			lockScrollY = window.scrollY || window.pageYOffset || 0;
-			document.body.style.position = 'fixed';
-			document.body.style.top = (-lockScrollY) + 'px';
-			document.body.style.left = '0';
-			document.body.style.right = '0';
-			document.body.style.width = '100%';
+		startCaptionCycle();
+
+		// ===== Scroll hint fade =====
+		// Simple fade of the "Scroll Down" hint once the hero section is
+		// mostly out of view — purely visual, no scroll locking.
+		var heroSection = document.getElementById('heroFramesSection');
+		var scrollHint = document.querySelector('.hero-video-scroll-hint');
+
+		if (heroSection && 'IntersectionObserver' in window) {
+			var heroObserver = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					if (scrollHint) {
+						scrollHint.style.opacity = entry.intersectionRatio > 0.6 ? '1' : '0';
+					}
+					// Pause/resume the caption cycle (and the video, where
+					// supported) when the hero scrolls out of view, so
+					// nothing keeps animating off-screen.
+					var video = document.getElementById('heroVideo');
+					if (entry.isIntersecting) {
+						startCaptionCycle();
+						if (video && video.paused) {
+							video.play().catch(function () {});
+						}
+					} else {
+						stopCaptionCycle();
+						if (video) video.pause();
+					}
+				});
+			}, { threshold: [0, 0.6, 1] });
+			heroObserver.observe(heroSection);
 		}
-		function releaseScrollLockStyles() {
-			document.body.style.position = '';
-			document.body.style.top = '';
-			document.body.style.left = '';
-			document.body.style.right = '';
-			document.body.style.width = '';
-			window.scrollTo(0, lockScrollY);
-		}
-
-		// ===== Wheel / touch / key handlers =====
-		var WHEEL_STEP_THRESHOLD = 130;
-		var wheelDeltaAccum = 0;
-
-		function handleWheel(e) {
-			if (sequenceDone) return;
-			// FIX: don't hijack scroll while a Bootstrap modal (e.g. Book Now)
-			// is open — otherwise the modal body can't be scrolled at all.
-			if (document.body.classList.contains('modal-open')) return;
-			e.preventDefault();
-
-			wheelDeltaAccum += e.deltaY;
-			if (Math.abs(wheelDeltaAccum) < WHEEL_STEP_THRESHOLD) return;
-
-			var dir = wheelDeltaAccum > 0 ? 1 : -1;
-			wheelDeltaAccum = wheelDeltaAccum - (dir * WHEEL_STEP_THRESHOLD);
-
-			currentIndex += dir;
-
-			if (currentIndex >= FRAME_COUNT - 1) {
-				currentIndex = FRAME_COUNT - 1;
-				requestRender();
-				unlockScroll(e.deltaY);
-				return;
-			}
-			if (currentIndex < 0) {
-				currentIndex = 0;
-				requestRender();
-				return;
-			}
-			requestRender();
-		}
-
-		var touchStartY = null;
-		var TOUCH_STEP_PX = 55;
-		function handleTouchMove(e) {
-			if (sequenceDone) return;
-			// FIX: same modal guard as handleWheel above, for touch devices.
-			if (document.body.classList.contains('modal-open')) return;
-			e.preventDefault();
-			if (touchStartY === null) { touchStartY = e.touches[0].clientY; return; }
-
-			var deltaY = touchStartY - e.touches[0].clientY;
-			if (Math.abs(deltaY) < TOUCH_STEP_PX) return;
-
-			var dir = deltaY > 0 ? 1 : -1;
-			touchStartY = e.touches[0].clientY;
-
-			currentIndex += dir;
-
-			if (currentIndex >= FRAME_COUNT - 1) {
-				currentIndex = FRAME_COUNT - 1;
-				requestRender();
-				unlockScroll(deltaY);
-				return;
-			}
-			if (currentIndex < 0) {
-				currentIndex = 0;
-				requestRender();
-				return;
-			}
-			requestRender();
-		}
-
-		function handleKeys(e) {
-			if (sequenceDone) return;
-			var blockedKeys = [32, 33, 34, 35, 36, 37, 38, 39, 40];
-			if (blockedKeys.indexOf(e.keyCode) === -1) return;
-			e.preventDefault();
-			var dir = (e.keyCode === 38 || e.keyCode === 33) ? -1 : 1;
-			currentIndex += dir;
-
-			if (currentIndex >= FRAME_COUNT - 1) {
-				currentIndex = FRAME_COUNT - 1;
-				requestRender();
-				unlockScroll();
-				return;
-			}
-			if (currentIndex < 0) currentIndex = 0;
-			requestRender();
-		}
-
-		function attachSequenceListeners() {
-			if (listenersAttached) return;
-			listenersAttached = true;
-			window.addEventListener('wheel', handleWheel, { passive: false });
-			window.addEventListener('touchmove', handleTouchMove, { passive: false });
-			window.addEventListener('keydown', handleKeys, false);
-		}
-		function detachSequenceListeners() {
-			if (!listenersAttached) return;
-			listenersAttached = false;
-			window.removeEventListener('wheel', handleWheel);
-			window.removeEventListener('touchmove', handleTouchMove);
-			window.removeEventListener('keydown', handleKeys);
-		}
-
-		function unlockScroll(carryDelta) {
-			if (sequenceDone) return;
-			sequenceDone = true;
-			sequenceArmed = false;
-			releaseScrollLockStyles();
-			if (scrollHint) scrollHint.style.display = 'none';
-			detachSequenceListeners();
-
-			if (carryDelta) {
-				window.scrollBy(0, carryDelta);
-			}
-
-			// Briefly ignore re-arm triggers right after unlocking, so the
-			// scroll motion that JUST finished the sequence (and is still
-			// carrying the page past the hero) doesn't immediately re-lock
-			// it again before the user has actually left the section.
-			suppressNextRearm = true;
-			setTimeout(function () { suppressNextRearm = false; }, 400);
-		}
-
-		// ===== Re-arm the full cycle every time the hero is reached =====
-		// Uses IntersectionObserver so it fires the SAME way whether the
-		// hero is reached by scrolling down into it from above, or by
-		// scrolling back UP into it from a section further down the page —
-		// there is no scrollY===0 requirement any more. Threshold lowered
-		// from 0.9 to 0.5: the cycle now restarts as soon as roughly half
-		// the hero section is in view, rather than waiting for it to
-		// almost completely fill the screen — feels more responsive on
-		// slower scrolls and shorter viewports.
-		function armSequence() {
-			if (sequenceArmed) return;
-			if (suppressNextRearm) return;
-
-			sequenceDone = false;
-			sequenceArmed = true;
-			currentIndex = 0;
-			wheelDeltaAccum = 0;
-			touchStartY = null;
-			if (scrollHint) scrollHint.style.display = '';
-			lockScroll();
-			attachSequenceListeners();
-			requestRender();
-		}
-
-		function disarmIfLeftWithoutFinishing() {
-			// If the hero scrolls out of view while still "armed" but not
-			// yet finished (e.g. user scrolled fast via keyboard/other means
-			// and bypassed our own scroll lock), make sure state doesn't get
-			// stuck — treat it as done so a future re-entry can re-arm cleanly.
-			if (sequenceArmed && !sequenceDone) {
-				sequenceDone = true;
-				sequenceArmed = false;
-				detachSequenceListeners();
-				releaseScrollLockStyles();
-				if (scrollHint) scrollHint.style.display = 'none';
-			}
-		}
-
-		if ('IntersectionObserver' in window) {
-    var heroObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            // Only re-arm once the hero completely fills the viewport,
-            // not merely half-visible. This prevents the lock from
-            // grabbing scroll mid-transition — whether entering from
-            // above (scrolling down) or from below (scrolling up).
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.98) {
-                armSequence();
-            } else if (!entry.isIntersecting) {
-                disarmIfLeftWithoutFinishing();
-            }
-        });
-    }, { threshold: [0, 0.5, 0.98, 1] });
-    heroObserver.observe(heroSection);
-} else {
-			// Fallback for browsers without IntersectionObserver: just run
-			// once on load, same as before.
-			if (heroSection.getBoundingClientRect().top <= 0) {
-				armSequence();
-			}
-		}
-
-		var safetyTimer = setTimeout(function () {
-			if (loadedCount === 0 && sequenceArmed) unlockScroll();
-		}, 15000);
-
-		window.addEventListener('resize', resizeCanvas);
-		window.addEventListener('touchstart', function (e) { touchStartY = e.touches[0].clientY; }, { passive: true });
-
-		resizeCanvas();
-		preload();
 	});
 </script>
            <!-- About
@@ -1144,6 +892,15 @@ img {
         transform: none !important;
     }
 }
+/* ===== Index page: navbar completely hidden while at the top of the
+   hero. Only appears once the user scrolls down (header gets the
+   .scrolled class from base.html's scroll script). ===== */
+body.hero-frames-page #header {
+    display: none;
+}
+body.hero-frames-page #header.scrolled {
+    display: block;
+}
 </style>
 
 <section class="section bg-light-1">
@@ -1263,7 +1020,93 @@ document.addEventListener('DOMContentLoaded', function () {
     roomsObserver.observe(roomsWrap);
 });
 </script>
+ <!-- Amenities
+			============================================= -->
+            <section class="section">
+                <div class="container">
+                    <!-- Heading -->
+                    <div class="mx-auto text-center mb-5">
+                        <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Hotel Amenities</span></p>
+                        <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Our Premium, <span class="text-primary">Industry <br class="d-none d-md-block">Leading</span> Facilities</h2>
+                    </div>
+                    <!-- Heading End -->
 
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp">
+                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-car"></i></div>
+                                <h3 class="text-7 fw-600">Pick Up & Drop</h3>
+                                <p class="text-3 text-body-secondary">Free pick up from the railway station and air port or bus stand. Well-maintained vehicles and professional drivers ensure seamless travel for guests.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp" data-wow-delay=".2s">
+                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-wifi"></i></div>
+                                <h3 class="text-7 fw-600">High Speed Wifi</h3>
+                                <p class="text-3 text-body-secondary">Enjoy seamless connectivity high-speed Wi-Fi, available in all guest rooms and public areas. our network ensures fast, stable, and secure internet access at all times.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp" data-wow-delay=".4s">
+                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-charging-station"></i></div>
+                                <h3 class="text-7 fw-600">EV Charger</h3>
+                                <p class="text-3 text-body-secondary">We provide convenient on-site EV charging services for our eco-conscious guests. Our fast and reliable chargers are compatible with all major electric vehicle models..</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp">
+                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-shirt"></i></div>
+                                <h3 class="text-7 fw-600">Laundry</h3>
+                                <p class="text-3 text-body-secondary">Enjoy the convenience of our professional laundry service. our efficient and reliable service ensures your clothes are cleaned and pressed promptly.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp" data-wow-delay=".2s">
+                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-water-ladder"></i></div>
+                                <h3 class="text-7 fw-600">Swimming Pool</h3>
+                                <p class="text-3 text-body-secondary">Dive into relaxation at our pristine swimming pool, designed for leisure, fitness, and fun. Whether you want to unwind under the sun, take a refreshing dip, or enjoy a few lap.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp" data-wow-delay=".2s">
+                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-utensils"></i></div>
+                                <h3 class="text-7 fw-600">Bar & Restaurant</h3>
+                                <p class="text-3 text-body-secondary">Enjoy exceptional dining and refreshing drinks at our hotel bar and restaurant. Gourmet meals, expertly mixed cocktails, and fine wines made with fresh, locally sourced ingredients.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button -->
+                    <!-- Button -->
+<div class="text-center mt-5 wow fadeInUp">
+    <a class="btn btn-new btn-primary rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#bookNowModal">
+        <span class="btn-text"><span>Book Now</span></span>
+        <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
+    </a>
+</div>
+                </div>
+            </section>
+            <!-- Amenities end -->
+              <!-- Video
+			============================================= -->
+           <section class="hero-wrap section">
+    <div class="hero-mask opacity-5 bg-black"></div>
+    <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/villa.png' %}');"></div>
+    <div class="hero-content">
+        <div class="container text-center">
+            <!-- Video Button -->
+            <a class="glightbox rounded-circle d-inline-flex mb-4 wow fadeInUp"
+               href="{% static 'tandu-main/hero.mp4' %}"
+               data-type="video"
+               data-width="960px">
+                <span class="playButton playButton-pulsing text-white bg-white bg-opacity-50"><i class="fa-solid fa-play"></i></span>
+            </a>
+            <h2 class="text-19 fw-600 text-white lh-sm wow fadeInUp" data-wow-delay=".2s">Enjoy Facilities of Unmatched Quality!</h2>
+        </div>
+    </div>
+</section>
+<!-- Video end -->
             <!-- Activities
 			============================================= -->
             <section class="section">
@@ -1347,91 +1190,9 @@ document.addEventListener('DOMContentLoaded', function () {
             </section>
             <!-- Activities end -->
 
-            <!-- Video
-			============================================= -->
-            <section class="hero-wrap section">
-                <div class="hero-mask opacity-5 bg-black"></div>
-                <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/villa.png' %}');"></div>
-                <div class="hero-content">
-                    <div class="container text-center">
-                        <!-- Video Button -->
-                        <a class="glightbox rounded-circle d-inline-flex mb-4 wow fadeInUp" href="https://www.youtube.com/embed/s8vnc9l8sz4">
-                            <span class="playButton playButton-pulsing text-white bg-white bg-opacity-50"><i class="fa-solid fa-play"></i></span>
-                        </a>
-                        <h2 class="text-19 fw-600 text-white lh-sm wow fadeInUp" data-wow-delay=".2s">Enjoy Facilities of Unmatched Quality!</h2>
-                    </div>
-                </div>
-            </section>
-            <!-- Video end -->
+           
 
-            <!-- Amenities
-			============================================= -->
-            <section class="section">
-                <div class="container">
-                    <!-- Heading -->
-                    <div class="mx-auto text-center mb-5">
-                        <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Hotel Amenities</span></p>
-                        <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Our Premium, <span class="text-primary">Industry <br class="d-none d-md-block">Leading</span> Facilities</h2>
-                    </div>
-                    <!-- Heading End -->
-
-                    <div class="row g-4">
-                        <div class="col-md-6 col-lg-4">
-                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp">
-                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-car"></i></div>
-                                <h3 class="text-7 fw-600">Pick Up & Drop</h3>
-                                <p class="text-3 text-body-secondary">Free pick up from the railway station and air port or bus stand. Well-maintained vehicles and professional drivers ensure seamless travel for guests.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp" data-wow-delay=".2s">
-                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-wifi"></i></div>
-                                <h3 class="text-7 fw-600">High Speed Wifi</h3>
-                                <p class="text-3 text-body-secondary">Enjoy seamless connectivity high-speed Wi-Fi, available in all guest rooms and public areas. our network ensures fast, stable, and secure internet access at all times.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp" data-wow-delay=".4s">
-                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-charging-station"></i></div>
-                                <h3 class="text-7 fw-600">EV Charger</h3>
-                                <p class="text-3 text-body-secondary">We provide convenient on-site EV charging services for our eco-conscious guests. Our fast and reliable chargers are compatible with all major electric vehicle models..</p>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp">
-                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-shirt"></i></div>
-                                <h3 class="text-7 fw-600">Laundry</h3>
-                                <p class="text-3 text-body-secondary">Enjoy the convenience of our professional laundry service. our efficient and reliable service ensures your clothes are cleaned and pressed promptly.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp" data-wow-delay=".2s">
-                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-water-ladder"></i></div>
-                                <h3 class="text-7 fw-600">Swimming Pool</h3>
-                                <p class="text-3 text-body-secondary">Dive into relaxation at our pristine swimming pool, designed for leisure, fitness, and fun. Whether you want to unwind under the sun, take a refreshing dip, or enjoy a few lap.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4">
-                            <div class="featured-box style-4 bg-white rounded-5 p-4 h-100 wow fadeInUp" data-wow-delay=".2s">
-                                <div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-utensils"></i></div>
-                                <h3 class="text-7 fw-600">Bar & Restaurant</h3>
-                                <p class="text-3 text-body-secondary">Enjoy exceptional dining and refreshing drinks at our hotel bar and restaurant. Gourmet meals, expertly mixed cocktails, and fine wines made with fresh, locally sourced ingredients.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Button -->
-                    <!-- Button -->
-<div class="text-center mt-5 wow fadeInUp">
-    <a class="btn btn-new btn-primary rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#bookNowModal">
-        <span class="btn-text"><span>Book Now</span></span>
-        <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
-    </a>
-</div>
-                </div>
-            </section>
-            <!-- Amenities end -->
+           
 
             <!-- Our Experience	============================================= -->
             <section class="hero-wrap section">
@@ -1482,9 +1243,8 @@ document.addEventListener('DOMContentLoaded', function () {
 </section>
 <!-- Our Experience end -->
 
-            <!-- Testimonial
-			============================================= -->
-           <!-- Testimonial ============================================= -->
+<!-- Testimonial
+============================================= -->
 <section class="section">
     <div class="container">
         <!-- Heading -->
@@ -1493,40 +1253,104 @@ document.addEventListener('DOMContentLoaded', function () {
             <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">What Our <span class="text-primary">Client Says <br class="d-none d-md-block">About</span> Hotel The Mist</h2>
         </div>
         <!-- Heading End -->
-        
+
+        <style>
+            .testimonial-card {
+                background: #fff;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 15px 35px rgba(0,0,0,.08);
+                position: relative;
+            }
+            .testimonial-card .quote-top {
+                padding: 2.5rem 2rem 5.5rem 2rem;
+                position: relative;
+                min-height: 180px;
+            }
+            .testimonial-card .quote-mark {
+                position: absolute;
+                right: 20px;
+                top: 55%;
+                font-size: 4rem;
+                font-family: Georgia, serif;
+                color: rgba(0,0,0,.08);
+                line-height: 1;
+            }
+            .testimonial-card .client-band {
+                position: relative;
+                padding: 60px 1.5rem 1.5rem 1.5rem;
+                text-align: center;
+                color: #fff;
+            }
+            .testimonial-card .client-avatar {
+                width: 110px;
+                height: 110px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 6px solid #fff;
+                position: absolute;
+                top: -55px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #fff;
+                box-shadow: 0 6px 18px rgba(0,0,0,.25);
+            }
+            .testimonial-card .client-avatar-fallback {
+                width: 110px;
+                height: 110px;
+                border-radius: 50%;
+                border: 6px solid #fff;
+                position: absolute;
+                top: -55px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #eee;
+                color: #999;
+                font-size: 2rem;
+                box-shadow: 0 6px 18px rgba(0,0,0,.25);
+            }
+            /* Olive -> Green (used on all cards) */
+            .band-olive-green {
+                background: linear-gradient(135deg, #6b7a2a 0%, #4c7a2e 50%, #1f9d55 100%);
+            }
+        </style>
+
         <div class="swiper wow fadeInUp" data-loop="true" data-autoplay="true" data-margin="30" data-items-xs="1" data-items-sm="1" data-items-md="1" data-items-lg="2">
             <div class="swiper-wrapper">
                 {% if testimonials %}
                     {% for testimonial in testimonials %}
                     <div class="swiper-slide">
-                        <div class="bg-white rounded-5 p-5">
-                            <!-- Star Rating -->
-                            <div class="mb-3">
-                                {% for i in "12345" %}
-                                    {% if i|add:"0" <= testimonial.rating %}
-                                        <i class="fa-solid fa-star text-warning"></i>
-                                    {% else %}
-                                        <i class="fa-regular fa-star text-warning"></i>
-                                    {% endif %}
-                                {% endfor %}
+                        <div class="testimonial-card">
+                            <!-- Quote Section -->
+                            <div class="quote-top">
+                                <!-- Star Rating -->
+                                <div class="mb-3">
+                                    {% for i in "12345" %}
+                                        {% if i|add:"0" <= testimonial.rating %}
+                                            <i class="fa-solid fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="fa-regular fa-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <p class="lh-lg mb-0">{{ testimonial.review|safe }}</p>
+                                <span class="quote-mark">&rdquo;</span>
                             </div>
-                            
-                            <!-- Review Text -->
-                            <p class="lh-lg">"{{ testimonial.review|safe }}"</p>
-                            
-                            <!-- Client Info -->
-                            <div class="d-flex align-items-center gap-3">
+
+                            <!-- Client Band -->
+                            <div class="client-band band-olive-green">
                                 {% if testimonial.image %}
-                                    <img class="rounded-circle w-auto" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                    <img class="client-avatar" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}">
                                 {% else %}
-                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <div class="client-avatar-fallback">
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                 {% endif %}
-                                <div>
-                                    <h3 class="text-4 fw-600 mb-1">{{ testimonial.name }}</h3>
-                                    <div class="text-3 fw-500 text-body-tertiary">{{ testimonial.created_at|date:"M d, Y" }}</div>
-                                </div>
+                                <h3 class="text-4 fw-600 mb-1 mt-2 text-white">{{ testimonial.name }}</h3>
+                                <div class="text-3 fw-500 text-white text-opacity-75">{{ testimonial.created_at|date:"M d, Y" }}</div>
                             </div>
                         </div>
                     </div>
@@ -1548,12 +1372,10 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         <!-- View More Link -->
-        
+
     </div>
 </section>
 <!-- Testimonial end -->
-            <!-- Testimonial end -->
-
 
             <!-- Blog/News
 			============================================= -->
@@ -1720,5 +1542,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	wowEls.forEach(function (el) { observer.observe(el); });
 });
 </script>
-
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.body.classList.add('hero-frames-page');
+});
+</script>
 {% endblock %}
