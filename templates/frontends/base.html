@@ -38,6 +38,8 @@
     max-height: 165px;
     width: auto;
     display: block;
+    filter: brightness(0) invert(1) !important;
+    transition: filter 0.3s ease;
 }
         /* Footer logo */
         #footer .footer-logo img {
@@ -53,12 +55,10 @@
             background-color: #556B2F !important;
         }
 
-        /* Make container relative so we can absolutely position elements if needed;
-           nudged up slightly so the nav content sits a touch higher in the bar */
+        /* Make container relative so we can absolutely position elements if needed */
         #header .primary-menu .container {
             position: relative;
             overflow: visible;
-            margin-top: -25px;
         }
 
         /* Header sits fixed over the hero, always showing logo + full nav */
@@ -73,17 +73,18 @@
         #header .primary-menu {
             background: transparent;
             transition: background-color 0.3s ease;
-            height: 150px !important;
+             height: 118px !important;
             display: flex;
             align-items: center;
             overflow: visible;
         }
 
-        /* Logo sits left, normal flow, always visible */
+        /* Logo sits left, normal flow, always visible, vertically centered in the bar */
         #header .logo {
             position: relative;
             margin-right: auto;
-            margin-top: -6px;
+            display: flex;
+            align-items: center;
             opacity: 1 !important;
             visibility: visible !important;
             pointer-events: auto !important;
@@ -105,12 +106,11 @@
             background-color: #fff !important;
         }
 
-        /* Book Now button — transparent/outlined over the hero, nudged up slightly */
+        /* Book Now button — transparent/outlined over the hero */
         #header .btn-new {
             background-color: transparent !important;
             border: 1.5px solid rgba(255,255,255,0.85) !important;
             color: #fff !important;
-            margin-top: -4px;
             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
         #header .btn-new .btn-icon {
@@ -135,7 +135,7 @@
             margin-top: 0 !important;
         }
         #header.scrolled .logo img {
-            filter: none;
+            filter: none !important;
         }
         #header.scrolled #header-nav .nav-link {
             color: #6B8E23 !important;
@@ -176,7 +176,7 @@
            (the collapse panel drops below the navbar as its own white
            block, so it needs its own text color instead of the white
            hero-overlay color used above) */
-        @media (max-width: 991px) {
+        @media (max-width: 1199.98px) {
             #header-nav.show .nav-link,
             #header-nav.collapsing .nav-link {
                 color: #6B8E23 !important;
@@ -189,20 +189,14 @@
         }
 
         /* Shorter navbar on tablet/mobile, logo scales down with it */
-        @media (max-width: 991px) {
+        @media (max-width: 1199.98px) {
             #header .primary-menu {
                 height: 110px !important;
-            }
-            #header .primary-menu .container {
-                margin-top: -6px;
             }
         }
         @media (max-width: 576px) {
             #header .primary-menu {
                 height: 90px !important;
-            }
-            #header .primary-menu .container {
-                margin-top: -4px;
             }
         }
 
@@ -469,7 +463,7 @@
         }
 
         /* ===== Navbar logo — mobile/tablet sizing (increased) ===== */
-        @media (max-width: 991px) {
+        @media (max-width: 1199.98px) {
             #header .logo img {
                 max-height: 130px;   /* was 100px */
             }
@@ -481,7 +475,7 @@
         }
 
         /* ===== Book Now button — mobile/tablet sizing (reduced) ===== */
-        @media (max-width: 991px) {
+        @media (max-width: 1199.98px) {
             #header .btn-new {
                 padding: 0.35rem 0.8rem !important;
                 font-size: 0.8rem !important;
@@ -501,6 +495,35 @@
                 width: 20px !important;
                 height: 20px !important;
                 font-size: 0.65rem !important;
+            }
+        }
+
+        /* ===== GLightbox nav arrows — force visible & tappable on mobile =====
+           glightbox.min.css (loaded above in <head>) de-emphasizes the
+           prev/next arrows on touch devices, assuming users will just
+           swipe. This applies site-wide, to every gallery that uses
+           GLightbox (room images, destination photos, main gallery page,
+           etc.), so the on-screen arrows always show and are tappable,
+           not just relying on swipe gestures. Covers both possible class
+           naming patterns GLightbox versions use. */
+        @media (max-width: 768px) {
+            .glightbox-container .gnext,
+            .glightbox-container .gprev,
+            .glightbox-container .gbtn.gnext,
+            .glightbox-container .gbtn.gprev {
+                display: flex !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                z-index: 99999 !important;
+            }
+            .glightbox-container .gnext,
+            .glightbox-container .gbtn.gnext {
+                right: 6px !important;
+            }
+            .glightbox-container .gprev,
+            .glightbox-container .gbtn.gprev {
+                left: 6px !important;
             }
         }
     </style>
@@ -526,7 +549,7 @@
 		============================ -->
         <header id="header" class="sticky-top-slide">
             <!-- Navbar -->
-            <nav class="primary-menu navbar navbar-expand-lg bg-transparent border-bottom-0 text-3 fw-600 mt-3">
+            <nav class="primary-menu navbar navbar-expand-xl bg-transparent border-bottom-0 text-3 fw-600">
                 <div class="container">
                     <!-- Logo -->
                    <a class="logo" href="{% url 'tandj_app:index' %}"><img src="{% static 'tandu-main/tandu.png' %}" alt=""></a>
@@ -545,6 +568,7 @@
 </li>
                           <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:activities' %}">Activities</a></li>
                            <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:nearby_destinations' %}">Sightseeing</a></li>
+                           <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:restaurant' %}">Restaurant</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:gallery_public' %}">Gallery</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:blogs' %}">Blog</a></li>
                             

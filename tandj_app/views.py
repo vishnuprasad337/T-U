@@ -801,14 +801,18 @@ def index(request):
 
     # Latest 3 activities for the homepage "Activities" section
     activities = Activity.objects.all().order_by("-created_at")[:3]
-    
+
     # Fetch approved testimonials (top-rated first)
     testimonials = Testimonial.objects.all().order_by("-rating", "-created_at")[:6]
+
+    # Latest 3 blog posts for the homepage "News & Events" section
+    blogs = Blog.objects.all().order_by("-created_at")[:3]
 
     context = {
         'rooms': rooms,
         'activities': activities,
-        'testimonials': testimonials,  # Add this
+        'testimonials': testimonials,
+        'blogs': blogs,
     }
 
     return render(request, "frontends/index.html", context)
@@ -931,7 +935,6 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_POST
 
-
 @require_POST
 def reservation_ajax_create(request):
     guest_name = (request.POST.get("guest_name") or "").strip()
@@ -977,6 +980,53 @@ def reservation_ajax_create(request):
         return JsonResponse({"success": False, "errors": e.message_dict}, status=400)
 
     reservation.save()
+
+    # --- Notify hotel staff ---
+    try:
+        send_mail(
+            subject=f"New Booking Request — {guest_name}",
+            message=(
+                f"You've received a new booking request on the T&U website.\n\n"
+                f"Name: {guest_name}\n"
+                f"Email: {guest_email}\n"
+                f"Phone: {guest_phone or 'N/A'}\n"
+                f"Room: {room.room_category if room else 'General Inquiry'}\n"
+                f"Guests: {num_guests}\n"
+                f"Check In: {check_in}\n"
+                f"Check Out: {check_out}\n"
+                + (f"Special Requests: {special_requests}\n" if special_requests else "")
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[getattr(settings, "CONTACT_NOTIFY_EMAIL", settings.DEFAULT_FROM_EMAIL)],
+            fail_silently=True,
+        )
+    except Exception:
+        pass
+
+    # --- Confirmation email to the guest ---
+    try:
+        send_mail(
+            subject="Your Booking Request — The T&U Leisure Hotel",
+            message=(
+                f"Dear {guest_name},\n\n"
+                f"Thank you for your booking request at MaxiMunnar T&U Leisure Hotel. "
+                f"We've received the following details and our team will confirm your "
+                f"reservation shortly.\n\n"
+                f"Room: {room.room_category if room else 'General Inquiry'}\n"
+                f"Guests: {num_guests}\n"
+                f"Check In: {check_in}\n"
+                f"Check Out: {check_out}\n"
+                + (f"Special Requests: {special_requests}\n" if special_requests else "")
+                + "\nIf you have any questions, feel free to reply to this email or call us "
+                "directly.\n\nWarm regards,\nThe T&U Leisure Hotel"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[guest_email],
+            fail_silently=True,
+        )
+    except Exception:
+        pass
+
     return JsonResponse({"success": True, "reservation_id": reservation.pk})
 
 def contact_page(request):
@@ -1041,3 +1091,11 @@ def contact_ajax_create(request):
         pass
 
     return JsonResponse({"success": True, "contact_id": contact.pk})
+
+def restaurant(request):
+    """Public 'Restaurant' page."""
+    
+    context = {
+        
+    }
+    return render(request, "frontends/restaurant.html", context)

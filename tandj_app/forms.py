@@ -39,14 +39,14 @@ class RoomForm(forms.ModelForm):
             "room_category",
             "description",
             "price_per_night",
-            # status field removed from the form — the model's default
-            # value is used instead (status is no longer editable here).
-            # main_image is now set programmatically from the first
-            # uploaded room_images file — not a form field anymore.
         ]
         widgets = {
             "description": forms.Textarea(attrs={"rows": 4}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["price_per_night"].required = False
 # --------- Multiple Gallery Images for a Room ---------
 
 class MultipleFileInput(forms.ClearableFileInput):

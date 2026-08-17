@@ -102,5 +102,6 @@ path("rooms/", views.room_list, name="room_list"),
     path('reservation/ajax-create/', views.reservation_ajax_create, name='reservation_ajax_create'),
 path("contact-us/", views.contact_page, name="contact"),
 path("contact/ajax-create/", views.contact_ajax_create, name="contact_ajax_create"),
+path('restaurant/', views.restaurant, name='restaurant'),
 
 ]

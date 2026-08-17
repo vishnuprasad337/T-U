@@ -13,7 +13,9 @@
         <source src="{% static 'tandu-main/hero.mp4' %}" type="video/mp4">
     </video>
     <div class="hero-mask bg-dark opacity-2"></div>
+    <div class="hero-frames-logo-wrap">
     <img src="{% static 'tandu-main/tandu.png' %}" alt="MaxiMunnar T&U Leisure Hotel" id="heroFramesLogo" class="hero-frames-logo">
+</div>
 
     <div class="hero-frames-content">
         <div class="hero-frames-caption hero-frames-caption--left" data-caption-index="0">
@@ -75,11 +77,6 @@ html, body {
 	width: 0;
 	height: 0;
 }
-@media (max-width: 767px) {
-	.container, .container-fluid, .container-xxl {
-		max-width: 100%;
-	}
-}
 html, body {
 	scrollbar-width: none;
 	-ms-overflow-style: none;
@@ -127,11 +124,7 @@ img {
 	height: auto;
 }
 
-/* ===== Hero video section =====
-   Replaces the old frame-by-frame canvas sequence. The video plays on
-   loop as a normal background — it is NOT tied to scroll position and
-   does not lock page scrolling. The page scrolls completely normally
-   over/past this section. */
+/* ===== Hero video section ===== */
 .hero-video-section {
 	position: relative;
 	width: 100%;
@@ -233,6 +226,7 @@ img {
 	opacity: 0.9;
 	margin: 0;
 }
+
 @media (max-width: 991px) {
 	.hero-caption-heading {
 		font-size: 2.8rem;
@@ -240,20 +234,23 @@ img {
 	.hero-caption-sub {
 		font-size: 1.05rem;
 	}
-}
-@media (max-width: 767px) {
+}@media (max-width: 767px) {
+	.container, .container-fluid, .container-xxl {
+		max-width: 100%;
+	}
 	.hero-frames-caption {
 		max-width: 90%;
+		top: 230px;
+		bottom: auto;
 	}
 	.hero-frames-caption--left,
 	.hero-frames-caption--right {
 		left: 5%;
 		right: 5%;
-		transform: translateY(-50%);
 	}
 	.hero-frames-caption--left.hero-content-active,
 	.hero-frames-caption--right.hero-content-active {
-		transform: translateY(-50%);
+		transform: translateX(0);
 	}
 	.hero-frames-caption--right .hero-frames-caption-inner,
 	.hero-frames-caption--left .hero-frames-caption-inner {
@@ -316,23 +313,43 @@ img {
 		max-width: 520px;
 	}
 }
-.hero-frames-logo {
+.hero-frames-logo-wrap {
 	position: absolute;
-	top: 5px;
+	top: 20px;
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 2;
-	max-height: 340px;
+	width: 140px;
+	height: 122px;
+	background: #fff;
+	border-radius: 16px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.hero-frames-logo {
+	max-width: none;
+	max-height: none;
 	width: auto;
-	filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.75))
-	        drop-shadow(0 0 24px rgba(0, 0, 0, 0.4));
+	height: 251px;
+	transform: scale(1.15) translateY(-16px);
+	filter: none;
+	display: block;
 }
 @media (max-width: 576px) {
-	.hero-frames-logo {
-		max-height: 205px;
-		top: 0px;
+	.hero-frames-logo-wrap {
+		width: 96px;
+		height: 85px;
+		top: 16px;
+		border-radius: 12px;
 	}
-    	.col-lg-6 .d-inline-flex.align-items-center.gap-4 {
+	.hero-frames-logo {
+		height: 170px;
+		transform: scale(1.15) translateY(-11px);
+	}
+	.col-lg-6 .d-inline-flex.align-items-center.gap-4 {
 		flex-wrap: wrap;
 		gap: 12px !important;
 	}
@@ -1090,24 +1107,149 @@ document.addEventListener('DOMContentLoaded', function () {
             </section>
             <!-- Amenities end -->
               <!-- Video
-			============================================= -->
-           <section class="hero-wrap section">
-    <div class="hero-mask opacity-5 bg-black"></div>
-    <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/villa.png' %}');"></div>
+<!-- Video / Hospitality Highlight
+============================================= -->
+<section class="hero-wrap section video-hero-section" id="videoHeroSection">
+    <div class="hero-mask opacity-3 bg-black"></div>
+    <!-- Autoplaying background video (muted, loops) -->
+    <video class="video-hero-bg" autoplay muted loop playsinline preload="auto"
+           poster="{% static 'tandu-main/villa.png' %}">
+        <source src="{% static 'tandu-main/v.mp4' %}" type="video/mp4">
+    </video>
     <div class="hero-content">
-        <div class="container text-center">
-            <!-- Video Button -->
-            <a class="glightbox rounded-circle d-inline-flex mb-4 wow fadeInUp"
-               href="{% static 'tandu-main/hero.mp4' %}"
-               data-type="video"
-               data-width="960px">
-                <span class="playButton playButton-pulsing text-white bg-white bg-opacity-50"><i class="fa-solid fa-play"></i></span>
-            </a>
-            <h2 class="text-19 fw-600 text-white lh-sm wow fadeInUp" data-wow-delay=".2s">Enjoy Facilities of Unmatched Quality!</h2>
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="row align-items-center g-4 justify-content-between">
+                <!-- Heading: pushed to left edge -->
+                <div class="col-lg-5 wow fadeInUp">
+                    <h2 class="video-hero-heading fw-600 text-white lh-sm mb-0">Enjoy Facilities of<br>Unmatched Quality!</h2>
+                </div>
+
+                <!-- Hospitality card + Book Now (modal): pushed to right edge -->
+                <div class="col-lg-5 wow fadeInRight" data-wow-delay=".2s">
+                    <div class="video-hero-card rounded-5 p-4 p-md-5 text-white">
+                        <h3 class="heading-font-family video-hero-title fw-600 mb-2">Hospitality</h3>
+                        <p class="video-hero-subtitle text-uppercase fw-600 opacity-90 mb-4">Where Comfort Meets Genuine Care</p>
+                        <div class="row g-3 text-center mb-4">
+                            <div class="col-4">
+                                <h4 class="video-hero-stat-num fw-700 mb-0" style="color:#9ACD32;">100%</h4>
+                                <p class="video-hero-stat-label text-uppercase fw-600 mb-0">Dedicated Team</p>
+                            </div>
+                            <div class="col-4">
+                                <h4 class="video-hero-stat-num video-hero-stat-num-sm fw-700 mb-0" style="color:#9ACD32;">Top Skills</h4>
+                                <p class="video-hero-stat-label text-uppercase fw-600 mb-0">Chef &amp; Kitchen Staff</p>
+                            </div>
+                            <div class="col-4">
+                                <h4 class="video-hero-stat-num fw-700 mb-0" style="color:#9ACD32;">24 hrs</h4>
+                                <p class="video-hero-stat-label text-uppercase fw-600 mb-0">Assistance Desk</p>
+                            </div>
+                        </div>
+                        <p class="video-hero-desc opacity-95 mb-4">At T&amp;U Leisure Hotel in Munnar, we are committed to exceeding your expectations, and our warm hospitality is the foundation of our service.</p>
+                        <a class="btn btn-new btn-primary rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#bookNowModal">
+                            <span class="btn-text"><span>Book Now</span></span>
+                            <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
-<!-- Video end -->
+<style>
+.video-hero-section {
+    position: relative;
+    overflow: hidden;
+    min-height: 760px;
+    display: flex;
+    align-items: center;
+}
+.video-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    filter: brightness(0.92) saturate(1.05);
+}
+.video-hero-section .hero-mask {
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.25) !important;
+    opacity: 1 !important;
+}
+.video-hero-section .hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+.video-hero-heading {
+    max-width: 480px;
+    font-size: 3.2rem;
+    line-height: 1.15;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+.video-hero-card {
+    background: transparent;
+    border: none;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+.video-hero-title {
+    font-size: 3rem;
+    color: #ffffff !important;
+}
+.video-hero-subtitle {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+.video-hero-card .row.g-3 {
+    align-items: flex-start;
+}
+.video-hero-card .row.g-3 .col-4 {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+.video-hero-stat-num {
+    font-size: 2.1rem;
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75), 0 0 2px rgba(0, 0, 0, 0.6);
+}
+.video-hero-stat-num-sm {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+.video-hero-stat-label {
+    font-size: 0.95rem;
+}
+.video-hero-desc {
+    font-size: 1.15rem;
+    line-height: 1.6;
+}
+@media (max-width: 991px) {
+    .video-hero-section { min-height: auto; padding: 80px 0; }
+    .video-hero-heading { font-size: 2.3rem; margin-bottom: 2rem; text-align: left; }
+    .video-hero-title { font-size: 2.3rem; }
+    .video-hero-stat-num { font-size: 1.7rem; }
+    .video-hero-stat-num-sm { font-size: 1.2rem; }
+    .video-hero-desc { font-size: 1rem; }
+    .video-hero-card { text-align: left; }
+    .video-hero-card .row.text-center { text-align: left !important; }
+    .video-hero-card .row.text-center .col-4 { text-align: left; align-items: flex-start; }
+
+    .video-hero-card .row.g-3 {
+        flex-direction: column;
+        row-gap: 1rem !important;
+    }
+    .video-hero-card .row.g-3 .col-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+</style>
             <!-- Activities
 			============================================= -->
             <section class="section">
@@ -1378,79 +1520,71 @@ document.addEventListener('DOMContentLoaded', function () {
 </section>
 <!-- Testimonial end -->
 
-            <!-- Blog/News
-			============================================= -->
-            <section class="section bg-light-1">
-                <div class="container">
-                    <!-- Heading -->
-                    <div class="mx-auto text-center mb-5">
-                        <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">News & Events</span></p>
-                        <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Explore Our <span class="text-primary">Latest <br class="d-none d-md-block">News</span> and Events</h2>
-                    </div>
-                    <!-- Heading End -->
+           <!-- Blog/News
+============================================= -->
+<section class="section bg-light-1">
+    <div class="container">
+        <!-- Heading -->
+        <div class="mx-auto text-center mb-5">
+            <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">News & Events</span></p>
+            <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Explore Our <span class="text-primary">Latest <br class="d-none d-md-block">News</span> and Events</h2>
+        </div>
+        <!-- Heading End -->
 
-                    <div class="row justify-content-center g-4">
-                        <div class="col-md-6 col-lg-4 wow fadeInUp">
-							<div class="blog-post card h-100 rounded-5 shadow-none border-0">
-								<a class="d-flex rounded-5 overflow-hidden" href="">
-									<img class="card-img-top rounded-5" src="{% static 'tandu-main/images/blog/post-1.jpg' %}" alt="">
-									<div class="position-absolute top-0 start-0 text-2 fw-600 bg-primary text-light rounded-pill px-2 py-0 mt-4 ms-4">Event</div>
-								</a>
-								<div class="card-body p-4">
-									<ul class="meta-blog text-2 mb-2">
-										<li><i class="fa-solid fa-calendar-alt"></i> 27 Nov 2025</li>
-										<li><a href="#"><i class="fa-solid fa-user"></i> Admin</a></li>
-									</ul>
-									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="">Recap of Recent Events Hosted at Our Hotel</a></h3>
-									<p class="text-3 text-body-secondary mb-1">Step inside the highlights of the unforgettable moments recently...</p>
-									<a href="" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
-								</div>
-							</div>
+        <div class="row justify-content-center g-4">
+            {% if blogs %}
+                {% for blog in blogs %}
+                <div class="col-md-6 col-lg-4 wow fadeInUp"{% if not forloop.first %} data-wow-delay=".{{ forloop.counter0|add:2 }}s"{% endif %}>
+                    <div class="blog-post card h-100 rounded-5 shadow-none border-0">
+                        <a class="d-flex rounded-5 overflow-hidden" href="{% url 'tandj_app:blog_detail_public' blog.slug %}">
+                            {% if blog.image %}
+                                <img class="card-img-top rounded-5" src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                            {% else %}
+                                <img class="card-img-top rounded-5" src="{% static 'tandu-main/images/blog/post-1.jpg' %}" alt="{{ blog.title }}">
+                            {% endif %}
+                        </a>
+                        <div class="card-body p-4">
+                            <ul class="meta-blog text-2 mb-2">
+                                <li><i class="fa-solid fa-calendar-alt"></i> {{ blog.created_at|date:"d M Y" }}</li>
+                                <li><a href="#"><i class="fa-solid fa-user"></i> Admin</a></li>
+                            </ul>
+                            <h3 class="title-blog text-6 lh-sm mb-2">
+                                <a class="text-6" href="{% url 'tandj_app:blog_detail_public' blog.slug %}">{{ blog.title }}</a>
+                            </h3>
+                            <p class="text-3 text-body-secondary mb-1">{{ blog.content|striptags|truncatewords:15 }}</p>
+                            <a href="{% url 'tandj_app:blog_detail_public' blog.slug %}" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
                         </div>
-						<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".2s">
-							<div class="blog-post card h-100 rounded-5 shadow-none border-0">
-								<a class="d-flex rounded-5 overflow-hidden" href="">
-									<img class="card-img-top rounded-5" src="{% static 'tandu-main/images/blog/post-2.jpg' %}" alt="">
-									<div class="position-absolute top-0 start-0 text-2 fw-600 bg-primary text-light rounded-pill px-2 py-0 mt-4 ms-4">Restaurant</div>
-								</a>
-								<div class="card-body p-4">
-									<ul class="meta-blog text-2 mb-2">
-										<li><i class="fa-solid fa-calendar-alt"></i> 14 Oct 2025</li>
-										<li><a href="#"><i class="fa-solid fa-user"></i> Admin</a></li>
-									</ul>
-									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="">Meet Our Chef: Culinary Inspiration Stories</a></h3>
-									<p class="text-3 text-body-secondary mb-1">Discover the passion, creativity, and flavors behind our kitchen...</p>
-									<a href="" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
-								</div>
-							</div>
-                        </div>
-						<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".4s">
-							<div class="blog-post card h-100 rounded-5 shadow-none border-0">
-								<a class="d-flex rounded-5 overflow-hidden" href="">
-									<img class="card-img-top rounded-5" src="{% static 'tandu-main/images/blog/post-3.jpg' %}" alt="">
-									<div class="position-absolute top-0 start-0 text-2 fw-600 bg-primary text-light rounded-pill px-2 py-0 mt-4 ms-4">Travel</div>
-								</a>
-								<div class="card-body p-4">
-									<ul class="meta-blog text-2 mb-2">
-										<li><i class="fa-solid fa-calendar-alt"></i> 15 Jul 2025</li>
-										<li><a href="#"><i class="fa-solid fa-user"></i> Admin</a></li>
-									</ul>
-									<h3 class="title-blog text-6 lh-sm mb-2"><a class="text-6" href="">Business Travel Tips for a Productive Stay</a></h3>
-									<p class="text-3 text-body-secondary mb-1">Make the most of every work trip with our expert tips designed..</p>
-									<a href="" class="text-3 fw-600 link-primary link-offset-2 link-underline-opacity-100 link-underline-opacity-0-hover">Read more</a>
-								</div>
-							</div>
-						</div>
-                    </div>
-                    <div class="text-center mt-5 wow fadeInUp">
-                        <a class="btn btn-new btn-primary rounded-pill" href="">
-							<span class="btn-text"><span>View all News</span></span>
-							<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-						</a>
                     </div>
                 </div>
-            </section>
-            <!-- Blog/News end -->
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <p class="mb-0">No news or events available at the moment.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="text-center mt-5 wow fadeInUp">
+            <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:blogs' %}">
+                <span class="btn-text"><span>View all News</span></span>
+                <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+        </div>
+    </div>
+</section>
+<style>
+.blog-post .card-img-top {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+.blog-post a.d-flex.rounded-5.overflow-hidden {
+    display: block !important;
+}
+</style>
+<!-- Blog/News end -->
 
 
             <!-- Check Availability

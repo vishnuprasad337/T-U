@@ -161,8 +161,9 @@ class Room(models.Model):
     description = models.TextField(blank=True)
 
     price_per_night = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0
-    )
+    max_digits=10, decimal_places=2,
+    blank=True, null=True,
+)
 
     main_image = models.ImageField(upload_to="rooms/main/", blank=True, null=True)
 

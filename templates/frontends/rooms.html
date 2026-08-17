@@ -10,8 +10,8 @@
 		============================================= -->
 		<section class="page-header page-header-text-light py-0 mb-0">
 			<div class="hero-wrap py-5">
-				<div class="hero-mask opacity-6 bg-black"></div>
-				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
+				<div class="hero-mask opacity-3 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}'); background-size: cover; background-position: center; background-repeat: no-repeat; filter: contrast(1.1) saturate(1.15) brightness(1.04);"></div>
 				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
 					<div class="container text-center mt-5 pt-5 pb-2">
 						<h1 class="text-17 mb-4 wow fadeInUp">Rooms</h1>
@@ -30,7 +30,7 @@
 		<section class="section">
 			<div class="container">
 				<div class="room-items-wrap">
-					<div class="row g-5">
+					<div class="row g-4">
 						{% for room in rooms %}
 						<div class="col-lg-6 col-md-12 col-sm-12">
 							<!-- Room Card -->
@@ -52,7 +52,7 @@
 									<h3 class="text-6 fw-600 mb-2 room-title-clamp">{{ room.room_category|default:"Room" }}</h3>
 
 									<!-- Description (HTML stripped + entities decoded, then truncated as plain text so it never cuts mid-tag) -->
-									<p class="text-body-secondary mb-3 room-desc-text">{{ room.description|striptags|truncatewords:40|safe }}</p>
+									<p class="text-body-secondary mb-3 room-desc-text">{{ room.description|striptags|truncatewords:38|safe }}</p>
 
 									<!-- Features Row -->
 									{% if room.bedroom_beds or room.living_room_beds or room.rating_average %}
@@ -89,9 +89,26 @@
 									<div class="no-features-spacer"></div>
 									{% endif %}
 
-									<!-- Details Button -->
-									<div class="room-card-btn-wrap">
-										<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:room_detail_public' room.slug %}">
+									<!-- Price (shown if available) -->
+									{% if room.price_per_night %}
+									<div class="d-flex align-items-baseline gap-1 mb-3">
+										<span class="text-7 fw-700 room-price-num">${{ room.price_per_night|floatformat:0 }}</span>
+										<span class="text-3 fw-500 room-price-suffix">/ NIGHT</span>
+									</div>
+									{% endif %}
+
+									<!-- Buttons: Book Now + View Details -->
+									<div class="room-card-btn-wrap d-flex flex-wrap gap-2">
+										<a class="btn btn-new btn-primary rounded-pill flex-fill room-book-now-btn"
+										   href="#"
+										   data-bs-toggle="modal"
+										   data-bs-target="#bookNowModal"
+										   data-room-id="{{ room.id }}"
+										   data-room-name="{{ room.room_category }}">
+											<span class="btn-text"><span>Book Now</span></span>
+											<span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
+										</a>
+										<a class="btn btn-new btn-outline-primary rounded-pill flex-fill" href="{% url 'tandj_app:room_detail_public' room.slug %}">
 											<span class="btn-text"><span>View Details</span></span>
 											<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
 										</a>
@@ -113,15 +130,103 @@
 		</section>
 		<!-- Rooms & Suites end -->
 
+		<!-- Book Now Modal (same component/markup pattern used on the
+			 index page) -->
+		<div class="modal fade" id="bookNowModal" tabindex="-1" aria-labelledby="bookNowModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content rounded-5 border-0" style="overflow: hidden;">
+					<div class="modal-header border-0 px-4 pt-4 pb-0">
+						<h3 class="modal-title text-8 fw-600" id="bookNowModalLabel">Book Your <span class="text-primary">Stay</span></h3>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body px-4 pb-4" style="overscroll-behavior: contain;">
+						<p class="text-body-secondary mb-4">Fill in your details and we'll confirm your reservation over WhatsApp.</p>
+						<form id="bookNowForm">
+							{% csrf_token %}
+							<div class="row gy-3">
+								<div class="col-12">
+									<label class="form-label text-3 fw-600" for="guestName">Full Name</label>
+									<input type="text" name="guest_name" class="form-control rounded-pill" id="guestName" required placeholder="Your full name">
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="guestEmail">Email</label>
+									<input type="email" name="guest_email" class="form-control rounded-pill" id="guestEmail" required placeholder="you@example.com">
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="guestPhone">Phone</label>
+									<input type="tel" name="guest_phone" class="form-control rounded-pill" id="guestPhone" placeholder="Your phone number">
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="checkIn">Check In</label>
+									<input type="date" name="check_in" class="form-control rounded-pill" id="checkIn" required>
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="checkOut">Check Out</label>
+									<input type="date" name="check_out" class="form-control rounded-pill" id="checkOut" required>
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="numGuests">Number of Guests</label>
+									<input type="number" name="num_guests" min="1" value="1" class="form-control rounded-pill" id="numGuests" required>
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="roomSelect">Room <span class="text-body-secondary fw-400">(optional)</span></label>
+									<select name="room_id" class="form-select rounded-pill" id="roomSelect">
+										<option value="" data-room-name="">General Inquiry</option>
+										{% if rooms %}
+											{% for room in rooms %}
+												<option value="{{ room.id }}" data-room-name="{{ room.room_category }}">{{ room.room_category }}</option>
+											{% endfor %}
+										{% endif %}
+									</select>
+								</div>
+								<div class="col-12">
+									<label class="form-label text-3 fw-600" for="specialRequests">Special Requests</label>
+									<textarea name="special_requests" class="form-control rounded-4" id="specialRequests" rows="3" placeholder="Any special requests? (optional)"></textarea>
+								</div>
+								<div class="col-12 d-grid mt-2">
+									<button type="submit" class="btn btn-new btn-primary rounded-pill">
+										<span class="btn-text"><span>Send via WhatsApp</span></span>
+										<span class="btn-icon"><i class="fa-brands fa-whatsapp"></i></span>
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Book Now Modal end -->
+
 {% endblock %}
 
 {% block extra_css %}
 <style>
 	.page-header .hero-wrap {
 		min-height: 550px;
+		position: relative;
+	}
+	.page-header .hero-bg {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+	}
+	.page-header .hero-mask {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+	}
+	.page-header .hero-content {
+		position: relative;
+		z-index: 2;
 	}
 
-	/* ===== Room Card Grid Layout ===== */
+	/* ===== Room Card Grid Layout (image on top, content below, 2 per row) ===== */
 	.room-items-wrap .row.g-4 {
 		margin: 0;
 	}
@@ -143,7 +248,7 @@
 	.room-card-img-wrapper {
 		position: relative;
 		width: 100%;
-		padding-bottom: 56.25%; /* 16:9 aspect ratio - larger image */
+		padding-bottom: 56.25%; /* 16:9 aspect ratio */
 		background-color: #f5f5f5;
 	}
 
@@ -174,24 +279,29 @@
 		color: #1a1a1a;
 		line-height: 1.3;
 		font-size: 2.1rem !important;
-		margin-bottom: 1rem !important;
+		margin-bottom: 0.6rem !important;
 		font-weight: 700;
 	}
 
-	/* Title clamp: keeps long room names from stretching/breaking card layout */
+	/* Title clamp: keeps long room names from stretching/breaking card layout. */
 	.room-title-clamp {
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
-		min-height: 2.6em;
 	}
 
 	.room-card-body p {
-		flex: 1;
+		flex: 1 1 auto;
+		align-self: stretch;
+		box-sizing: border-box;
 		width: 100% !important;
 		max-width: 100% !important;
+		margin-top: 0 !important;
 		margin-bottom: 1.5rem !important;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		padding: 0 !important;
 		overflow: hidden;
 		display: -webkit-box;
 		-webkit-line-clamp: 3;
@@ -199,6 +309,8 @@
 		font-size: 1.4rem !important;
 		line-height: 1.5 !important;
 		color: #666 !important;
+		text-align: justify;
+		text-justify: inter-word;
 	}
 
 	/* Features Row */
@@ -230,18 +342,25 @@
 		margin-top: auto;
 	}
 
-	/* Button Styling */
+	/* Price */
+	.room-price-num {
+		color: #1a1a1a;
+		font-size: 1.8rem !important;
+	}
+	.room-price-suffix {
+		color: #999;
+	}
+
+	/* Button Styling — two buttons side by side (Book Now + View Details) */
 	.room-card-btn-wrap {
 		display: flex;
-		justify-content: center;
 	}
 
 	.room-card .btn-new {
 		margin-top: 0;
-		width: 40%;
-		padding: 10px 18px;
+		padding: 10px 16px;
 		font-weight: 600;
-		font-size: 0.9rem;
+		font-size: 0.85rem;
 		text-align: center;
 		justify-content: center;
 		transition: all 0.3s ease;
@@ -249,7 +368,8 @@
 	}
 
 	.room-card .btn-new:hover {
-		transform: translateX(4px);
+		transform: translateY(-3px);
+		box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.3);
 	}
 
 	.room-card .btn-new .btn-text {
@@ -264,7 +384,7 @@
 
 		.room-card-body h3 {
 			font-size: 1.75rem !important;
-			margin-bottom: 0.875rem !important;
+			margin-bottom: 0.6rem !important;
 		}
 
 		.room-card-body p {
@@ -276,9 +396,8 @@
 		}
 
 		.room-card .btn-new {
-			width: 40%;
-			padding: 8px 14px !important;
-			font-size: 0.8rem !important;
+			padding: 8px 12px !important;
+			font-size: 0.78rem !important;
 		}
 	}
 
@@ -290,7 +409,7 @@
 
 		.room-card-body h3 {
 			font-size: 1.55rem !important;
-			margin-bottom: 0.75rem !important;
+			margin-bottom: 0.5rem !important;
 		}
 
 		.room-card-body p {
@@ -316,10 +435,14 @@
 			font-size: 1.25rem !important;
 		}
 
+		.room-card-btn-wrap {
+			flex-direction: column;
+		}
+
 		.room-card .btn-new {
-			width: 50%;
-			padding: 6px 12px !important;
+			padding: 8px 12px !important;
 			font-size: 0.75rem !important;
+			width: 100%;
 		}
 
 		.room-card .btn-icon {
@@ -379,7 +502,6 @@
 	document.addEventListener('DOMContentLoaded', function () {
 		var targets = [];
 
-		// Each room card fades/slides in individually
 		document.querySelectorAll('.room-items-wrap .room-card').forEach(function (card, cardIndex) {
 			card.classList.add('reveal-on-scroll', 'reveal-up');
 			card.dataset.enterDelay = (cardIndex % 2) * 0.15;
@@ -387,7 +509,6 @@
 		});
 
 		if (!('IntersectionObserver' in window) || targets.length === 0) {
-			// Fallback: just show everything if the browser can't observe
 			targets.forEach(function (el) { el.classList.add('is-visible'); });
 			return;
 		}
@@ -411,9 +532,149 @@
 		targets.forEach(function (el) { observer.observe(el); });
 	});
 
+	/* ===== Book Now Modal — sizing + scroll lock, same pattern used
+	   for #bookNowModal on the index page ===== */
+	document.addEventListener('DOMContentLoaded', function () {
+		var bookNowModalEl = document.getElementById('bookNowModal');
+		if (bookNowModalEl) {
+			var lockedScrollY = 0;
+			var modalContentEl = bookNowModalEl.querySelector('.modal-content');
+			var modalHeaderEl = bookNowModalEl.querySelector('.modal-header');
+			var modalBodyEl = bookNowModalEl.querySelector('.modal-body');
+
+			function sizeModal() {
+				if (!modalContentEl || !modalBodyEl) return;
+				var margin = 56;
+				var maxContentHeight = window.innerHeight - margin;
+				modalContentEl.style.height = 'auto';
+				modalContentEl.style.maxHeight = maxContentHeight + 'px';
+
+				var headerHeight = modalHeaderEl ? modalHeaderEl.offsetHeight : 0;
+				modalBodyEl.style.maxHeight = (maxContentHeight - headerHeight) + 'px';
+				modalBodyEl.style.overflowY = 'auto';
+			}
+
+			bookNowModalEl.addEventListener('show.bs.modal', function (event) {
+				lockedScrollY = window.scrollY || window.pageYOffset || 0;
+				document.body.style.overflow = 'hidden';
+				document.body.style.position = 'fixed';
+				document.body.style.top = (-lockedScrollY) + 'px';
+				document.body.style.left = '0';
+				document.body.style.right = '0';
+				document.body.style.width = '100%';
+
+				// Pre-select the room whose "Book Now" button triggered this modal
+				var trigger = event.relatedTarget;
+				var roomSelectEl = document.getElementById('roomSelect');
+				if (trigger && roomSelectEl) {
+					var roomId = trigger.getAttribute('data-room-id') || '';
+					if (roomId && roomSelectEl.querySelector('option[value="' + roomId + '"]')) {
+						roomSelectEl.value = roomId;
+					} else {
+						roomSelectEl.value = '';
+					}
+				} else if (roomSelectEl) {
+					roomSelectEl.value = '';
+				}
+			});
+			bookNowModalEl.addEventListener('shown.bs.modal', sizeModal);
+			window.addEventListener('resize', function () {
+				if (bookNowModalEl.classList.contains('show')) sizeModal();
+			});
+			bookNowModalEl.addEventListener('hidden.bs.modal', function () {
+				document.body.style.overflow = '';
+				document.body.style.position = '';
+				document.body.style.top = '';
+				document.body.style.left = '';
+				document.body.style.right = '';
+				document.body.style.width = '';
+				window.scrollTo(0, lockedScrollY);
+			});
+		}
+
+		var bookNowForm = document.getElementById('bookNowForm');
+		if (!bookNowForm) return;
+
+		var WHATSAPP_NUMBER = '919633870962'; // country code 91 + 9633870962
+
+		bookNowForm.addEventListener('submit', function (e) {
+			e.preventDefault();
+
+			var name = document.getElementById('guestName').value.trim();
+			var email = document.getElementById('guestEmail').value.trim();
+			var phone = document.getElementById('guestPhone').value.trim();
+			var checkIn = document.getElementById('checkIn').value;
+			var checkOut = document.getElementById('checkOut').value;
+			var numGuests = document.getElementById('numGuests').value;
+			var roomSelectEl = document.getElementById('roomSelect');
+			var roomName = roomSelectEl.options[roomSelectEl.selectedIndex].getAttribute('data-room-name');
+			var requests = document.getElementById('specialRequests').value.trim();
+
+			if (checkOut <= checkIn) {
+				alert('Check-out date must be after check-in date.');
+				return;
+			}
+
+			var submitBtn = bookNowForm.querySelector('button[type="submit"]');
+			if (submitBtn) submitBtn.disabled = true;
+
+			var formData = new FormData(bookNowForm);
+
+			fetch("{% url 'tandj_app:reservation_ajax_create' %}", {
+				method: 'POST',
+				body: formData,
+				headers: { 'X-Requested-With': 'XMLHttpRequest' }
+			})
+			.then(function (res) { return res.json(); })
+			.then(function (data) {
+				if (submitBtn) submitBtn.disabled = false;
+
+				if (!data.success) {
+					var msg = 'Please check your details and try again.';
+					if (data.errors) {
+						msg = Object.values(data.errors).map(function (v) {
+							return Array.isArray(v) ? v.join(' ') : v;
+						}).join('\n');
+					}
+					alert(msg);
+					return;
+				}
+
+				var lines = [
+					'New Booking Request — The Mist',
+					'',
+					'Name: ' + name,
+					'Email: ' + email,
+					'Phone: ' + (phone || 'N/A'),
+					'Room: ' + (roomName || 'General Inquiry'),
+					'Guests: ' + numGuests,
+					'Check In: ' + checkIn,
+					'Check Out: ' + checkOut
+				];
+				if (requests) {
+					lines.push('Special Requests: ' + requests);
+				}
+
+				var message = encodeURIComponent(lines.join('\n'));
+				var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+
+				window.open(waUrl, '_blank');
+
+				var modalEl = document.getElementById('bookNowModal');
+				var modalInstance = bootstrap.Modal.getInstance(modalEl);
+				if (modalInstance) modalInstance.hide();
+
+				bookNowForm.reset();
+			})
+			.catch(function () {
+				if (submitBtn) submitBtn.disabled = false;
+				alert('Network error — please try again.');
+			});
+		});
+	});
+
 	/* ===== Image Modal/Lightbox on Click ===== */
 	document.addEventListener('DOMContentLoaded', function () {
-		// Create modal HTML if not exists
 		if (!document.getElementById('roomImageModal')) {
 			var modalHTML = `
 				<div class="modal fade" id="roomImageModal" tabindex="-1">
@@ -430,7 +691,6 @@
 			document.body.insertAdjacentHTML('beforeend', modalHTML);
 		}
 
-		// Add click event to all room card images
 		document.querySelectorAll('.room-card-img-wrapper a').forEach(function (link) {
 			link.addEventListener('click', function (e) {
 				e.preventDefault();

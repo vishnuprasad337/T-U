@@ -9,6 +9,7 @@
      <meta name="description"
         content="{% block meta_description %}Experience a peaceful plantation stay at Ambady Estate, Munnar. Stay in colonial cottages, enjoy organic farm-to-table dining, nature walks, and scenic mountain views in Kerala.{% endblock %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2f6b52">
 
     <link rel="shortcut icon" href="{% static 'admin-static/assets/img/T&U.png' %}" type="image/x-icon">
     
@@ -157,7 +158,6 @@
     align-items: center;
     padding: 0 24px;
     border-radius: 0 0 20px 20px;
-    overflow: hidden;
 }
 .dashboard-header::before {
     content: '';
@@ -166,6 +166,8 @@
     left: 0;
     width: 100%;
     height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
     background-image:
         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>'),
         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="22" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>'),
@@ -361,33 +363,6 @@
             color: var(--primary-blue);
         }
 
-        /* Fix for active state highlighting */
-{% comment %} .sidebar-menu a.active {
-    background: var(--light-blue);
-    color: var(--primary-blue);
-    border-right: 3px solid var(--primary-blue);
-}
-
-.submenu a.active {
-    background: var(--light-blue);
-    color: var(--primary-blue);
-    border-left: 3px solid var(--primary-blue);
-}
-
-/* Fix for dropdown arrow */
-.has-dropdown > a::after {
-    content: '\f107';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    margin-left: auto;
-    transition: transform 0.3s ease;
-}
-
-.has-dropdown.open > a::after {
-    transform: rotate(180deg);
-} {% endcomment %}
-
-        /* Fix for dropdown arrow visibility */
         /* Replace dropdown arrow with a dot */
 .has-dropdown > a::after {
     content: '•';
@@ -1021,17 +996,11 @@
                 </ul>
             </div>
 
-            <!-- Add this toast container near the end of your body, before the scripts --> <!-- Management Section -->
+            <!-- Management Section -->
             <div class="sidebar-section">
                 <h6 class="sidebar-title">Management</h6>
                 <ul class="sidebar-menu">
                     <li>
-
-
-
-
-
-        
     <a href="{% url 'tandj_app:room_list' %}" class="{% if request.resolver_match.url_name == 'room_list' %}active{% endif %}">
         <i class="icofont-bed"></i>
         Rooms
@@ -1128,9 +1097,7 @@
     <script src="{% static 'admin-static/assets/js/bootstrap.min.js' %}"></script>
 
     <script>
-        // Mobile menu toggle
-        // Mobile menu toggle
-    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const dashboardSidebar = document.getElementById('dashboardSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -1155,14 +1122,12 @@
             sidebarOverlay.addEventListener('click', closeMobileMenu);
         }
 
-        // Close mobile menu on window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 closeMobileMenu();
             }
         });
 
-            // Dropdown menu functionality - prevent closing when clicking submenu items
 const dropdownToggles = document.querySelectorAll('.has-dropdown > a');
 
 dropdownToggles.forEach(toggle => {
@@ -1170,24 +1135,20 @@ dropdownToggles.forEach(toggle => {
         e.preventDefault();
         const parent = this.parentElement;
         
-        // Close other dropdowns
         document.querySelectorAll('.has-dropdown').forEach(item => {
             if (item !== parent) {
                 item.classList.remove('open');
             }
         });
         
-        // Toggle current dropdown
         parent.classList.toggle('open');
     });
 });
 
-// Close dropdowns when clicking outside, but not when clicking on submenu items
 document.addEventListener('click', function(e) {
     const isDropdown = e.target.closest('.has-dropdown');
     const isSubmenuLink = e.target.closest('.submenu a');
     
-    // Only close dropdowns if clicking outside both dropdowns and submenu links
     if (!isDropdown && !isSubmenuLink) {
         document.querySelectorAll('.has-dropdown').forEach(item => {
             item.classList.remove('open');
@@ -1195,10 +1156,8 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Handle submenu link clicks - don't close the parent dropdown
 document.querySelectorAll('.submenu a').forEach(link => {
     link.addEventListener('click', function(e) {
-        // Allow the link to work normally but keep the dropdown open
         const dropdown = this.closest('.has-dropdown');
         if (dropdown) {
             dropdown.classList.add('open');
@@ -1211,13 +1170,11 @@ document.querySelectorAll('.submenu a').forEach(link => {
     </script>
 
     <script>
-        // User Profile Dropdown functionality
 document.addEventListener('DOMContentLoaded', function() {
     const userProfileDropdown = document.querySelector('.user-profile-dropdown');
     const userProfileToggle = document.querySelector('.user-profile-toggle');
     const logoutBtn = document.querySelector('.logout-btn');
     
-    // Toggle dropdown
     if (userProfileToggle) {
         userProfileToggle.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -1225,26 +1182,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.user-profile-dropdown')) {
             userProfileDropdown.classList.remove('open');
         }
     });
     
-    // Logout button click - show modal
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
             userProfileDropdown.classList.remove('open');
             
-            // Show logout confirmation modal
             const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
             logoutModal.show();
         });
     }
     
-    // Prevent dropdown close when clicking inside dropdown
     const userProfileMenu = document.querySelector('.user-profile-menu');
     if (userProfileMenu) {
         userProfileMenu.addEventListener('click', function(e) {
@@ -1256,22 +1209,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     <script>
-    // Simple toast function for Django messages
     function showGlobalToast(message, type = 'success') {
         const toast = document.getElementById('global-toast');
         const toastMessage = toast.querySelector('.toast-message');
         const toastIcon = toast.querySelector('.toast-icon');
         
-        // Set message
         toastMessage.textContent = message;
         
-        // Remove all type classes
         toast.classList.remove('success', 'error', 'warning', 'info');
         
-        // Add the correct type class
         toast.classList.add(type);
         
-        // Set appropriate icon
         switch(type) {
             case 'success':
                 toastIcon.className = 'toast-icon';
@@ -1291,23 +1239,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
         }
         
-        // Show toast
         toast.classList.add('show');
         
-        // Remove toast after 5 seconds
         setTimeout(() => {
             toast.classList.remove('show');
         }, 5000);
     }
 
-    // Close toast when clicking on it
     document.getElementById('global-toast').addEventListener('click', function() {
         this.classList.remove('show');
     });
 
-    // Show Django messages on page load
     document.addEventListener('DOMContentLoaded', function() {
-        // Check for Django messages
         {% if messages %}
             {% for message in messages %}
                 showGlobalToast("{{ message }}", "{{ message.tags }}");
@@ -1318,7 +1261,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <script>
     window.addEventListener("pageshow", function (event) {
-        // If the page was loaded from back/forward cache
         if (event.persisted) {
             window.location.reload();
         }

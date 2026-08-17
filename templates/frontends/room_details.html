@@ -1,7 +1,7 @@
 {% extends "frontends/base.html" %}
 {% load static %}
 
-{% block title %}{{ room.room_category|default:"Room" }} - The Mist Luxury Hotel{% endblock %}
+{% block title %}Restaurant - The Mist Luxury Hotel{% endblock %}
 {% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
 
 {% block content %}
@@ -10,15 +10,14 @@
 		============================================= -->
 		<section class="page-header page-header-text-light py-0 mb-0">
 			<div class="hero-wrap py-5">
-				<div class="hero-mask opacity-3 bg-black"></div>
-				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% if room.main_image %}{{ room.main_image.url }}{% else %}{% static 'tandu-main/images/rooms/room-3.jpg' %}{% endif %}'); background-size:cover; background-position:center;"></div>
+				<div class="hero-mask opacity-6 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/rest3.avif' %}');"></div>
 				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
 					<div class="container text-center mt-5 pt-5 pb-2">
-						<h1 class="text-17 mb-4 reveal reveal-fadeInUp">{{ room.room_category|default:"Room" }}</h1>
-						<ul class="breadcrumb justify-content-center mb-0 reveal reveal-fadeInUp" data-reveal-delay="200">
+						<h1 class="text-17 mb-4 wow fadeInUp">Restaurant</h1>
+						<ul class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay=".2s">
 							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
-							<li><a href="{% url 'tandj_app:rooms' %}">Rooms</a></li>
-							<li class="active">{{ room.room_category|default:"Room" }}</li>
+							<li class="active">Restaurant</li>
 						</ul>
 					</div>
 				</div>
@@ -26,878 +25,1197 @@
 		</section>
 		<!-- Page Header end -->
 
-            <!-- Rooms & Suites
-			============================================= -->
-            <section class="section room-detail-section">
-                <div class="container">
-                    <div class="room-items-wrap">
-						<div class="row gx-4 gy-5">
-							<div class="col-lg-8 col-xl-9 reveal reveal-fade">
-								<!-- Main Image -->
-								<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
-									{% if room.main_image %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{{ room.main_image.url }}" alt="{{ room.room_category }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
-									{% else %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/rooms/room-3.jpg' %}" alt="{{ room.room_category }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
-									{% endif %}
-								</div>
+		<!-- About Restaurant
+		============================================= -->
+		<section class="section">
+			<div class="container">
+				<div class="row g-5">
+					<div class="col-lg-6 wow fadeInLeft">
+						<!-- Heading -->
+						<p><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Meal with us</span></p>
+						<h2 class="heading-font-family text-13 fw-600 lh-sm mb-4">A Hotel <span class="text-primary">Restaurant</span> Serves Meals to Both <span class="text-primary">Guests</span> and <span class="text-primary">Visitors</span></h2>
+						<!-- Heading End -->
 
-								<!-- Rooms Details -->
-								<h2 class="text-13 fw-600 reveal reveal-fadeInUp">{{ room.room_category|default:"Room" }}</h2>
-								<div class="row gy-2 gx-5 text-body-secondary mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
-									{% if room.bedroom_beds %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-bed"></i></span>{{ room.bedroom_beds }}
-									</div>
-									{% endif %}
-									{% if room.living_room_beds %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-couch"></i></span>{{ room.living_room_beds }}
-									</div>
-									{% endif %}
-									{% if room.rating_average %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-star"></i></span>{{ room.rating_average }} Rating
-									</div>
-									{% endif %}
-								</div>
-								<div class="text-body-secondary lh-lg reveal reveal-fadeInUp" data-reveal-delay="200">{{ room.description|safe }}</div>
+						<p class="text-5 text-body-secondary">The Mist introduces guests to a memorable experience in dining out, fast becoming a preferred choice in dining out.</p>
+						<p class="text-body-secondary mb-4">The Mist offers a choice of dining options available to our guests with a zest for the good life. Unwind at our wellness center or explore nearby attractions easily.</p>
 
-								<!-- Thumbnail Gallery -->
-								{% if room_images %}
-								<div class="row g-3 mt-2 mb-4 reveal reveal-fadeInUp" data-reveal-delay="250">
-									{% for img in room_images %}
-									<div class="{% if forloop.last and room_images|length|divisibleby:2 == False %}col-12{% else %}col-6{% endif %}">
-										<a href="{{ img.image.url }}" class="glightbox d-block destination-thumb-link" data-gallery="room-gallery" data-title="{{ img.caption|default:room.room_category }}">
-											<div class="rounded-4 overflow-hidden position-relative">
-												<img class="img-fluid w-100" src="{{ img.image.url }}" alt="{{ img.caption|default:room.room_category }}" style="height:380px; object-fit:cover; display:block;" loading="lazy" decoding="async">
-												{% if img.caption %}
-												<div class="destination-thumb-caption">{{ img.caption }}</div>
-												{% endif %}
-											</div>
-										</a>
-									</div>
-									{% endfor %}
+						<div class="row mt-5">
+							<div class="col-sm-5 wow fadeInUp">
+								<div class="mb-3 hour-item">
+									<div class="text-2 fw-600 text-body-tertiary mb-1">Breakfast:</div>
+									<div class="fw-700">7.00am – 10.30am</div>
 								</div>
-								{% endif %}
-
-								<hr class="opacity-1 my-4">
-								<div class="room-price-book-bar d-flex flex-wrap align-items-center justify-content-between gap-3 w-100 reveal reveal-fadeInUp" data-reveal-delay="300">
-									<div class="text-9 fw-600 d-flex align-items-center gap-1 flex-shrink-0">₹{{ room.price_per_night }} <span class="text-3 fw-500 text-body-tertiary text-uppercase">/ Per Night</span></div>
-									<a href="javascript:void(0)" class="btn btn-new btn-primary rounded-pill flex-shrink-0 js-open-booking-modal" data-room-id="{{ room.id }}">
-										<span class="btn-text"><span>Book Now</span></span>
-										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-									</a>
+								<div class="mb-3 hour-item">
+									<div class="text-2 fw-600 text-body-tertiary mb-1">Lunch:</div>
+									<div class="fw-700">11.00am – 3.00pm</div>
+								</div>
+								<div class="mb-3 hour-item">
+									<div class="text-2 fw-600 text-body-tertiary mb-1">Dinner:</div>
+									<div class="fw-700">7.00pm – 11.00pm</div>
 								</div>
 							</div>
-							<div class="col-lg-4 col-xl-3 reveal reveal-fade">
-								<div class="row room-sidebar-sticky" style="z-index: 10;">
-									<div class="col-sm-6 col-lg-12">
-										<!-- Other Link -->
-										<div class="bg-white rounded-5 p-4 mb-4">
-											<h4 class="text-7 fw-600">Other Rooms</h4>
-											<ul class="list-link">
-												{% for other in other_rooms %}
-												<li><a href="{% url 'tandj_app:room_detail_public' other.slug %}">{{ other.room_category|default:"Room" }}</a></li>
-												{% empty %}
-												<li><a href="{% url 'tandj_app:rooms' %}">View All Rooms</a></li>
-												{% endfor %}
-											</ul>
+							<div class="col-sm-auto align-content-center wow fadeInUp reservation-col" data-wow-delay="0.2s">
+								<div class="d-flex flex-column gap-3">
+									<!-- Call for Reservation -->
+									<a href="tel:+919188954770" class="reservation-call-card bg-white rounded-4 p-3 d-flex align-items-center gap-3 text-decoration-none">
+										<div class="text-primary text-7 d-inline-flex reservation-icon"><i class="fa-solid fa-phone-volume"></i></div>
+										<div class="vr my-1 opacity-1 d-none d-sm-block"></div>
+										<div class="text-start">
+											<div class="text-2 fw-600 text-body-tertiary mb-1">Call for Reservation:</div>
+											<h3 class="text-4 fw-700 mb-0">+91 9188954770</h3>
 										</div>
-									</div>
-									<div class="col-sm-6 col-lg-12">
-										<!-- Help -->
-										<div class="hero-wrap rounded-5">
-											<div class="hero-mask opacity-6 bg-black"></div>
-											<img class="img-fluid d-flex rounded-5" src="{% static 'tandu-main/images/help-bg.jpg' %}" alt="">
-											<div class="hero-content position-absolute top-50 start-50 translate-middle w-100">
-												<div class="container py-5 px-4 text-center">
-													<span class="text-primary text-13"><i class="fa-solid fa-circle-question"></i></span>
-													<h3 class="text-white text-6 fw-600 mb-3">Need Help?</h3>
-													<div class="text-6 fw-700 text-primary mb-1">+91 9188954770</div>
-													<div class="fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">info@themist.com</div>
-													<a class="btn btn-new btn-sm btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
-														<span class="btn-text"><span>Contact Us</span></span>
-														<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
+									</a>
+									<!-- Call for Reservation End -->
+
+									<!-- Book a Table Button -->
+									<a href="javascript:void(0)" class="btn btn-new btn-primary rounded-pill js-open-table-booking-modal">
+										<span class="btn-text"><span>Book a Table</span></span>
+										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+									</a>
+									<!-- Book a Table Button End -->
 								</div>
 							</div>
 						</div>
-                    </div>
-                </div>
-            </section>
-            <!-- Rooms & Suites end -->
+					</div>
+					<div class="col-lg-6 wow fadeInRight">
+						<div class="position-relative text-center d-flex flex-column gap-4">
+							<div class="d-inline-flex img-zoom-wrap">
+								<img class="img-fluid rounded-5" src="{% static 'tandu-main/rest3.avif' %}" alt="Restaurant interior at The Mist">
+							</div>
+							<div class="d-inline-flex img-zoom-wrap">
+								<img class="img-fluid rounded-5" src="{% static 'tandu-main/rest2.jpg' %}" alt="Chef preparing a dish at The Mist restaurant">
+							</div>
 
-            <!-- ===== BOOKING MODAL (overlay-based — same reliable pattern used
-                 elsewhere on the site; opened by any .js-open-booking-modal
-                 trigger, e.g. the "Book Now" button above) ===== -->
-            <div id="bookingModalOverlay" class="booking-modal-overlay" aria-hidden="true">
-                <div class="booking-modal-box" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
-                    <button type="button" class="booking-modal-close" id="bookingModalClose" aria-label="Close">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+							<div class="position-absolute top-50 start-50 translate-middle">
+								<!-- Circle Text -->
 
-                    <!-- Header -->
-                    <div class="booking-modal-header">
-                        <span class="booking-modal-eyebrow">The Mist</span>
-                        <h3 id="bookingModalTitle" class="booking-modal-title">Book Your <span class="text-primary">Stay</span></h3>
-                        <p class="booking-modal-sub">Fill in your details and we'll confirm your reservation over WhatsApp.</p>
-                    </div>
+								<!-- Circle Text End -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- About Restaurant end -->
 
-                    <form class="booking-modal-form" id="bookNowForm" novalidate>
-                        {% csrf_token %}
+		<!-- Restaurant Menu
+		============================================= -->
+		<section class="section bg-light-1">
+			<div class="container">
+				<!-- Heading -->
+				<div class="mx-auto text-center mb-5">
+					<p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Meal options</span></p>
+					<h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Restaurant <span class="text-primary">Menu</span></h2>
+				</div>
+				<!-- Heading End -->
 
-                        <div class="booking-modal-section-label">Guest Details</div>
-                        <div class="booking-modal-row">
-                            <div class="booking-modal-field">
-                                <label for="guestName"><i class="fa-solid fa-user"></i> Full Name</label>
-                                <input type="text" id="guestName" name="guest_name" placeholder="Your full name" required>
-                                <span class="booking-modal-error" data-field-error="guest_name"></span>
-                            </div>
-                            <div class="booking-modal-field">
-                                <label for="guestPhone"><i class="fa-solid fa-phone"></i> Phone</label>
-                                <input type="tel" id="guestPhone" name="guest_phone" placeholder="Your phone number">
-                            </div>
-                        </div>
+				<!-- Tabs -->
+				<div class="menu-tab-scroll mb-5 wow fadeInUp">
+					<ul id="menuTab" role="tablist" class="nav nav-pills gap-3 fw-600 justify-content-center justify-content-md-center flex-nowrap flex-md-wrap">
+					  <li class="nav-item"> <a class="nav-link rounded-pill active" id="one-tab" data-bs-toggle="tab" href="#one" role="tab" aria-controls="one" aria-selected="true">Starters</a> </li>
+					  <li class="nav-item"> <a class="nav-link rounded-pill" id="two-tab" data-bs-toggle="tab" href="#two" role="tab" aria-controls="two" aria-selected="false">Main Courses</a> </li>
+					  <li class="nav-item"> <a class="nav-link rounded-pill" id="three-tab" data-bs-toggle="tab" href="#three" role="tab" aria-controls="three" aria-selected="false">Desserts</a> </li>
+					</ul>
+				</div>
 
-                        <div class="booking-modal-field">
-                            <label for="guestEmail"><i class="fa-solid fa-envelope"></i> Email</label>
-                            <input type="email" id="guestEmail" name="guest_email" placeholder="you@example.com" required>
-                            <span class="booking-modal-error" data-field-error="guest_email"></span>
-                        </div>
+				<!-- Tabs Content -->
+				<div id="menuTabContent" class="tab-content my-3 wow fadeInUp">
+				  <div class="tab-pane fade show active" id="one" role="tabpanel" aria-labelledby="one-tab">
+					<!-- Starters List -->
+					<div class="row gy-4 gx-5">
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Heirloom Tomato & Burrata</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$22</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Basil oil, aged balsamic pearls</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Foie-Style Chicken Liver Parfait</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$12</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Fig gelée, toasted sourdough</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Seared Scallops</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$24</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Cauliflower purée, citrus beurre blanc</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Lobster Bisque</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$19</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Cream finish, chive oil</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Wild Mushroom Velouté</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$16</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Truffle foam, brioche crisp</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Beef Carpaccio</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$21</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Parmesan shavings, capers, extra virgin olive oil</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Smoked Salmon Tartare</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$28</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Avocado mousse, lemon crème fraîche</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Crispy Prawn Tempura</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$17</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Avocado mousse, lemon crème fraîche</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Wild Mushroom Velouté</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$24</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Truffle foam, brioche crisp</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Beef Carpaccio</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$15</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Parmesan shavings, capers, extra virgin olive oil</p>
+						</div>
+					</div>
+					<!-- Starters List End -->
+				  </div>
+				  <div class="tab-pane fade" id="two" role="tabpanel" aria-labelledby="two-tab">
+					<!-- Main Courses List -->
+					<div class="row gy-4 gx-5">
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Grilled Norwegian Salmon</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$38</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Salmon fillet with lemon butter sauce and asparagus.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Australian Lamb Chops</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$45</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Herb-marinated lamb chops with rosemary jus.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">US Prime Beef Tenderloin</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$58</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Premium tenderloin with red wine reduction and truffle mash.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Wild Mushroom Risotto</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$28</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Creamy arborio rice with mushrooms and parmesan.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Chicken Roulade</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$32</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Stuffed chicken with spinach and cheese, herb sauce.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Vegetable Au Gratin</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$26</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Baked vegetables with creamy cheese sauce.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Thai Green Curry (Veg/Chicken/Shrimp)</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$26</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Coconut curry with Thai herbs, jasmine rice.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Japanese Teriyaki Chicken</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$30</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Grilled chicken glazed with teriyaki sauce.</p>
+						</div>
+					</div>
+					<!-- Main Courses End -->
+				  </div>
+				  <div class="tab-pane fade" id="three" role="tabpanel" aria-labelledby="three-tab">
+					<!-- Desserts List -->
+					<div class="row gy-4 gx-5">
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Valrhona Chocolate Fondant</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$18</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Warm chocolate cake with molten center, with vanilla ice cream.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Classic Crème Brûlée</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$16</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Silky vanilla custard with caramelized sugar crust.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">US Prime Beef Tenderloin</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$58</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Premium tenderloin with red wine reduction and truffle mash.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">New York Cheesecake</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$17</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Creamy baked cheesecake with berry compote.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Tiramisu</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$18</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Italian dessert with mascarpone, espresso, and cocoa.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Opera Cake</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$16</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Layered almond sponge with coffee cream and chocolate glaze.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Artisanal Gelato Selection</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$15</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Choice of chocolate, pistachio, or vanilla.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Sorbet Trio</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$14</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Refreshing fruit sorbets (mango, raspberry, lemon).</p>
+						</div>
+					</div>
+					<!-- Desserts End -->
+				  </div>
+				</div>
+				<!-- Button -->
+				<div class="text-center mt-5 wow fadeInUp">
+					<a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:contact' %}">
+						<span class="btn-text"><span>View Full Menu</span></span>
+						<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+					</a>
+				</div>
+			</div>
+		</section>
+		<!-- Restaurant Menu end -->
 
-                        <div class="booking-modal-section-label">Stay Details</div>
-                        <div class="booking-modal-row">
-                            <div class="booking-modal-field">
-                                <label for="checkIn"><i class="fa-solid fa-calendar-check"></i> Check In</label>
-                                <input type="date" id="checkIn" name="check_in" required>
-                                <span class="booking-modal-error" data-field-error="check_in"></span>
-                            </div>
-                            <div class="booking-modal-field">
-                                <label for="checkOut"><i class="fa-solid fa-calendar-xmark"></i> Check Out</label>
-                                <input type="date" id="checkOut" name="check_out" required>
-                                <span class="booking-modal-error" data-field-error="check_out"></span>
-                            </div>
-                        </div>
 
-                        <div class="booking-modal-row">
-                            <div class="booking-modal-field">
-                                <label for="numGuests"><i class="fa-solid fa-users"></i> Guests</label>
-                                <input type="number" min="1" value="1" id="numGuests" name="num_guests" required>
-                                <span class="booking-modal-error" data-field-error="num_guests"></span>
-                            </div>
-                            <div class="booking-modal-field">
-                                <label for="roomSelect">
-                                    <i class="fa-solid fa-bed"></i> Room
-                                    <span class="booking-modal-optional-tag">optional</span>
-                                </label>
-                                <select id="roomSelect" name="room_id">
-                                    <option value="" data-room-name="">General Inquiry</option>
-                                    {% if rooms %}
-                                        {% for r in rooms %}
-                                            <option value="{{ r.id }}" data-room-name="{{ r.room_category }}" {% if room and r.id == room.id %}selected{% endif %}>{{ r.room_category }}</option>
-                                        {% endfor %}
-                                    {% elif room %}
-                                        <option value="{{ room.id }}" data-room-name="{{ room.room_category }}" selected>{{ room.room_category }}</option>
-                                    {% endif %}
-                                </select>
-                            </div>
-                        </div>
 
-                        <div class="booking-modal-field">
-                            <label for="specialRequests">
-                                <i class="fa-solid fa-comment-dots"></i> Special Requests
-                                <span class="booking-modal-optional-tag">optional</span>
-                            </label>
-                            <textarea id="specialRequests" name="special_requests" placeholder="Any special requests? (optional)"></textarea>
-                        </div>
+		<!-- Our Values
+		============================================= -->
+		<section class="section bg-light-1">
+			<div class="container">
+				<!-- Heading -->
+				<div class="mx-auto text-center mb-5">
+					<p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Our Values</span></p>
+					<h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">The Heart of <br class="d-none d-md-block"><span class="text-primary">Our Restaurant</span></h2>
+				</div>
+				<!-- Heading End -->
 
-                        <button type="submit" class="booking-modal-submit">
-                            <span class="btn-label">Send via WhatsApp</span>
-                            <i class="fa-brands fa-whatsapp"></i>
-                        </button>
+				<div class="row g-4">
+					<div class="col-md-6 col-lg-4 wow fadeInUp">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-medal"></i></div>
+							<h3 class="text-7 fw-600">Quality Food</h3>
+							<p class="text-3 text-body-secondary">We use fresh ingredients and careful preparation to deliver food you can trust and enjoy.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".2s">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-bell-concierge"></i></div>
+							<h3 class="text-7 fw-600">Great Service</h3>
+							<p class="text-3 text-body-secondary">We treat every guest with respect, warmth, and attention.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".4s">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-repeat"></i></div>
+							<h3 class="text-7 fw-600">Consistency</h3>
+							<p class="text-3 text-body-secondary">We aim to provide the same quality and experience every time you visit.</p>
+						</div>
+					</div>
 
-                        <div id="bookingModalMsg" class="booking-modal-msg" role="status" aria-live="polite"></div>
-                    </form>
-                </div>
-            </div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-seedling"></i></div>
+							<h3 class="text-7 fw-600">Clean Environment</h3>
+							<p class="text-3 text-body-secondary">Hygiene and food safety are always our top priorities.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".2s">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-handshake"></i></div>
+							<h3 class="text-7 fw-600">Honesty & Integrity</h3>
+							<p class="text-3 text-body-secondary">We operate with transparency, fairness, and respect for our guests and team.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".4s">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-people-group"></i></div>
+							<h3 class="text-7 fw-600">Community Respect</h3>
+							<p class="text-3 text-body-secondary">We value our people and strive to contribute positively to our community.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Our Values end -->
 
-            <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var overlay = document.getElementById('bookingModalOverlay');
-                var closeBtn = document.getElementById('bookingModalClose');
-                var form = document.getElementById('bookNowForm');
-                var msgBox = document.getElementById('bookingModalMsg');
-                var submitBtn = form ? form.querySelector('.booking-modal-submit') : null;
-                var btnLabel = submitBtn ? submitBtn.querySelector('.btn-label') : null;
-                var roomSelectEl = document.getElementById('roomSelect');
 
-                if (!overlay || !form) return;
 
-                var lockedScrollY = 0;
-                var WHATSAPP_NUMBER = '919633870962'; // country code 91 + 9633870962
+		<!-- Call to Action
+		============================================= -->
+		<section class="call-to-action bg-primary section">
+			<div class="container text-center">
+				<h2 class="text-14 fw-600 text-white lh-sm wow fadeInUp mb-3">The Most Memorable <span class="text-black">Rest <br class="d-none d-md-block">Time</span> Starts at The Top Station Multi Cuisine Restaurant</h2>
+				<div class="wow fadeInUp" data-wow-delay=".2s">
+					<a class="btn btn-new btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
+						<span class="btn-text"><span>Contact Us</span></span>
+						<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+					</a>
+				</div>
+			</div>
+		</section>
+		<!-- Call to Action end -->
 
-                function openModal(roomId) {
-                    lockedScrollY = window.scrollY || window.pageYOffset || 0;
-                    document.body.style.overflow = 'hidden';
-                    document.body.style.position = 'fixed';
-                    document.body.style.top = (-lockedScrollY) + 'px';
-                    document.body.style.left = '0';
-                    document.body.style.right = '0';
-                    document.body.style.width = '100%';
+		<!-- Sticky mobile reservation bar
+		============================================= -->
+		<a href="tel:+919188954770" class="mobile-call-bar d-lg-none">
+			<i class="fa-solid fa-phone-volume"></i>
+			<span>Call to Reserve a Table</span>
+		</a>
 
-                    if (roomId && roomSelectEl) {
-                        roomSelectEl.value = roomId;
-                    }
+		<!-- ===== TABLE BOOKING MODAL (overlay-based — same pattern used
+			 on the room details page, adapted for a restaurant table
+			 reservation instead of a room stay) ===== -->
+		<div id="tableBookingModalOverlay" class="booking-modal-overlay" aria-hidden="true">
+			<div class="booking-modal-box" role="dialog" aria-modal="true" aria-labelledby="tableBookingModalTitle">
+				<button type="button" class="booking-modal-close" id="tableBookingModalClose" aria-label="Close">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
 
-                    overlay.classList.add('active');
-                    overlay.setAttribute('aria-hidden', 'false');
-                }
+				<!-- Header -->
+				<div class="booking-modal-header">
+					<span class="booking-modal-eyebrow">The Mist</span>
+					<h3 id="tableBookingModalTitle" class="booking-modal-title">Book a <span class="text-primary">Table</span></h3>
+					<p class="booking-modal-sub">Fill in your details and we'll confirm your table reservation over WhatsApp.</p>
+				</div>
 
-                function closeModal() {
-                    overlay.classList.remove('active');
-                    overlay.setAttribute('aria-hidden', 'true');
+				<form class="booking-modal-form" id="tableBookingForm" novalidate>
+					{% csrf_token %}
 
-                    document.body.style.overflow = '';
-                    document.body.style.position = '';
-                    document.body.style.top = '';
-                    document.body.style.left = '';
-                    document.body.style.right = '';
-                    document.body.style.width = '';
-                    window.scrollTo(0, lockedScrollY);
-                }
+					<div class="booking-modal-section-label">Guest Details</div>
+					<div class="booking-modal-row">
+						<div class="booking-modal-field">
+							<label for="tableGuestName"><i class="fa-solid fa-user"></i> Full Name</label>
+							<input type="text" id="tableGuestName" name="guest_name" placeholder="Your full name" required>
+							<span class="booking-modal-error" data-field-error="guest_name"></span>
+						</div>
+						<div class="booking-modal-field">
+							<label for="tableGuestPhone"><i class="fa-solid fa-phone"></i> Phone</label>
+							<input type="tel" id="tableGuestPhone" name="guest_phone" placeholder="Your phone number" required>
+							<span class="booking-modal-error" data-field-error="guest_phone"></span>
+						</div>
+					</div>
 
-                document.querySelectorAll('.js-open-booking-modal').forEach(function (trigger) {
-                    trigger.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        openModal(trigger.getAttribute('data-room-id'));
-                    });
-                });
+					<div class="booking-modal-field">
+						<label for="tableGuestEmail"><i class="fa-solid fa-envelope"></i> Email <span class="booking-modal-optional-tag">optional</span></label>
+						<input type="email" id="tableGuestEmail" name="guest_email" placeholder="you@example.com">
+					</div>
 
-                closeBtn.addEventListener('click', closeModal);
+					<div class="booking-modal-section-label">Reservation Details</div>
+					<div class="booking-modal-row">
+						<div class="booking-modal-field">
+							<label for="tableDate"><i class="fa-solid fa-calendar-days"></i> Date</label>
+							<input type="date" id="tableDate" name="reservation_date" required>
+							<span class="booking-modal-error" data-field-error="reservation_date"></span>
+						</div>
+						<div class="booking-modal-field">
+							<label for="tableTime"><i class="fa-solid fa-clock"></i> Time</label>
+							<input type="time" id="tableTime" name="reservation_time" required>
+							<span class="booking-modal-error" data-field-error="reservation_time"></span>
+						</div>
+					</div>
 
-                overlay.addEventListener('click', function (e) {
-                    if (e.target === overlay) closeModal();
-                });
+					<div class="booking-modal-field">
+						<label for="tableNumGuests"><i class="fa-solid fa-users"></i> Number of Guests</label>
+						<input type="number" min="1" value="2" id="tableNumGuests" name="num_guests" required>
+						<span class="booking-modal-error" data-field-error="num_guests"></span>
+					</div>
 
-                document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
-                });
+					<div class="booking-modal-field">
+						<label for="tableSpecialRequests">
+							<i class="fa-solid fa-comment-dots"></i> Special Requests
+							<span class="booking-modal-optional-tag">optional</span>
+						</label>
+						<textarea id="tableSpecialRequests" name="special_requests" placeholder="Any special requests? (optional)"></textarea>
+					</div>
 
-                form.addEventListener('submit', function (e) {
-                    e.preventDefault();
+					<button type="submit" class="booking-modal-submit">
+						<span class="btn-label">Send via WhatsApp</span>
+						<i class="fa-brands fa-whatsapp"></i>
+					</button>
 
-                    form.querySelectorAll('[data-field-error]').forEach(function (el) {
-                        el.textContent = '';
-                    });
-                    msgBox.textContent = '';
-                    msgBox.classList.remove('success', 'error');
-
-                    var name = document.getElementById('guestName').value.trim();
-                    var email = document.getElementById('guestEmail').value.trim();
-                    var phone = document.getElementById('guestPhone').value.trim();
-                    var checkIn = document.getElementById('checkIn').value;
-                    var checkOut = document.getElementById('checkOut').value;
-                    var numGuests = document.getElementById('numGuests').value;
-                    var roomName = roomSelectEl.options[roomSelectEl.selectedIndex].getAttribute('data-room-name');
-                    var requests = document.getElementById('specialRequests').value.trim();
-
-                    var hasError = false;
-                    if (!name) {
-                        hasError = true;
-                        form.querySelector('[data-field-error="guest_name"]').textContent = 'This field is required.';
-                    }
-                    if (!email) {
-                        hasError = true;
-                        form.querySelector('[data-field-error="guest_email"]').textContent = 'This field is required.';
-                    }
-                    if (!checkIn) {
-                        hasError = true;
-                        form.querySelector('[data-field-error="check_in"]').textContent = 'This field is required.';
-                    }
-                    if (!checkOut) {
-                        hasError = true;
-                        form.querySelector('[data-field-error="check_out"]').textContent = 'This field is required.';
-                    }
-                    if (!numGuests) {
-                        hasError = true;
-                        form.querySelector('[data-field-error="num_guests"]').textContent = 'This field is required.';
-                    }
-                    if (checkIn && checkOut && checkOut <= checkIn) {
-                        hasError = true;
-                        form.querySelector('[data-field-error="check_out"]').textContent = 'Must be after check-in.';
-                    }
-
-                    if (hasError) {
-                        msgBox.textContent = 'Please fill in the required fields.';
-                        msgBox.classList.add('error');
-                        return;
-                    }
-
-                    submitBtn.disabled = true;
-                    var originalLabel = btnLabel.textContent;
-                    btnLabel.textContent = 'Saving your booking…';
-                    msgBox.textContent = '';
-                    msgBox.classList.remove('success', 'error');
-
-                    // Save the booking to the database first...
-                    var formData = new FormData(form);
-
-                    fetch("{% url 'tandj_app:reservation_ajax_create' %}", {
-                        method: 'POST',
-                        body: formData,
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                    })
-                    .then(function (res) { return res.json(); })
-                    .then(function (data) {
-                        if (!data.success) {
-                            submitBtn.disabled = false;
-                            btnLabel.textContent = originalLabel;
-
-                            if (data.errors) {
-                                Object.keys(data.errors).forEach(function (key) {
-                                    var span = form.querySelector('[data-field-error="' + key + '"]');
-                                    var val = data.errors[key];
-                                    var text = Array.isArray(val) ? val.join(' ') : val;
-                                    if (span) {
-                                        span.textContent = text;
-                                    }
-                                });
-                            }
-
-                            msgBox.textContent = 'Please check your details and try again.';
-                            msgBox.classList.add('error');
-                            return;
-                        }
-
-                        // ...then, once it's saved, hand off to WhatsApp same as before
-                        var lines = [
-                            'New Booking Request — The Mist',
-                            '',
-                            'Name: ' + name,
-                            'Email: ' + email,
-                            'Phone: ' + (phone || 'N/A'),
-                            'Room: ' + (roomName || 'General Inquiry'),
-                            'Guests: ' + numGuests,
-                            'Check In: ' + checkIn,
-                            'Check Out: ' + checkOut
-                        ];
-                        if (requests) {
-                            lines.push('Special Requests: ' + requests);
-                        }
-
-                        btnLabel.textContent = 'Opening WhatsApp…';
-
-                        var message = encodeURIComponent(lines.join('\n'));
-                        var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
-
-                        msgBox.textContent = 'Redirecting you to WhatsApp…';
-                        msgBox.classList.add('success');
-
-                        setTimeout(function () {
-                            window.open(waUrl, '_blank');
-                            submitBtn.disabled = false;
-                            btnLabel.textContent = originalLabel;
-                            closeModal();
-                            form.reset();
-                        }, 400);
-                    })
-                    .catch(function () {
-                        submitBtn.disabled = false;
-                        btnLabel.textContent = originalLabel;
-                        msgBox.textContent = 'Network error — please try again.';
-                        msgBox.classList.add('error');
-                    });
-                });
-            });
-            </script>
+					<div id="tableBookingModalMsg" class="booking-modal-msg" role="status" aria-live="polite"></div>
+				</form>
+			</div>
+		</div>
+		<!-- TABLE BOOKING MODAL end -->
 
 <style>
-
-
-/* ===== BOOKING MODAL (overlay-based, same pattern as the rest of the site) ===== */
-.booking-modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1050;
-    background: rgba(10, 18, 10, 0.65);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.booking-modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.booking-modal-box {
-    position: relative;
-    background: #fff;
-    width: 100%;
-    max-width: 560px;
-    max-height: 90vh;
-    max-height: 90dvh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    border-radius: 24px;
-    padding: 44px 40px 36px;
-    transform: translateY(24px) scale(0.98);
-    transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
-}
-
-.booking-modal-overlay.active .booking-modal-box {
-    transform: translateY(0) scale(1);
-}
-
-.booking-modal-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.1);
-    color: #1a1a1a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
-    z-index: 2;
-}
-
-.booking-modal-close:hover {
-    background: var(--bs-primary, #0d6efd);
-    color: #fff;
-    transform: rotate(90deg);
-}
-
-.booking-modal-header {
-    margin-bottom: 28px;
-    padding-right: 30px;
-}
-
-.booking-modal-eyebrow {
-    display: inline-block;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--bs-primary, #0d6efd);
-    margin-bottom: 8px;
-}
-
-.booking-modal-title {
-    margin: 0 0 8px;
-    font-weight: 700;
-}
-
-.booking-modal-sub {
-    color: #6c757d;
-    font-size: 0.92rem;
-    line-height: 1.6;
-    margin: 0;
-}
-
-.booking-modal-section-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--bs-primary, #0d6efd);
-    margin: 20px 0 2px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.booking-modal-section-label:first-of-type {
-    margin-top: 4px;
-}
-
-.booking-modal-section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(0, 0, 0, 0.08);
-}
-
-.booking-modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.booking-modal-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.booking-modal-field label {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 0.83rem;
-    font-weight: 700;
-    color: #212529;
-    margin-bottom: 7px;
-}
-
-.booking-modal-field label i {
-    color: var(--bs-primary, #0d6efd);
-    font-size: 0.85rem;
-    width: 14px;
-    text-align: center;
-}
-
-.booking-modal-optional-tag {
-    font-size: 0.68rem;
-    font-weight: 600;
-    color: #6c757d;
-    text-transform: none;
-    letter-spacing: 0;
-    background: rgba(0, 0, 0, 0.05);
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-left: auto;
-}
-
-.booking-modal-field input,
-.booking-modal-field select,
-.booking-modal-field textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 13px 16px;
-    border: 1.5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    font-size: max(16px, 0.92rem);
-    color: #212529;
-    background: #f7f7f9;
-    outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    appearance: none;
-    -webkit-appearance: none;
-}
-
-.booking-modal-field select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23444' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    padding-right: 36px;
-    cursor: pointer;
-}
-
-.booking-modal-field textarea {
-    min-height: 90px;
-    resize: vertical;
-    line-height: 1.6;
-}
-
-.booking-modal-field input:focus,
-.booking-modal-field select:focus,
-.booking-modal-field textarea:focus {
-    border-color: var(--bs-primary, #0d6efd);
-    box-shadow: 0 0 0 4px rgba(var(--bs-primary-rgb, 13, 110, 253), 0.1);
-    background: #fff;
-}
-
-.booking-modal-error {
-    display: block;
-    font-size: 0.76rem;
-    color: #d64545;
-    margin-top: 5px;
-    min-height: 15px;
-}
-
-.booking-modal-submit {
-    margin-top: 8px;
-    padding: 16px 26px;
-    background: var(--bs-primary, #0d6efd);
-    color: #fff;
-    border: none;
-    border-radius: 100px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease, gap 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 10px 24px rgba(var(--bs-primary-rgb, 13, 110, 253), 0.18);
-}
-
-.booking-modal-submit:hover:not(:disabled) {
-    background: #25D366;
-    gap: 16px;
-    transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(37, 211, 102, 0.3);
-}
-
-.booking-modal-submit:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-}
-
-.booking-modal-msg {
-    margin-top: 4px;
-    font-size: 0.88rem;
-    font-weight: 600;
-    min-height: 18px;
-    text-align: center;
-}
-
-.booking-modal-msg.success { color: #198754; }
-.booking-modal-msg.error { color: #d64545; }
-/* Bigger, easier-to-grab scrollbar for the booking modal */
-.booking-modal-box {
-    scrollbar-width: auto;          /* Firefox: thin -> auto (wider) */
-    scrollbar-color: var(--bs-primary, #0d6efd) rgba(0, 0, 0, 0.08);
-}
-
-.booking-modal-box::-webkit-scrollbar {
-    width: 12px;                    /* increase from default ~6-8px */
-}
-
-.booking-modal-box::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.06);
-    border-radius: 20px;
-}
-
-.booking-modal-box::-webkit-scrollbar-thumb {
-    background: var(--bs-primary, #0d6efd);
-    border-radius: 20px;
-    border: 2px solid #fff;         /* gives it a bit of padding, feels less cramped */
-}
-
-.booking-modal-box::-webkit-scrollbar-thumb:hover {
-    background: #25D366;            /* matches your WhatsApp-green hover accent */
-}
-
-/* On touch devices the native scrollbar is usually invisible anyway,
-   so make it a bit wider there too where supported */
-@media (max-width: 575px) {
-    .booking-modal-box::-webkit-scrollbar {
-        width: 14px;
-    }
-}
-@media (max-width: 575px) {
-    .booking-modal-box {
-        padding: 32px 22px 26px;
-        border-radius: 20px;
-    }
-
-    .booking-modal-row {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .booking-modal-header {
-        padding-right: 20px;
-    }
-}
-</style>
-
-{% endblock %}
-
-{% block extra_css %}
-<style>
-
-    .page-header .hero-wrap {
-  min-height: 550px;
-}
-/* .section has overflow:hidden globally, which breaks position:sticky.
-   Override it just for this page's room-detail section. */
-.room-detail-section {
-	overflow: visible !important;
-}
-
-/* Sidebar only sticks on large screens (matches the col-lg-4 breakpoint
-   where it sits beside the main content). On mobile it just flows in
-   normal document order below the room info instead of sticking early
-   and jumping into view right after the hero image. */
-.room-sidebar-sticky {
-	position: static;
-}
-@media (min-width: 992px) {
-	.room-sidebar-sticky {
-		position: sticky;
-		top: 90px;
+	.page-header .hero-wrap {
+		min-height: 550px;
 	}
-}
 
-/* Header must always render above sticky content */
-#header {
-	z-index: 1000 !important;
-}
+	/* ---------- Interactivity ---------- */
 
-/* Sharper hero background rendering */
-.page-header .hero-bg {
-	background-size: cover !important;
-	background-position: center center !important;
-	background-repeat: no-repeat !important;
-	image-rendering: -webkit-optimize-contrast;
-	image-rendering: crisp-edges;
-}
+	/* Menu item hover: subtle lift + price highlight */
+	.menu-item {
+		padding: 8px 10px;
+		margin: -8px -10px 0;
+		border-radius: 12px;
+		transition: background-color .25s ease, transform .25s ease;
+	}
+	.menu-item:hover {
+		background-color: rgba(0, 0, 0, 0.035);
+		transform: translateX(4px);
+	}
 
-/* Sharper main/thumbnail room images */
-.room-items-wrap img {
-	image-rendering: -webkit-optimize-contrast;
-}
+	/* Image zoom on hover */
+	.img-zoom-wrap {
+		overflow: hidden;
+		border-radius: 1.5rem;
+	}
+	.img-zoom-wrap img {
+		transition: transform .5s ease;
+	}
+	.img-zoom-wrap:hover img {
+		transform: scale(1.06);
+	}
 
-/* Price + Book Now bar: wrap instead of overflowing off-screen on
-   narrow phones where price + pill button don't both fit on one row. */
-.room-price-book-bar {
-	min-width: 0;
-}
-.room-price-book-bar .btn {
-	white-space: nowrap;
-}
-@media (max-width: 380px) {
-	.room-price-book-bar {
-		justify-content: center !important;
+	/* Reservation card interactivity */
+	.reservation-call-card {
+		transition: box-shadow .25s ease, transform .25s ease;
+		color: inherit;
+	}
+	.reservation-call-card:hover {
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+		transform: translateY(-3px);
+	}
+	.reservation-icon {
+		transition: transform .3s ease;
+	}
+	.reservation-call-card:hover .reservation-icon {
+		transform: rotate(-8deg) scale(1.1);
+	}
+
+	/* Reservation card + Book a Table button column: shift slightly down
+	   from the top of the row so it sits a little lower than the hours
+	   list beside it. */
+	.reservation-col {
+		margin-top: 28px;
+	}
+
+	/* Menu tabs: horizontal scroll on small screens instead of squeezing */
+	.menu-tab-scroll {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+	.menu-tab-scroll::-webkit-scrollbar {
+		display: none;
+	}
+	.menu-tab-scroll .nav-pills .nav-link {
+		white-space: nowrap;
+		transition: background-color .2s ease, color .2s ease, transform .2s ease;
+	}
+	.menu-tab-scroll .nav-pills .nav-link:hover {
+		transform: translateY(-2px);
+	}
+
+	/* Sticky mobile reservation bar */
+	.mobile-call-bar {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 1030;
+		padding: 12px 16px;
+		background-color: var(--bs-primary, #c9a15a);
+		color: #fff;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 0.9rem;
+		box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.18);
+	}
+	.mobile-call-bar i {
+		font-size: 1rem;
+	}
+
+	/* ---------- Mobile responsive fixes ---------- */
+	@media (max-width: 991.98px) {
+		.page-header .hero-wrap {
+			min-height: 340px;
+		}
+		/* leave room at the bottom for the sticky call bar */
+		body {
+			padding-bottom: 54px;
+		}
+	}
+
+	/* ---------- Repeatable scroll animations (replay every time, not just first load) ---------- */
+	.wow {
+		visibility: visible !important;
+	}
+	.scroll-anim {
+		opacity: 0;
+		will-change: transform, opacity;
+	}
+	.scroll-anim.fadeInUp {
+		transform: translateY(40px);
+	}
+	.scroll-anim.fadeInLeft {
+		transform: translateX(-50px);
+	}
+	.scroll-anim.fadeInRight {
+		transform: translateX(50px);
+	}
+	.scroll-anim.in-view {
+		opacity: 1;
+		transform: translate(0, 0);
+		transition: opacity .7s cubic-bezier(.25,.46,.45,.94), transform .7s cubic-bezier(.25,.46,.45,.94);
+	}
+	.scroll-anim.in-view.delay-1 { transition-delay: .1s; }
+	.scroll-anim.in-view.delay-2 { transition-delay: .2s; }
+	.scroll-anim.in-view.delay-3 { transition-delay: .3s; }
+	.scroll-anim.in-view.delay-4 { transition-delay: .4s; }
+
+	@media (max-width: 767.98px) {
+		.page-header .hero-wrap {
+			min-height: 280px;
+		}
+
+		/* Shrink pill/CTA buttons on mobile so they don't dominate the screen */
+		.btn-new.rounded-pill {
+			padding: 10px 20px !important;
+			font-size: 0.85rem !important;
+		}
+		.btn-new .btn-icon {
+			width: 28px !important;
+			height: 28px !important;
+		}
+
+		/* Shrink Call to Action heading on mobile */
+		.call-to-action h2.text-14 {
+			font-size: 1.5rem !important;
+			line-height: 1.3 !important;
+		}
+
+		/* Shrink Contact Us button in the CTA section specifically */
+		.call-to-action .btn-new.rounded-pill {
+			padding: 8px 18px !important;
+			font-size: 0.8rem !important;
+		}
+		.call-to-action .btn-new .btn-icon {
+			width: 24px !important;
+			height: 24px !important;
+			font-size: 0.7rem !important;
+		}
+
+		/* Menu category pills: smaller and tighter on mobile */
+		.menu-tab-scroll .nav-pills {
+			flex-wrap: nowrap !important;
+			justify-content: flex-start !important;
+			padding-bottom: 4px;
+		}
+		.menu-tab-scroll .nav-pills .nav-link {
+			padding: 8px 16px;
+			font-size: 0.85rem;
+		}
+
+		/* Reservation card: stack icon/text and reduce padding */
+		.reservation-call-card {
+			flex-direction: row;
+			padding: 12px !important;
+			width: 100%;
+		}
+		.reservation-call-card h3 {
+			font-size: 1.05rem;
+		}
+
+		/* Menu item rows: reduce side padding so text has room */
+		.menu-item {
+			padding: 6px 4px;
+			margin: -6px -4px 0;
+		}
+		.menu-item .text-5 {
+			font-size: 1rem;
+		}
+
+		/* Reservation column: smaller downward shift on mobile since it
+		   already stacks below the hours list */
+		.reservation-col {
+			margin-top: 12px;
+			width: 100%;
+		}
+	}
+
+	/* Extra shrink for very small phones */
+	@media (max-width: 480px) {
+		.call-to-action h2.text-14 {
+			font-size: 1.25rem !important;
+		}
+	}
+
+	/* ===== BOOKING MODAL (overlay-based, same pattern as the room details page) ===== */
+	.booking-modal-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: 1050;
+		background: rgba(10, 18, 10, 0.65);
+		backdrop-filter: blur(6px);
+		-webkit-backdrop-filter: blur(6px);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.3s ease, visibility 0.3s ease;
+	}
+
+	.booking-modal-overlay.active {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	.booking-modal-box {
+		position: relative;
+		background: #fff;
+		width: 100%;
+		max-width: 560px;
+		max-height: 90vh;
+		max-height: 90dvh;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior: contain;
+		border-radius: 24px;
+		padding: 44px 40px 36px;
+		transform: translateY(24px) scale(0.98);
+		transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+		box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+	}
+
+	.booking-modal-overlay.active .booking-modal-box {
+		transform: translateY(0) scale(1);
+	}
+
+	.booking-modal-close {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		width: 38px;
+		height: 38px;
+		border-radius: 50%;
+		border: none;
+		background: rgba(var(--bs-primary-rgb, 13, 110, 253), 0.1);
+		color: #1a1a1a;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1rem;
+		cursor: pointer;
+		transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+		z-index: 2;
+	}
+
+	.booking-modal-close:hover {
+		background: var(--bs-primary, #0d6efd);
+		color: #fff;
+		transform: rotate(90deg);
+	}
+
+	.booking-modal-header {
+		margin-bottom: 28px;
+		padding-right: 30px;
+	}
+
+	.booking-modal-eyebrow {
+		display: inline-block;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 1.5px;
+		text-transform: uppercase;
+		color: var(--bs-primary, #0d6efd);
+		margin-bottom: 8px;
+	}
+
+	.booking-modal-title {
+		margin: 0 0 8px;
+		font-weight: 700;
+	}
+
+	.booking-modal-sub {
+		color: #6c757d;
+		font-size: 0.92rem;
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	.booking-modal-section-label {
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 1.2px;
+		text-transform: uppercase;
+		color: var(--bs-primary, #0d6efd);
+		margin: 20px 0 2px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.booking-modal-section-label:first-of-type {
+		margin-top: 4px;
+	}
+
+	.booking-modal-section-label::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: rgba(0, 0, 0, 0.08);
+	}
+
+	.booking-modal-form {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.booking-modal-row {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 16px;
+	}
+
+	.booking-modal-field label {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		font-size: 0.83rem;
+		font-weight: 700;
+		color: #212529;
+		margin-bottom: 7px;
+	}
+
+	.booking-modal-field label i {
+		color: var(--bs-primary, #0d6efd);
+		font-size: 0.85rem;
+		width: 14px;
 		text-align: center;
 	}
-}
 
-/* Compact button on mobile: smaller padding, text, and icon circle so it
-   doesn't dominate the screen. */
-@media (max-width: 576px) {
-	.room-price-book-bar .btn {
-		padding: 10px 20px !important;
-		font-size: 0.85rem !important;
+	.booking-modal-optional-tag {
+		font-size: 0.68rem;
+		font-weight: 600;
+		color: #6c757d;
+		text-transform: none;
+		letter-spacing: 0;
+		background: rgba(0, 0, 0, 0.05);
+		padding: 2px 8px;
+		border-radius: 20px;
+		margin-left: auto;
 	}
-	.room-price-book-bar .btn .btn-icon {
-		width: 28px !important;
-		height: 28px !important;
-		font-size: 0.7rem !important;
-	}
-	.room-price-book-bar .text-9 {
-		font-size: 1.75rem !important;
-	}
-}
 
-/* ---- Repeatable fade-in reveal animation ----
-   Unlike WOW.js (which animates an element once and leaves it), these
-   elements fade in every time they scroll into view and reset when they
-   scroll back out, so the effect replays on every pass, not just on
-   first page load. Controlled by the IntersectionObserver script below. */
-.reveal {
-	opacity: 0;
-	transition: opacity .6s ease, transform .6s ease;
-	will-change: opacity, transform;
-}
-/* Opacity-only variant — no transform. Use this on any wrapper that is an
-   ancestor of a position:sticky element: a transform on an ancestor
-   (even translate(0,0)) creates a new containing block and silently
-   breaks position:sticky on descendants. */
-.reveal-fade {
-	transition: opacity .6s ease;
-}
-.reveal-fadeInUp {
-	transform: translateY(30px);
-}
-.reveal-fadeInLeft {
-	transform: translateX(-40px);
-}
-.reveal-fadeInRight {
-	transform: translateX(40px);
-}
-.reveal.reveal-visible {
-	opacity: 1;
-	transform: translate(0, 0);
-}
-@media (prefers-reduced-motion: reduce) {
-	.reveal {
-		opacity: 1 !important;
-		transform: none !important;
-		transition: none !important;
+	.booking-modal-field input,
+	.booking-modal-field select,
+	.booking-modal-field textarea {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 13px 16px;
+		border: 1.5px solid rgba(0, 0, 0, 0.1);
+		border-radius: 12px;
+		font-size: max(16px, 0.92rem);
+		color: #212529;
+		background: #f7f7f9;
+		outline: none;
+		transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+		appearance: none;
+		-webkit-appearance: none;
 	}
-}
 
-/* ===== Room thumbnail gallery ===== */
-.destination-thumb-link {
-    display: block;
-    transition: transform 0.3s ease;
-}
-.destination-thumb-link:hover {
-    transform: translateY(-3px);
-}
-.destination-thumb-caption {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 18px 20px 16px;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: 600;
-    line-height: 1.3;
-}
+	.booking-modal-field select {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23444' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 16px center;
+		padding-right: 36px;
+		cursor: pointer;
+	}
 
-@media (max-width: 768px) {
-    .destination-thumb-link img {
-        height: 280px !important;
-    }
-}
-@media (max-width: 576px) {
-    .destination-thumb-link img {
-        height: 220px !important;
-    }
-    .destination-thumb-caption {
-        font-size: 0.95rem;
-        padding: 14px 14px 12px;
-    }
-}
+	.booking-modal-field textarea {
+		min-height: 90px;
+		resize: vertical;
+		line-height: 1.6;
+	}
+
+	.booking-modal-field input:focus,
+	.booking-modal-field select:focus,
+	.booking-modal-field textarea:focus {
+		border-color: var(--bs-primary, #0d6efd);
+		box-shadow: 0 0 0 4px rgba(var(--bs-primary-rgb, 13, 110, 253), 0.1);
+		background: #fff;
+	}
+
+	.booking-modal-error {
+		display: block;
+		font-size: 0.76rem;
+		color: #d64545;
+		margin-top: 5px;
+		min-height: 15px;
+	}
+
+	.booking-modal-submit {
+		margin-top: 8px;
+		padding: 16px 26px;
+		background: var(--bs-primary, #0d6efd);
+		color: #fff;
+		border: none;
+		border-radius: 100px;
+		font-size: 0.95rem;
+		font-weight: 700;
+		letter-spacing: 0.3px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		cursor: pointer;
+		transition: background 0.3s ease, gap 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+		box-shadow: 0 10px 24px rgba(var(--bs-primary-rgb, 13, 110, 253), 0.18);
+	}
+
+	.booking-modal-submit:hover:not(:disabled) {
+		background: #25D366;
+		gap: 16px;
+		transform: translateY(-2px);
+		box-shadow: 0 14px 30px rgba(37, 211, 102, 0.3);
+	}
+
+	.booking-modal-submit:disabled {
+		opacity: 0.65;
+		cursor: not-allowed;
+	}
+
+	.booking-modal-msg {
+		margin-top: 4px;
+		font-size: 0.88rem;
+		font-weight: 600;
+		min-height: 18px;
+		text-align: center;
+	}
+
+	.booking-modal-msg.success { color: #198754; }
+	.booking-modal-msg.error { color: #d64545; }
+
+	/* Bigger, easier-to-grab scrollbar for the booking modal */
+	.booking-modal-box {
+		scrollbar-width: auto;
+		scrollbar-color: var(--bs-primary, #0d6efd) rgba(0, 0, 0, 0.08);
+	}
+
+	.booking-modal-box::-webkit-scrollbar {
+		width: 12px;
+	}
+
+	.booking-modal-box::-webkit-scrollbar-track {
+		background: rgba(0, 0, 0, 0.06);
+		border-radius: 20px;
+	}
+
+	.booking-modal-box::-webkit-scrollbar-thumb {
+		background: var(--bs-primary, #0d6efd);
+		border-radius: 20px;
+		border: 2px solid #fff;
+	}
+
+	.booking-modal-box::-webkit-scrollbar-thumb:hover {
+		background: #25D366;
+	}
+
+	@media (max-width: 575px) {
+		.booking-modal-box::-webkit-scrollbar {
+			width: 14px;
+		}
+		.booking-modal-box {
+			padding: 32px 22px 26px;
+			border-radius: 20px;
+		}
+		.booking-modal-row {
+			grid-template-columns: 1fr;
+			gap: 16px;
+		}
+		.booking-modal-header {
+			padding-right: 20px;
+		}
+	}
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-	var revealEls = document.querySelectorAll('.reveal');
-	if (!revealEls.length) return;
-
-	if (!('IntersectionObserver' in window)) {
-		// Fallback: just show everything immediately.
-		revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
-		return;
-	}
-
-	var observer = new IntersectionObserver(function (entries) {
-		entries.forEach(function (entry) {
-			var el = entry.target;
-			var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
-			if (entry.isIntersecting) {
-				if (delay) {
-					setTimeout(function () { el.classList.add('reveal-visible'); }, delay);
-				} else {
-					el.classList.add('reveal-visible');
+	document.addEventListener('DOMContentLoaded', function () {
+		// Make fadeInUp / fadeInLeft / fadeInRight replay every time the
+		// element scrolls into view, instead of only animating once on
+		// first load (which is the default WOW.js behaviour).
+		var animatedEls = document.querySelectorAll('.wow.fadeInUp, .wow.fadeInLeft, .wow.fadeInRight');
+		animatedEls.forEach(function (el) {
+			el.classList.add('scroll-anim');
+			var delay = el.getAttribute('data-wow-delay');
+			if (delay) {
+				var step = Math.round(parseFloat(delay) * 10); // ".2s" -> 2
+				if (step >= 1 && step <= 4) {
+					el.classList.add('delay-' + step);
 				}
-			} else {
-				// Leaving the viewport resets it so it fades in again
-				// next time it's scrolled back into view.
-				el.classList.remove('reveal-visible');
 			}
 		});
-	}, { threshold: 0.15 });
 
-	revealEls.forEach(function (el) { observer.observe(el); });
-});
+		if ('IntersectionObserver' in window && animatedEls.length) {
+			var animObserver = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('in-view');
+					} else {
+						// leaving the viewport resets it so it fades/slides
+						// in again next time it's scrolled back into view
+						entry.target.classList.remove('in-view');
+					}
+				});
+			}, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+			animatedEls.forEach(function (el) { animObserver.observe(el); });
+		} else {
+			// Fallback: just show everything if IntersectionObserver isn't supported
+			animatedEls.forEach(function (el) { el.classList.add('in-view'); });
+		}
+
+		// Highlight the active menu tab with a smooth underline/scale cue
+		var tabLinks = document.querySelectorAll('#menuTab .nav-link');
+		tabLinks.forEach(function (link) {
+			link.addEventListener('shown.bs.tab', function (e) {
+				tabLinks.forEach(function (l) { l.classList.remove('active'); });
+				e.target.classList.add('active');
+				// bring the newly active tab into view on small screens
+				if (window.innerWidth < 768) {
+					e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+				}
+			});
+		});
+
+		// Hide the sticky mobile call bar once the footer/call-to-action is reached
+		var cta = document.querySelector('.call-to-action');
+		var callBar = document.querySelector('.mobile-call-bar');
+		if (cta && callBar && 'IntersectionObserver' in window) {
+			var observer = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					callBar.style.transform = entry.isIntersecting ? 'translateY(100%)' : 'translateY(0)';
+					callBar.style.transition = 'transform .3s ease';
+				});
+			}, { threshold: 0.15 });
+			observer.observe(cta);
+		}
+
+		// ===== Table Booking Modal =====
+		var overlay = document.getElementById('tableBookingModalOverlay');
+		var closeBtn = document.getElementById('tableBookingModalClose');
+		var form = document.getElementById('tableBookingForm');
+		var msgBox = document.getElementById('tableBookingModalMsg');
+		var submitBtn = form ? form.querySelector('.booking-modal-submit') : null;
+		var btnLabel = submitBtn ? submitBtn.querySelector('.btn-label') : null;
+
+		if (overlay && form) {
+			var lockedScrollY = 0;
+			var WHATSAPP_NUMBER = '919633870962'; // country code 91 + 9633870962
+
+			function openModal() {
+				lockedScrollY = window.scrollY || window.pageYOffset || 0;
+				document.body.style.overflow = 'hidden';
+				document.body.style.position = 'fixed';
+				document.body.style.top = (-lockedScrollY) + 'px';
+				document.body.style.left = '0';
+				document.body.style.right = '0';
+				document.body.style.width = '100%';
+
+				overlay.classList.add('active');
+				overlay.setAttribute('aria-hidden', 'false');
+			}
+
+			function closeModal() {
+				overlay.classList.remove('active');
+				overlay.setAttribute('aria-hidden', 'true');
+
+				document.body.style.overflow = '';
+				document.body.style.position = '';
+				document.body.style.top = '';
+				document.body.style.left = '';
+				document.body.style.right = '';
+				document.body.style.width = '';
+				window.scrollTo(0, lockedScrollY);
+			}
+
+			document.querySelectorAll('.js-open-table-booking-modal').forEach(function (trigger) {
+				trigger.addEventListener('click', function (e) {
+					e.preventDefault();
+					openModal();
+				});
+			});
+
+			if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+			overlay.addEventListener('click', function (e) {
+				if (e.target === overlay) closeModal();
+			});
+
+			document.addEventListener('keydown', function (e) {
+				if (e.key === 'Escape' && overlay.classList.contains('active')) closeModal();
+			});
+
+			form.addEventListener('submit', function (e) {
+				e.preventDefault();
+
+				form.querySelectorAll('[data-field-error]').forEach(function (el) {
+					el.textContent = '';
+				});
+				msgBox.textContent = '';
+				msgBox.classList.remove('success', 'error');
+
+				var name = document.getElementById('tableGuestName').value.trim();
+				var phone = document.getElementById('tableGuestPhone').value.trim();
+				var email = document.getElementById('tableGuestEmail').value.trim();
+				var date = document.getElementById('tableDate').value;
+				var time = document.getElementById('tableTime').value;
+				var numGuests = document.getElementById('tableNumGuests').value;
+				var requests = document.getElementById('tableSpecialRequests').value.trim();
+
+				var hasError = false;
+				if (!name) {
+					hasError = true;
+					form.querySelector('[data-field-error="guest_name"]').textContent = 'This field is required.';
+				}
+				if (!phone) {
+					hasError = true;
+					form.querySelector('[data-field-error="guest_phone"]').textContent = 'This field is required.';
+				}
+				if (!date) {
+					hasError = true;
+					form.querySelector('[data-field-error="reservation_date"]').textContent = 'This field is required.';
+				}
+				if (!time) {
+					hasError = true;
+					form.querySelector('[data-field-error="reservation_time"]').textContent = 'This field is required.';
+				}
+				if (!numGuests) {
+					hasError = true;
+					form.querySelector('[data-field-error="num_guests"]').textContent = 'This field is required.';
+				}
+
+				if (hasError) {
+					msgBox.textContent = 'Please fill in the required fields.';
+					msgBox.classList.add('error');
+					return;
+				}
+
+				submitBtn.disabled = true;
+				var originalLabel = btnLabel.textContent;
+				btnLabel.textContent = 'Opening WhatsApp…';
+
+				var lines = [
+					'New Table Reservation — The Mist Restaurant',
+					'',
+					'Name: ' + name,
+					'Phone: ' + phone,
+					'Email: ' + (email || 'N/A'),
+					'Date: ' + date,
+					'Time: ' + time,
+					'Guests: ' + numGuests
+				];
+				if (requests) {
+					lines.push('Special Requests: ' + requests);
+				}
+
+				var message = encodeURIComponent(lines.join('\n'));
+				var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+
+				msgBox.textContent = 'Redirecting you to WhatsApp…';
+				msgBox.classList.add('success');
+
+				setTimeout(function () {
+					window.open(waUrl, '_blank');
+					submitBtn.disabled = false;
+					btnLabel.textContent = originalLabel;
+					closeModal();
+					form.reset();
+				}, 400);
+			});
+		}
+	});
 </script>
+
 {% endblock %}

@@ -1,0 +1,975 @@
+{% extends "frontends/base.html" %}
+{% load static %}
+
+{% block title %}Restaurant - MaxiMunnar T&U Leisure Hotel{% endblock %}
+{% block meta_description %}MaxiMunnar T&U Leisure Hotel is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+
+{% block content %}
+
+		<!-- Page Header
+		============================================= -->
+		<section class="page-header page-header-text-light py-0 mb-0">
+			<div class="hero-wrap py-5">
+				<div class="hero-mask opacity-1 bg-black"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/rest3.avif' %}');"></div>
+				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+					<div class="container text-center mt-5 pt-5 pb-2">
+						<h1 class="text-17 mb-4 wow fadeInUp">Restaurant</h1>
+						<ul class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay=".2s">
+							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
+							<li class="active">Restaurant</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Page Header end -->
+
+		<!-- About Restaurant
+		============================================= -->
+		<section class="section">
+			<div class="container">
+				<div class="row g-5">
+					<div class="col-lg-6 wow fadeInLeft d-flex flex-column">
+						<!-- Heading -->
+						<p><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Meal with us</span></p>
+						<h2 class="heading-font-family text-13 fw-600 lh-sm mb-4">A Hotel <span class="text-primary">Restaurant</span> Serves Meals to Both <span class="text-primary">Guests</span> and <span class="text-primary">Visitors</span></h2>
+						<!-- Heading End -->
+
+						<p class="text-5 text-body-secondary">Top Station Multi Cuisine Restaurant introduces guests to a memorable experience in dining out, fast becoming a preferred choice in dining out.</p>
+						<p class="text-body-secondary mb-4">Top Station Multi Cuisine Restaurant offers a choice of dining options available to our guests with a zest for the good life. Unwind at our wellness center or explore nearby attractions easily.</p>
+
+						<div class="row mt-auto pt-5 restaurant-bottom-row">
+							<div class="col-sm-5 wow fadeInUp">
+								<div class="mb-4 hour-item">
+									<div class="text-4 fw-600 text-body-tertiary mb-1">Breakfast:</div>
+									<div class="text-6 fw-700">7.00am – 10.30am</div>
+								</div>
+								<div class="mb-4 hour-item">
+									<div class="text-4 fw-600 text-body-tertiary mb-1">Lunch:</div>
+									<div class="text-6 fw-700">11.00am – 3.00pm</div>
+								</div>
+								<div class="mb-4 hour-item">
+									<div class="text-4 fw-600 text-body-tertiary mb-1">Dinner:</div>
+									<div class="text-6 fw-700">7.00pm – 11.00pm</div>
+								</div>
+							</div>
+							<div class="col-sm-auto align-content-center wow fadeInUp reservation-col" data-wow-delay="0.2s">
+								<div class="d-flex flex-column gap-2">
+									<!-- Call for Reservation -->
+									<a href="tel:+919188954770" class="reservation-call-card bg-white rounded-4 p-3 d-flex align-items-center gap-3 text-decoration-none">
+										<div class="text-primary text-7 d-inline-flex reservation-icon"><i class="fa-solid fa-phone-volume"></i></div>
+										<div class="vr my-1 opacity-1 d-none d-sm-block"></div>
+										<div class="text-start">
+											<div class="text-2 fw-600 text-body-tertiary mb-1">Call for Reservation:</div>
+											<h3 class="text-5 fw-700 mb-0">+91 9188954770</h3>
+										</div>
+									</a>
+									<!-- Call for Reservation End -->
+
+									<!-- Book Now Button (Bootstrap modal, same as index page) -->
+									<a href="#" class="btn btn-new btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#bookNowModal">
+										<span class="btn-text"><span>Book Now</span></span>
+										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+									</a>
+									<!-- Book Now Button End -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 wow fadeInRight">
+						<div class="position-relative text-center d-flex flex-column gap-4">
+							<div class="d-inline-flex img-zoom-wrap">
+								<img class="img-fluid rounded-5" src="{% static 'tandu-main/rest3.avif' %}" alt="Restaurant interior at Top Station Multi Cuisine Restaurant">
+							</div>
+							<div class="d-inline-flex img-zoom-wrap">
+								<img class="img-fluid rounded-5" src="{% static 'tandu-main/rest2.jpg' %}" alt="Chef preparing a dish at Top Station Multi Cuisine Restaurant">
+							</div>
+
+							<div class="position-absolute top-50 start-50 translate-middle">
+								<!-- Circle Text -->
+
+								<!-- Circle Text End -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- About Restaurant end -->
+
+		<!-- Restaurant Menu
+		============================================= -->
+		<section class="section bg-light-1">
+			<div class="container">
+				<!-- Heading -->
+				<div class="mx-auto text-center mb-5">
+					<p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Meal options</span></p>
+					<h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Restaurant <span class="text-primary">Menu</span></h2>
+				</div>
+				<!-- Heading End -->
+
+				<!-- Tabs -->
+				<div class="menu-tab-scroll mb-5 wow fadeInUp">
+					<ul id="menuTab" role="tablist" class="nav nav-pills gap-3 fw-600 justify-content-center justify-content-md-center flex-nowrap flex-md-wrap">
+					  <li class="nav-item"> <a class="nav-link rounded-pill active" id="one-tab" data-bs-toggle="tab" href="#one" role="tab" aria-controls="one" aria-selected="true">Starters</a> </li>
+					  <li class="nav-item"> <a class="nav-link rounded-pill" id="two-tab" data-bs-toggle="tab" href="#two" role="tab" aria-controls="two" aria-selected="false">Main Courses</a> </li>
+					  <li class="nav-item"> <a class="nav-link rounded-pill" id="three-tab" data-bs-toggle="tab" href="#three" role="tab" aria-controls="three" aria-selected="false">Desserts</a> </li>
+					</ul>
+				</div>
+
+				<!-- Tabs Content -->
+				<div id="menuTabContent" class="tab-content my-3 wow fadeInUp">
+				  <div class="tab-pane fade show active" id="one" role="tabpanel" aria-labelledby="one-tab">
+					<!-- Starters List -->
+					<div class="row gy-4 gx-5">
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Heirloom Tomato & Burrata</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$22</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Basil oil, aged balsamic pearls</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Foie-Style Chicken Liver Parfait</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$12</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Fig gelée, toasted sourdough</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Seared Scallops</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$24</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Cauliflower purée, citrus beurre blanc</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Lobster Bisque</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$19</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Cream finish, chive oil</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Wild Mushroom Velouté</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$16</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Truffle foam, brioche crisp</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Beef Carpaccio</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$21</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Parmesan shavings, capers, extra virgin olive oil</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Smoked Salmon Tartare</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$28</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Avocado mousse, lemon crème fraîche</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Crispy Prawn Tempura</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$17</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Avocado mousse, lemon crème fraîche</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Wild Mushroom Velouté</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$24</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Truffle foam, brioche crisp</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Beef Carpaccio</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$15</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Parmesan shavings, capers, extra virgin olive oil</p>
+						</div>
+					</div>
+					<!-- Starters List End -->
+				  </div>
+				  <div class="tab-pane fade" id="two" role="tabpanel" aria-labelledby="two-tab">
+					<!-- Main Courses List -->
+					<div class="row gy-4 gx-5">
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Grilled Norwegian Salmon</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$38</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Salmon fillet with lemon butter sauce and asparagus.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Australian Lamb Chops</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$45</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Herb-marinated lamb chops with rosemary jus.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">US Prime Beef Tenderloin</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$58</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Premium tenderloin with red wine reduction and truffle mash.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Wild Mushroom Risotto</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$28</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Creamy arborio rice with mushrooms and parmesan.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Chicken Roulade</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$32</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Stuffed chicken with spinach and cheese, herb sauce.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Vegetable Au Gratin</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$26</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Baked vegetables with creamy cheese sauce.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Thai Green Curry (Veg/Chicken/Shrimp)</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$26</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Coconut curry with Thai herbs, jasmine rice.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Japanese Teriyaki Chicken</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$30</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Grilled chicken glazed with teriyaki sauce.</p>
+						</div>
+					</div>
+					<!-- Main Courses End -->
+				  </div>
+				  <div class="tab-pane fade" id="three" role="tabpanel" aria-labelledby="three-tab">
+					<!-- Desserts List -->
+					<div class="row gy-4 gx-5">
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Valrhona Chocolate Fondant</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$18</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Warm chocolate cake with molten center, with vanilla ice cream.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Classic Crème Brûlée</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$16</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Silky vanilla custard with caramelized sugar crust.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">US Prime Beef Tenderloin</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$58</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Premium tenderloin with red wine reduction and truffle mash.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">New York Cheesecake</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$17</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Creamy baked cheesecake with berry compote.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Tiramisu</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$18</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Italian dessert with mascarpone, espresso, and cocoa.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Opera Cake</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$16</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Layered almond sponge with coffee cream and chocolate glaze.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Artisanal Gelato Selection</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$15</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Choice of chocolate, pistachio, or vanilla.</p>
+						</div>
+						<div class="col-md-6">
+							<div class="menu-item d-flex justify-content-between gap-2">
+								<div class="text-5 fw-600">Sorbet Trio</div>
+								<div class="line flex-grow-1"><hr></div>
+								<div class="text-5 fw-600">$14</div>
+							</div>
+							<p class="text-3 text-body-tertiary mb-0">Refreshing fruit sorbets (mango, raspberry, lemon).</p>
+						</div>
+					</div>
+					<!-- Desserts End -->
+				  </div>
+				</div>
+				<!-- Button -->
+				<div class="text-center mt-5 wow fadeInUp">
+					
+				</div>
+			</div>
+		</section>
+		<!-- Restaurant Menu end -->
+
+
+
+		<!-- Our Values
+		============================================= -->
+		<section class="section bg-light-1">
+			<div class="container">
+				<!-- Heading -->
+				<div class="mx-auto text-center mb-5">
+					<p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Our Values</span></p>
+					<h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">The Heart of <br class="d-none d-md-block"><span class="text-primary">Our Restaurant</span></h2>
+				</div>
+				<!-- Heading End -->
+
+				<div class="row g-4">
+					<div class="col-md-6 col-lg-4 wow fadeInUp">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-medal"></i></div>
+							<h3 class="text-7 fw-600">Quality Food</h3>
+							<p class="text-3 text-body-secondary">We use fresh ingredients and careful preparation to deliver food you can trust and enjoy.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".2s">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-bell-concierge"></i></div>
+							<h3 class="text-7 fw-600">Great Service</h3>
+							<p class="text-3 text-body-secondary">We treat every guest with respect, warmth, and attention.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".4s">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-repeat"></i></div>
+							<h3 class="text-7 fw-600">Consistency</h3>
+							<p class="text-3 text-body-secondary">We aim to provide the same quality and experience every time you visit.</p>
+						</div>
+					</div>
+
+					<div class="col-md-6 col-lg-4 wow fadeInUp">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-seedling"></i></div>
+							<h3 class="text-7 fw-600">Clean Environment</h3>
+							<p class="text-3 text-body-secondary">Hygiene and food safety are always our top priorities.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".2s">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-handshake"></i></div>
+							<h3 class="text-7 fw-600">Honesty & Integrity</h3>
+							<p class="text-3 text-body-secondary">We operate with transparency, fairness, and respect for our guests and team.</p>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay=".4s">
+						<div class="featured-box style-4 bg-white rounded-5 p-4 h-100">
+							<div class="featured-box-icon border rounded-5 text-13 shadow-none text-primary mt-3"> <i class="fa-solid fa-people-group"></i></div>
+							<h3 class="text-7 fw-600">Community Respect</h3>
+							<p class="text-3 text-body-secondary">We value our people and strive to contribute positively to our community.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Our Values end -->
+
+
+
+		<!-- Call to Action
+		============================================= -->
+		<section class="call-to-action bg-primary section">
+			<div class="container text-center">
+				<h2 class="text-14 fw-600 text-white lh-sm wow fadeInUp mb-3">The Most Memorable <span class="text-black">Rest <br class="d-none d-md-block">Time</span> Starts at Top Station Multi Cuisine Restaurant</h2>
+				<div class="wow fadeInUp" data-wow-delay=".2s">
+					<a class="btn btn-new btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
+						<span class="btn-text"><span>Contact Us</span></span>
+						<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+					</a>
+				</div>
+			</div>
+		</section>
+		<!-- Call to Action end -->
+
+		<!-- Sticky mobile reservation bar
+		============================================= -->
+		<a href="tel:+919188954770" class="mobile-call-bar d-lg-none">
+			<i class="fa-solid fa-phone-volume"></i>
+			<span>Call to Reserve a Table</span>
+		</a>
+
+		<!-- ===== BOOK NOW MODAL (Bootstrap modal — same component/markup
+			 pattern used on the index page, adapted for a restaurant
+			 table reservation instead of a room stay) ===== -->
+		<div class="modal fade" id="bookNowModal" tabindex="-1" aria-labelledby="bookNowModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content rounded-5 border-0" style="overflow: hidden;">
+					<div class="modal-header border-0 px-4 pt-4 pb-0">
+						<h3 class="modal-title text-8 fw-600" id="bookNowModalLabel">Book a <span class="text-primary">Table</span></h3>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body px-4 pb-4" style="overscroll-behavior: contain;">
+						<p class="text-body-secondary mb-4">Fill in your details and we'll confirm your table reservation over WhatsApp.</p>
+						<form id="bookNowForm">
+							{% csrf_token %}
+							<div class="row gy-3">
+								<div class="col-12">
+									<label class="form-label text-3 fw-600" for="guestName">Full Name</label>
+									<input type="text" name="guest_name" class="form-control rounded-pill" id="guestName" required placeholder="Your full name">
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="guestEmail">Email</label>
+									<input type="email" name="guest_email" class="form-control rounded-pill" id="guestEmail" required placeholder="you@example.com">
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="guestPhone">Phone</label>
+									<input type="tel" name="guest_phone" class="form-control rounded-pill" id="guestPhone" placeholder="Your phone number">
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="checkIn">Check In</label>
+									<input type="date" name="check_in" class="form-control rounded-pill" id="checkIn" required>
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="checkOut">Check Out</label>
+									<input type="date" name="check_out" class="form-control rounded-pill" id="checkOut" required>
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="numGuests">Number of Guests</label>
+									<input type="number" name="num_guests" min="1" value="2" class="form-control rounded-pill" id="numGuests" required>
+								</div>
+								<div class="col-12 col-sm-6">
+									<label class="form-label text-3 fw-600" for="roomSelect">Room <span class="text-body-secondary fw-400">(optional)</span></label>
+									<select name="room_id" class="form-select rounded-pill" id="roomSelect">
+										<option value="" data-room-name="">General Inquiry</option>
+										{% if rooms %}
+											{% for room in rooms %}
+												<option value="{{ room.id }}" data-room-name="{{ room.room_category }}">{{ room.room_category }}</option>
+											{% endfor %}
+										{% endif %}
+									</select>
+								</div>
+								<div class="col-12">
+									<label class="form-label text-3 fw-600" for="specialRequests">Special Requests</label>
+									<textarea name="special_requests" class="form-control rounded-4" id="specialRequests" rows="3" placeholder="Any special requests? (optional)"></textarea>
+								</div>
+								<div class="col-12 d-grid mt-2">
+									<button type="submit" class="btn btn-new btn-primary rounded-pill">
+										<span class="btn-text"><span>Send via WhatsApp</span></span>
+										<span class="btn-icon"><i class="fa-brands fa-whatsapp"></i></span>
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- BOOK NOW MODAL end -->
+
+<style>
+	.page-header .hero-wrap {
+		min-height: 550px;
+		position: relative;
+	}
+	.page-header .hero-bg {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		filter: contrast(1.1) saturate(1.15) brightness(1.04);
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+		transform: translateZ(0) !important;
+		will-change: auto;
+	}
+	.page-header .hero-mask {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.15) 100%) !important;
+		opacity: 1 !important;
+	}
+	.page-header .hero-content {
+		position: relative;
+		z-index: 2;
+	}
+
+	/* ---------- Interactivity ---------- */
+
+	/* Menu item hover: subtle lift + price highlight */
+	.menu-item {
+		padding: 8px 10px;
+		margin: -8px -10px 0;
+		border-radius: 12px;
+		transition: background-color .25s ease, transform .25s ease;
+	}
+	.menu-item:hover {
+		background-color: rgba(0, 0, 0, 0.035);
+		transform: translateX(4px);
+	}
+
+	/* Image zoom on hover */
+	.img-zoom-wrap {
+		overflow: hidden;
+		border-radius: 1.5rem;
+	}
+	.img-zoom-wrap img {
+		transition: transform .5s ease;
+	}
+	.img-zoom-wrap:hover img {
+		transform: scale(1.06);
+	}
+
+	/* Reservation card interactivity */
+	.reservation-call-card {
+		transition: box-shadow .25s ease, transform .25s ease;
+		color: inherit;
+	}
+	.reservation-call-card:hover {
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+		transform: translateY(-3px);
+	}
+	.reservation-icon {
+		transition: transform .3s ease;
+	}
+	.reservation-call-card:hover .reservation-icon {
+		transform: rotate(-8deg) scale(1.1);
+	}
+
+	/* Reservation card + Book Now button column: shift slightly down
+	   from the top of the row so it sits a little lower than the hours
+	   list beside it. */
+	.reservation-col {
+		margin-top: 28px;
+	}
+
+	/* Push the hours/reservation row down so its bottom edge lines up
+	   with the bottom border of the image column beside it. */
+	.restaurant-bottom-row {
+		width: 100%;
+	}
+
+	/* Menu tabs: horizontal scroll on small screens instead of squeezing */
+	.menu-tab-scroll {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+	.menu-tab-scroll::-webkit-scrollbar {
+		display: none;
+	}
+	.menu-tab-scroll .nav-pills .nav-link {
+		white-space: nowrap;
+		transition: background-color .2s ease, color .2s ease, transform .2s ease;
+	}
+	.menu-tab-scroll .nav-pills .nav-link:hover {
+		transform: translateY(-2px);
+	}
+
+	/* Sticky mobile reservation bar */
+	.mobile-call-bar {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 1030;
+		padding: 12px 16px;
+		background-color: var(--bs-primary, #c9a15a);
+		color: #fff;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 0.9rem;
+		box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.18);
+	}
+	.mobile-call-bar i {
+		font-size: 1rem;
+	}
+
+	/* ---------- Mobile responsive fixes ---------- */
+	@media (max-width: 991.98px) {
+		.page-header .hero-wrap {
+			min-height: 340px;
+		}
+		/* leave room at the bottom for the sticky call bar */
+		body {
+			padding-bottom: 54px;
+		}
+	}
+
+	/* ---------- Repeatable scroll animations (replay every time, not just first load) ---------- */
+	.wow {
+		visibility: visible !important;
+	}
+	.scroll-anim {
+		opacity: 0;
+		will-change: transform, opacity;
+	}
+	.scroll-anim.fadeInUp {
+		transform: translateY(40px);
+	}
+	.scroll-anim.fadeInLeft {
+		transform: translateX(-50px);
+	}
+	.scroll-anim.fadeInRight {
+		transform: translateX(50px);
+	}
+	.scroll-anim.in-view {
+		opacity: 1;
+		transform: translate(0, 0);
+		transition: opacity .7s cubic-bezier(.25,.46,.45,.94), transform .7s cubic-bezier(.25,.46,.45,.94);
+	}
+	.scroll-anim.in-view.delay-1 { transition-delay: .1s; }
+	.scroll-anim.in-view.delay-2 { transition-delay: .2s; }
+	.scroll-anim.in-view.delay-3 { transition-delay: .3s; }
+	.scroll-anim.in-view.delay-4 { transition-delay: .4s; }
+
+	@media (max-width: 767.98px) {
+		.page-header .hero-wrap {
+			min-height: 280px;
+		}
+
+		/* Shrink pill/CTA buttons on mobile so they don't dominate the screen */
+		.btn-new.rounded-pill {
+			padding: 10px 20px !important;
+			font-size: 0.85rem !important;
+		}
+		.btn-new .btn-icon {
+			width: 28px !important;
+			height: 28px !important;
+		}
+
+		/* Shrink Call to Action heading on mobile */
+		.call-to-action h2.text-14 {
+			font-size: 1.5rem !important;
+			line-height: 1.3 !important;
+		}
+
+		/* Shrink Contact Us button in the CTA section specifically */
+		.call-to-action .btn-new.rounded-pill {
+			padding: 8px 18px !important;
+			font-size: 0.8rem !important;
+		}
+		.call-to-action .btn-new .btn-icon {
+			width: 24px !important;
+			height: 24px !important;
+			font-size: 0.7rem !important;
+		}
+
+		/* Menu category pills: smaller and tighter on mobile */
+		.menu-tab-scroll .nav-pills {
+			flex-wrap: nowrap !important;
+			justify-content: flex-start !important;
+			padding-bottom: 4px;
+		}
+		.menu-tab-scroll .nav-pills .nav-link {
+			padding: 8px 16px;
+			font-size: 0.85rem;
+		}
+
+		/* Reservation card: stack icon/text and reduce padding */
+		.reservation-call-card {
+			flex-direction: row;
+			padding: 12px !important;
+			width: 100%;
+		}
+		.reservation-call-card h3 {
+			font-size: 1.05rem;
+		}
+
+		/* Menu item rows: reduce side padding so text has room */
+		.menu-item {
+			padding: 6px 4px;
+			margin: -6px -4px 0;
+		}
+		.menu-item .text-5 {
+			font-size: 1rem;
+		}
+
+		/* Reservation column: smaller downward shift on mobile since it
+		   already stacks below the hours list */
+		.reservation-col {
+			margin-top: 12px;
+			width: 100%;
+		}
+
+		/* Book Now button inside the reservation column: shrink further
+		   than the generic .btn-new mobile rule so it doesn't dominate
+		   the screen next to the hours list */
+		.reservation-col .btn-new.rounded-pill {
+			padding: 10px 16px !important;
+			font-size: 0.8rem !important;
+			width: fit-content !important;
+			align-self: flex-start;
+		}
+		.reservation-col .btn-new .btn-icon {
+			width: 24px !important;
+			height: 24px !important;
+			font-size: 0.65rem !important;
+		}
+	}
+
+	/* Extra shrink for very small phones */
+	@media (max-width: 480px) {
+		.call-to-action h2.text-14 {
+			font-size: 1.25rem !important;
+		}
+		.reservation-col .btn-new.rounded-pill {
+			padding: 9px 14px !important;
+			font-size: 0.75rem !important;
+			width: fit-content !important;
+		}
+		.reservation-col .btn-new .btn-icon {
+			width: 22px !important;
+			height: 22px !important;
+			font-size: 0.6rem !important;
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		// Make fadeInUp / fadeInLeft / fadeInRight replay every time the
+		// element scrolls into view, instead of only animating once on
+		// first load (which is the default WOW.js behaviour).
+		var animatedEls = document.querySelectorAll('.wow.fadeInUp, .wow.fadeInLeft, .wow.fadeInRight');
+		animatedEls.forEach(function (el) {
+			el.classList.add('scroll-anim');
+			var delay = el.getAttribute('data-wow-delay');
+			if (delay) {
+				var step = Math.round(parseFloat(delay) * 10); // ".2s" -> 2
+				if (step >= 1 && step <= 4) {
+					el.classList.add('delay-' + step);
+				}
+			}
+		});
+
+		if ('IntersectionObserver' in window && animatedEls.length) {
+			var animObserver = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('in-view');
+					} else {
+						// leaving the viewport resets it so it fades/slides
+						// in again next time it's scrolled back into view
+						entry.target.classList.remove('in-view');
+					}
+				});
+			}, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+			animatedEls.forEach(function (el) { animObserver.observe(el); });
+		} else {
+			// Fallback: just show everything if IntersectionObserver isn't supported
+			animatedEls.forEach(function (el) { el.classList.add('in-view'); });
+		}
+
+		// Highlight the active menu tab with a smooth underline/scale cue
+		var tabLinks = document.querySelectorAll('#menuTab .nav-link');
+		tabLinks.forEach(function (link) {
+			link.addEventListener('shown.bs.tab', function (e) {
+				tabLinks.forEach(function (l) { l.classList.remove('active'); });
+				e.target.classList.add('active');
+				// bring the newly active tab into view on small screens
+				if (window.innerWidth < 768) {
+					e.target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+				}
+			});
+		});
+
+		// Hide the sticky mobile call bar once the footer/call-to-action is reached
+		var cta = document.querySelector('.call-to-action');
+		var callBar = document.querySelector('.mobile-call-bar');
+		if (cta && callBar && 'IntersectionObserver' in window) {
+			var observer = new IntersectionObserver(function (entries) {
+				entries.forEach(function (entry) {
+					callBar.style.transform = entry.isIntersecting ? 'translateY(100%)' : 'translateY(0)';
+					callBar.style.transition = 'transform .3s ease';
+				});
+			}, { threshold: 0.15 });
+			observer.observe(cta);
+		}
+
+		// ===== Book Now Modal (Bootstrap) — sizing + scroll lock, same
+		// pattern used for #bookNowModal on the index page =====
+		var bookNowModalEl = document.getElementById('bookNowModal');
+		if (bookNowModalEl) {
+			var lockedScrollY = 0;
+			var modalContentEl = bookNowModalEl.querySelector('.modal-content');
+			var modalHeaderEl = bookNowModalEl.querySelector('.modal-header');
+			var modalBodyEl = bookNowModalEl.querySelector('.modal-body');
+
+			function sizeModal() {
+				if (!modalContentEl || !modalBodyEl) return;
+				var margin = 56; // total top+bottom breathing room
+				var maxContentHeight = window.innerHeight - margin;
+				modalContentEl.style.height = 'auto';
+				modalContentEl.style.maxHeight = maxContentHeight + 'px';
+
+				var headerHeight = modalHeaderEl ? modalHeaderEl.offsetHeight : 0;
+				modalBodyEl.style.maxHeight = (maxContentHeight - headerHeight) + 'px';
+				modalBodyEl.style.overflowY = 'auto';
+			}
+
+			bookNowModalEl.addEventListener('show.bs.modal', function () {
+				lockedScrollY = window.scrollY || window.pageYOffset || 0;
+				document.body.style.overflow = 'hidden';
+				document.body.style.position = 'fixed';
+				document.body.style.top = (-lockedScrollY) + 'px';
+				document.body.style.left = '0';
+				document.body.style.right = '0';
+				document.body.style.width = '100%';
+			});
+			bookNowModalEl.addEventListener('shown.bs.modal', sizeModal);
+			window.addEventListener('resize', function () {
+				if (bookNowModalEl.classList.contains('show')) sizeModal();
+			});
+			bookNowModalEl.addEventListener('hidden.bs.modal', function () {
+				document.body.style.overflow = '';
+				document.body.style.position = '';
+				document.body.style.top = '';
+				document.body.style.left = '';
+				document.body.style.right = '';
+				document.body.style.width = '';
+				window.scrollTo(0, lockedScrollY);
+			});
+		}
+
+		// ===== Book Now form submit -> WhatsApp =====
+		var bookNowForm = document.getElementById('bookNowForm');
+		if (bookNowForm) {
+			var WHATSAPP_NUMBER = '919633870962'; // country code 91 + 9633870962
+
+			bookNowForm.addEventListener('submit', function (e) {
+				e.preventDefault();
+
+				var name = document.getElementById('guestName').value.trim();
+				var email = document.getElementById('guestEmail').value.trim();
+				var phone = document.getElementById('guestPhone').value.trim();
+				var checkIn = document.getElementById('checkIn').value;
+				var checkOut = document.getElementById('checkOut').value;
+				var numGuests = document.getElementById('numGuests').value;
+				var roomSelectEl = document.getElementById('roomSelect');
+				var roomName = roomSelectEl.options[roomSelectEl.selectedIndex].getAttribute('data-room-name');
+				var requests = document.getElementById('specialRequests').value.trim();
+
+				if (checkOut <= checkIn) {
+					alert('Check-out date must be after check-in date.');
+					return;
+				}
+
+				var submitBtn = bookNowForm.querySelector('button[type="submit"]');
+				if (submitBtn) submitBtn.disabled = true;
+
+				// Save the booking to the database first...
+				var formData = new FormData(bookNowForm);
+
+				fetch("{% url 'tandj_app:reservation_ajax_create' %}", {
+					method: 'POST',
+					body: formData,
+					headers: { 'X-Requested-With': 'XMLHttpRequest' }
+				})
+				.then(function (res) { return res.json(); })
+				.then(function (data) {
+					if (submitBtn) submitBtn.disabled = false;
+
+					if (!data.success) {
+						var msg = 'Please check your details and try again.';
+						if (data.errors) {
+							msg = Object.values(data.errors).map(function (v) {
+								return Array.isArray(v) ? v.join(' ') : v;
+							}).join('\n');
+						}
+						alert(msg);
+						return;
+					}
+
+					// ...then, once it's saved, hand off to WhatsApp same as before
+					var lines = [
+						'New Table Reservation — Top Station Multi Cuisine Restaurant',
+						'',
+						'Name: ' + name,
+						'Email: ' + email,
+						'Phone: ' + (phone || 'N/A'),
+						'Room: ' + (roomName || 'General Inquiry'),
+						'Guests: ' + numGuests,
+						'Check In: ' + checkIn,
+						'Check Out: ' + checkOut
+					];
+					if (requests) {
+						lines.push('Special Requests: ' + requests);
+					}
+
+					var message = encodeURIComponent(lines.join('\n'));
+					var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+
+					window.open(waUrl, '_blank');
+
+					var modalInstance = bootstrap.Modal.getInstance(bookNowModalEl);
+					if (modalInstance) modalInstance.hide();
+
+					bookNowForm.reset();
+				})
+				.catch(function () {
+					if (submitBtn) submitBtn.disabled = false;
+					alert('Network error — please try again.');
+				});
+			});
+		}
+	});
+</script>
+
+{% endblock %}
