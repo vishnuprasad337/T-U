@@ -1332,8 +1332,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </section>
             <!-- Activities end -->
-
- <!-- Site Seeing (continuous cyclic auto-scroll + manual controls)
+           <!-- Site Seeing (continuous auto-scroll trail + manual buttons)
 ============================================= -->
 <section class="section bg-light-1 nearby-trail-section">
     <div class="container">
@@ -1345,38 +1344,36 @@ document.addEventListener('DOMContentLoaded', function () {
         <!-- Heading End -->
 
         {% if destinations %}
-        <div class="nearby-trail-outer wow fadeInUp">
-            <div class="nearby-trail-wrap" id="nearbyTrailWrap">
-                <div class="nearby-trail-track" id="nearbyTrailTrack">
-                    {% for destination in destinations %}
-                    <div class="nearby-trail-card">
-                        <a href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}" class="nearby-trail-img d-block">
-                            {% if destination.image %}
-                                <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
-                            {% else %}
-                                <img src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ destination.name }}">
-                            {% endif %}
-                        </a>
-                        <div class="nearby-trail-info">
-                            <h3 class="nearby-trail-name">{{ destination.name }}</h3>
-                            {% if destination.distance %}
-                                <span class="nearby-trail-distance"><i class="fa-solid fa-location-dot"></i> {{ destination.distance }}</span>
-                            {% endif %}
-                        </div>
+        <div class="nearby-trail-wrap wow fadeInUp" id="nearbyTrailWrap">
+            <div class="nearby-trail-track" id="nearbyTrailTrack">
+                {% for destination in destinations %}
+                <div class="nearby-trail-card">
+                    <a href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}" class="nearby-trail-img d-block">
+                        {% if destination.image %}
+                            <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+                        {% else %}
+                            <img src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ destination.name }}">
+                        {% endif %}
+                    </a>
+                    <div class="nearby-trail-info">
+                        <h3 class="nearby-trail-name">{{ destination.name }}</h3>
+                        {% if destination.distance %}
+                            <span class="nearby-trail-distance"><i class="fa-solid fa-location-dot"></i> {{ destination.distance }}</span>
+                        {% endif %}
                     </div>
-                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
+        </div>
 
-            <!-- Manual prev/next controls -->
-            <div class="nearby-trail-nav" id="nearbyTrailNav">
-                <button type="button" class="nearby-nav-btn" id="nearbyPrevBtn" aria-label="Previous destination">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-                <button type="button" class="nearby-nav-btn" id="nearbyNextBtn" aria-label="Next destination">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-            </div>
+        <!-- Manual prev/next controls, directly under the cards -->
+        <div class="nearby-trail-nav" id="nearbyTrailNav">
+            <button type="button" class="nearby-nav-btn" id="nearbyPrevBtn" aria-label="Previous destination">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button type="button" class="nearby-nav-btn" id="nearbyNextBtn" aria-label="Next destination">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
         </div>
 
         <div class="text-center mt-5">
@@ -1394,18 +1391,11 @@ document.addEventListener('DOMContentLoaded', function () {
 </section>
 
 <style>
-.nearby-trail-section {
-    overflow: visible;
-}
-
-.nearby-trail-outer {
+.nearby-trail-wrap {
+    overflow: hidden;
+    position: relative;
     max-width: 1080px;
     margin: 0 auto;
-}
-
-.nearby-trail-wrap {
-    overflow: hidden; /* we move the track ourselves via JS, no native scrollbar */
-    position: relative;
 }
 
 .nearby-trail-track {
@@ -1415,6 +1405,7 @@ document.addEventListener('DOMContentLoaded', function () {
     will-change: transform;
 }
 
+/* Card width is set so exactly 2 cards (+ gap) fill the wrapper */
 .nearby-trail-card {
     flex: 0 0 auto;
     width: calc((1080px - 32px) / 2);
@@ -1464,7 +1455,7 @@ document.addEventListener('DOMContentLoaded', function () {
     margin-right: 4px;
 }
 
-/* Manual nav buttons, centered under the track */
+/* Manual nav buttons, centered directly under the cards */
 .nearby-trail-nav {
     display: flex;
     align-items: center;
@@ -1494,46 +1485,29 @@ document.addEventListener('DOMContentLoaded', function () {
     transform: scale(0.94);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .nearby-trail-track { transition: none !important; }
+}
+
+/* Tablet: still 2 cards, just narrower */
 @media (max-width: 991px) {
-    .nearby-trail-outer { max-width: 700px; }
+    .nearby-trail-wrap { max-width: 700px; }
     .nearby-trail-card { width: calc((700px - 32px) / 2); }
     .nearby-trail-name { font-size: 1.15rem; }
     .nearby-trail-info { padding: 18px 20px 22px; }
 }
 
+/* Mobile: 1 full-width card visible, next peeking in from the edge */
 @media (max-width: 576px) {
-    .nearby-trail-section * {
-        border: none !important;
-        box-shadow: none !important;
-        outline: none !important;
-    }
-}
-    .nearby-trail-outer {
-        max-width: 100%;
-        overflow: hidden;
-    }
-    .nearby-trail-wrap {
-        max-width: 100%;
-        overflow: hidden;
-    }
-    .nearby-trail-card {
-        width: 78vw;
-    }
+    .nearby-trail-wrap { max-width: 100%; }
+    .nearby-trail-card { width: 78vw; }
     .nearby-trail-name { font-size: 1.05rem; }
     .nearby-trail-img { aspect-ratio: 4 / 3; }
 
-    /* "View all Destinations" button — border moved to the left edge
-       instead of the right */
+    /* Left-align the "View all Destinations" button on mobile */
     .nearby-trail-section .text-center.mt-5 {
-        max-width: 100%;
-        overflow: hidden;
         text-align: left !important;
-        padding-left: 20px;
-        border-left: 1px solid #2b2b2b;
-        border-right: none !important;
-    }
-    .nearby-trail-section .btn-new {
-        border-right: none !important;
+        padding-left: 12px;
     }
 }
 </style>
@@ -1542,8 +1516,7 @@ document.addEventListener('DOMContentLoaded', function () {
 (function () {
     // ===== Speed / behaviour controls =====
     var PIXELS_PER_SECOND = 40;        // continuous auto-scroll speed — raise for faster, lower for slower
-    var STEP_ON_CLICK = true;          // true: prev/next jump one full card; false: they just nudge slightly
-    var RESUME_AFTER_MANUAL_MS = 2500; // how long continuous motion pauses after a manual click/hover
+    var RESUME_AFTER_MANUAL_MS = 2500; // how long auto-scroll pauses after a manual click/hover/touch
 
     document.addEventListener('DOMContentLoaded', function () {
         var wrap = document.getElementById('nearbyTrailWrap');
@@ -1557,13 +1530,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (originalCards.length === 0) return;
 
         if (originalCards.length === 1) {
+            // Nothing to scroll to — hide the nav entirely.
             if (nav) nav.style.display = 'none';
             return;
         }
 
         // Duplicate the full set once so the track is always at least
-        // double its real width — this is what makes the wrap-around
-        // point invisible: the clone looks identical to the original.
+        // double its real width — this makes the wrap-around point
+        // invisible since the clone looks identical to the original.
         originalCards.forEach(function (card) {
             var clone = card.cloneNode(true);
             clone.setAttribute('aria-hidden', 'true');
@@ -1573,7 +1547,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var position = 0;          // current translateX, always <= 0
         var isPaused = false;
         var resumeTimer = null;
-        var rafId = null;
         var lastTimestamp = null;
 
         function stepWidth() {
@@ -1599,18 +1572,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!isPaused) {
                 position -= PIXELS_PER_SECOND * delta;
 
-                // Once we've scrolled a full original-set width past
-                // the start, snap forward by that same width — since
-                // the clone is identical, this is visually seamless
-                // and the cycle continues forever.
                 var setWidth = originalSetWidth();
                 if (-position >= setWidth) {
-                    position += setWidth;
+                    position += setWidth; // seamless loop, no visible jump
                 }
                 applyPosition();
             }
 
-            rafId = requestAnimationFrame(tick);
+            requestAnimationFrame(tick);
         }
 
         function pauseThenResume() {
@@ -1623,15 +1592,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function jump(direction) {
-            if (STEP_ON_CLICK) {
-                position -= direction * stepWidth();
-            } else {
-                position -= direction * (stepWidth() * 0.5);
-            }
+            position -= direction * stepWidth();
 
             var setWidth = originalSetWidth();
-            // Keep position normalized within a sane range so it
-            // never drifts too far positive or negative.
             if (-position >= setWidth) position += setWidth;
             if (position > 0) position -= setWidth;
 
@@ -1658,7 +1621,7 @@ document.addEventListener('DOMContentLoaded', function () {
         wrap.addEventListener('touchstart', function () { isPaused = true; }, { passive: true });
         wrap.addEventListener('touchend', pauseThenResume, { passive: true });
 
-        rafId = requestAnimationFrame(tick);
+        requestAnimationFrame(tick);
     });
 })();
 </script>
