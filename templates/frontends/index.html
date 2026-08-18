@@ -1332,8 +1332,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </section>
             <!-- Activities end -->
-           <!-- Site Seeing (continuous auto-scroll trail + manual buttons)
-============================================= -->
+           <!-- Site Seeing (continuous auto-scroll trail + manual buttons) -->
 <section class="section bg-light-1 nearby-trail-section">
     <div class="container">
         <!-- Heading -->
@@ -1392,17 +1391,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <style>
 .nearby-trail-wrap {
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     position: relative;
     max-width: 1080px;
     margin: 0 auto;
+    scroll-snap-type: x mandatory;   /* guarantees every card snaps fully into view */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.nearby-trail-wrap::-webkit-scrollbar {
+    display: none;
 }
 
 .nearby-trail-track {
     display: flex;
     gap: 32px;
     width: max-content;
-    will-change: transform;
 }
 
 /* Card width is set so exactly 2 cards (+ gap) fill the wrapper */
@@ -1410,6 +1416,8 @@ document.addEventListener('DOMContentLoaded', function () {
     flex: 0 0 auto;
     width: calc((1080px - 32px) / 2);
     max-width: 100%;
+    scroll-snap-align: start;   /* each card is a hard snap point */
+    scroll-snap-stop: always;   /* never allow scrolling past a card without stopping */
     border-radius: 1.75rem;
     overflow: hidden;
     background: #fff;
@@ -1485,10 +1493,6 @@ document.addEventListener('DOMContentLoaded', function () {
     transform: scale(0.94);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .nearby-trail-track { transition: none !important; }
-}
-
 /* Tablet: still 2 cards, just narrower */
 @media (max-width: 991px) {
     .nearby-trail-wrap { max-width: 700px; }
@@ -1497,10 +1501,10 @@ document.addEventListener('DOMContentLoaded', function () {
     .nearby-trail-info { padding: 18px 20px 22px; }
 }
 
-/* Mobile: 1 full-width card visible, next peeking in from the edge */
+/* Mobile: 1 full card in view at a time, snapped edge-to-edge */
 @media (max-width: 576px) {
     .nearby-trail-wrap { max-width: 100%; }
-    .nearby-trail-card { width: 78vw; }
+    .nearby-trail-card { width: 92vw; }
     .nearby-trail-name { font-size: 1.05rem; }
     .nearby-trail-img { aspect-ratio: 4 / 3; }
 
@@ -1515,8 +1519,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <script>
 (function () {
     // ===== Speed / behaviour controls =====
-    var PIXELS_PER_SECOND = 40;        // continuous auto-scroll speed — raise for faster, lower for slower
-    var RESUME_AFTER_MANUAL_MS = 2500; // how long auto-scroll pauses after a manual click/hover/touch
+    var AUTO_ADVANCE_MS = 3200;        // time between automatic steps — lower = faster
+    var RESUME_AFTER_MANUAL_MS = 4000; // how long auto-scroll pauses after a manual click/touch
 
     document.addEventListener('DOMContentLoaded', function () {
         var wrap = document.getElementById('nearbyTrailWrap');
@@ -1530,29 +1534,27 @@ document.addEventListener('DOMContentLoaded', function () {
         if (originalCards.length === 0) return;
 
         if (originalCards.length === 1) {
-            // Nothing to scroll to — hide the nav entirely.
             if (nav) nav.style.display = 'none';
             return;
         }
 
-        // Duplicate the full set once so the track is always at least
-        // double its real width — this makes the wrap-around point
-        // invisible since the clone looks identical to the original.
+        // Duplicate the full set once so there's always overflow to
+        // scroll through, and looping back is invisible (the clone
+        // looks identical to the original set).
         originalCards.forEach(function (card) {
             var clone = card.cloneNode(true);
             clone.setAttribute('aria-hidden', 'true');
             track.appendChild(clone);
         });
 
-        var position = 0;          // current translateX, always <= 0
-        var isPaused = false;
+        var autoTimer = null;
         var resumeTimer = null;
-        var lastTimestamp = null;
+        var isResetting = false;
 
         function stepWidth() {
             var card = track.children[0];
             var style = window.getComputedStyle(track);
-            var gap = parseFloat(style.columnGap || style.gap || 0);
+            var gap = parseFloat(style.columnGap || style.gap || 0) || 0;
             return card.getBoundingClientRect().width + gap;
         }
 
@@ -1560,68 +1562,78 @@ document.addEventListener('DOMContentLoaded', function () {
             return stepWidth() * originalCards.length;
         }
 
-        function applyPosition() {
-            track.style.transform = 'translateX(' + position + 'px)';
+        // Snap the scroll position to the nearest exact card boundary —
+        // this is what guarantees no partial/half card is ever left
+        // in view, regardless of how the position got there.
+        function snapToNearestCard(scrollLeft) {
+            var w = stepWidth();
+            return Math.round(scrollLeft / w) * w;
         }
 
-        function tick(timestamp) {
-            if (lastTimestamp === null) lastTimestamp = timestamp;
-            var delta = (timestamp - lastTimestamp) / 1000;
-            lastTimestamp = timestamp;
+        function goTo(scrollLeft, smooth) {
+            wrap.scrollTo({ left: scrollLeft, behavior: smooth ? 'smooth' : 'auto' });
+        }
 
-            if (!isPaused) {
-                position -= PIXELS_PER_SECOND * delta;
+        function step(direction) {
+            if (isResetting) return;
 
-                var setWidth = originalSetWidth();
-                if (-position >= setWidth) {
-                    position += setWidth; // seamless loop, no visible jump
-                }
-                applyPosition();
+            var current = snapToNearestCard(wrap.scrollLeft);
+            var target = current + direction * stepWidth();
+            var maxScroll = track.scrollWidth - wrap.clientWidth;
+
+            if (target > maxScroll - 1) {
+                // Reached the end of the duplicated set — snap back to
+                // the equivalent spot in the real set, instantly, then
+                // continue forward from there.
+                isResetting = true;
+                goTo(target - originalSetWidth(), false);
+                isResetting = false;
+                return;
+            }
+            if (target < 0) {
+                isResetting = true;
+                goTo(target + originalSetWidth(), false);
+                isResetting = false;
+                return;
             }
 
-            requestAnimationFrame(tick);
+            goTo(target, true);
+        }
+
+        function startAuto() {
+            stopAuto();
+            autoTimer = setInterval(function () { step(1); }, AUTO_ADVANCE_MS);
+        }
+
+        function stopAuto() {
+            if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
         }
 
         function pauseThenResume() {
-            isPaused = true;
+            stopAuto();
             if (resumeTimer) clearTimeout(resumeTimer);
-            resumeTimer = setTimeout(function () {
-                isPaused = false;
-                lastTimestamp = null; // avoid a large delta jump on resume
-            }, RESUME_AFTER_MANUAL_MS);
-        }
-
-        function jump(direction) {
-            position -= direction * stepWidth();
-
-            var setWidth = originalSetWidth();
-            if (-position >= setWidth) position += setWidth;
-            if (position > 0) position -= setWidth;
-
-            track.style.transition = 'transform .5s cubic-bezier(0.22,1,0.36,1)';
-            applyPosition();
-            setTimeout(function () { track.style.transition = ''; }, 520);
+            resumeTimer = setTimeout(startAuto, RESUME_AFTER_MANUAL_MS);
         }
 
         if (prevBtn) {
             prevBtn.addEventListener('click', function () {
-                jump(-1);
+                step(-1);
                 pauseThenResume();
             });
         }
         if (nextBtn) {
             nextBtn.addEventListener('click', function () {
-                jump(1);
+                step(1);
                 pauseThenResume();
             });
         }
 
-        wrap.addEventListener('mouseenter', function () { isPaused = true; });
-        wrap.addEventListener('mouseleave', function () { isPaused = false; lastTimestamp = null; });
-        wrap.addEventListener('touchstart', function () { isPaused = true; }, { passive: true });
+        wrap.addEventListener('mouseenter', stopAuto);
+        wrap.addEventListener('mouseleave', startAuto);
+        wrap.addEventListener('touchstart', stopAuto, { passive: true });
         wrap.addEventListener('touchend', pauseThenResume, { passive: true });
 
-        requestAnimationFrame(tick);
+        startAuto();
     });
 })();
 </script>
