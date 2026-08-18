@@ -10,7 +10,7 @@
 			============================================= -->
 			<section class="hero-wrap hero-video-section" id="heroFramesSection">
     <video class="hero-frames-video" id="heroVideo" autoplay muted loop playsinline preload="auto">
-        <source src="{% static 'tandu-main/hero.mp4' %}" type="video/mp4">
+        <source src="{% static 'tandu-main/hero1.mp4' %}" type="video/mp4">
     </video>
     <div class="hero-mask bg-dark opacity-2"></div>
     <div class="hero-frames-logo-wrap">
@@ -1333,7 +1333,336 @@ document.addEventListener('DOMContentLoaded', function () {
             </section>
             <!-- Activities end -->
 
-           
+ <!-- Site Seeing (continuous cyclic auto-scroll + manual controls)
+============================================= -->
+<section class="section bg-light-1 nearby-trail-section">
+    <div class="container">
+        <!-- Heading -->
+        <div class="mx-auto text-center mb-5">
+            <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Explore The Area</span></p>
+            <h2 class="heading-font-family text-13 fw-600 lh-sm wow fadeInUp" data-wow-delay=".2s">Site <span class="text-primary">Seeing <br class="d-none d-md-block">Worth Visiting</span></h2>
+        </div>
+        <!-- Heading End -->
+
+        {% if destinations %}
+        <div class="nearby-trail-outer wow fadeInUp">
+            <div class="nearby-trail-wrap" id="nearbyTrailWrap">
+                <div class="nearby-trail-track" id="nearbyTrailTrack">
+                    {% for destination in destinations %}
+                    <div class="nearby-trail-card">
+                        <a href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}" class="nearby-trail-img d-block">
+                            {% if destination.image %}
+                                <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+                            {% else %}
+                                <img src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ destination.name }}">
+                            {% endif %}
+                        </a>
+                        <div class="nearby-trail-info">
+                            <h3 class="nearby-trail-name">{{ destination.name }}</h3>
+                            {% if destination.distance %}
+                                <span class="nearby-trail-distance"><i class="fa-solid fa-location-dot"></i> {{ destination.distance }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Manual prev/next controls -->
+            <div class="nearby-trail-nav" id="nearbyTrailNav">
+                <button type="button" class="nearby-nav-btn" id="nearbyPrevBtn" aria-label="Previous destination">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="nearby-nav-btn" id="nearbyNextBtn" aria-label="Next destination">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:nearby_destinations' %}">
+                <span class="btn-text"><span>View all Destinations</span></span>
+                <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            <p class="mb-0">No nearby destinations added yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+.nearby-trail-section {
+    overflow: visible;
+}
+
+.nearby-trail-outer {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+.nearby-trail-wrap {
+    overflow: hidden; /* we move the track ourselves via JS, no native scrollbar */
+    position: relative;
+}
+
+.nearby-trail-track {
+    display: flex;
+    gap: 32px;
+    width: max-content;
+    will-change: transform;
+}
+
+.nearby-trail-card {
+    flex: 0 0 auto;
+    width: calc((1080px - 32px) / 2);
+    max-width: 100%;
+    border-radius: 1.75rem;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 18px 40px -18px rgba(0,0,0,.25);
+    transition: transform .4s cubic-bezier(0.22,1,0.36,1), box-shadow .4s ease;
+}
+.nearby-trail-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 28px 50px -18px rgba(0,0,0,.3);
+}
+
+.nearby-trail-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+}
+.nearby-trail-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s cubic-bezier(0.22,1,0.36,1);
+}
+.nearby-trail-card:hover .nearby-trail-img img {
+    transform: scale(1.08);
+}
+
+.nearby-trail-info {
+    padding: 22px 26px 26px;
+}
+.nearby-trail-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    color: #1a1a1a;
+}
+.nearby-trail-distance {
+    font-size: .95rem;
+    color: var(--bs-primary, #b4915c);
+}
+.nearby-trail-distance i {
+    margin-right: 4px;
+}
+
+/* Manual nav buttons, centered under the track */
+.nearby-trail-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+.nearby-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.nearby-nav-btn:hover {
+    background: var(--bs-primary, #b4915c);
+    border-color: var(--bs-primary, #b4915c);
+    color: #fff;
+}
+.nearby-nav-btn:active {
+    transform: scale(0.94);
+}
+
+@media (max-width: 991px) {
+    .nearby-trail-outer { max-width: 700px; }
+    .nearby-trail-card { width: calc((700px - 32px) / 2); }
+    .nearby-trail-name { font-size: 1.15rem; }
+    .nearby-trail-info { padding: 18px 20px 22px; }
+}
+
+@media (max-width: 576px) {
+    .nearby-trail-section * {
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+}
+    .nearby-trail-outer {
+        max-width: 100%;
+        overflow: hidden;
+    }
+    .nearby-trail-wrap {
+        max-width: 100%;
+        overflow: hidden;
+    }
+    .nearby-trail-card {
+        width: 78vw;
+    }
+    .nearby-trail-name { font-size: 1.05rem; }
+    .nearby-trail-img { aspect-ratio: 4 / 3; }
+
+    /* "View all Destinations" button — border moved to the left edge
+       instead of the right */
+    .nearby-trail-section .text-center.mt-5 {
+        max-width: 100%;
+        overflow: hidden;
+        text-align: left !important;
+        padding-left: 20px;
+        border-left: 1px solid #2b2b2b;
+        border-right: none !important;
+    }
+    .nearby-trail-section .btn-new {
+        border-right: none !important;
+    }
+}
+</style>
+
+<script>
+(function () {
+    // ===== Speed / behaviour controls =====
+    var PIXELS_PER_SECOND = 40;        // continuous auto-scroll speed — raise for faster, lower for slower
+    var STEP_ON_CLICK = true;          // true: prev/next jump one full card; false: they just nudge slightly
+    var RESUME_AFTER_MANUAL_MS = 2500; // how long continuous motion pauses after a manual click/hover
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var wrap = document.getElementById('nearbyTrailWrap');
+        var track = document.getElementById('nearbyTrailTrack');
+        var prevBtn = document.getElementById('nearbyPrevBtn');
+        var nextBtn = document.getElementById('nearbyNextBtn');
+        var nav = document.getElementById('nearbyTrailNav');
+        if (!wrap || !track) return;
+
+        var originalCards = Array.prototype.slice.call(track.children);
+        if (originalCards.length === 0) return;
+
+        if (originalCards.length === 1) {
+            if (nav) nav.style.display = 'none';
+            return;
+        }
+
+        // Duplicate the full set once so the track is always at least
+        // double its real width — this is what makes the wrap-around
+        // point invisible: the clone looks identical to the original.
+        originalCards.forEach(function (card) {
+            var clone = card.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            track.appendChild(clone);
+        });
+
+        var position = 0;          // current translateX, always <= 0
+        var isPaused = false;
+        var resumeTimer = null;
+        var rafId = null;
+        var lastTimestamp = null;
+
+        function stepWidth() {
+            var card = track.children[0];
+            var style = window.getComputedStyle(track);
+            var gap = parseFloat(style.columnGap || style.gap || 0);
+            return card.getBoundingClientRect().width + gap;
+        }
+
+        function originalSetWidth() {
+            return stepWidth() * originalCards.length;
+        }
+
+        function applyPosition() {
+            track.style.transform = 'translateX(' + position + 'px)';
+        }
+
+        function tick(timestamp) {
+            if (lastTimestamp === null) lastTimestamp = timestamp;
+            var delta = (timestamp - lastTimestamp) / 1000;
+            lastTimestamp = timestamp;
+
+            if (!isPaused) {
+                position -= PIXELS_PER_SECOND * delta;
+
+                // Once we've scrolled a full original-set width past
+                // the start, snap forward by that same width — since
+                // the clone is identical, this is visually seamless
+                // and the cycle continues forever.
+                var setWidth = originalSetWidth();
+                if (-position >= setWidth) {
+                    position += setWidth;
+                }
+                applyPosition();
+            }
+
+            rafId = requestAnimationFrame(tick);
+        }
+
+        function pauseThenResume() {
+            isPaused = true;
+            if (resumeTimer) clearTimeout(resumeTimer);
+            resumeTimer = setTimeout(function () {
+                isPaused = false;
+                lastTimestamp = null; // avoid a large delta jump on resume
+            }, RESUME_AFTER_MANUAL_MS);
+        }
+
+        function jump(direction) {
+            if (STEP_ON_CLICK) {
+                position -= direction * stepWidth();
+            } else {
+                position -= direction * (stepWidth() * 0.5);
+            }
+
+            var setWidth = originalSetWidth();
+            // Keep position normalized within a sane range so it
+            // never drifts too far positive or negative.
+            if (-position >= setWidth) position += setWidth;
+            if (position > 0) position -= setWidth;
+
+            track.style.transition = 'transform .5s cubic-bezier(0.22,1,0.36,1)';
+            applyPosition();
+            setTimeout(function () { track.style.transition = ''; }, 520);
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function () {
+                jump(-1);
+                pauseThenResume();
+            });
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function () {
+                jump(1);
+                pauseThenResume();
+            });
+        }
+
+        wrap.addEventListener('mouseenter', function () { isPaused = true; });
+        wrap.addEventListener('mouseleave', function () { isPaused = false; lastTimestamp = null; });
+        wrap.addEventListener('touchstart', function () { isPaused = true; }, { passive: true });
+        wrap.addEventListener('touchend', pauseThenResume, { passive: true });
+
+        rafId = requestAnimationFrame(tick);
+    });
+})();
+</script>
+<!-- Site Seeing end -->
 
            
 
@@ -1384,11 +1713,9 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
 </section>
-<!-- Our Experience end -->
-
 <!-- Testimonial
 ============================================= -->
-<section class="section">
+<section class="section mist-testimonials">
     <div class="container">
         <!-- Heading -->
         <div class="mx-auto text-center mb-5">
@@ -1398,121 +1725,472 @@ document.addEventListener('DOMContentLoaded', function () {
         <!-- Heading End -->
 
         <style>
-            .testimonial-card {
-                background: #fff;
-                border-radius: 20px;
+            .mist-testimonials {
+                --mist-ink: #1E2A28;
+                --mist-sage: #7C9A8E;
+                --mist-fog: #DEE5E2;
+                --mist-gold: #B4915C;
+                --mist-paper: #F7F6F2;
+                position: relative;
+            }
+
+            /* Scroll wrapper — height is set by JS to fit exactly 2 rows; scroll reveals the rest */
+            .mist-scroll-wrap {
+                position: relative;
+                max-width: 1080px;
+                margin: 0 auto;
+                overflow-y: auto;
+                scroll-snap-type: y proximity;
+                overscroll-behavior: contain;
+                scrollbar-width: thin;
+                scrollbar-color: var(--mist-sage) transparent;
+            }
+            .mist-scroll-wrap::-webkit-scrollbar {
+                width: 6px;
+            }
+            .mist-scroll-wrap::-webkit-scrollbar-thumb {
+                background: var(--mist-sage);
+                border-radius: 999px;
+            }
+            .mist-scroll-wrap::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            /* The trail groups each testimonial row together */
+            .mist-trail {
+                position: relative;
+            }
+
+            .mist-row {
+                position: relative;
+                display: flex;
+                align-items: center;
+                gap: 4.5rem;
+                padding: 1.5rem 0;
+                z-index: 1;
+                scroll-snap-align: start;
+            }
+            .mist-row:nth-child(even) {
+                flex-direction: row-reverse;
+            }
+
+            /* Photo side */
+            .mist-photo {
+                flex: 0 0 42%;
+                position: relative;
+            }
+            .mist-photo-frame {
+                position: relative;
+                border-radius: 22px;
                 overflow: hidden;
-                box-shadow: 0 15px 35px rgba(0,0,0,.08);
-                position: relative;
+                aspect-ratio: 4 / 4.6;
+                box-shadow: 0 25px 50px -20px rgba(30,42,40,.35);
             }
-            .testimonial-card .quote-top {
-                padding: 2.5rem 2rem 5.5rem 2rem;
-                position: relative;
-                min-height: 180px;
-            }
-            .testimonial-card .quote-mark {
-                position: absolute;
-                right: 20px;
-                top: 55%;
-                font-size: 4rem;
-                font-family: Georgia, serif;
-                color: rgba(0,0,0,.08);
-                line-height: 1;
-            }
-            .testimonial-card .client-band {
-                position: relative;
-                padding: 60px 1.5rem 1.5rem 1.5rem;
-                text-align: center;
-                color: #fff;
-            }
-            .testimonial-card .client-avatar {
-                width: 110px;
-                height: 110px;
-                border-radius: 50%;
+            .mist-photo-frame img,
+            .mist-photo-frame .mist-photo-fallback {
+                width: 100%;
+                height: 100%;
                 object-fit: cover;
-                border: 6px solid #fff;
-                position: absolute;
-                top: -55px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #fff;
-                box-shadow: 0 6px 18px rgba(0,0,0,.25);
+                display: block;
             }
-            .testimonial-card .client-avatar-fallback {
-                width: 110px;
-                height: 110px;
-                border-radius: 50%;
-                border: 6px solid #fff;
-                position: absolute;
-                top: -55px;
-                left: 50%;
-                transform: translateX(-50%);
+            .mist-photo-frame .mist-photo-fallback {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: #eee;
-                color: #999;
-                font-size: 2rem;
-                box-shadow: 0 6px 18px rgba(0,0,0,.25);
+                background: var(--mist-fog);
+                color: var(--mist-sage);
+                font-size: 3rem;
             }
-            /* Olive -> Green (used on all cards) */
-            .band-olive-green {
-                background: linear-gradient(135deg, #6b7a2a 0%, #4c7a2e 50%, #1f9d55 100%);
+            /* Mist wash across the base of every photo */
+            .mist-photo-frame::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(to top, rgba(30,42,40,.35) 0%, rgba(30,42,40,0) 45%);
+                pointer-events: none;
+            }
+
+            /* Text side */
+            .mist-text {
+                flex: 1 1 auto;
+            }
+
+            /* Star rating shown above the review, in the text column */
+            .mist-stars-inline {
+                font-size: .9rem;
+                color: var(--mist-gold);
+                margin-bottom: 0.75rem;
+                letter-spacing: 2px;
+            }
+
+            /* Name / address shown below the review, in the text column */
+            .mist-attribution {
+                margin-top: 1rem;
+            }
+            .mist-attr-name {
+                font-family: var(--heading-font-family, serif);
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--mist-ink);
+                margin: 0 0 3px 0;
+                line-height: 1.2;
+            }
+            .mist-attr-role {
+                font-size: .8rem;
+                letter-spacing: .04em;
+                text-transform: uppercase;
+                color: var(--mist-sage);
+                margin: 0;
+            }
+
+            .mist-quote-mark {
+                display: block;
+                font-family: Georgia, serif;
+                font-size: 4.5rem;
+                line-height: 1;
+                color: #6B8E23;
+                margin-bottom: -0.5rem;
+            }
+            .mist-review {
+                font-family: var(--heading-font-family, serif);
+                font-size: 1.55rem;
+                line-height: 1.55;
+                color: var(--mist-ink);
+                font-weight: 500;
+                margin-top: 0;
+                margin-bottom: 1.5rem;
+            }
+            .mist-meta {
+                display: flex;
+                align-items: center;
+                gap: .75rem;
+                font-size: .85rem;
+                color: var(--mist-sage);
+            }
+            .mist-meta .mist-dot {
+                width: 4px;
+                height: 4px;
+                border-radius: 50%;
+                background: currentColor;
+                display: inline-block;
+            }
+
+            /* Hint that more testimonials are below — fades out once the user has scrolled */
+            .mist-scroll-hint {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: .4rem;
+                margin-top: 1rem;
+                font-size: .8rem;
+                letter-spacing: .04em;
+                text-transform: uppercase;
+                color: var(--mist-sage);
+                opacity: 1;
+                transition: opacity .3s ease;
+            }
+            .mist-scroll-hint.is-hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+            .mist-scroll-hint i {
+                animation: mist-bounce 1.6s ease-in-out infinite;
+            }
+            @keyframes mist-bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(4px); }
+            }
+
+            /* Manual prev/next controls — for stepping through cards on demand */
+            .mist-manual-nav {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                margin-top: 0.75rem;
+            }
+            .mist-nav-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border: 1px solid var(--mist-fog);
+                background: var(--mist-paper);
+                color: var(--mist-ink);
+                cursor: pointer;
+                transition: background .2s ease, color .2s ease, border-color .2s ease;
+            }
+            .mist-nav-btn:hover {
+                background: var(--mist-sage);
+                border-color: var(--mist-sage);
+                color: #fff;
+            }
+            .mist-nav-btn:active {
+                transform: scale(0.94);
+            }
+
+            @media (max-width: 767.98px) {
+
+                /* Mobile: horizontal swipe carousel instead of stacked rows */
+                .mist-scroll-wrap {
+                    overflow: visible !important;
+                    max-height: none !important;
+                }
+                .mist-trail {
+                    display: flex;
+                    flex-direction: row;
+                    overflow-x: auto;
+                    scroll-snap-type: x mandatory;
+                    scroll-padding-left: 0;
+                    -webkit-overflow-scrolling: touch;
+                    gap: 0;
+                    padding: 0.5rem 0 1rem;
+                    margin: 0;
+                    scrollbar-width: none;
+                }
+                .mist-trail::-webkit-scrollbar { display: none; }
+
+                .mist-row,
+                .mist-row:nth-child(even) {
+                    flex: 0 0 100%;
+                    width: 100%;
+                    max-width: 100%;
+                    box-sizing: border-box;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 1rem;
+                    padding: 1rem 0.25rem;
+                    border-bottom: none;
+                    scroll-snap-align: start;
+                    scroll-snap-stop: always;
+                }
+                .mist-photo { flex: 0 0 auto; width: 100%; max-width: 280px; margin: 0 auto; box-sizing: border-box; }
+                .mist-text,
+                .mist-row:nth-child(even) .mist-text {
+                    width: 100%;
+                    box-sizing: border-box;
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+                .mist-attr-name { font-size: 1.1rem; }
+                .mist-attr-role { font-size: .7rem; }
+                .mist-quote-mark { font-size: 3rem; }
+                .mist-review { font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; }
+                .mist-meta { font-size: .75rem; }
+                .mist-scroll-hint { display: none !important; }
+                .mist-manual-nav { display: none !important; }
             }
         </style>
 
-        <div class="swiper wow fadeInUp" data-loop="true" data-autoplay="true" data-margin="30" data-items-xs="1" data-items-sm="1" data-items-md="1" data-items-lg="2">
-            <div class="swiper-wrapper">
-                {% if testimonials %}
+        {% if testimonials %}
+            <div class="mist-scroll-wrap" id="mistScrollWrap">
+                <div class="mist-trail" id="mistTrail">
                     {% for testimonial in testimonials %}
-                    <div class="swiper-slide">
-                        <div class="testimonial-card">
-                            <!-- Quote Section -->
-                            <div class="quote-top">
-                                <!-- Star Rating -->
-                                <div class="mb-3">
-                                    {% for i in "12345" %}
-                                        {% if i|add:"0" <= testimonial.rating %}
-                                            <i class="fa-solid fa-star text-warning"></i>
-                                        {% else %}
-                                            <i class="fa-regular fa-star text-warning"></i>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                                <p class="lh-lg mb-0">{{ testimonial.review|safe }}</p>
-                                <span class="quote-mark">&rdquo;</span>
-                            </div>
+                    <div class="mist-row" data-wow-delay=".{{ forloop.counter }}s">
 
-                            <!-- Client Band -->
-                            <div class="client-band band-olive-green">
+                        <!-- Photo side -->
+                        <div class="mist-photo">
+                            <div class="mist-photo-frame">
                                 {% if testimonial.image %}
-                                    <img class="client-avatar" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}">
+                                    <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}">
                                 {% else %}
-                                    <div class="client-avatar-fallback">
-                                        <i class="fa-solid fa-user"></i>
-                                    </div>
+                                    <div class="mist-photo-fallback"><i class="fa-solid fa-user"></i></div>
                                 {% endif %}
-                                <h3 class="text-4 fw-600 mb-1 mt-2 text-white">{{ testimonial.name }}</h3>
-                                <div class="text-3 fw-500 text-white text-opacity-75">{{ testimonial.created_at|date:"M d, Y" }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Text side -->
+                        <div class="mist-text">
+                            <div class="mist-stars-inline">
+                                {% for i in "12345" %}
+                                    {% if i|add:"0" <= testimonial.rating %}
+                                        <i class="fa-solid fa-star"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span class="mist-quote-mark">&rdquo;</span>
+                            <p class="mist-review">{{ testimonial.review|safe }}</p>
+                            <div class="mist-attribution">
+                                <p class="mist-attr-name">{{ testimonial.name }}</p>
+                                <p class="mist-attr-role">{{ testimonial.role|default:"Guest" }}</p>
+                            </div>
+                            <div class="mist-meta">
+                                <span>{{ testimonial.created_at|date:"M d, Y" }}</span>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
-                {% else %}
-                    <div class="swiper-slide">
-                        <div class="bg-white rounded-5 p-5 text-center">
-                            <p class="text-body-secondary">No testimonials available yet.</p>
-                        </div>
-                    </div>
-                {% endif %}
+                </div>
             </div>
 
-            <!-- Navigation -->
-            <div class="swiper-button-next mt-n5"><i class="fa-solid fa-angle-right"></i></div>
-            <div class="swiper-button-prev mt-n5"><i class="fa-solid fa-angle-left"></i></div>
-            <!-- Pagination -->
-            <div class="swiper-pagination position-relative mt-4"></div>
-        </div>
+            <div class="mist-scroll-hint" id="mistScrollHint">
+                <span>Scroll for more</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+
+            <div class="mist-manual-nav" id="mistManualNav">
+                <button type="button" class="mist-nav-btn" id="mistPrevBtn" aria-label="Previous testimonial">
+                    <i class="fa-solid fa-chevron-up"></i>
+                </button>
+                <button type="button" class="mist-nav-btn" id="mistNextBtn" aria-label="Next testimonial">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+            </div>
+
+            <script>
+            (function () {
+                var VISIBLE_ROWS = 1;
+                var AUTO_ADVANCE_MS = 2800;
+                var scrollWrap = document.getElementById('mistScrollWrap');
+                var trail = document.getElementById('mistTrail');
+                var hint = document.getElementById('mistScrollHint');
+                if (!scrollWrap || !trail) return;
+
+                // On mobile the trail becomes a native horizontal swipe carousel (see CSS),
+                // so the vertical auto-scroll/pagination logic below doesn't apply there.
+                var isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+                if (isMobile) return;
+
+                var originalRows = Array.prototype.slice.call(trail.querySelectorAll('.mist-row'));
+                var totalPages = Math.max(1, Math.ceil(originalRows.length / VISIBLE_ROWS));
+                var currentPage = 0;
+                var pageHeight = 0;
+                var autoTimer = null;
+                var isPaused = false;
+                var isResetting = false;
+
+                // Clone the first page's rows and append them to the end of the trail.
+                // This lets the auto-scroll keep flowing upward seamlessly past the
+                // "last" card straight into a visual repeat of the first card, so we
+                // can then jump back to the real top invisibly and loop forever —
+                // works even with an odd count like 3 testimonials.
+                if (originalRows.length > VISIBLE_ROWS) {
+                    originalRows.slice(0, VISIBLE_ROWS).forEach(function (row) {
+                        var clone = row.cloneNode(true);
+                        clone.setAttribute('aria-hidden', 'true');
+                        clone.classList.add('mist-row-clone');
+                        trail.appendChild(clone);
+                    });
+                }
+
+                function measure() {
+                    if (originalRows.length === 0) return;
+                    var rowsToMeasure = originalRows.slice(0, VISIBLE_ROWS);
+                    var height = 0;
+                    rowsToMeasure.forEach(function (row) {
+                        height += row.getBoundingClientRect().height;
+                    });
+                    pageHeight = height;
+
+                    if (originalRows.length <= VISIBLE_ROWS) {
+                        scrollWrap.style.maxHeight = 'none';
+                        scrollWrap.style.overflowY = 'visible';
+                        if (hint) hint.style.display = 'none';
+                    } else {
+                        scrollWrap.style.maxHeight = height + 'px';
+                        scrollWrap.style.overflowY = 'auto';
+                        if (hint) hint.style.display = 'flex';
+                    }
+                }
+
+                function scrollToTop(pageIndex, behavior) {
+                    scrollWrap.scrollTo({
+                        top: pageIndex * pageHeight,
+                        behavior: behavior || 'smooth'
+                    });
+                }
+
+                function advance() {
+                    if (isPaused || isResetting || totalPages <= 1) return;
+
+                    var nextPage = currentPage + 1;
+
+                    if (nextPage >= totalPages) {
+                        // Scroll smoothly into the cloned page (visually identical to page 0),
+                        // then snap back to the real top without animation once it's settled.
+                        isResetting = true;
+                        scrollToTop(totalPages, 'smooth');
+                        setTimeout(function () {
+                            scrollToTop(0, 'auto');
+                            currentPage = 0;
+                            isResetting = false;
+                        }, 450);
+                    } else {
+                        currentPage = nextPage;
+                        scrollToTop(currentPage, 'smooth');
+                    }
+                }
+
+                function startAuto() {
+                    stopAuto();
+                    if (totalPages <= 1) return;
+                    autoTimer = setInterval(advance, AUTO_ADVANCE_MS);
+                }
+
+                function stopAuto() {
+                    if (autoTimer) {
+                        clearInterval(autoTimer);
+                        autoTimer = null;
+                    }
+                }
+
+                function goToPage(pageIndex, behavior) {
+                    currentPage = ((pageIndex % totalPages) + totalPages) % totalPages;
+                    scrollToTop(currentPage, behavior || 'smooth');
+                }
+
+                function manualNext() {
+                    if (isResetting) return;
+                    advance();
+                    startAuto(); // restart the timer so it doesn't double-advance right after a manual click
+                }
+
+                function manualPrev() {
+                    if (isResetting) return;
+                    goToPage(currentPage - 1);
+                    startAuto();
+                }
+
+                var manualNav = document.getElementById('mistManualNav');
+                var prevBtn = document.getElementById('mistPrevBtn');
+                var nextBtn = document.getElementById('mistNextBtn');
+
+                if (totalPages <= 1) {
+                    if (manualNav) manualNav.style.display = 'none';
+                } else {
+                    if (prevBtn) prevBtn.addEventListener('click', manualPrev);
+                    if (nextBtn) nextBtn.addEventListener('click', manualNext);
+                }
+
+                scrollWrap.addEventListener('mouseenter', function () { isPaused = true; });
+                scrollWrap.addEventListener('mouseleave', function () { isPaused = false; });
+                scrollWrap.addEventListener('touchstart', function () { isPaused = true; }, { passive: true });
+                scrollWrap.addEventListener('touchend', function () {
+                    setTimeout(function () { isPaused = false; }, 2000);
+                }, { passive: true });
+
+                var resizeTimer;
+                window.addEventListener('resize', function () {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(function () {
+                        measure();
+                        scrollToTop(currentPage, 'auto');
+                    }, 150);
+                });
+
+                measure();
+                startAuto();
+            })();
+            </script>
+        {% else %}
+            <div class="bg-white rounded-5 p-5 text-center">
+                <p class="text-body-secondary">No testimonials available yet.</p>
+            </div>
+        {% endif %}
 
         <!-- View More Link -->
 

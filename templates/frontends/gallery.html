@@ -52,7 +52,7 @@
 							{% for image in entry.page_obj %}
 							<div class="col-md-4 gallery-grid-item scroll-reveal" data-category="cat-{{ entry.category.id }}">
 								<div class="gallery-item rounded-5">
-									<a class="glightbox" href="{{ image.image.url }}" data-gallery="hotel-gallery" data-title="{{ image.title|default:entry.category.name }}">
+									<a class="glightbox" href="{{ image.image.url }}" data-gallery="hotel-gallery"{% if image.title %} data-title="{{ image.title }}"{% endif %}>
 										<img class="img-fluid d-block" src="{{ image.image.url }}" alt="{{ image.title|default:entry.category.name }}">
 										<div class="overlay-details">
 											<span class="text-6"><i class="fa-solid fa-plus"></i></span>
@@ -85,6 +85,15 @@
 <style>
     .page-header .hero-wrap {
   min-height: 550px;
+}
+@media (max-width: 576px) {
+	.page-header .hero-wrap {
+		min-height: 340px;
+	}
+	.page-header .hero-content {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+	}
 }
 .gallery-filters .filter-btn {
     border: 1px solid rgba(0,0,0,.1);
@@ -139,6 +148,36 @@
 }
 .scroll-reveal:nth-child(3n+3) {
     transition-delay: .2s;
+}
+
+/* ===== Consistent GLightbox popup styling for the main gallery ===== */
+.gslide-image {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: min(90vw, 1200px) !important;
+    height: min(75vh, 675px) !important;
+    margin: 0 auto;
+}
+.gslide-image img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 20px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+.gslide-description,
+.gdesc-inner {
+    display: none !important;
+}
+.glightbox-clean .gslide-media {
+    box-shadow: none !important;
+}
+.gclose, .gprev, .gnext {
+    background-color: rgba(0, 0, 0, 0.45) !important;
+    border-radius: 50% !important;
 }
 </style>
 {% endblock %}

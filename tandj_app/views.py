@@ -807,12 +807,14 @@ def index(request):
 
     # Latest 3 blog posts for the homepage "News & Events" section
     blogs = Blog.objects.all().order_by("-created_at")[:3]
+    destinations = NearbyDestination.objects.all().order_by("-created_at")[:3]
 
     context = {
         'rooms': rooms,
         'activities': activities,
         'testimonials': testimonials,
         'blogs': blogs,
+        'destinations': destinations,
     }
 
     return render(request, "frontends/index.html", context)
@@ -1099,3 +1101,6 @@ def restaurant(request):
         
     }
     return render(request, "frontends/restaurant.html", context)
+def page_404(request, exception=None):
+    return render(request, 'front-end/404.html', status=404)
+

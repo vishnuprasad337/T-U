@@ -295,7 +295,15 @@ document.addEventListener('DOMContentLoaded', function () {
 .page-header .hero-wrap {
 	min-height: 550px;
 }
-
+@media (max-width: 576px) {
+	.page-header .hero-wrap {
+		min-height: 340px;
+	}
+	.page-header .hero-content {
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+	}
+}
 .contact-intro {
 	max-width: 780px;
 }
