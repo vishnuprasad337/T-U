@@ -885,6 +885,16 @@
 				document.body.style.right = '';
 				document.body.style.width = '';
 				window.scrollTo(0, lockedScrollY);
+
+				// Reset the modal body back to the booking form the next
+				// time it's closed, so a fresh open always shows the form
+				// again rather than a stale "please wait" message.
+				var modalBodyForReset = bookNowModalEl.querySelector('.modal-body');
+				if (modalBodyForReset && modalBodyForReset.dataset.showingRedirect) {
+					modalBodyForReset.innerHTML = formOriginalBodyHTML;
+					delete modalBodyForReset.dataset.showingRedirect;
+					bindFormSubmit();
+				}
 			});
 		}
 
@@ -893,83 +903,161 @@
 		if (bookNowForm) {
 			var WHATSAPP_NUMBER = '919633870962'; // country code 91 + 9633870962
 
-			bookNowForm.addEventListener('submit', function (e) {
-				e.preventDefault();
+			// Keep a copy of the modal body's original markup (intro text +
+			// form) so it can be restored after the modal is closed/reopened,
+			// or if the booking request fails.
+			var modalBodyElRef = document.querySelector('#bookNowModal .modal-body');
+			var formOriginalBodyHTML = modalBodyElRef ? modalBodyElRef.innerHTML : '';
 
-				var name = document.getElementById('guestName').value.trim();
-				var email = document.getElementById('guestEmail').value.trim();
-				var phone = document.getElementById('guestPhone').value.trim();
-				var checkIn = document.getElementById('checkIn').value;
-				var checkOut = document.getElementById('checkOut').value;
-				var numGuests = document.getElementById('numGuests').value;
-				var roomSelectEl = document.getElementById('roomSelect');
-				var roomName = roomSelectEl.options[roomSelectEl.selectedIndex].getAttribute('data-room-name');
-				var requests = document.getElementById('specialRequests').value.trim();
+			var showRedirectingMessage = function () {
+				var modalBodyEl = document.querySelector('#bookNowModal .modal-body');
+				if (!modalBodyEl) return;
+				modalBodyEl.dataset.showingRedirect = '1';
+				modalBodyEl.innerHTML =
+					'<div class="text-center py-4">' +
+						'<div class="spinner-border text-primary mb-3" role="status" style="width:3rem;height:3rem;">' +
+							'<span class="visually-hidden">Loading...</span>' +
+						'</div>' +
+						'<h5 class="fw-600 mb-2">Sending your table reservation…</h5>' +
+						'<p class="text-body-secondary mb-0">Please wait a moment while we save your details and take you to WhatsApp to confirm your reservation.</p>' +
+					'</div>';
+			};
 
-				if (checkOut <= checkIn) {
-					alert('Check-out date must be after check-in date.');
-					return;
-				}
+			var bindFormSubmit = function () {
+				var formEl = document.getElementById('bookNowForm');
+				if (!formEl) return;
 
-				var submitBtn = bookNowForm.querySelector('button[type="submit"]');
-				if (submitBtn) submitBtn.disabled = true;
+				formEl.addEventListener('submit', function (e) {
+					e.preventDefault();
 
-				// Save the booking to the database first...
-				var formData = new FormData(bookNowForm);
+					var name = document.getElementById('guestName').value.trim();
+					var email = document.getElementById('guestEmail').value.trim();
+					var phone = document.getElementById('guestPhone').value.trim();
+					var checkIn = document.getElementById('checkIn').value;
+					var checkOut = document.getElementById('checkOut').value;
+					var numGuests = document.getElementById('numGuests').value;
+					var roomSelectEl = document.getElementById('roomSelect');
+					var roomName = roomSelectEl.options[roomSelectEl.selectedIndex].getAttribute('data-room-name');
+					var requests = document.getElementById('specialRequests').value.trim();
 
-				fetch("{% url 'tandj_app:reservation_ajax_create' %}", {
-					method: 'POST',
-					body: formData,
-					headers: { 'X-Requested-With': 'XMLHttpRequest' }
-				})
-				.then(function (res) { return res.json(); })
-				.then(function (data) {
-					if (submitBtn) submitBtn.disabled = false;
-
-					if (!data.success) {
-						var msg = 'Please check your details and try again.';
-						if (data.errors) {
-							msg = Object.values(data.errors).map(function (v) {
-								return Array.isArray(v) ? v.join(' ') : v;
-							}).join('\n');
-						}
-						alert(msg);
+					if (checkOut < checkIn) {
+						alert('Check-out date must be after check-in date.');
 						return;
 					}
 
-					// ...then, once it's saved, hand off to WhatsApp same as before
-					var lines = [
-						'New Table Reservation — Top Station Multi Cuisine Restaurant',
-						'',
-						'Name: ' + name,
-						'Email: ' + email,
-						'Phone: ' + (phone || 'N/A'),
-						'Room: ' + (roomName || 'General Inquiry'),
-						'Guests: ' + numGuests,
-						'Check In: ' + checkIn,
-						'Check Out: ' + checkOut
-					];
-					if (requests) {
-						lines.push('Special Requests: ' + requests);
-					}
+					var formData = new FormData(formEl);
 
-					var message = encodeURIComponent(lines.join('\n'));
-					var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+					// Show the "please wait" message immediately — right
+					// when the customer taps Submit, not after the fetch
+					// resolves — so they always see clear feedback that
+					// something is happening, however fast the network is.
+					showRedirectingMessage();
 
-					window.open(waUrl, '_blank');
+					fetch("{% url 'tandj_app:reservation_ajax_create' %}", {
+						method: 'POST',
+						body: formData,
+						headers: { 'X-Requested-With': 'XMLHttpRequest' }
+					})
+					.then(function (res) { return res.json(); })
+					.then(function (data) {
+						if (!data.success) {
+							// Restore the form so the customer can fix and retry.
+							var modalBodyEl = document.querySelector('#bookNowModal .modal-body');
+							if (modalBodyEl) {
+								modalBodyEl.innerHTML = formOriginalBodyHTML;
+								delete modalBodyEl.dataset.showingRedirect;
+								bindFormSubmit();
+							}
+							var msg = 'Please check your details and try again.';
+							if (data.errors) {
+								msg = Object.values(data.errors).map(function (v) {
+									return Array.isArray(v) ? v.join(' ') : v;
+								}).join('\n');
+							}
+							alert(msg);
+							return;
+						}
 
-					var modalInstance = bootstrap.Modal.getInstance(bookNowModalEl);
-					if (modalInstance) modalInstance.hide();
+						// ...then, once it's saved, hand off to WhatsApp
+						var lines = [
+							'New Table Reservation — Top Station Multi Cuisine Restaurant',
+							'',
+							'Name: ' + name,
+							'Email: ' + email,
+							'Phone: ' + (phone || 'N/A'),
+							'Room: ' + (roomName || 'General Inquiry'),
+							'Guests: ' + numGuests,
+							'Check In: ' + checkIn,
+							'Check Out: ' + checkOut
+						];
+						if (requests) {
+							lines.push('Special Requests: ' + requests);
+						}
 
-					bookNowForm.reset();
-				})
-				.catch(function () {
-					if (submitBtn) submitBtn.disabled = false;
-					alert('Network error — please try again.');
+						var message = encodeURIComponent(lines.join('\n'));
+						var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
+
+						// Same-tab redirect — window.open() gets silently
+						// blocked by popup blockers here since it runs
+						// after an async fetch resolves. Navigating the
+						// current tab is never blocked. The short delay
+						// still gives the customer time to read the
+						// message above.
+						setTimeout(function () {
+							window.location.href = waUrl;
+						}, 1200);
+					})
+					.catch(function () {
+						var modalBodyEl = document.querySelector('#bookNowModal .modal-body');
+						if (modalBodyEl) {
+							modalBodyEl.innerHTML = formOriginalBodyHTML;
+							delete modalBodyEl.dataset.showingRedirect;
+							bindFormSubmit();
+						}
+						alert('Network error — please try again.');
+					});
 				});
-			});
+			};
+
+			bindFormSubmit();
 		}
 	});
 </script>
-
+<style>
+	@media (max-width: 576px) {
+	#bookNowModal .modal-dialog {
+		max-width: 320px;
+		margin: 1.5rem auto;
+	}
+	#bookNowModal .modal-content {
+		border-radius: 20px !important;
+	}
+	#bookNowModal .modal-header {
+		padding: 1.25rem 1.25rem 0 !important;
+	}
+	#bookNowModal .modal-body {
+		padding: 1.25rem !important;
+	}
+	#bookNowModal .modal-title {
+		font-size: 1.15rem !important;
+	}
+	/* Shrink the "sending" state specifically */
+	#bookNowModal .modal-body .spinner-border {
+		width: 2rem !important;
+		height: 2rem !important;
+		margin-bottom: 0.75rem !important;
+	}
+	#bookNowModal .modal-body h5 {
+		font-size: 1rem !important;
+		margin-bottom: 0.5rem !important;
+	}
+	#bookNowModal .modal-body p {
+		font-size: 0.85rem !important;
+	}
+	#bookNowModal .modal-body .py-4 {
+		padding-top: 0.5rem !important;
+		padding-bottom: 0.5rem !important;
+	}
+}
+</style>
 {% endblock %}

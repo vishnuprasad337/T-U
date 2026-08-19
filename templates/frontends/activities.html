@@ -339,7 +339,7 @@
                         hasError = true;
                         form.querySelector('[data-field-error="num_guests"]').textContent = 'This field is required.';
                     }
-                    if (checkIn && checkOut && checkOut <= checkIn) {
+                    if (checkIn && checkOut && checkOut < checkIn) {
                         hasError = true;
                         form.querySelector('[data-field-error="check_out"]').textContent = 'Must be after the start date.';
                     }
@@ -353,7 +353,7 @@
                     submitBtn.disabled = true;
                     var originalLabel = btnLabel.textContent;
                     btnLabel.textContent = 'Saving your booking…';
-                    msgBox.textContent = '';
+                    msgBox.textContent = 'Please wait while we save your booking…';
                     msgBox.classList.remove('success', 'error');
 
                     // Save the booking to the database first...
@@ -401,21 +401,23 @@
                             lines.push('Special Requests: ' + requests);
                         }
 
-                        btnLabel.textContent = 'Opening WhatsApp…';
+                        btnLabel.textContent = 'Redirecting to WhatsApp…';
 
                         var message = encodeURIComponent(lines.join('\n'));
                         var waUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message;
 
-                        msgBox.textContent = 'Redirecting you to WhatsApp…';
+                        msgBox.textContent = 'Booking saved! Redirecting you to WhatsApp, please wait…';
                         msgBox.classList.add('success');
 
+                        // Same-tab redirect — window.open() inside a setTimeout
+                        // is no longer treated as a direct user gesture, so
+                        // browsers silently block it as a popup. Navigating
+                        // the current tab instead is never blocked, and the
+                        // short delay below still gives the customer time to
+                        // read the message above.
                         setTimeout(function () {
-                            window.open(waUrl, '_blank');
-                            submitBtn.disabled = false;
-                            btnLabel.textContent = originalLabel;
-                            closeModal();
-                            form.reset();
-                        }, 400);
+                            window.location.href = waUrl;
+                        }, 1200);
                     })
                     .catch(function () {
                         submitBtn.disabled = false;
@@ -426,7 +428,6 @@
                 });
             });
             </script>
-
 <style>
 /* ===== BOOKING MODAL (overlay-based, same pattern as the rest of the site) ===== */
 .booking-modal-overlay {
@@ -710,6 +711,41 @@
     .booking-modal-header {
         padding-right: 20px;
     }
+}
+@media (max-width: 576px) {
+	#bookNowModal .modal-dialog {
+		max-width: 320px;
+		margin: 1.5rem auto;
+	}
+	#bookNowModal .modal-content {
+		border-radius: 20px !important;
+	}
+	#bookNowModal .modal-header {
+		padding: 1.25rem 1.25rem 0 !important;
+	}
+	#bookNowModal .modal-body {
+		padding: 1.25rem !important;
+	}
+	#bookNowModal .modal-title {
+		font-size: 1.15rem !important;
+	}
+	/* Shrink the "sending" state specifically */
+	#bookNowModal .modal-body .spinner-border {
+		width: 2rem !important;
+		height: 2rem !important;
+		margin-bottom: 0.75rem !important;
+	}
+	#bookNowModal .modal-body h5 {
+		font-size: 1rem !important;
+		margin-bottom: 0.5rem !important;
+	}
+	#bookNowModal .modal-body p {
+		font-size: 0.85rem !important;
+	}
+	#bookNowModal .modal-body .py-4 {
+		padding-top: 0.5rem !important;
+		padding-bottom: 0.5rem !important;
+	}
 }
 </style>
 
