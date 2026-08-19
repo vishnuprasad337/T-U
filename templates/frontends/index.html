@@ -302,11 +302,12 @@ img {
 	}
 }
 @media (min-width: 992px) {
-	.activities-row .activity-img-col {
+	.activities-row > *:first-child {
 		padding-left: 80px;
 		padding-right: 24px;
 	}
-	.activities-row > *:not(.activity-img-col) {
+	.activities-row > *:last-child {
+		padding-left: 24px;
 		padding-right: 80px;
 	}
 	.activities-row p {
