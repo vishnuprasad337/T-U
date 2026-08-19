@@ -92,7 +92,7 @@
 									<!-- Price (shown if available) -->
 									{% if room.price_per_night %}
 									<div class="d-flex align-items-baseline gap-1 mb-3">
-										<span class="text-7 fw-700 room-price-num">${{ room.price_per_night|floatformat:0 }}</span>
+										<span class="text-7 fw-700 room-price-num">₹{{ room.price_per_night|floatformat:0 }}</span>
 										<span class="text-3 fw-500 room-price-suffix">/ NIGHT</span>
 									</div>
 									{% endif %}
