@@ -612,7 +612,7 @@
 </section>
 <!-- Our Experience end -->
             <!-- Our Experience end -->
-         <!-- Testimonial
+<!-- Testimonial
 ============================================= -->
 <section class="section mist-testimonials">
     <div class="container">
@@ -722,7 +722,7 @@
                 letter-spacing: 2px;
             }
 
-            /* Name / address shown below the review, in the text column */
+            /* Name / Google badge + date shown below the review, in the text column */
             .mist-attribution {
                 margin-top: 1rem;
             }
@@ -731,15 +731,8 @@
                 font-size: 1.5rem;
                 font-weight: 600;
                 color: var(--mist-ink);
-                margin: 0 0 3px 0;
+                margin: 0 0 6px 0;
                 line-height: 1.2;
-            }
-            .mist-attr-role {
-                font-size: .8rem;
-                letter-spacing: .04em;
-                text-transform: uppercase;
-                color: var(--mist-sage);
-                margin: 0;
             }
 
             .mist-quote-mark {
@@ -762,7 +755,7 @@
             .mist-meta {
                 display: flex;
                 align-items: center;
-                gap: .75rem;
+                gap: .6rem;
                 font-size: .85rem;
                 color: var(--mist-sage);
             }
@@ -772,6 +765,55 @@
                 border-radius: 50%;
                 background: currentColor;
                 display: inline-block;
+                flex: none;
+            }
+            /* Google rating badge, background matches the page. Google logo on
+               its own line, rating/stars/date inline together underneath. */
+            .mist-google-badge {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                background: transparent;
+                color: var(--mist-ink);
+                padding: 0;
+                border-radius: 0;
+                margin: 4px 0 10px 0;
+            }
+            .mist-google-wordmark {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 1.5rem;
+                font-weight: 700;
+                letter-spacing: -0.5px;
+                line-height: 1;
+            }
+            .mist-google-wordmark span:nth-child(1) { color: #4285F4; }
+            .mist-google-wordmark span:nth-child(2) { color: #EA4335; }
+            .mist-google-wordmark span:nth-child(3) { color: #FBBC05; }
+            .mist-google-wordmark span:nth-child(4) { color: #4285F4; }
+            .mist-google-wordmark span:nth-child(5) { color: #34A853; }
+            .mist-google-wordmark span:nth-child(6) { color: #EA4335; }
+            .mist-google-rating-row {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: nowrap;
+            }
+            .mist-google-rating-num {
+                font-size: 1.15rem;
+                font-weight: 700;
+                color: var(--mist-ink);
+                line-height: 1;
+            }
+            .mist-google-stars {
+                display: inline-flex;
+                gap: 2px;
+                color: #FBBC05;
+                font-size: 1rem;
+            }
+            .mist-google-date {
+                font-size: .85rem;
+                color: var(--mist-sage);
             }
 
             /* Hint that more testimonials are below — fades out once the user has scrolled */
@@ -874,14 +916,17 @@
                     padding-right: 0;
                 }
                 .mist-attr-name { font-size: 1.1rem; }
-                .mist-attr-role { font-size: .7rem; }
+                .mist-google-wordmark { font-size: 1.1rem; }
+                .mist-google-rating-num { font-size: .95rem; }
+                .mist-google-stars { font-size: .85rem; }
+                .mist-google-date { font-size: .75rem; }
                 .mist-quote-mark { font-size: 3rem; }
                 .mist-review { font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; }
                 .mist-meta { font-size: .75rem; }
                 .mist-scroll-hint { display: none !important; }
                 .mist-manual-nav { display: none !important; }
             }
-            .mist-mobile-dots {
+             .mist-mobile-dots {
                 display: none;
             }
             @media (max-width: 767.98px) {
@@ -941,17 +986,31 @@
                             <p class="mist-review">{{ testimonial.review|safe }}</p>
                             <div class="mist-attribution">
                                 <p class="mist-attr-name">{{ testimonial.name }}</p>
-                                <p class="mist-attr-role">{{ testimonial.role|default:"Guest" }}</p>
-                            </div>
-                            <div class="mist-meta">
-                                <span>{{ testimonial.created_at|date:"M d, Y" }}</span>
+                                <div class="mist-google-badge">
+                                    <span class="mist-google-wordmark">
+                                        <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+                                    </span>
+                                    <div class="mist-google-rating-row">
+                                        <span class="mist-google-rating-num">4.8</span>
+                                        <span class="mist-google-stars">
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star"></i>
+                                            <i class="fa-solid fa-star-half-stroke"></i>
+                                        </span>
+                                        <span class="mist-dot"></span>
+                                        <span class="mist-google-date">{{ testimonial.created_at|date:"M d, Y" }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-            <div class="mist-mobile-dots" id="mistMobileDots"></div>
+             <div class="mist-mobile-dots" id="mistMobileDots"></div>
+
             <div class="mist-scroll-hint" id="mistScrollHint">
                 <span>Scroll for more</span>
                 <i class="fa-solid fa-chevron-down"></i>
@@ -1110,7 +1169,8 @@
                 measure();
                 startAuto();
             })();
-             (function () {
+            // Mobile pagination dots
+            (function () {
                 var trail = document.getElementById('mistTrail');
                 var dotsWrap = document.getElementById('mistMobileDots');
                 if (!trail || !dotsWrap) return;
