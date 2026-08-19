@@ -2047,6 +2047,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 .mist-scroll-hint { display: none !important; }
                 .mist-manual-nav { display: none !important; }
             }
+             .mist-mobile-dots {
+                display: none;
+            }
+            @media (max-width: 767.98px) {
+                .mist-mobile-dots {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    margin-top: 0.5rem;
+                }
+                .mist-mobile-dots .mist-dot-btn {
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: var(--mist-fog);
+                    border: none;
+                    padding: 0;
+                    transition: background .25s ease, width .25s ease;
+                }
+                .mist-mobile-dots .mist-dot-btn.is-active {
+                    background: var(--mist-sage);
+                    width: 22px;
+                    border-radius: 999px;
+                }
+            }
         </style>
 
         {% if testimonials %}
@@ -2091,6 +2117,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     {% endfor %}
                 </div>
             </div>
+             <div class="mist-mobile-dots" id="mistMobileDots"></div>
 
             <div class="mist-scroll-hint" id="mistScrollHint">
                 <span>Scroll for more</span>
@@ -2249,6 +2276,54 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 measure();
                 startAuto();
+            })();
+            // Mobile pagination dots
+            (function () {
+                var trail = document.getElementById('mistTrail');
+                var dotsWrap = document.getElementById('mistMobileDots');
+                if (!trail || !dotsWrap) return;
+
+                var isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+                if (!isMobile) return;
+
+                var rows = Array.prototype.slice.call(trail.querySelectorAll('.mist-row'));
+                if (rows.length <= 1) return;
+
+                rows.forEach(function (row, i) {
+                    var dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = 'mist-dot-btn' + (i === 0 ? ' is-active' : '');
+                    dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
+                    dot.addEventListener('click', function () {
+                        rows[i].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+                    });
+                    dotsWrap.appendChild(dot);
+                });
+
+                var dots = Array.prototype.slice.call(dotsWrap.querySelectorAll('.mist-dot-btn'));
+
+                function updateActiveDot() {
+                    var wrapRect = trail.getBoundingClientRect();
+                    var closestIdx = 0;
+                    var closestDist = Infinity;
+                    rows.forEach(function (row, i) {
+                        var rowRect = row.getBoundingClientRect();
+                        var dist = Math.abs(rowRect.left - wrapRect.left);
+                        if (dist < closestDist) {
+                            closestDist = dist;
+                            closestIdx = i;
+                        }
+                    });
+                    dots.forEach(function (d, i) {
+                        d.classList.toggle('is-active', i === closestIdx);
+                    });
+                }
+
+                var scrollTimer;
+                trail.addEventListener('scroll', function () {
+                    clearTimeout(scrollTimer);
+                    scrollTimer = setTimeout(updateActiveDot, 80);
+                }, { passive: true });
             })();
             </script>
         {% else %}
