@@ -526,7 +526,57 @@
                 left: 6px !important;
             }
         }
+          /* ===== Custom cursor (desktop only) ===== */
+        @media (hover: hover) and (pointer: fine) {
+    
+           .custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #6B8E23;
+    pointer-events: none;
+    z-index: 999999;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: width .3s ease, height .3s ease,
+                background-color .3s ease, opacity .2s ease;
+    will-change: transform, width, height;
+}
+            .custom-cursor.is-visible {
+                opacity: 1;
+            }
+            .custom-cursor span {
+                opacity: 0;
+                color: #fff;
+                font-size: .72rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: .04em;
+                white-space: nowrap;
+                transition: opacity .2s ease;
+            }
+           .custom-cursor.cursor-hover {
+    width: 68px;
+    height: 68px;
+    background: #fff;
+    mix-blend-mode: difference;
+}
+            .custom-cursor.cursor-hover span {
+                opacity: 1;
+            }
+        }
+        @media (hover: none), (pointer: coarse) {
+            .custom-cursor { display: none !important; }
+        }
+        
     </style>
+
     {% block extra_css %}{% endblock %}
 </head>
 
@@ -1000,7 +1050,7 @@
     <!-- Custom Script -->
     <script src="{% static 'tandu-main/js/main.js' %}"></script>
 	
-    <!-- Header scroll behavior: centered logo on hero -> normal navbar on scroll -->
+       <!-- Header scroll behavior: centered logo on hero -> normal navbar on scroll -->
     <script>
         (function () {
             var header = document.getElementById('header');
@@ -1028,6 +1078,74 @@
         })();
     </script>
 
+    <!-- Custom cursor -->
+    <div class="custom-cursor" id="customCursor">
+        
+    </div>
+
+    <!-- Custom cursor: dot that follows the mouse, grows + shows "View"
+         over headings/titles. Desktop only. -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+        var cursor = document.getElementById('customCursor');
+        if (!cursor) return;
+
+        var mouseX = 0, mouseY = 0;
+        var curX = 0, curY = 0;
+        var hasMoved = false;
+
+        document.addEventListener('mousemove', function (e) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            if (!hasMoved) {
+                hasMoved = true;
+                curX = mouseX;
+                curY = mouseY;
+                cursor.classList.add('is-visible');
+            }
+        });
+
+        document.addEventListener('mouseleave', function () {
+            cursor.classList.remove('is-visible');
+        });
+        document.addEventListener('mouseenter', function () {
+            if (hasMoved) cursor.classList.add('is-visible');
+        });
+
+        function render() {
+            curX += (mouseX - curX) * 0.18;
+            curY += (mouseY - curY) * 0.18;
+            cursor.style.transform = 'translate(-50%, -50%) translate(' + curX + 'px,' + curY + 'px)';
+            requestAnimationFrame(render);
+        }
+        requestAnimationFrame(render);
+
+        var hoverSelector = [
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    '.heading-font-family',
+    '.video-hero-heading',
+    '.mist-attr-name',
+    '.room-item h3'
+].join(', ');
+
+        document.addEventListener('mouseover', function (e) {
+            var target = e.target.closest(hoverSelector);
+            if (target) cursor.classList.add('cursor-hover');
+        });
+        document.addEventListener('mouseout', function (e) {
+            var target = e.target.closest(hoverSelector);
+            var related = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest(hoverSelector) : null;
+            if (target && !related) cursor.classList.remove('cursor-hover');
+        });
+    });
+    </script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+    
+   
+    
+    
