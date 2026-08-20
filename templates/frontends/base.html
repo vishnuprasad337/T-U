@@ -47,14 +47,132 @@
             width: auto;
             display: block;
         }
-        /* Back to Top button — green to match theme */
-        #back-to-top {
-            background-color: #6B8E23 !important;
-        }
-        #back-to-top:hover {
-            background-color: #556B2F !important;
-        }
+                /* Back to Top — replaced by Contact FAB, hide the old arrow */
+        #back-to-top { display: none !important; }
 
+        /* ===== Contact FAB (mail + call) ===== */
+        .contact-fab-wrap {
+            position: fixed;
+            right: 22px;
+            bottom: 24px;
+            z-index: 998;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 16px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(.92);
+            transition: opacity .35s ease, transform .35s ease, visibility .35s;
+            pointer-events: none;
+            max-width: calc(100vw - 32px);
+        }
+        .contact-fab-wrap.is-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .contact-fab-options {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 14px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px) scale(.95);
+            transition: opacity .3s ease, transform .3s ease, visibility .3s;
+            max-width: 100%;
+        }
+        .contact-fab-options.is-open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        .contact-fab-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background-color: #6B8E23;
+            color: #fff;
+            border-radius: 999px;
+            padding: 14px 26px 14px 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+            text-decoration: none;
+            transition: background-color .25s ease, transform .2s ease;
+            max-width: 100%;
+        }
+        .contact-fab-item:hover {
+            background-color: #556B2F;
+            color: #fff;
+            transform: scale(1.03);
+        }
+                .contact-fab-item .fab-icon-circle {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+        .contact-fab-item .fab-label {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .contact-fab-toggle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background-color: #6B8E23;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            border: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            cursor: pointer;
+            transition: background-color .25s ease, transform .2s ease;
+        }
+        .contact-fab-toggle:hover,
+        .contact-fab-toggle.active {
+            background-color: #556B2F;
+        }
+                       @media (max-width: 576px) {
+            .contact-fab-wrap {
+                right: 14px;
+                bottom: 90px;
+                gap: 10px;
+                align-items: flex-end;
+                max-width: 68vw;
+            }
+            .contact-fab-item {
+                padding: 9px 14px 9px 9px;
+                gap: 9px;
+                max-width: 100%;
+                width: auto;
+            }
+            .contact-fab-item .fab-icon-circle { width: 42px; height: 42px; font-size: 1.05rem; }
+            .contact-fab-item .fab-label {
+                font-size: 0.82rem;
+                white-space: normal;
+                line-height: 1.2;
+                text-overflow: clip;
+                overflow: visible;
+                word-break: break-word;
+            }
+            .contact-fab-toggle { width: 52px; height: 52px; font-size: 1.25rem; }
+        }
+        @media (max-width: 380px) {
+            .contact-fab-wrap { bottom: 80px; max-width: 62vw; }
+        }
         /* Make container relative so we can absolutely position elements if needed */
         #header .primary-menu .container {
             position: relative;
@@ -1032,8 +1150,22 @@
 
     <!-- Back to Top
 	============================================= -->
-    <a id="back-to-top" href="javascript:void(0)"><i class="fa-solid fa-arrow-up"></i></a>
-
+           <!-- Contact Floating Button (mail + call) -->
+    <div class="contact-fab-wrap" id="contactFab">
+        <div class="contact-fab-options" id="contactFabOptions">
+            <a href="mailto:mail@tanduleisurehotel.in" class="contact-fab-item" aria-label="Email us">
+                <span class="fab-icon-circle"><i class="fa-solid fa-envelope"></i></span>
+                <span class="fab-label">mail@tanduleisurehotel.in</span>
+            </a>
+            <a href="tel:+919188954770" class="contact-fab-item" aria-label="Call us">
+                <span class="fab-icon-circle"><i class="fa-solid fa-phone-volume"></i></span>
+                <span class="fab-label">+91 9188954770</span>
+            </a>
+        </div>
+        <button type="button" class="contact-fab-toggle" id="contactFabToggle" aria-label="Contact us">
+            <i class="fa-solid fa-headset"></i>
+        </button>
+    </div>
     <!-- JavaScript -->
     <script src="{% static 'tandu-main/js/jquery.min.js' %}"></script>
     <script src="{% static 'tandu-main/js/bootstrap.bundle.min.js' %}"></script>
@@ -1140,8 +1272,55 @@
             if (target && !related) cursor.classList.remove('cursor-hover');
         });
     });
+    
     </script>
+          <script>
+    (function () {
+        var fabWrap = document.getElementById('contactFab');
+        var toggleBtn = document.getElementById('contactFabToggle');
+        var optionsEl = document.getElementById('contactFabOptions');
+        if (!fabWrap || !toggleBtn || !optionsEl) return;
 
+        var IDLE_DELAY = 400; // ms with no scroll = "stopped"
+        var scrollTimer;
+        var manuallyOpened = false;
+
+        function showFab() { fabWrap.classList.add('is-visible'); }
+        function hideFab() {
+            if (manuallyOpened) return;
+            fabWrap.classList.remove('is-visible');
+            closeOptions();
+        }
+        function openOptions() {
+            optionsEl.classList.add('is-open');
+            toggleBtn.classList.add('active');
+        }
+        function closeOptions() {
+            optionsEl.classList.remove('is-open');
+            toggleBtn.classList.remove('active');
+        }
+
+        window.addEventListener('scroll', function () {
+            hideFab();
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(showFab, IDLE_DELAY);
+        }, { passive: true });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            scrollTimer = setTimeout(showFab, IDLE_DELAY);
+        });
+
+        toggleBtn.addEventListener('click', function () {
+            manuallyOpened = !manuallyOpened;
+            if (manuallyOpened) {
+                showFab();
+                openOptions();
+            } else {
+                closeOptions();
+            }
+        });
+    })();
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
