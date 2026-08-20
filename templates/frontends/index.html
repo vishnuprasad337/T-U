@@ -13,9 +13,27 @@
         <source src="{% static 'tandu-main/hero1.mp4' %}" type="video/mp4">
     </video>
     <div class="hero-mask bg-dark opacity-2"></div>
+
+    <div class="hero-frames-topbar">
+        <div class="hero-frames-topbar-contact">
+            <a href="tel:+919188954770" class="hero-frames-topbar-link">
+                <i class="fa-solid fa-phone-volume"></i> <span>+91 9188954770</span>
+            </a>
+            <a href="mailto:mail@tanduleisurehotel.in" class="hero-frames-topbar-link">
+                <i class="fa-solid fa-envelope"></i> <span>mail@tanduleisurehotel.in</span>
+            </a>
+        </div>
+        <ul class="hero-frames-topbar-social">
+            <li><a href="http://www.facebook.com/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+            <li><a href="http://www.x.com/" target="_blank" title="X"><i class="fa-brands fa-x-twitter"></i></a></li>
+            <li><a href="http://www.instagram.com/" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+            <li><a href="http://www.whatsapp.com/" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
+        </ul>
+    </div>
+
     <div class="hero-frames-logo-wrap">
-    <img src="{% static 'tandu-main/tandu.png' %}" alt="MaxiMunnar T&U Leisure Hotel" id="heroFramesLogo" class="hero-frames-logo">
-</div>
+        <img src="{% static 'tandu-main/tandu.png' %}" alt="MaxiMunnar T&U Leisure Hotel" id="heroFramesLogo" class="hero-frames-logo">
+    </div>
 
     <div class="hero-frames-content">
      <div class="hero-frames-caption hero-frames-caption--left" data-caption-index="0">
@@ -243,6 +261,90 @@ img {
 	pointer-events: auto;
 	margin-top: 8px;
 }
+
+/* ===== Hero topbar (phone / email / social) — above the logo ===== */
+.hero-frames-topbar {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0;
+    font-size: 1.15rem;
+    background: transparent;
+    white-space: nowrap;
+}
+.hero-frames-topbar-contact {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+}
+.hero-frames-topbar-link {
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+.hero-frames-topbar-link:hover {
+    color: #d7e4b0;
+}
+.hero-frames-topbar-social {
+    display: flex;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.hero-frames-topbar-social li a {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+.hero-frames-topbar-social li a:hover {
+    background: rgba(255,255,255,0.3);
+}
+@media (max-width: 991px) {
+    .hero-frames-topbar-social {
+        display: none;
+    }
+    .hero-frames-topbar {
+        gap: 0.9rem;
+        font-size: 0.95rem;
+    }
+}
+@media (max-width: 576px) {
+    .hero-frames-topbar {
+        top: 14px;
+        font-size: 0.72rem;
+        gap: 0.5rem;
+        max-width: 90vw;
+        flex-wrap: wrap;
+        justify-content: center;
+        white-space: normal;
+    }
+    .hero-frames-topbar-link i {
+        font-size: 0.68rem;
+    }
+    .hero-frames-topbar-contact {
+        gap: 0.5rem;
+    }
+}
+
 @media (max-width: 767px) {
 	.hero-caption-btn {
 		margin-top: 20px;
@@ -335,9 +437,11 @@ img {
 		max-width: 520px;
 	}
 }
+
+/* ===== Hero logo box — pushed down below the topbar ===== */
 .hero-frames-logo-wrap {
 	position: absolute;
-	top: 20px;
+	top: 70px;
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 2;
@@ -364,7 +468,7 @@ img {
 	.hero-frames-logo-wrap {
 		width: 96px;
 		height: 85px;
-		top: 16px;
+		top: 52px;
 		border-radius: 12px;
 	}
 	.hero-frames-logo {
@@ -457,19 +561,24 @@ img {
 	}
 }
 @media (max-width: 576px) {
-	.btn-new {
-		padding: 8px 16px !important;
-		font-size: 0.8rem !important;
-	}
-	.btn-new .btn-icon {
-		width: 26px !important;
-		height: 26px !important;
-		font-size: 0.65rem !important;
-	}
-	.text-center .btn-new,
-	.d-grid .btn-new {
-		display: inline-flex;
-	}
+    .hero-frames-topbar {
+        top: 14px;
+        font-size: 0.72rem;
+        gap: 0.5rem;
+        max-width: 90vw;
+        flex-wrap: wrap;
+        justify-content: center;
+        white-space: normal;
+    }
+    .hero-frames-topbar-link i {
+        font-size: 0.68rem;
+    }
+    .hero-frames-topbar-contact {
+        gap: 0.5rem;
+    }
+    .hero-frames-topbar-link {
+        white-space: nowrap;
+    }
 }
 @media (max-width: 400px) {
 	.btn-new {

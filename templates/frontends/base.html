@@ -39,7 +39,7 @@
     width: auto;
     display: block;
     filter: brightness(0) invert(1) !important;
-    transition: filter 0.3s ease;
+    transition: filter 0.3s ease, max-height 0.3s ease;
 }
         /* Footer logo */
         #footer .footer-logo img {
@@ -47,132 +47,14 @@
             width: auto;
             display: block;
         }
-                /* Back to Top — replaced by Contact FAB, hide the old arrow */
-        #back-to-top { display: none !important; }
+        /* Back to Top button — green to match theme */
+        #back-to-top {
+            background-color: #6B8E23 !important;
+        }
+        #back-to-top:hover {
+            background-color: #556B2F !important;
+        }
 
-        /* ===== Contact FAB (mail + call) ===== */
-        .contact-fab-wrap {
-            position: fixed;
-            right: 22px;
-            bottom: 24px;
-            z-index: 998;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 16px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px) scale(.92);
-            transition: opacity .35s ease, transform .35s ease, visibility .35s;
-            pointer-events: none;
-            max-width: calc(100vw - 32px);
-        }
-        .contact-fab-wrap.is-visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-        .contact-fab-options {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 14px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px) scale(.95);
-            transition: opacity .3s ease, transform .3s ease, visibility .3s;
-            max-width: 100%;
-        }
-        .contact-fab-options.is-open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-        .contact-fab-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background-color: #6B8E23;
-            color: #fff;
-            border-radius: 999px;
-            padding: 14px 26px 14px 14px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-            text-decoration: none;
-            transition: background-color .25s ease, transform .2s ease;
-            max-width: 100%;
-        }
-        .contact-fab-item:hover {
-            background-color: #556B2F;
-            color: #fff;
-            transform: scale(1.03);
-        }
-                .contact-fab-item .fab-icon-circle {
-            width: 68px;
-            height: 68px;
-            border-radius: 50%;
-            background-color: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            flex-shrink: 0;
-        }
-        .contact-fab-item .fab-label {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .contact-fab-toggle {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background-color: #6B8E23;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            border: none;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-            cursor: pointer;
-            transition: background-color .25s ease, transform .2s ease;
-        }
-        .contact-fab-toggle:hover,
-        .contact-fab-toggle.active {
-            background-color: #556B2F;
-        }
-                       @media (max-width: 576px) {
-            .contact-fab-wrap {
-                right: 14px;
-                bottom: 90px;
-                gap: 10px;
-                align-items: flex-end;
-                max-width: 68vw;
-            }
-            .contact-fab-item {
-                padding: 9px 14px 9px 9px;
-                gap: 9px;
-                max-width: 100%;
-                width: auto;
-            }
-            .contact-fab-item .fab-icon-circle { width: 42px; height: 42px; font-size: 1.05rem; }
-            .contact-fab-item .fab-label {
-                font-size: 0.82rem;
-                white-space: normal;
-                line-height: 1.2;
-                text-overflow: clip;
-                overflow: visible;
-                word-break: break-word;
-            }
-            .contact-fab-toggle { width: 52px; height: 52px; font-size: 1.25rem; }
-        }
-        @media (max-width: 380px) {
-            .contact-fab-wrap { bottom: 80px; max-width: 62vw; }
-        }
         /* Make container relative so we can absolutely position elements if needed */
         #header .primary-menu .container {
             position: relative;
@@ -191,11 +73,150 @@
         #header .primary-menu {
             background: transparent;
             transition: background-color 0.3s ease;
-             height: 118px !important;
+            display: flex;
+            align-items: stretch;
+            overflow: visible;
+            padding: 0;
+        }
+
+        /* ===== Topbar row + main row now live INSIDE .primary-menu's
+           container, stacked vertically, instead of as a separate sibling
+           element. Being part of the same nav element that the theme's
+           sticky/slide scroll JS already measures and repositions means
+           it can no longer get clipped out once the header goes sticky. */
+        #header .primary-menu .container {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        /* Topbar row — phone, email, social icons, above the logo row */
+                .header-topbar-row {
+            padding: 0.15rem 0;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.18);
+            transition: border-color 0.3s ease, padding 0.3s ease;
+        }
+        .header-topbar-row .topbar-contact {
+            gap: 1.25rem !important;
+        }
+        .header-topbar-row .topbar-link {
+            color: #fff;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .header-topbar-row .topbar-link i {
+            font-size: 0.9rem;
+        }
+        .header-topbar-row .topbar-link:hover {
+            color: #d7e4b0;
+        }
+        /* Thin divider between phone and email, for a more structured look */
+        .header-topbar-row .topbar-contact a:first-child {
+            position: relative;
+            padding-right: 1.25rem;
+        }
+        .header-topbar-row .topbar-contact a:first-child::after {
+            content: "";
+            position: absolute;
+            right: -0.05rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 14px;
+            background: rgba(255,255,255,0.3);
+        }
+        #header.scrolled .header-topbar-row .topbar-contact a:first-child::after {
+            background: rgba(107,142,35,0.3);
+        }
+        .header-topbar-row .topbar-social-icons {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .header-topbar-row .topbar-social-icons li a {
+            width: 30px;
+            height: 30px;
             display: flex;
             align-items: center;
-            overflow: visible;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 0.85rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+        .header-topbar-row .topbar-social-icons li a:hover {
+            background: rgba(255,255,255,0.3);
+            color: #fff;
+        }
+
+        /* Main row — logo + nav links + Book Now + hamburger */
+                /* Main row — logo + nav links + Book Now + hamburger */
+        .header-main-row {
+            height: 90px;
+        }
+
+        /* Scrolled state: switch topbar row to olive-on-white to match the nav links */
+        #header.scrolled .header-topbar-row {
+            border-bottom-color: rgba(107,142,35,0.15);
+            padding: 0.3rem 0;
+        }
+        #header.scrolled .header-topbar-row .topbar-link {
+            color: #6B8E23;
+            text-shadow: none;
+        }
+        #header.scrolled .header-topbar-row .topbar-link:hover {
+            color: #556B2F;
+        }
+        #header.scrolled .header-topbar-row .topbar-social-icons li a {
+            background: rgba(107,142,35,0.12);
+            color: #6B8E23;
+        }
+        #header.scrolled .header-topbar-row .topbar-social-icons li a:hover {
+            background: rgba(107,142,35,0.25);
+        }
+
+        /* On tablet/mobile: keep phone + email visible above the logo,
+           but drop the social icons (too tight next to the logo/hamburger
+           row) and shrink/center the text to fit narrow screens. */
+        @media (max-width: 991px) {
+            .header-topbar-row {
+                justify-content: center;
+                padding: 0.4rem 0;
+            }
+            .header-topbar-row .topbar-social-icons {
+                display: none !important;
+            }
+            .header-topbar-row .topbar-contact {
+                gap: 0.9rem !important;
+                justify-content: center;
+                width: 100%;
+            }
+        }
+        @media (max-width: 576px) {
+            .header-topbar-row {
+                font-size: 0.75rem;
+            }
+            .header-topbar-row .topbar-link i {
+                font-size: 0.75rem;
+            }
+            .header-topbar-row .topbar-contact {
+                gap: 0.6rem !important;
+            }
+            .header-topbar-row .topbar-contact a:first-child {
+                padding-right: 0.6rem;
+            }
+        }
+
 
         /* Logo sits left, normal flow, always visible, vertically centered in the bar */
         #header .logo {
@@ -307,13 +328,13 @@
         }
 
         /* Shorter navbar on tablet/mobile, logo scales down with it */
-        @media (max-width: 1199.98px) {
-            #header .primary-menu {
-                height: 110px !important;
+                @media (max-width: 1199.98px) {
+            .header-main-row {
+                height: 84px !important;
             }
         }
         @media (max-width: 576px) {
-            #header .primary-menu {
+            .header-main-row {
                 height: 90px !important;
             }
         }
@@ -580,15 +601,15 @@
             }
         }
 
-        /* ===== Navbar logo — mobile/tablet sizing (increased) ===== */
+        /* ===== Navbar logo — mobile/tablet sizing (matches compact main row) ===== */
         @media (max-width: 1199.98px) {
             #header .logo img {
-                max-height: 130px;   /* was 100px */
+                max-height: 130px;
             }
         }
         @media (max-width: 576px) {
             #header .logo img {
-                max-height: 100px;   /* was 80px */
+                max-height: 100px;
             }
         }
 
@@ -716,45 +737,72 @@
         <!-- Header
 		============================ -->
         <header id="header" class="sticky-top-slide">
-            <!-- Navbar -->
+            <!-- Navbar (topbar now lives INSIDE this nav, as its own row
+                 above the logo, so it's part of the same element the
+                 theme's sticky/slide scroll JS measures and manages —
+                 a separate sibling element was getting clipped once the
+                 header settled into its sticky/scrolled state). -->
             <nav class="primary-menu navbar navbar-expand-xl bg-transparent border-bottom-0 text-3 fw-600">
-                <div class="container">
-                    <!-- Logo -->
-                   <a class="logo" href="{% url 'tandj_app:index' %}"><img src="{% static 'tandu-main/tandu.png' %}" alt=""></a>
-<!-- Logo End -->
-<div id="header-nav" class="collapse navbar-collapse justify-content-center">
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'tandj_app:index' %}">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'tandj_app:about' %}">About</a>
-        </li>
-    
-							<li class="nav-item">
-    <a class="nav-link" href="{% url 'tandj_app:rooms' %}">Rooms</a>
-</li>
-                          <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:activities' %}">Activities</a></li>
-                           <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:nearby_destinations' %}">Sightseeing</a></li>
-                           <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:restaurant' %}">Restaurant</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:gallery_public' %}">Gallery</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:blogs' %}">Blog</a></li>
-                            
-                            <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:contact' %}">Contact</a></li>
+                <div class="container flex-column align-items-stretch">
+
+                    <!-- Top utility bar row: phone, email, social icons — sits above the logo -->
+                    <div class="header-topbar-row d-flex align-items-center justify-content-between w-100">
+                        <div class="topbar-contact d-flex align-items-center gap-4">
+                            <a href="tel:+919188954770" class="topbar-link">
+                                <i class="fa-solid fa-phone-volume"></i> <span>+91 9188954770</span>
+                            </a>
+                            <a href="mailto:mail@tanduleisurehotel.in" class="topbar-link">
+                                <i class="fa-solid fa-envelope"></i> <span>mail@tanduleisurehotel.in</span>
+                            </a>
+                        </div>
+                        <ul class="social-icons social-icons-light topbar-social-icons">
+                            <li><a href="http://www.facebook.com/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+                            <li><a href="http://www.x.com/" target="_blank" title="X"><i class="fa-brands fa-x-twitter"></i></a></li>
+                            <li><a href="http://www.instagram.com/" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+                            <li><a href="http://www.whatsapp.com/" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
                         </ul>
                     </div>
+                    <!-- Top utility bar row end -->
 
-                    <!-- Button -->
-                    <a href="#" class="btn btn-new btn-primary text-capitalize rounded-pill text-nowrap ms-auto"
-                       data-bs-toggle="modal" data-bs-target="#bookNowModal">
-						<span class="btn-text"><span>Book Now</span></span>
-						<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-					</a>
-                    <!-- Button End -->
-					
-					<!-- Hamburger Menu Button -->
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#header-nav"><span></span><span></span><span></span></button>
-                    <!-- Hamburger Menu Button End -->
+                    <!-- Main row: logo + nav links + Book Now + hamburger -->
+                    <div class="header-main-row d-flex align-items-center w-100">
+                        <!-- Logo -->
+                        <a class="logo" href="{% url 'tandj_app:index' %}"><img src="{% static 'tandu-main/tandu.png' %}" alt=""></a>
+                        <!-- Logo End -->
+                        <div id="header-nav" class="collapse navbar-collapse justify-content-center">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'tandj_app:index' %}">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'tandj_app:about' %}">About</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'tandj_app:rooms' %}">Rooms</a>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:activities' %}">Activities</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:nearby_destinations' %}">Sightseeing</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:restaurant' %}">Restaurant</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:gallery_public' %}">Gallery</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:blogs' %}">Blog</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'tandj_app:contact' %}">Contact</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Button -->
+                        <a href="#" class="btn btn-new btn-primary text-capitalize rounded-pill text-nowrap ms-auto"
+                           data-bs-toggle="modal" data-bs-target="#bookNowModal">
+                            <span class="btn-text"><span>Book Now</span></span>
+                            <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
+                        <!-- Button End -->
+
+                        <!-- Hamburger Menu Button -->
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#header-nav"><span></span><span></span><span></span></button>
+                        <!-- Hamburger Menu Button End -->
+                    </div>
+                    <!-- Main row end -->
+
                 </div>
             </nav>
             <!-- Navbar End -->
@@ -1150,22 +1198,8 @@
 
     <!-- Back to Top
 	============================================= -->
-           <!-- Contact Floating Button (mail + call) -->
-    <div class="contact-fab-wrap" id="contactFab">
-        <div class="contact-fab-options" id="contactFabOptions">
-            <a href="mailto:mail@tanduleisurehotel.in" class="contact-fab-item" aria-label="Email us">
-                <span class="fab-icon-circle"><i class="fa-solid fa-envelope"></i></span>
-                <span class="fab-label">mail@tanduleisurehotel.in</span>
-            </a>
-            <a href="tel:+919188954770" class="contact-fab-item" aria-label="Call us">
-                <span class="fab-icon-circle"><i class="fa-solid fa-phone-volume"></i></span>
-                <span class="fab-label">+91 9188954770</span>
-            </a>
-        </div>
-        <button type="button" class="contact-fab-toggle" id="contactFabToggle" aria-label="Contact us">
-            <i class="fa-solid fa-headset"></i>
-        </button>
-    </div>
+    <a id="back-to-top" href="javascript:void(0)"><i class="fa-solid fa-arrow-up"></i></a>
+
     <!-- JavaScript -->
     <script src="{% static 'tandu-main/js/jquery.min.js' %}"></script>
     <script src="{% static 'tandu-main/js/bootstrap.bundle.min.js' %}"></script>
@@ -1272,59 +1306,8 @@
             if (target && !related) cursor.classList.remove('cursor-hover');
         });
     });
-    
     </script>
-          <script>
-    (function () {
-        var fabWrap = document.getElementById('contactFab');
-        var toggleBtn = document.getElementById('contactFabToggle');
-        var optionsEl = document.getElementById('contactFabOptions');
-        if (!fabWrap || !toggleBtn || !optionsEl) return;
 
-        var IDLE_DELAY = 400; // ms with no scroll = "stopped"
-        var scrollTimer;
-        var manuallyOpened = false;
-
-        function showFab() { fabWrap.classList.add('is-visible'); }
-        function hideFab() {
-            if (manuallyOpened) return;
-            fabWrap.classList.remove('is-visible');
-            closeOptions();
-        }
-        function openOptions() {
-            optionsEl.classList.add('is-open');
-            toggleBtn.classList.add('active');
-        }
-        function closeOptions() {
-            optionsEl.classList.remove('is-open');
-            toggleBtn.classList.remove('active');
-        }
-
-        window.addEventListener('scroll', function () {
-            hideFab();
-            clearTimeout(scrollTimer);
-            scrollTimer = setTimeout(showFab, IDLE_DELAY);
-        }, { passive: true });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            scrollTimer = setTimeout(showFab, IDLE_DELAY);
-        });
-
-        toggleBtn.addEventListener('click', function () {
-            manuallyOpened = !manuallyOpened;
-            if (manuallyOpened) {
-                showFab();
-                openOptions();
-            } else {
-                closeOptions();
-            }
-        });
-    })();
-    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
-    
-   
-    
-    
