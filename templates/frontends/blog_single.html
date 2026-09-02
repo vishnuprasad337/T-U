@@ -6,231 +6,675 @@
 
 {% block content %}
 
-		<!-- Page Header
-		============================================= -->
-		<section class="page-header page-header-text-light py-0 mb-0">
-			<div class="hero-wrap py-5">
-				<div class="hero-mask opacity-3 bg-black"></div>
-				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% if blog.image %}{{ blog.image.url }}{% else %}{% static 'tandu-main/images/slider/slide-2.jpg' %}{% endif %}'); background-size:cover; background-position:center;"></div>
-				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
-					<div class="container text-center mt-5 pt-5 pb-2">
-						<h1 class="text-17 mb-4 reveal reveal-fadeInUp">{{ blog.title|default:"Blog" }}</h1>
-						<ul class="breadcrumb justify-content-center mb-0 reveal reveal-fadeInUp" data-reveal-delay="200">
-							<li><a href="{% url 'tandj_app:index' %}">Home</a></li>
-							<li><a href="{% url 'tandj_app:blogs' %}">Blog</a></li>
-							<li class="active">{{ blog.title|default:"Blog" }}</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!-- Page Header end -->
+<!-- =========================================================
+     PAGE HEADER
+========================================================= -->
+<section class="page-header page-header-text-light py-0 mb-0">
+    <div class="hero-wrap py-5">
 
-            <!-- Blog Details
-			============================================= -->
-            <section class="section blog-detail-section">
-                <div class="container">
-                    <div class="blog-items-wrap">
-						<div class="row gx-4 gy-5">
-							<div class="col-lg-8 col-xl-9 reveal reveal-fade">
-								<!-- Main Image -->
-								<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
-									{% if blog.image %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{{ blog.image.url }}" alt="{{ blog.title }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
-									{% else %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/slider/slide-2.jpg' %}" alt="{{ blog.title }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
-									{% endif %}
-								</div>
+        <div class="hero-mask opacity-3 bg-black"></div>
 
-								<!-- Blog Details -->
-								<h2 class="text-13 fw-600 reveal reveal-fadeInUp">{{ blog.title }}</h2>
-								
-								<!-- Blog Meta Info -->
-								<div class="row gy-2 gx-5 text-body-secondary mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
-									{% if blog.created_at %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-calendar"></i></span>
-										{{ blog.created_at|date:"M d, Y" }}
-									</div>
-									{% endif %}
-									{% if blog.author %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-user"></i></span>
-										{{ blog.author }}
-									</div>
-									{% endif %}
-									{% if blog.category %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-tag"></i></span>
-										{{ blog.category }}
-									</div>
-									{% endif %}
-								</div>
+        <div class="hero-bg hero-bg-scroll"
+             style="background-image:url('{% if blog.image %}{{ blog.image.url }}{% else %}{% static 'tandu-main/images/slider/slide-2.jpg' %}{% endif %}');
+                    background-size:cover;
+                    background-position:center;">
+        </div>
 
-								<!-- Blog Content -->
-								<div class="blog-content text-body-secondary lh-lg reveal reveal-fadeInUp" data-reveal-delay="200">
-									{{ blog.description|safe }}
-								</div>
+        <div class="hero-content py-2 py-lg-4 my-2 my-md-4">
+            <div class="container text-center mt-5 pt-5 pb-2">
 
-								<hr class="opacity-1 my-4">
+                <h1 class="text-17 mb-4 reveal reveal-fadeInUp">
+                    {{ blog.title|default:"Blog" }}
+                </h1>
 
-								<!-- Share Section -->
-								<div class="blog-share-section reveal reveal-fadeInUp" data-reveal-delay="300">
-									<div class="d-flex align-items-center gap-3 flex-wrap">
-										
-									</div>
-								</div>
-							</div>
+                <ul class="breadcrumb justify-content-center mb-0 reveal reveal-fadeInUp"
+                    data-reveal-delay="200">
 
-							<div class="col-lg-4 col-xl-3 reveal reveal-fade">
-								<div class="row blog-sidebar-sticky" style="z-index: 10;">
-									<div class="col-sm-6 col-lg-12">
-										<!-- Other Blogs Link -->
-										<div class="bg-white rounded-5 p-4 mb-4">
-											<h4 class="text-7 fw-600">Related Posts</h4>
-											<ul class="list-link">
-												{% for other in other_blogs %}
-												<li><a href="{% url 'tandj_app:blog_detail_public' other.slug %}">{{ other.title }}</a></li>
-												{% empty %}
-												<li><a href="{% url 'tandj_app:blogs' %}">View All Posts</a></li>
-												{% endfor %}
-											</ul>
-										</div>
-									</div>
-									<div class="col-sm-6 col-lg-12">
-										<!-- Help -->
-										<div class="hero-wrap rounded-5">
-											<div class="hero-mask opacity-6 bg-black"></div>
-											<img class="img-fluid d-flex rounded-5" src="{% static 'tandu-main/images/help-bg.jpg' %}" alt="">
-											<div class="hero-content position-absolute top-50 start-50 translate-middle w-100">
-												<div class="container py-5 px-4 text-center">
-													<span class="text-primary text-13"><i class="fa-solid fa-circle-question"></i></span>
-													<h3 class="text-white text-6 fw-600 mb-3">Need Help?</h3>
-													<div class="text-6 fw-700 text-primary mb-1">+91 9188954770</div>
-													<div class="fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">info@themist.com</div>
-													<a class="btn btn-new btn-sm btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
-														<span class="btn-text"><span>Contact Us</span></span>
-														<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+                    <li>
+                        <a href="{% url 'tandj_app:index' %}">
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'tandj_app:blogs' %}">
+                            Blog
+                        </a>
+                    </li>
+
+                    <li class="active">
+                        {{ blog.title|default:"Blog" }}
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- =========================================================
+     BLOG DETAILS
+========================================================= -->
+<section class="section blog-detail-section">
+
+    <div class="container">
+
+        <div class="blog-items-wrap">
+
+            <div class="row gx-4 gy-5">
+
+                <!-- =================================================
+                     MAIN BLOG CONTENT
+                ================================================== -->
+                <div class="col-lg-8 col-xl-9">
+
+                    <!-- Main Image -->
+                    <div class="blog-main-image rounded-5 mb-4 overflow-hidden">
+
+                        {% if blog.image %}
+
+                            <img
+                                class="img-fluid d-block w-100 rounded-5"
+                                src="{{ blog.image.url }}"
+                                alt="{{ blog.title }}"
+                                loading="eager"
+                                decoding="async">
+
+                        {% else %}
+
+                            <img
+                                class="img-fluid d-block w-100 rounded-5"
+                                src="{% static 'tandu-main/images/slider/slide-2.jpg' %}"
+                                alt="{{ blog.title }}"
+                                loading="eager"
+                                decoding="async">
+
+                        {% endif %}
+
                     </div>
-                </div>
-            </section>
-            <!-- Blog Details end -->
 
+
+                    <!-- =================================================
+                         BLOG TITLE
+                    ================================================== -->
+                    <h2 class="text-13 fw-600 blog-detail-title">
+                        {{ blog.title }}
+                    </h2>
+
+
+                    <!-- =================================================
+                         BLOG META
+                    ================================================== -->
+                    <div class="row gy-2 gx-5 text-body-secondary mb-4 blog-meta">
+
+                        {% if blog.created_at %}
+
+                        <div class="col-6 col-md-auto d-flex align-items-center">
+
+                            <span class="text-primary text-6 me-2">
+                                <i class="fa-solid fa-calendar"></i>
+                            </span>
+
+                            {{ blog.created_at|date:"M d, Y" }}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if blog.author %}
+
+                        <div class="col-6 col-md-auto d-flex align-items-center">
+
+                            <span class="text-primary text-6 me-2">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+
+                            {{ blog.author }}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if blog.category %}
+
+                        <div class="col-6 col-md-auto d-flex align-items-center">
+
+                            <span class="text-primary text-6 me-2">
+                                <i class="fa-solid fa-tag"></i>
+                            </span>
+
+                            {{ blog.category }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =================================================
+                         BLOG CONTENT
+
+                         IMPORTANT:
+                         No "reveal" class here.
+                         This ensures large content is always visible.
+                    ================================================== -->
+                    <article class="blog-content text-body-secondary">
+
+                        {{ blog.description|safe }}
+
+                    </article>
+
+
+                    <!-- =================================================
+                         DIVIDER
+                    ================================================== -->
+                    <hr class="opacity-1 my-4">
+
+
+                    <!-- =================================================
+                         SHARE SECTION
+                    ================================================== -->
+                    <div class="blog-share-section">
+
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
+
+                            <!-- Add share buttons here if required -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SIDEBAR
+                ================================================== -->
+                <div class="col-lg-4 col-xl-3">
+
+                    <div class="row blog-sidebar-sticky"
+                         style="z-index:10;">
+
+                        <!-- =================================================
+                             RELATED POSTS
+                        ================================================== -->
+                        <div class="col-sm-6 col-lg-12">
+
+                            <div class="bg-white rounded-5 p-4 mb-4">
+
+                                <h4 class="text-7 fw-600">
+                                    Related Posts
+                                </h4>
+
+                                <ul class="list-link">
+
+                                    {% for other in other_blogs %}
+
+                                    <li>
+                                        <a href="{% url 'tandj_app:blog_detail_public' other.slug %}">
+                                            {{ other.title }}
+                                        </a>
+                                    </li>
+
+                                    {% empty %}
+
+                                    <li>
+                                        <a href="{% url 'tandj_app:blogs' %}">
+                                            View All Posts
+                                        </a>
+                                    </li>
+
+                                    {% endfor %}
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             HELP BOX
+                        ================================================== -->
+                        <div class="col-sm-6 col-lg-12">
+
+                            <div class="hero-wrap rounded-5">
+
+                                <div class="hero-mask opacity-6 bg-black"></div>
+
+                                <img
+                                    class="img-fluid d-flex rounded-5"
+                                    src="{% static 'tandu-main/images/help-bg.jpg' %}"
+                                    alt=""
+                                    loading="lazy">
+
+                                <div class="hero-content position-absolute top-50 start-50 translate-middle w-100">
+
+                                    <div class="container py-5 px-4 text-center">
+
+                                        <span class="text-primary text-13">
+                                            <i class="fa-solid fa-circle-question"></i>
+                                        </span>
+
+                                        <h3 class="text-white text-6 fw-600 mb-3">
+                                            Need Help?
+                                        </h3>
+
+                                        <div class="text-6 fw-700 text-primary mb-1">
+                                            +91 9188954770
+                                        </div>
+
+                                        <div class="fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">
+                                            info@themist.com
+                                        </div>
+
+                                        <a
+                                            class="btn btn-new btn-sm btn-dark rounded-pill"
+                                            href="{% url 'tandj_app:contact' %}">
+
+                                            <span class="btn-text">
+                                                <span>Contact Us</span>
+                                            </span>
+
+                                            <span class="btn-icon">
+                                                <i class="fa-solid fa-arrow-right"></i>
+                                            </span>
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     CUSTOM BLOG STYLES
+========================================================= -->
 <style>
 
-/* ===== BLOG DETAIL PAGE STYLES ===== */
+/* =========================================================
+   PAGE HEADER
+========================================================= */
 
 .page-header .hero-wrap {
     min-height: 550px;
 }
 
-/* Blog detail section: override global overflow:hidden for sticky sidebar */
+
+/* =========================================================
+   BLOG DETAIL SECTION
+========================================================= */
+
 .blog-detail-section {
     overflow: visible !important;
+    position: relative;
+    z-index: 1;
 }
 
-/* Sidebar only sticks on large screens */
-.blog-sidebar-sticky {
-    position: static;
-}
-@media (max-width: 576px) {
-	.page-header .hero-wrap {
-		min-height: 340px;
-	}
-	.page-header .hero-content {
-		padding-top: 0 !important;
-		padding-bottom: 0 !important;
-	}
-	/* Long blog titles at the full text-17 size wrap into many lines and
-	   blow past the reduced mobile hero height, so scale the title and
-	   breadcrumb down specifically on small screens. */
-	.page-header h1.text-17 {
-		font-size: 1.65rem !important;
-		line-height: 1.3 !important;
-		margin-bottom: 14px !important;
-	}
-	.page-header .breadcrumb {
-		font-size: 0.75rem !important;
-		row-gap: 4px;
-	}
-	.page-header .breadcrumb li {
-		white-space: normal;
-	}
-}
-@media (min-width: 992px) {
-    .blog-sidebar-sticky {
-        position: sticky;
-        top: 90px;
-    }
+
+/* =========================================================
+   MAIN BLOG IMAGE
+========================================================= */
+
+.blog-main-image {
+    width: 100%;
+    max-height: 520px;
+    position: relative;
+    background: #f5f5f5;
 }
 
-/* Header above sticky content */
-#header {
-    z-index: 1000 !important;
+.blog-main-image img {
+    width: 100%;
+    height: 520px;
+    object-fit: cover;
+    display: block;
+
+    /* Better image rendering */
+    image-rendering: auto;
 }
 
-/* Crisp image rendering */
-.blog-items-wrap img {
-    image-rendering: -webkit-optimize-contrast;
-}
 
-/* Blog content typography */
+/* =========================================================
+   BLOG CONTENT
+
+   IMPORTANT:
+   There is NO opacity:0 here.
+   There is NO reveal animation.
+========================================================= */
+
 .blog-content {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+
     font-size: 1rem;
     line-height: 1.8;
+
+    color: #6c757d;
+
+    /* Prevent long text from breaking page layout */
+    overflow-wrap: anywhere;
+    word-wrap: break-word;
+
+    /* Make sure content is visible */
+    opacity: 1 !important;
+    visibility: visible !important;
 }
+
+
+/* =========================================================
+   BLOG PARAGRAPHS
+========================================================= */
 
 .blog-content p {
+    margin-top: 0;
     margin-bottom: 1.5rem;
+
+    line-height: 1.85;
 }
 
+
+/* =========================================================
+   HEADINGS
+========================================================= */
+
+.blog-content h1,
 .blog-content h2,
 .blog-content h3,
-.blog-content h4 {
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+    color: #1a1a1a;
+
+    font-weight: 600;
+
+    line-height: 1.35;
+
     margin-top: 2rem;
     margin-bottom: 1rem;
-    font-weight: 600;
-    color: #1a1a1a;
+
+    overflow-wrap: anywhere;
 }
 
-.blog-content img {
-    max-width: 100%;
-    height: auto;
-    margin: 1.5rem 0;
-    border-radius: 12px;
+.blog-content h1 {
+    font-size: 2rem;
 }
+
+.blog-content h2 {
+    font-size: 1.7rem;
+}
+
+.blog-content h3 {
+    font-size: 1.45rem;
+}
+
+.blog-content h4 {
+    font-size: 1.25rem;
+}
+
+.blog-content h5 {
+    font-size: 1.1rem;
+}
+
+
+/* =========================================================
+   BLOG IMAGES
+
+   Handles large images inside blog description.
+========================================================= */
+
+.blog-content img {
+    display: block;
+
+    max-width: 100% !important;
+    width: auto;
+    height: auto !important;
+
+    margin: 1.5rem auto;
+
+    border-radius: 12px;
+
+    object-fit: contain;
+}
+
+
+/* Full-width images */
+
+.blog-content img.full-width {
+    width: 100% !important;
+}
+
+
+/* =========================================================
+   FIGURE
+========================================================= */
+
+.blog-content figure {
+    max-width: 100%;
+    margin: 2rem 0;
+}
+
+.blog-content figure img {
+    margin: 0 auto;
+}
+
+.blog-content figcaption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 0.6rem;
+}
+
+
+/* =========================================================
+   LINKS
+========================================================= */
 
 .blog-content a {
     color: var(--bs-primary, #b08d57);
+
     text-decoration: none;
+
     border-bottom: 1px solid var(--bs-primary, #b08d57);
+
     transition: all 0.3s ease;
+
+    overflow-wrap: anywhere;
 }
 
 .blog-content a:hover {
     color: #1a1a1a;
+
     border-bottom-color: #1a1a1a;
 }
 
-/* Share section */
-.blog-share-section {
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.03);
-    border-radius: 12px;
+
+/* =========================================================
+   LISTS
+========================================================= */
+
+.blog-content ul,
+.blog-content ol {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+
+    padding-left: 2rem;
 }
 
-/* List Link Styles */
+.blog-content li {
+    margin-bottom: 0.6rem;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   BLOCKQUOTE
+========================================================= */
+
+.blog-content blockquote {
+    margin: 2rem 0;
+
+    padding: 1.25rem 1.5rem;
+
+    border-left: 4px solid var(--bs-primary, #b08d57);
+
+    background: rgba(0, 0, 0, 0.03);
+
+    border-radius: 0 10px 10px 0;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   TABLES
+
+   Prevent large tables from expanding the page horizontally.
+========================================================= */
+
+.blog-content table {
+    width: 100%;
+    max-width: 100%;
+
+    border-collapse: collapse;
+
+    margin: 1.5rem 0;
+
+    display: block;
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.blog-content table th,
+.blog-content table td {
+    padding: 10px 12px;
+
+    border: 1px solid #ddd;
+
+    white-space: nowrap;
+}
+
+.blog-content table th {
+    font-weight: 600;
+    background: #f7f7f7;
+}
+
+
+/* =========================================================
+   IFRAMES / VIDEOS
+========================================================= */
+
+.blog-content iframe,
+.blog-content video {
+    display: block;
+
+    max-width: 100% !important;
+
+    margin: 1.5rem auto;
+}
+
+.blog-content iframe {
+    width: 100%;
+    min-height: 400px;
+}
+
+.blog-content video {
+    width: 100%;
+    height: auto;
+}
+
+
+/* =========================================================
+   EMBEDS
+========================================================= */
+
+.blog-content embed,
+.blog-content object {
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   CODE
+========================================================= */
+
+.blog-content pre {
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    padding: 1rem;
+
+    background: #f5f5f5;
+
+    border-radius: 8px;
+}
+
+.blog-content code {
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   HORIZONTAL RULE
+========================================================= */
+
+.blog-content hr {
+    margin: 2rem 0;
+    opacity: 0.2;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.blog-sidebar-sticky {
+    position: static;
+}
+
+
+/* =========================================================
+   HEADER Z-INDEX
+========================================================= */
+
+#header {
+    z-index: 1000 !important;
+}
+
+
+/* =========================================================
+   RELATED POSTS
+========================================================= */
+
 .list-link {
     list-style: none;
+
     padding: 0;
+
     margin: 0;
 }
 
@@ -240,24 +684,39 @@
 
 .list-link a {
     color: #6c757d;
+
     text-decoration: none;
+
     font-size: 0.95rem;
+
     transition: all 0.3s ease;
+
     display: flex;
-    align-items: center;
+
+    align-items: flex-start;
+
     gap: 8px;
+
+    line-height: 1.5;
 }
 
 .list-link a::before {
     content: '→';
+
     color: var(--bs-primary, #b08d57);
+
     font-weight: bold;
+
     opacity: 0;
+
     transition: all 0.3s ease;
+
+    flex-shrink: 0;
 }
 
 .list-link a:hover {
     color: var(--bs-primary, #b08d57);
+
     padding-left: 8px;
 }
 
@@ -265,92 +724,400 @@
     opacity: 1;
 }
 
-/* Responsive adjustments */
-@media (max-width: 767px) {
-    .blog-content {
-        font-size: 0.95rem;
+
+/* =========================================================
+   SHARE SECTION
+========================================================= */
+
+.blog-share-section {
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.03);
+
+    border-radius: 12px;
+
+    margin-bottom: 2rem;
+}
+
+
+/* =========================================================
+   REMOVE INVISIBLE REVEAL FROM BLOG CONTENT
+========================================================= */
+
+/*
+   The global website may use .reveal with opacity:0.
+   The blog article must never become invisible because
+   an IntersectionObserver failed or content is very long.
+*/
+
+.blog-content,
+.blog-content.reveal,
+.blog-content.reveal-fade,
+.blog-content.reveal-fadeInUp,
+.blog-detail-section .col-lg-8,
+.blog-detail-section .col-xl-9 {
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    transform: none !important;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 992px) {
+
+    .blog-sidebar-sticky {
+        position: sticky;
+        top: 90px;
     }
 
-    .blog-content h2,
-    .blog-content h3,
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .blog-main-image {
+        max-height: 480px;
+    }
+
+    .blog-main-image img {
+        height: 480px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767px) {
+
+    .blog-content {
+        font-size: 0.95rem;
+
+        line-height: 1.75;
+    }
+
+    .blog-content p {
+        margin-bottom: 1.2rem;
+    }
+
+    .blog-content h1 {
+        font-size: 1.7rem;
+    }
+
+    .blog-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .blog-content h3 {
+        font-size: 1.3rem;
+    }
+
     .blog-content h4 {
-        margin-top: 1.5rem;
-        font-size: 1.25rem;
+        font-size: 1.15rem;
+    }
+
+    .blog-content ul,
+    .blog-content ol {
+        padding-left: 1.5rem;
+    }
+
+    .blog-content iframe {
+        min-height: 250px;
     }
 
     .blog-share-section {
-        flex-direction: column;
+        padding: 15px;
     }
+
+    .blog-main-image {
+        max-height: 350px;
+
+        border-radius: 20px !important;
+    }
+
+    .blog-main-image img {
+        height: 350px;
+
+        border-radius: 20px !important;
+    }
+
 }
 
-/* Reveal animation styles */
-.reveal {
-    opacity: 0;
-    transition: opacity .6s ease, transform .6s ease;
-    will-change: opacity, transform;
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 576px) {
+
+    .page-header .hero-wrap {
+        min-height: 340px;
+    }
+
+    .page-header .hero-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    .page-header h1.text-17 {
+        font-size: 1.65rem !important;
+
+        line-height: 1.3 !important;
+
+        margin-bottom: 14px !important;
+    }
+
+    .page-header .breadcrumb {
+        font-size: 0.75rem !important;
+
+        row-gap: 4px;
+    }
+
+    .page-header .breadcrumb li {
+        white-space: normal;
+    }
+
+
+    .blog-main-image {
+        max-height: 280px;
+    }
+
+    .blog-main-image img {
+        height: 280px;
+    }
+
+
+    .blog-detail-title {
+        font-size: 1.5rem !important;
+
+        line-height: 1.35;
+    }
+
+
+    .blog-meta {
+        font-size: 0.9rem;
+    }
+
+
+    .blog-content {
+        font-size: 0.95rem;
+
+        line-height: 1.75;
+
+        overflow-wrap: anywhere;
+
+        word-break: break-word;
+    }
+
+
+    .blog-content img {
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        height: auto !important;
+
+        margin: 1.2rem auto;
+    }
+
+
+    .blog-content iframe {
+        width: 100% !important;
+
+        min-height: 220px;
+    }
+
+
+    .blog-content table {
+        font-size: 0.85rem;
+    }
+
 }
 
-.reveal-fade {
-    transition: opacity .6s ease;
+
+/* =========================================================
+   LOADER SAFETY
+========================================================= */
+
+.loader,
+.loader-wrap,
+#loader,
+.preloader {
+    z-index: 9999;
 }
 
-.reveal-fadeInUp {
-    transform: translateY(30px);
-}
 
-.reveal-fadeInLeft {
-    transform: translateX(-40px);
-}
-
-.reveal-fadeInRight {
-    transform: translateX(40px);
-}
-
-.reveal.reveal-visible {
-    opacity: 1;
-    transform: translate(0, 0);
-}
+/* =========================================================
+   ACCESSIBILITY / REDUCED MOTION
+========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-    .reveal {
+
+    .blog-content {
         opacity: 1 !important;
+
         transform: none !important;
-        transition: none !important;
     }
+
 }
 
 </style>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    var revealEls = document.querySelectorAll('.reveal');
-    if (!revealEls.length) return;
 
-    if (!('IntersectionObserver' in window)) {
-        // Fallback: just show everything immediately.
-        revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
+<!-- =========================================================
+     REVEAL SCRIPT
+     
+     Only used for header elements.
+     Blog content does NOT depend on this script.
+========================================================= -->
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    var revealEls = document.querySelectorAll(
+        '.page-header .reveal'
+    );
+
+    if (!revealEls.length) {
         return;
     }
 
-    var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            var el = entry.target;
-            var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
-            if (entry.isIntersecting) {
-                if (delay) {
-                    setTimeout(function () { el.classList.add('reveal-visible'); }, delay);
-                } else {
-                    el.classList.add('reveal-visible');
-                }
-            } else {
-                // Leaving the viewport resets it so it fades in again
-                el.classList.remove('reveal-visible');
-            }
-        });
-    }, { threshold: 0.15 });
 
-    revealEls.forEach(function (el) { observer.observe(el); });
+    /*
+     * If IntersectionObserver is not supported,
+     * immediately display the elements.
+     */
+    if (!('IntersectionObserver' in window)) {
+
+        revealEls.forEach(function (el) {
+
+            el.classList.add('reveal-visible');
+
+        });
+
+        return;
+    }
+
+
+    var observer = new IntersectionObserver(
+        function (entries) {
+
+            entries.forEach(function (entry) {
+
+                var el = entry.target;
+
+                var delay = parseInt(
+                    el.getAttribute('data-reveal-delay') || '0',
+                    10
+                );
+
+
+                if (entry.isIntersecting) {
+
+                    if (delay) {
+
+                        setTimeout(function () {
+
+                            el.classList.add(
+                                'reveal-visible'
+                            );
+
+                        }, delay);
+
+                    } else {
+
+                        el.classList.add(
+                            'reveal-visible'
+                        );
+
+                    }
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.15
+        }
+    );
+
+
+    revealEls.forEach(function (el) {
+
+        observer.observe(el);
+
+    });
+
 });
+
+</script>
+
+
+<!-- =========================================================
+     LOADER SAFETY SCRIPT
+========================================================= -->
+<script>
+
+(function () {
+
+    function hideLoader() {
+
+        var loader = document.querySelector(
+            '.loader, .loader-wrap, #loader, .preloader'
+        );
+
+        if (loader) {
+
+            loader.style.display = 'none';
+
+            loader.style.visibility = 'hidden';
+
+            loader.style.opacity = '0';
+
+        }
+
+    }
+
+
+    /*
+     * Hide loader when DOM is ready.
+     */
+    if (document.readyState === 'loading') {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            hideLoader
+        );
+
+    } else {
+
+        hideLoader();
+
+    }
+
+
+    /*
+     * Safety fallback.
+     */
+    setTimeout(
+        hideLoader,
+        2500
+    );
+
+})();
+
 </script>
 
 {% endblock %}

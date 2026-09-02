@@ -1202,129 +1202,1573 @@ body.hero-frames-page #header.scrolled {
 }
 </style>
 
-<section class="section bg-light-1">
-    <div class="container">
-        <!-- Heading -->
-        <div class="mx-auto text-center mb-5">
-            <p class="wow fadeInUp"><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">Rooms & Suites</span></p>
-            <h2 class="heading-font-family text-13 fw-600 lh-sm mb-4 wow fadeInUp" data-wow-delay=".2s">Five Room Choices for <span class="text-primary">Different Types<br class="d-none d-md-block"> of Stays</span></h2>
-            <div class="rooms-heading-desc mx-auto wow fadeInUp" data-wow-delay=".3s">
-                <p class="text-body-secondary text-4 mb-3">A couple travelling for two nights may want a straightforward double room. A family may need more space. A honeymoon couple may prefer a suite and a quieter setting.</p>
-                <p class="text-body-secondary text-4 mb-0">T&amp;U offers <strong class="text-dark">Deluxe Double, Portico Deluxe, Premium Double, Suite Rooms and Honeymoon Suites</strong>.</p>
-            </div>
-        </div>
-        <!-- Heading End -->
+<!-- =========================================================
+     ROOMS & SUITES
+========================================================= -->
 
-        <div class="room-items-wrap wow fadeInUp">
-            <div class="row g-4">
-                {% if rooms %}
-                    {% for room in rooms %}
-                    <!-- Room Card -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="room-item bg-white rounded-5 overflow-hidden shadow-sm" style="transition: all 0.3s ease;">
-                            <!-- Image Container -->
-                            <div class="room-item-img position-relative" style="height: 280px; overflow: hidden; border-radius: 1.5rem;">
-                                {% if room.slug %}
-                                <a href="{% url 'tandj_app:room_detail_public' room.slug %}" class="d-block h-100">
-                                {% else %}
-                                <a href="#" class="d-block h-100">
-                                {% endif %}
-                                    {% if room.main_image %}
-                                        <img class="img-fluid h-100 w-100" src="{{ room.main_image.url }}" alt="{{ room.room_category }}" style="object-fit: cover; border-radius: 1.5rem;">
+<section class="section bg-light-1 rooms-section">
+
+    <div class="container">
+
+        <!-- =====================================================
+             HEADING
+        ====================================================== -->
+
+        <div class="mx-auto text-center mb-5">
+
+            <p class="wow fadeInUp">
+                <span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">
+                    Rooms & Suites
+                </span>
+            </p>
+
+            <h2 class="heading-font-family text-13 fw-600 lh-sm mb-4 wow fadeInUp"
+                data-wow-delay=".2s">
+
+                Five Room Choices for
+
+                <span class="text-primary">
+                    Different Types<br class="d-none d-md-block">
+                    of Stays
+                </span>
+
+            </h2>
+
+            <div class="rooms-heading-desc mx-auto wow fadeInUp"
+                 data-wow-delay=".3s">
+
+                <p class="text-body-secondary text-4 mb-3">
+                    A couple travelling for two nights may want a straightforward double room.
+                    A family may need more space. A honeymoon couple may prefer a suite and a quieter setting.
+                </p>
+
+                <p class="text-body-secondary text-4 mb-0">
+
+                    T&amp;U offers
+
+                    <strong class="text-dark">
+                        Deluxe Double, Portico Deluxe, Premium Double,
+                        Suite Rooms and Honeymoon Suites
+                    </strong>.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             HORIZONTAL ROOM CAROUSEL
+        ====================================================== -->
+
+        <div class="rooms-carousel-wrapper wow fadeInUp">
+
+
+            <!-- LEFT ARROW -->
+
+            <button
+                type="button"
+                class="rooms-carousel-arrow rooms-carousel-prev"
+                id="roomsPrev"
+                aria-label="Previous room">
+
+                <i class="fa-solid fa-chevron-left"></i>
+
+            </button>
+
+
+            <!-- =================================================
+                 VIEWPORT
+            ================================================== -->
+
+            <div class="rooms-carousel-viewport">
+
+                <div
+                    class="rooms-carousel-track"
+                    id="roomsSlider">
+
+                    {% if rooms %}
+
+                        {% for room in rooms %}
+
+                        <!-- =================================================
+                             ROOM CARD
+                        ================================================== -->
+
+                        <div class="room-slide">
+
+                            <div class="room-item bg-white rounded-5 overflow-hidden shadow-sm">
+
+
+                                <!-- ROOM IMAGE -->
+
+                                <div class="room-item-img position-relative">
+
+                                    {% if room.slug %}
+
+                                        <a
+                                            href="{% url 'tandj_app:room_detail_public' room.slug %}"
+                                            class="d-block h-100">
+
                                     {% else %}
-                                        <img class="img-fluid h-100 w-100" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="" style="object-fit: cover; border-radius: 1.5rem;">
+
+                                        <a href="#" class="d-block h-100">
+
                                     {% endif %}
-                                </a>
-                                <div class="position-absolute top-0 start-0 pt-3 ps-3"></div>
+
+
+                                        {% if room.main_image %}
+
+                                            <img
+                                                class="img-fluid h-100 w-100"
+                                                src="{{ room.main_image.url }}"
+                                                alt="{{ room.room_category }}">
+
+                                        {% else %}
+
+                                            <img
+                                                class="img-fluid h-100 w-100"
+                                                src="{% static 'tandu-main/images/rooms/room-1.jpg' %}"
+                                                alt="{{ room.room_category }}">
+
+                                        {% endif %}
+
+
+                                    </a>
+
+                                </div>
+
+
+                                <!-- ROOM CONTENT -->
+
+                                <div class="p-4 room-card-content">
+
+
+                                    <!-- ROOM NAME -->
+
+                                    <h3 class="text-6 fw-700 mb-2 room-title">
+
+                                        {{ room.room_category }}
+
+                                    </h3>
+
+
+                                    <!-- DESCRIPTION -->
+
+                                    <p class="text-3 text-body-secondary mb-3 room-description">
+
+                                        {{ room.description|striptags|truncatewords:18|safe }}
+
+                                    </p>
+
+
+                                    <!-- PRICE -->
+
+                                    {% if room.price_per_night %}
+
+                                    <div class="d-flex align-items-baseline gap-1 pt-3 mb-3 room-price">
+
+                                        <span class="text-7 fw-700 room-price-value">
+
+                                            ${{ room.price_per_night|floatformat:0 }}
+
+                                        </span>
+
+                                        <span class="text-3 fw-500 room-price-label">
+
+                                            / NIGHT
+
+                                        </span>
+
+                                    </div>
+
+                                    {% endif %}
+
+
+                                    <!-- ACTIONS -->
+
+                                    <div class="d-flex align-items-center gap-2 room-actions">
+
+
+                                        <!-- BOOK NOW -->
+
+                                        <a
+                                            class="btn btn-new btn-primary rounded-pill flex-fill room-book-now-btn"
+                                            href="#"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#bookNowModal"
+                                            data-room-id="{{ room.id }}"
+                                            data-room-name="{{ room.room_category }}">
+
+                                            <span class="btn-text">
+                                                <span>Book Now</span>
+                                            </span>
+
+                                            <span class="btn-icon">
+                                                <i class="fa-solid fa-calendar-check"></i>
+                                            </span>
+
+                                        </a>
+
+
+                                        <!-- VIEW MORE -->
+
+                                        {% if room.slug %}
+
+                                        <a
+                                            class="btn btn-new btn-outline-primary rounded-pill flex-fill"
+                                            href="{% url 'tandj_app:room_detail_public' room.slug %}">
+
+                                            <span class="btn-text">
+                                                <span>View More</span>
+                                            </span>
+
+                                            <span class="btn-icon">
+                                                <i class="fa-solid fa-arrow-right"></i>
+                                            </span>
+
+                                        </a>
+
+                                        {% else %}
+
+                                        <a
+                                            class="btn btn-new btn-outline-primary rounded-pill flex-fill disabled"
+                                            href="#"
+                                            style="pointer-events:none;opacity:.6;">
+
+                                            <span class="btn-text">
+                                                <span>View More</span>
+                                            </span>
+
+                                            <span class="btn-icon">
+                                                <i class="fa-solid fa-arrow-right"></i>
+                                            </span>
+
+                                        </a>
+
+                                        {% endif %}
+
+
+                                    </div>
+
+                                </div>
+
                             </div>
 
-                            <!-- Card Content -->
-                            <div class="p-4">
-                                <!-- Room Name -->
-                                <h3 class="text-6 fw-700 mb-2" style="color: #1a1a1a;">{{ room.room_category }}</h3>
+                        </div>
 
-                                <!-- Room Description (HTML stripped + truncated + entities decoded) -->
-                                <p class="text-3 text-body-secondary mb-3">
-                                    {{ room.description|striptags|truncatewords:18|safe }}
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="rooms-empty">
+
+                            <div class="alert alert-info text-center mb-0">
+
+                                <p class="mb-0">
+                                    No rooms available at the moment.
                                 </p>
 
-                                <!-- Price -->
-                                                                <!-- Price -->
-                                {% if room.price_per_night %}
-                                <div class="d-flex align-items-baseline gap-1 pt-3 mb-3" style="border-top: 1px solid #f0f0f0;">
-                                    <span class="text-7 fw-700" style="color: #1a1a1a;">${{ room.price_per_night|floatformat:0 }}</span>
-                                    <span class="text-3 fw-500" style="color: #999;">/ NIGHT</span>
-                                </div>
-                                {% endif %}
-
-                                <!-- Actions -->
-                                <div class="d-flex align-items-center gap-2">
-                                    <a class="btn btn-new btn-primary rounded-pill flex-fill room-book-now-btn"
-                                       href="#"
-                                       data-bs-toggle="modal"
-                                       data-bs-target="#bookNowModal"
-                                       data-room-id="{{ room.id }}"
-                                       data-room-name="{{ room.room_category }}">
-                                        <span class="btn-text"><span>Book Now</span></span>
-                                        <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
-                                    </a>
-                                    {% if room.slug %}
-                                    <a class="btn btn-new btn-outline-primary rounded-pill flex-fill"
-                                       href="{% url 'tandj_app:room_detail_public' room.slug %}">
-                                        <span class="btn-text"><span>View More</span></span>
-                                        <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-                                    </a>
-                                    {% else %}
-                                    <a class="btn btn-new btn-outline-primary rounded-pill flex-fill disabled"
-                                       href="#"
-                                       style="pointer-events:none; opacity:.6;">
-                                        <span class="btn-text"><span>View More</span></span>
-                                        <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-                                    </a>
-                                    {% endif %}
-                                </div>
                             </div>
+
                         </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="col-12">
-                        <div class="alert alert-info text-center">
-                            <p class="mb-0">No rooms available at the moment.</p>
-                        </div>
-                    </div>
-                {% endif %}
+
+                    {% endif %}
+
+                </div>
+
             </div>
+
+
+            <!-- RIGHT ARROW -->
+
+            <button
+                type="button"
+                class="rooms-carousel-arrow rooms-carousel-next"
+                id="roomsNext"
+                aria-label="Next room">
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+            </button>
+
+
         </div>
+
+
+        <!-- =====================================================
+             CAROUSEL HINT
+        ====================================================== -->
+
+        {% if rooms|length > 3 %}
+
+        <div class="rooms-carousel-hint text-center mt-3">
+
+            <span>
+                <i class="fa-solid fa-arrows-left-right me-1"></i>
+                More rooms available
+            </span>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- =====================================================
+             VIEW ALL
+        ====================================================== -->
 
         <div class="position-relative text-center z-1 mt-5 wow fadeInUp">
-            <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:rooms' %}">
-                <span class="btn-text"><span>View all Rooms</span></span>
-                <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+
+            <a
+                class="btn btn-new btn-primary rounded-pill"
+                href="{% url 'tandj_app:rooms' %}">
+
+                <span class="btn-text">
+                    <span>View all Rooms</span>
+                </span>
+
+                <span class="btn-icon">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+
             </a>
+
         </div>
-        
+
     </div>
+
 </section>
-<!-- Rooms & Suites end -->
+
+
+<!-- =========================================================
+     CSS
+========================================================= -->
+
+<style>
+
+/* =========================================================
+   MAIN CAROUSEL
+========================================================= */
+
+.rooms-carousel-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+    /*
+       IMPORTANT:
+       Prevent vertical movement
+    */
+
+    overflow: visible;
+
+}
+
+
+/* =========================================================
+   VIEWPORT
+========================================================= */
+
+.rooms-carousel-viewport {
+
+    width: 100%;
+
+    overflow: hidden;
+
+    /*
+       IMPORTANT:
+       Only horizontal carousel movement
+    */
+
+    position: relative;
+
+}
+
+
+/* =========================================================
+   TRACK
+========================================================= */
+
+.rooms-carousel-track {
+
+    display: flex;
+
+    flex-direction: row;
+
+    flex-wrap: nowrap;
+
+    gap: 24px;
+
+    width: max-content;
+
+    transform: translateX(0);
+
+    will-change: transform;
+
+    transition:
+        transform .7s cubic-bezier(.22,.61,.36,1);
+
+}
+
+
+/* =========================================================
+   ROOM SLIDE
+========================================================= */
+
+.room-slide {
+
+    /*
+       Exactly 3 cards visible
+    */
+
+    flex: 0 0 calc(
+        (var(--rooms-carousel-width, 100vw) - 48px) / 3
+    );
+
+    width: calc(
+        (100% - 48px) / 3
+    );
+
+    min-width: 0;
+
+}
+
+
+/*
+   Better desktop calculation
+*/
+
+@media (min-width: 992px) {
+
+    .room-slide {
+
+        flex: 0 0 calc(
+            (100% - 48px) / 3
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ROOM CARD
+========================================================= */
+
+.room-item {
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+
+.room-item:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.10) !important;
+
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.room-item-img {
+
+    height: 280px;
+
+    overflow: hidden;
+
+    border-radius: 1.5rem;
+
+    flex-shrink: 0;
+
+}
+
+
+.room-item-img a {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+}
+
+
+.room-item-img img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 1.5rem;
+
+    transition:
+        transform .6s ease;
+
+}
+
+
+.room-item:hover
+.room-item-img img {
+
+    transform: scale(1.05);
+
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.room-card-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+}
+
+
+.room-title {
+
+    color: #1a1a1a;
+
+    min-height: 30px;
+
+}
+
+
+.room-description {
+
+    line-height: 1.65;
+
+    min-height: 54px;
+
+}
+
+
+.room-price {
+
+    border-top: 1px solid #f0f0f0;
+
+}
+
+
+.room-price-value {
+
+    color: #1a1a1a;
+
+}
+
+
+.room-price-label {
+
+    color: #999;
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.room-actions {
+
+    margin-top: auto;
+
+}
+
+
+.room-actions .btn {
+
+    min-height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+}
+
+
+/* =========================================================
+   ARROWS
+========================================================= */
+
+.rooms-carousel-arrow {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    z-index: 50;
+
+    width: 48px;
+
+    height: 48px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #fff;
+
+    color: #222;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.16);
+
+    transition:
+        all .25s ease;
+
+}
+
+
+.rooms-carousel-arrow:hover {
+
+    background: var(--bs-primary, #0d6efd);
+
+    color: #fff;
+
+    transform:
+        translateY(-50%) scale(1.08);
+
+}
+
+
+.rooms-carousel-prev {
+
+    left: -24px;
+
+}
+
+
+.rooms-carousel-next {
+
+    right: -24px;
+
+}
+
+
+/* =========================================================
+   HINT
+========================================================= */
+
+.rooms-carousel-hint {
+
+    color: #999;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991.98px) {
+
+    .room-slide {
+
+        /*
+           2 cards on tablet
+        */
+
+        flex: 0 0 calc(
+            (100% - 24px) / 2
+        );
+
+    }
+
+
+    .rooms-carousel-arrow {
+
+        width: 42px;
+
+        height: 42px;
+
+    }
+
+
+    .rooms-carousel-prev {
+
+        left: -12px;
+
+    }
+
+
+    .rooms-carousel-next {
+
+        right: -12px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .rooms-carousel-track {
+
+        gap: 16px;
+
+    }
+
+
+    .room-slide {
+
+        /*
+           One card on mobile
+        */
+
+        flex: 0 0 88%;
+
+    }
+
+
+    .room-item-img {
+
+        height: 250px;
+
+    }
+
+
+    .rooms-carousel-arrow {
+
+        width: 38px;
+
+        height: 38px;
+
+        font-size: 13px;
+
+    }
+
+
+    .rooms-carousel-prev {
+
+        left: -8px;
+
+    }
+
+
+    .rooms-carousel-next {
+
+        right: -8px;
+
+    }
+
+
+    .room-actions {
+
+        flex-direction: column;
+
+    }
+
+
+    .room-actions .btn {
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .room-slide {
+
+        flex: 0 0 92%;
+
+    }
+
+
+    .rooms-carousel-arrow {
+
+        display: none;
+
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
 
 <script>
+
 document.addEventListener('DOMContentLoaded', function () {
-    var roomsWrap = document.querySelector('.room-items-wrap');
-    if (!roomsWrap || !('IntersectionObserver' in window)) {
-        if (roomsWrap) roomsWrap.classList.add('rooms-in');
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const track =
+        document.getElementById('roomsSlider');
+
+    const prevButton =
+        document.getElementById('roomsPrev');
+
+    const nextButton =
+        document.getElementById('roomsNext');
+
+
+    if (!track) {
+
         return;
+
     }
-    var roomsObserver = new IntersectionObserver(function (entries, obs) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-                roomsWrap.classList.add('rooms-in');
-                obs.disconnect(); // play once only
+
+
+    /* =====================================================
+       VARIABLES
+    ===================================================== */
+
+    let currentIndex = 0;
+
+    let autoTimer = null;
+
+    let isPaused = false;
+
+    let visibleCards = 3;
+
+    let cardWidth = 0;
+
+    let gap = 24;
+
+
+    /* =====================================================
+       CALCULATE SLIDER
+    ===================================================== */
+
+    function calculateSlider() {
+
+
+        const cards =
+            track.querySelectorAll('.room-slide');
+
+
+        if (!cards.length) {
+
+            return;
+
+        }
+
+
+        /* Desktop */
+
+        if (window.innerWidth >= 992) {
+
+            visibleCards = 3;
+
+            gap = 24;
+
+        }
+
+
+        /* Tablet */
+
+        else if (window.innerWidth >= 768) {
+
+            visibleCards = 2;
+
+            gap = 24;
+
+        }
+
+
+        /* Mobile */
+
+        else {
+
+            visibleCards = 1;
+
+            gap = 16;
+
+        }
+
+
+        /*
+           Get actual card width
+        */
+
+        cardWidth =
+            cards[0].offsetWidth;
+
+
+        /*
+           Make sure current position
+           remains valid
+        */
+
+        const maxIndex =
+            Math.max(
+                0,
+                cards.length - visibleCards
+            );
+
+
+        if (currentIndex > maxIndex) {
+
+            currentIndex = maxIndex;
+
+        }
+
+
+        updatePosition();
+
+    }
+
+
+    /* =====================================================
+       MOVE TRACK HORIZONTALLY
+    ===================================================== */
+
+    function updatePosition() {
+
+
+        /*
+           IMPORTANT:
+           Only translateX is used.
+           
+           No scrollTop.
+           No vertical movement.
+        */
+
+        const distance =
+            currentIndex *
+            (cardWidth + gap);
+
+
+        track.style.transform =
+            'translate3d(-' +
+            distance +
+            'px, 0, 0)';
+
+
+        updateButtons();
+
+    }
+
+
+    /* =====================================================
+       NEXT
+    ===================================================== */
+
+    function nextRoom() {
+
+
+        const cards =
+            track.querySelectorAll('.room-slide');
+
+
+        if (!cards.length) {
+
+            return;
+
+        }
+
+
+        const maxIndex =
+            Math.max(
+                0,
+                cards.length - visibleCards
+            );
+
+
+        if (currentIndex < maxIndex) {
+
+
+            /*
+               Move one card horizontally
+            */
+
+            currentIndex++;
+
+
+        } else {
+
+
+            /*
+               Reached the end.
+               
+               Go back to first room.
+            */
+
+            currentIndex = 0;
+
+        }
+
+
+        updatePosition();
+
+    }
+
+
+    /* =====================================================
+       PREVIOUS
+    ===================================================== */
+
+    function previousRoom() {
+
+
+        const cards =
+            track.querySelectorAll('.room-slide');
+
+
+        if (!cards.length) {
+
+            return;
+
+        }
+
+
+        const maxIndex =
+            Math.max(
+                0,
+                cards.length - visibleCards
+            );
+
+
+        if (currentIndex > 0) {
+
+
+            currentIndex--;
+
+
+        } else {
+
+
+            /*
+               Go to last available position
+            */
+
+            currentIndex = maxIndex;
+
+        }
+
+
+        updatePosition();
+
+    }
+
+
+    /* =====================================================
+       BUTTON STATE
+    ===================================================== */
+
+    function updateButtons() {
+
+
+        const cards =
+            track.querySelectorAll('.room-slide');
+
+
+        if (!cards.length) {
+
+            return;
+
+        }
+
+
+        /*
+           If 3 or fewer rooms,
+           hide arrows.
+        */
+
+        if (
+            cards.length <=
+            visibleCards
+        ) {
+
+
+            if (prevButton) {
+
+                prevButton.style.display =
+                    'none';
+
             }
-        });
-    }, { threshold: 0.15 });
-    roomsObserver.observe(roomsWrap);
+
+
+            if (nextButton) {
+
+                nextButton.style.display =
+                    'none';
+
+            }
+
+
+            return;
+
+        }
+
+
+        if (prevButton) {
+
+            prevButton.style.display =
+                'flex';
+
+        }
+
+
+        if (nextButton) {
+
+            nextButton.style.display =
+                'flex';
+
+        }
+
+    }
+
+
+    /* =====================================================
+       NEXT BUTTON
+    ===================================================== */
+
+    if (nextButton) {
+
+
+        nextButton.addEventListener(
+            'click',
+            function () {
+
+
+                nextRoom();
+
+
+                /*
+                   Give user time before
+                   auto movement starts again.
+                */
+
+                restartAutoSlide();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       PREVIOUS BUTTON
+    ===================================================== */
+
+    if (prevButton) {
+
+
+        prevButton.addEventListener(
+            'click',
+            function () {
+
+
+                previousRoom();
+
+                restartAutoSlide();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       AUTO SLIDE
+    ===================================================== */
+
+    function startAutoSlide() {
+
+
+        stopAutoSlide();
+
+
+        const cards =
+            track.querySelectorAll('.room-slide');
+
+
+        /*
+           Don't auto-slide if
+           there are not enough rooms.
+        */
+
+        if (
+            cards.length <=
+            visibleCards
+        ) {
+
+            return;
+
+        }
+
+
+        autoTimer =
+            setInterval(function () {
+
+
+                if (!isPaused) {
+
+                    nextRoom();
+
+                }
+
+
+            }, 5000);
+
+    }
+
+
+    /* =====================================================
+       STOP AUTO SLIDE
+    ===================================================== */
+
+    function stopAutoSlide() {
+
+
+        if (autoTimer) {
+
+            clearInterval(autoTimer);
+
+            autoTimer = null;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RESTART AUTO SLIDE
+    ===================================================== */
+
+    function restartAutoSlide() {
+
+
+        stopAutoSlide();
+
+
+        /*
+           Wait 8 seconds after
+           manual interaction.
+        */
+
+        setTimeout(function () {
+
+
+            if (!isPaused) {
+
+                startAutoSlide();
+
+            }
+
+
+        }, 8000);
+
+    }
+
+
+    /* =====================================================
+       HOVER PAUSE
+    ===================================================== */
+
+    const wrapper =
+        document.querySelector(
+            '.rooms-carousel-wrapper'
+        );
+
+
+    if (wrapper) {
+
+
+        wrapper.addEventListener(
+            'mouseenter',
+            function () {
+
+
+                isPaused = true;
+
+                stopAutoSlide();
+
+            }
+        );
+
+
+        wrapper.addEventListener(
+            'mouseleave',
+            function () {
+
+
+                isPaused = false;
+
+                startAutoSlide();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       TOUCH SUPPORT
+    ===================================================== */
+
+    let touchStartX = 0;
+
+    let touchEndX = 0;
+
+
+    track.addEventListener(
+        'touchstart',
+        function (event) {
+
+
+            isPaused = true;
+
+            stopAutoSlide();
+
+
+            touchStartX =
+                event.touches[0].clientX;
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    track.addEventListener(
+        'touchend',
+        function (event) {
+
+
+            touchEndX =
+                event.changedTouches[0].clientX;
+
+
+            const difference =
+                touchStartX -
+                touchEndX;
+
+
+            /*
+               Swipe left
+            */
+
+            if (difference > 50) {
+
+                nextRoom();
+
+            }
+
+
+            /*
+               Swipe right
+            */
+
+            else if (difference < -50) {
+
+                previousRoom();
+
+            }
+
+
+            isPaused = false;
+
+
+            restartAutoSlide();
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    /* =====================================================
+       MOUSE DRAG
+    ===================================================== */
+
+    let dragging = false;
+
+    let dragStartX = 0;
+
+
+    track.addEventListener(
+        'mousedown',
+        function (event) {
+
+
+            dragging = true;
+
+            dragStartX =
+                event.clientX;
+
+
+            track.style.cursor =
+                'grabbing';
+
+
+            stopAutoSlide();
+
+        }
+    );
+
+
+    document.addEventListener(
+        'mouseup',
+        function () {
+
+
+            if (!dragging) {
+
+                return;
+
+            }
+
+
+            dragging = false;
+
+
+            track.style.cursor =
+                'grab';
+
+
+            startAutoSlide();
+
+        }
+    );
+
+
+    track.addEventListener(
+        'mousemove',
+        function (event) {
+
+
+            if (!dragging) {
+
+                return;
+
+            }
+
+
+            const difference =
+                dragStartX -
+                event.clientX;
+
+
+            /*
+               Swipe / drag threshold
+            */
+
+            if (Math.abs(difference) > 60) {
+
+
+                if (difference > 0) {
+
+                    nextRoom();
+
+                } else {
+
+                    previousRoom();
+
+                }
+
+
+                dragging = false;
+
+                track.style.cursor =
+                    'grab';
+
+
+                restartAutoSlide();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       RESIZE
+    ===================================================== */
+
+    window.addEventListener(
+        'resize',
+        function () {
+
+
+            calculateSlider();
+
+            stopAutoSlide();
+
+            startAutoSlide();
+
+        }
+    );
+
+
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
+
+    setTimeout(function () {
+
+
+        calculateSlider();
+
+        startAutoSlide();
+
+
+    }, 300);
+
+
 });
+
 </script>
  <!-- Amenities
 			============================================= -->

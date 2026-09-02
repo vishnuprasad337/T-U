@@ -104,4 +104,5 @@ path("contact-us/", views.contact_page, name="contact"),
 path("contact/ajax-create/", views.contact_ajax_create, name="contact_ajax_create"),
 path('restaurant/', views.restaurant, name='restaurant'),
 
+
 ]
