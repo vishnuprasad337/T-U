@@ -1249,10 +1249,13 @@ body.hero-frames-page #header.scrolled {
                                 </p>
 
                                 <!-- Price -->
+                                                                <!-- Price -->
+                                {% if room.price_per_night %}
                                 <div class="d-flex align-items-baseline gap-1 pt-3 mb-3" style="border-top: 1px solid #f0f0f0;">
                                     <span class="text-7 fw-700" style="color: #1a1a1a;">${{ room.price_per_night|floatformat:0 }}</span>
                                     <span class="text-3 fw-500" style="color: #999;">/ NIGHT</span>
                                 </div>
+                                {% endif %}
 
                                 <!-- Actions -->
                                 <div class="d-flex align-items-center gap-2">
