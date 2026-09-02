@@ -797,7 +797,7 @@ from .models import Room
 
 def index(request):
     # Fetch rooms without status filter
-    rooms = Room.objects.all()[:3]
+    rooms = Room.objects.all()
 
     # Latest 3 activities for the homepage "Activities" section
     activities = Activity.objects.all().order_by("-created_at")[:3]
