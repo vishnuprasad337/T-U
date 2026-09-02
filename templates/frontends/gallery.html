@@ -179,6 +179,84 @@
     background-color: rgba(0, 0, 0, 0.45) !important;
     border-radius: 50% !important;
 }
+/* ===== Force swipe/touch navigation to actually work on mobile ===== */
+@media (max-width: 768px) {
+    .glightbox-container .gslider,
+    .glightbox-container .gslide-image,
+    .glightbox-container .gslide-image img {
+        touch-action: pan-y !important;
+    }
+    .glightbox-container .gnext,
+    .glightbox-container .gprev,
+    .glightbox-container .gbtn.gnext,
+    .glightbox-container .gbtn.gprev {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        z-index: 99999 !important;
+    }
+    .glightbox-container .gnext,
+    .glightbox-container .gbtn.gnext {
+        right: 6px !important;
+    }
+    .glightbox-container .gprev,
+    .glightbox-container .gbtn.gprev {
+        left: 6px !important;
+    }
+}
+/* ===== Custom always-visible nav buttons (bypasses GLightbox's
+   touch-device arrow hiding) ===== */
+.custom-glightbox-nav {
+    position: fixed !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background-color: rgba(0, 0, 0, 0.55) !important;
+    color: #fff !important;
+    font-size: 20px !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2147483647 !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent !important;
+    pointer-events: auto !important;
+}
+.custom-glightbox-prev {
+    left: 10px !important;
+}
+.custom-glightbox-next {
+    right: 10px !important;
+}
+.custom-glightbox-nav:active {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+}
+/* ===== FINAL: forced custom nav buttons ===== */
+button.custom-glightbox-nav {
+    all: unset !important;
+    position: fixed !important;
+    top: 50% !important;
+    margin-top: -22px !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50% !important;
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    color: #fff !important;
+    font-size: 22px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2147483647 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+}
+button.custom-glightbox-prev { left: 10px !important; }
+button.custom-glightbox-next { right: 10px !important; }
 </style>
 {% endblock %}
 
@@ -191,10 +269,8 @@ document.addEventListener("DOMContentLoaded", function () {
     filterButtons.forEach(function (btn) {
         btn.addEventListener("click", function () {
             var filter = btn.getAttribute("data-filter");
-
             filterButtons.forEach(function (b) { b.classList.remove("active"); });
             btn.classList.add("active");
-
             galleryItems.forEach(function (item) {
                 if (filter === "all" || item.getAttribute("data-category") === filter) {
                     item.classList.remove("d-none");
@@ -205,7 +281,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Replay fade-in animation every time an item scrolls into/out of view
     if ("IntersectionObserver" in window) {
         var revealItems = document.querySelectorAll(".scroll-reveal");
         var observer = new IntersectionObserver(function (entries) {
@@ -217,16 +292,62 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         }, { threshold: 0.15 });
-
-        revealItems.forEach(function (item) {
-            observer.observe(item);
-        });
+        revealItems.forEach(function (item) { observer.observe(item); });
     } else {
-        // Fallback: just show everything if IntersectionObserver isn't supported
         document.querySelectorAll(".scroll-reveal").forEach(function (item) {
             item.classList.add("is-visible");
         });
     }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (typeof GLightbox === 'undefined') return;
+
+    var lightbox = GLightbox({
+        selector: '.glightbox',
+        touchNavigation: true,
+        touchFollowAxis: true,
+        loop: true,
+        dragToleranceX: 40,
+        zoomable: false,
+        draggable: true,
+        openEffect: 'zoom',
+        closeEffect: 'fade',
+        slideEffect: 'slide'
+    });
+
+    var prevBtn = null, nextBtn = null;
+
+    function makeBtn(className, label, onClick) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'custom-glightbox-nav ' + className;
+        b.textContent = label;
+        // inline style as a hard failsafe, in case CSS file fails to load/cache
+        b.style.cssText = 'position:fixed;top:50%;margin-top:-22px;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;z-index:2147483647;cursor:pointer;border:none;';
+        if (className.indexOf('prev') > -1) { b.style.left = '10px'; }
+        else { b.style.right = '10px'; }
+        b.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            onClick();
+        });
+        return b;
+    }
+
+    lightbox.on('open', function () {
+        setTimeout(function () {
+            prevBtn = makeBtn('custom-glightbox-prev', String.fromCharCode(10094), function () { lightbox.prevSlide(); });
+            nextBtn = makeBtn('custom-glightbox-next', String.fromCharCode(10095), function () { lightbox.nextSlide(); });
+            document.body.appendChild(prevBtn);
+            document.body.appendChild(nextBtn);
+        }, 100);
+    });
+
+    lightbox.on('close', function () {
+        if (prevBtn) { prevBtn.remove(); prevBtn = null; }
+        if (nextBtn) { nextBtn.remove(); nextBtn = null; }
+    });
 });
 </script>
 {% endblock %}

@@ -1102,5 +1102,4 @@ def restaurant(request):
     }
     return render(request, "frontends/restaurant.html", context)
 def page_404(request, exception=None):
-    return render(request, 'front-end/404.html', status=404)
-
+    return render(request, 'frontends/404.html', status=404)

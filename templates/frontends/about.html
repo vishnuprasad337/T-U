@@ -1,8 +1,11 @@
 {% extends "frontends/base.html" %}
 {% load static %}
 
-{% block title %}About Us - The Mist Luxury Hotel{% endblock %}
-{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+{% block title %}Top Rated Hotel in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}
+{% block meta_description %}Discover MaxiMunnar T&U Leisure Hotel, a top rated hotel in Munnar with comfortable rooms, scenic views, dining and easy access to Munnar's attractions.{% endblock %}
+
+{% block og_title %}Top Rated Hotel in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}
+{% block og_description %}Stay at MaxiMunnar T&U Leisure Hotel on Mattupetty Road, with comfortable rooms, scenic surroundings, multi-cuisine dining and easy access to Munnar's popular attractions.{% endblock %}
 
 {% block content %}
 
@@ -50,62 +53,67 @@
 		</section>
 		<!-- Page Header end -->
 
-            <!-- About
-			============================================= -->
-            <section class="section">
-                <div class="container">
-                    <div class="row g-5">
-                        <div class="col-lg-6 wow fadeInLeft">
-                            <!-- Heading -->
-                            <p><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">About The Mist</span></p>
-                            <h2 class="heading-font-family text-13 fw-600 lh-sm mb-4">Discover <span class="text-primary">unique holidays</span> enhanced by personalized</h2>
-                            <!-- Heading End -->
-                            
-							<p class="text-5 text-body-secondary">Uncover a luxurious haven at Hotel The Mist, United States. Nestled in Los Ageless heart, our hotel offers modern elegance and warm hospitality.</p>
-                            <p class="text-body-secondary mb-4">Experience comfort in stylish rooms, savor culinary delights at our restaurant, and host memorable events in our versatile spaces. Unwind at our wellness center or explore nearby attractions easily. With impeccable service and a prime location, Hotel The Mist ensures a delightful.</p>
+<!-- About
+============================================= -->
+<section class="section">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6 wow fadeInLeft">
+                <!-- Heading -->
+                <p><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">About MaxiMunnar T&U</span></p>
+                <h2 class="heading-font-family text-13 fw-600 lh-sm mb-4">About <span class="text-primary">MaxiMunnar T&U</span> Leisure Hotel</h2>
+                <!-- Heading End -->
 
-                            <div class="d-inline-flex align-items-center gap-4 flex-wrap">
-                                <!-- Button -->
-                                <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:rooms' %}">
-									<span class="btn-text"><span>Rooms & Suites</span></span>
-									<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-								</a>
+                <h3 class="heading-font-family text-6 fw-600 mb-3">A Comfortable Stay in the Hills of Munnar</h3>
 
-                                <!-- Book Now Button -->
-                                <a class="btn btn-new btn-outline-primary rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#bookNowModal">
-                                    <span class="btn-text"><span>Book Now</span></span>
-                                    <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
-                                </a>
+                <p class="text-5 text-body-secondary">Welcome to <strong>MaxiMunnar T&U Leisure Hotel</strong>, a four-star hotel on Mattupetty Road, Munnar. We created the hotel with one simple thought in mind — give guests a comfortable place to stay while they enjoy everything that makes Munnar special.</p>
 
-                                <!-- Call us -->
-                                <div class="d-flex align-items-center gap-3 ms-sm-2 h-100">
-                                    <div class="text-body-tertiary text-7 opacity-7 d-inline-flex"><i class="fa-solid fa-phone-volume"></i></div>
-                                    <div class="vr my-1 opacity-1"></div>
-                                    <div class="text-start">
-                                        <div class="text-2 fw-600 text-body-tertiary mb-1">Call us for Inquiry:</div>
-                                        <h3 class="text-4 fw-700 mb-0">+91 9188954770</h3>
-                                    </div>
-                                </div>
-                                <!-- Call us End -->
-                            </div>
+                <p class="text-body-secondary">T&U has <strong>30 rooms and suites</strong>, along with an in-house restaurant, recreation spaces, fitness facilities and other everyday comforts. Being on Mattupetty Road also makes it easy to plan visits to places such as <strong>Mattupetty, Echo Point, Kundala and Top Station</strong>.</p>
+
+                <p class="text-body-secondary mb-4">There is a quiet charm to the hotel too. The interiors take a few cues from Munnar's colonial and plantation history, while the rooms have the modern comforts you would expect from a good hotel. Step outside and you have tea gardens, green valleys and the cool mountain air that brings many travellers to Munnar in the first place.</p>
+
+                <div class="d-inline-flex align-items-center gap-4 flex-wrap">
+                    <!-- Button -->
+                    <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:rooms' %}">
+                        <span class="btn-text"><span>Rooms & Suites</span></span>
+                        <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+                    </a>
+
+                    <!-- Book Now Button -->
+                    <a class="btn btn-new btn-outline-primary rounded-pill" href="#" data-bs-toggle="modal" data-bs-target="#bookNowModal">
+                        <span class="btn-text"><span>Book Now</span></span>
+                        <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
+                    </a>
+
+                    <!-- Call us -->
+                    <div class="d-flex align-items-center gap-3 ms-sm-2 h-100">
+                        <div class="text-body-tertiary text-7 opacity-7 d-inline-flex"><i class="fa-solid fa-phone-volume"></i></div>
+                        <div class="vr my-1 opacity-1"></div>
+                        <div class="text-start">
+                            <div class="text-2 fw-600 text-body-tertiary mb-1">Call us for Inquiry:</div>
+                            <h3 class="text-4 fw-700 mb-0">+91 9188954770</h3>
                         </div>
-                        <div class="col-lg-6 wow fadeInRight">
-    <div class="position-relative about-img-wrap">
-        <img class="rounded-5 about-img" src="{% static 'tandu-main/room.png' %}" alt="">
+                    </div>
+                    <!-- Call us End -->
+                </div>
+            </div>
+            <div class="col-lg-6 wow fadeInRight">
+                <div class="position-relative about-img-wrap">
+                    <img class="rounded-5 about-img" src="{% static 'tandu-main/room.png' %}" alt="MaxiMunnar T&U Leisure Hotel">
 
-        <div class="position-absolute top-0 end-0">
-            <!-- Circle Text -->
-        </div>
+                    <div class="position-absolute top-0 end-0">
+                        <!-- Circle Text -->
+                    </div>
 
-        <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
-            <div class="text-light text-start bg-dark bg-opacity-50 rounded-5 m-5 p-4 wow fadeInUp">A new kind of hospitality experience, crafted for business and leisure travellers alike.</div>
-        </div>
-    </div>
-</div>
+                    <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
+                        <div class="text-light text-start bg-dark bg-opacity-50 rounded-5 m-5 p-4 wow fadeInUp">A comfortable stay in Munnar, with easy access to tea gardens, viewpoints and the hills all around.</div>
                     </div>
                 </div>
-            </section>
-            <!-- About end -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- About end -->
 
             <!-- Book Now Modal -->
             <div class="modal fade" id="bookNowModal" tabindex="-1" aria-labelledby="bookNowModalLabel" aria-hidden="true">

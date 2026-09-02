@@ -1,8 +1,11 @@
 {% extends "frontends/base.html" %}
 {% load static %}
 
-{% block title %}Rooms - The Mist Luxury Hotel{% endblock %}
-{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+{% block title %}Luxury Rooms & Suites in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}
+{% block meta_description %}Explore rooms and suites at MaxiMunnar T&U Leisure Hotel, including Deluxe, Premium, Suite and Honeymoon rooms for a comfortable stay in Munnar.{% endblock %}
+
+{% block og_title %}Luxury Rooms & Suites in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}
+{% block og_description %}Choose from Deluxe, Premium, Suite and Honeymoon rooms at MaxiMunnar T&U Leisure Hotel, with modern comforts and a convenient location on Mattupetty Road.{% endblock %}
 
 {% block content %}
 
@@ -29,6 +32,57 @@
 		============================================= -->
 		<section class="section">
 			<div class="container">
+
+				<style>
+    .text-block-justify {
+        text-align: justify !important;
+        text-justify: inter-word;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    .text-block-justify p {
+        text-align: justify !important;
+        text-align-last: left;
+    }
+
+    /* ===== Mobile: heading left-aligned, paragraphs stay justified ===== */
+    @media (max-width: 576px) {
+        .rooms-heading-block {
+            text-align: left !important;
+        }
+        .rooms-heading-block h2,
+        .rooms-heading-block h3 {
+            text-align: left !important;
+        }
+        .rooms-heading-block .text-block-justify {
+            max-width: 100% !important;
+            margin: 0 !important;
+        }
+        .rooms-heading-block .text-block-justify p {
+            text-align: justify !important;
+            text-align-last: left !important;
+        }
+    }
+</style>
+
+<!-- Heading -->
+<div class="row justify-content-center mb-5">
+    <div class="col-lg-9 text-center rooms-heading-block">
+        <h2 class="heading-font-family text-13 fw-600 lh-sm mb-4">Rooms & Suites at <span class="text-primary">MaxiMunnar T&U</span> Leisure Hotel</h2>
+
+        <h3 class="heading-font-family text-6 fw-600 mb-3">Comfortable Rooms for Different Kinds of Munnar Stays</h3>
+
+        <!-- Justified paragraph block (justified on desktop AND mobile) -->
+        <div class="text-block-justify">
+            <p class="text-body-secondary">After a day on Munnar's hill roads, walking through tea plantations or visiting places such as Mattupetty Dam and Echo Point, having a comfortable room to return to makes a difference.</p>
+
+            <p class="text-body-secondary mb-0">
+                <strong>MaxiMunnar T&U Leisure Hotel</strong> offers five accommodation categories: <strong>Deluxe Double, Portico Deluxe, Premium Double, Premium Suite and Honeymoon Suite</strong>. Each category has a different purpose, so you can choose based on the way you plan to spend your time in Munnar.
+            </p>
+        </div>
+    </div>
+</div>
+<!-- Heading End -->
 				<div class="room-items-wrap">
 					<div class="row g-4">
 						{% for room in rooms %}
@@ -412,7 +466,7 @@
 		}
 	}
 
-	/* ===== Room card — mobile ===== */
+		/* ===== Room card — mobile ===== */
 	@media (max-width: 576px) {
 		.room-card-body {
 			padding: 1.5rem !important;
@@ -446,19 +500,22 @@
 			font-size: 1.25rem !important;
 		}
 
+		/* Keep Book Now + View Details side by side on mobile */
 		.room-card-btn-wrap {
-			flex-direction: column;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			gap: 0.5rem;
 		}
 
 		.room-card .btn-new {
-			padding: 8px 12px !important;
-			font-size: 0.75rem !important;
-			width: 100%;
+			padding: 8px 10px !important;
+			font-size: 0.72rem !important;
+			width: auto;
 		}
 
 		.room-card .btn-icon {
-			width: 26px !important;
-			height: 26px !important;
+			width: 24px !important;
+			height: 24px !important;
 		}
 	}
 
