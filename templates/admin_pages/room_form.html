@@ -452,9 +452,9 @@ img, input, textarea, select, .form-control, .modern-input, .form-text {
                                     <span class="text-danger field-error" id="room_category-error"></span>
                                 </div>
 
-                                <div class="col-md-6 mb-4">
-                                    <label for="price_per_night" class="form-label">Price Per Night <span class="text-danger">*</span></label>
-                                    <input type="number" step="0.01" name="price_per_night" id="price_per_night" class="form-control modern-input" placeholder="e.g. 3500.00" value="{{ form.price_per_night.value|default:'' }}" required>
+                                                                <div class="col-md-6 mb-4">
+                                    <label for="price_per_night" class="form-label">Price Per Night</label>
+                                    <input type="number" step="0.01" name="price_per_night" id="price_per_night" class="form-control modern-input" placeholder="e.g. 3500.00" value="{{ form.price_per_night.value|default:'' }}">
                                     {% if form.price_per_night.errors %}<div class="text-danger small mt-1">{{ form.price_per_night.errors|first }}</div>{% endif %}
                                     <span class="text-danger field-error" id="price_per_night-error"></span>
                                 </div>
@@ -677,11 +677,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 return null;
             }
         },
-        price_per_night: {
+                price_per_night: {
             element: document.getElementById('price_per_night'),
             error: document.getElementById('price_per_night-error'),
             validate: function(value) {
-                if (!value.trim()) return "Price per night is required.";
+                if (!value.trim()) return null; // optional field — blank is fine
                 if (isNaN(value) || Number(value) < 0) return "Price must be a valid positive number.";
                 return null;
             }
