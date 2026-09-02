@@ -1202,6 +1202,151 @@ body.hero-frames-page #header.scrolled {
 }
 </style>
 
+<!-- Rooms & Suites (auto-scroll trail, same behavior as Site Seeing) -->
+<style>
+.about-img-wrap {
+    height: 100%;
+    min-height: 420px;
+}
+.about-img-wrap .about-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+@media (max-width: 991px) {
+    .about-img-wrap {
+        min-height: 320px;
+    }
+}
+.room-item .btn-new {
+    padding: 8px 8px 8px 18px;
+    font-size: 0.8rem;
+}
+.room-item .btn-new .btn-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+}
+.room-item {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+.room-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 45px -15px rgba(0, 0, 0, 0.25) !important;
+}
+.room-item-img img {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.room-item:hover .room-item-img img {
+    transform: scale(1.1);
+}
+.room-item .p-4 h3,
+.room-item .p-4 .d-flex.align-items-baseline {
+    transition: transform 0.35s ease;
+}
+.room-item:hover .p-4 h3 {
+    transform: translateX(3px);
+}
+.room-item .btn-new {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.room-item .btn-new:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.3);
+}
+@media (prefers-reduced-motion: reduce) {
+    .room-item,
+    .room-item-img img,
+    .room-item .p-4 h3,
+    .room-item .btn-new {
+        transition: none !important;
+        transform: none !important;
+    }
+}
+body.hero-frames-page #header {
+    display: none;
+}
+body.hero-frames-page #header.scrolled {
+    display: block;
+}
+</style>
+
+<style>
+.rooms-heading-desc {
+    max-width: 720px;
+    line-height: 1.7;
+}
+@media (max-width: 767px) {
+    .rooms-heading-desc {
+        max-width: 100%;
+        padding: 0 8px;
+    }
+}
+
+/* ===== Room trail (same mechanism as the Site Seeing section) ===== */
+.room-trail-wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.room-trail-wrap::-webkit-scrollbar {
+    display: none;
+}
+
+.room-trail-track {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    padding: 4px 4px 8px;
+}
+
+.room-trail-card {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
+.room-trail-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+.room-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.room-nav-btn:hover {
+    background: var(--bs-primary, #b4915c);
+    border-color: var(--bs-primary, #b4915c);
+    color: #fff;
+}
+.room-nav-btn:active {
+    transform: scale(0.94);
+}
+
+@media (max-width: 576px) {
+    .room-trail-card { width: 92vw !important; }
+}
+</style>
+
 <section class="section bg-light-1">
     <div class="container">
         <!-- Heading -->
@@ -1217,15 +1362,11 @@ body.hero-frames-page #header.scrolled {
 
         <div class="room-items-wrap wow fadeInUp">
             {% if rooms %}
-            <div class="room-scroll-outer position-relative">
-                <button type="button" class="room-scroll-btn room-scroll-prev" aria-label="Scroll left">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-
-                <div class="room-scroll-track" id="roomScrollTrack">
+            <div class="room-trail-wrap" id="roomTrailWrap">
+                <div class="room-trail-track" id="roomTrailTrack">
                     {% for room in rooms %}
                     <!-- Room Card -->
-                    <div class="room-scroll-item">
+                    <div class="room-trail-card" id="roomCard{{ forloop.counter0 }}">
                         <div class="room-item bg-white rounded-5 overflow-hidden shadow-sm h-100" style="transition: all 0.3s ease;">
                             <!-- Image Container -->
                             <div class="room-item-img position-relative" style="height: 280px; overflow: hidden; border-radius: 1.5rem;">
@@ -1292,8 +1433,13 @@ body.hero-frames-page #header.scrolled {
                     </div>
                     {% endfor %}
                 </div>
+            </div>
 
-                <button type="button" class="room-scroll-btn room-scroll-next" aria-label="Scroll right">
+            <div class="room-trail-nav" id="roomTrailNav">
+                <button type="button" class="room-nav-btn" id="roomPrevBtn" aria-label="Previous room">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="room-nav-btn" id="roomNextBtn" aria-label="Next room">
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
             </div>
@@ -1312,195 +1458,163 @@ body.hero-frames-page #header.scrolled {
                 <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
             </a>
         </div>
-
     </div>
 </section>
 <!-- Rooms & Suites end -->
 
-<style>
-.room-scroll-outer {
-    padding: 0 2px;
-}
-
-.room-scroll-track {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 1.5rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    padding: 4px 4px 20px;
-    -webkit-overflow-scrolling: touch;
-}
-
-.room-scroll-track::-webkit-scrollbar {
-    height: 6px;
-}
-.room-scroll-track::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.15);
-    border-radius: 10px;
-}
-
-.room-scroll-item {
-    flex: 0 0 calc((100% - 2 * 1.5rem) / 3); /* exactly 3 visible on desktop */
-    max-width: calc((100% - 2 * 1.5rem) / 3);
-    scroll-snap-align: start;
-}
-
-@media (max-width: 991.98px) {
-    .room-scroll-item {
-        flex: 0 0 calc((100% - 1.5rem) / 2); /* 2 visible on tablet */
-        max-width: calc((100% - 1.5rem) / 2);
-    }
-}
-
-@media (max-width: 575.98px) {
-    .room-scroll-item {
-        flex: 0 0 85%; /* 1 visible on mobile */
-        max-width: 85%;
-    }
-}
-
-.room-scroll-btn {
-    position: absolute;
-    top: 45%;
-    transform: translateY(-50%);
-    z-index: 5;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: none;
-    background: #fff;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-.room-scroll-btn:hover {
-    background: #f2f2f2;
-}
-.room-scroll-prev { left: -10px; }
-.room-scroll-next { right: -10px; }
-
-@media (max-width: 575.98px) {
-    .room-scroll-btn { display: none; } /* rely on swipe on mobile */
-}
-</style>
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    var roomsWrap = document.querySelector('.room-items-wrap');
-    if (!roomsWrap) return;
+(function () {
+    // ===== Speed / behaviour controls =====
+    var AUTO_ADVANCE_MS = 3200;        // time between automatic steps — lower = faster
+    var RESUME_AFTER_MANUAL_MS = 4000; // how long auto-scroll pauses after a manual click/touch
 
-    if ('IntersectionObserver' in window) {
-        var roomsObserver = new IntersectionObserver(function (entries, obs) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    roomsWrap.classList.add('rooms-in');
-                    obs.disconnect();
-                }
-            });
-        }, { threshold: 0.15 });
-        roomsObserver.observe(roomsWrap);
-    } else {
-        roomsWrap.classList.add('rooms-in');
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var wrap = document.getElementById('roomTrailWrap');
+        var track = document.getElementById('roomTrailTrack');
+        var prevBtn = document.getElementById('roomPrevBtn');
+        var nextBtn = document.getElementById('roomNextBtn');
+        var nav = document.getElementById('roomTrailNav');
+        if (!wrap || !track) return;
 
-    // Horizontal scroll controls
-    var track = document.getElementById('roomScrollTrack');
-    var prevBtn = document.querySelector('.room-scroll-prev');
-    var nextBtn = document.querySelector('.room-scroll-next');
+        var originalCards = Array.prototype.slice.call(track.children);
+        if (originalCards.length === 0) return;
 
-    if (!track) return;
-
-    var scrollByAmount = function () {
-        var item = track.querySelector('.room-scroll-item');
-        return item ? item.getBoundingClientRect().width + 24 : 300; // card width + gap
-    };
-
-    var isAtEnd = function () {
-        return track.scrollLeft >= track.scrollWidth - track.clientWidth - 5;
-    };
-
-    var toggleArrows = function () {
-        if (!prevBtn || !nextBtn) return;
-        var maxScroll = track.scrollWidth - track.clientWidth - 5;
-        prevBtn.style.display = track.scrollLeft <= 0 ? 'none' : 'flex';
-        nextBtn.style.display = track.scrollLeft >= maxScroll ? 'none' : 'flex';
-    };
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', function () {
-            track.scrollBy({ left: -scrollByAmount(), behavior: 'smooth' });
-        });
-    }
-    if (nextBtn) {
-        nextBtn.addEventListener('click', function () {
-            track.scrollBy({ left: scrollByAmount(), behavior: 'smooth' });
-        });
-    }
-
-    toggleArrows();
-    track.addEventListener('scroll', toggleArrows);
-    window.addEventListener('resize', toggleArrows);
-
-    // ---- Auto-scroll (carousel-style) ----
-    var AUTO_SCROLL_DELAY = 3500;   // ms between each auto-advance
-    var autoScrollTimer = null;
-    var isPaused = false;
-
-    function startAutoScroll() {
-        stopAutoScroll(); // clear any existing timer first
-        autoScrollTimer = setInterval(function () {
-            if (isPaused) return;
-
-            if (isAtEnd()) {
-                // loop back to the start smoothly
-                track.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                track.scrollBy({ left: scrollByAmount(), behavior: 'smooth' });
-            }
-        }, AUTO_SCROLL_DELAY);
-    }
-
-    function stopAutoScroll() {
-        if (autoScrollTimer) {
-            clearInterval(autoScrollTimer);
-            autoScrollTimer = null;
+        function visibleCount() {
+            var w = window.innerWidth;
+            if (w <= 575.98) return 1;
+            if (w <= 991.98) return 2;
+            return 3;
         }
-    }
 
-    // Only auto-scroll if there's actually more than one "page" of cards
-    if (track.scrollWidth > track.clientWidth + 5) {
-        startAutoScroll();
+        if (originalCards.length <= visibleCount() && window.innerWidth > 575.98) {
+            // Not enough cards to ever scroll on desktop/tablet — just size
+            // them evenly and skip the carousel logic entirely.
+        }
 
-        // Pause on hover (desktop)
-        track.addEventListener('mouseenter', function () { isPaused = true; });
-        track.addEventListener('mouseleave', function () { isPaused = false; });
+        var GAP = 24; // px, matches the 1.5rem gap in CSS
 
-        // Pause while user is manually touching/dragging (mobile)
-        track.addEventListener('touchstart', function () { isPaused = true; });
-        track.addEventListener('touchend', function () {
-            setTimeout(function () { isPaused = false; }, 1000);
-        });
-
-        // Pause briefly when arrows are clicked manually, then resume
-        [prevBtn, nextBtn].forEach(function (btn) {
-            if (!btn) return;
-            btn.addEventListener('click', function () {
-                isPaused = true;
-                setTimeout(function () { isPaused = false; }, 1500);
+        function sizeCards() {
+            var count = visibleCount();
+            var wrapWidth = wrap.clientWidth;
+            var cardWidth = (wrapWidth - GAP * (count - 1)) / count;
+            Array.prototype.forEach.call(track.children, function (card) {
+                card.style.width = cardWidth + 'px';
             });
+            return cardWidth;
+        }
+
+        if (originalCards.length === 1) {
+            if (nav) nav.style.display = 'none';
+            sizeCards();
+            return;
+        }
+
+        // Duplicate the full set once so there's always overflow to
+        // scroll through, and looping back is invisible (the clone
+        // looks identical to the original set).
+        originalCards.forEach(function (card) {
+            var clone = card.cloneNode(true);
+            clone.removeAttribute('id');
+            clone.setAttribute('aria-hidden', 'true');
+            track.appendChild(clone);
         });
 
-        // Pause when tab isn't visible
-        document.addEventListener('visibilitychange', function () {
-            isPaused = document.hidden;
+        var autoTimer = null;
+        var resumeTimer = null;
+        var isResetting = false;
+
+        function stepWidth() {
+            var card = track.children[0];
+            var style = window.getComputedStyle(track);
+            var gap = parseFloat(style.columnGap || style.gap || 0) || 0;
+            return card.getBoundingClientRect().width + gap;
+        }
+
+        function originalSetWidth() {
+            return stepWidth() * originalCards.length;
+        }
+
+        function snapToNearestCard(scrollLeft) {
+            var w = stepWidth();
+            return Math.round(scrollLeft / w) * w;
+        }
+
+        function goTo(scrollLeft, smooth) {
+            wrap.scrollTo({ left: scrollLeft, behavior: smooth ? 'smooth' : 'auto' });
+        }
+
+        function step(direction) {
+            if (isResetting) return;
+
+            var current = snapToNearestCard(wrap.scrollLeft);
+            var target = current + direction * stepWidth();
+            var maxScroll = track.scrollWidth - wrap.clientWidth;
+
+            if (target > maxScroll - 1) {
+                isResetting = true;
+                goTo(target - originalSetWidth(), false);
+                isResetting = false;
+                return;
+            }
+            if (target < 0) {
+                isResetting = true;
+                goTo(target + originalSetWidth(), false);
+                isResetting = false;
+                return;
+            }
+
+            goTo(target, true);
+        }
+
+        function startAuto() {
+            stopAuto();
+            if (originalCards.length <= visibleCount()) return; // nothing to scroll
+            autoTimer = setInterval(function () { step(1); }, AUTO_ADVANCE_MS);
+        }
+
+        function stopAuto() {
+            if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+        }
+
+        function pauseThenResume() {
+            stopAuto();
+            if (resumeTimer) clearTimeout(resumeTimer);
+            resumeTimer = setTimeout(startAuto, RESUME_AFTER_MANUAL_MS);
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function () {
+                step(-1);
+                pauseThenResume();
+            });
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function () {
+                step(1);
+                pauseThenResume();
+            });
+        }
+
+        wrap.addEventListener('mouseenter', stopAuto);
+        wrap.addEventListener('mouseleave', startAuto);
+        wrap.addEventListener('touchstart', stopAuto, { passive: true });
+        wrap.addEventListener('touchend', pauseThenResume, { passive: true });
+
+        sizeCards();
+        startAuto();
+
+        var resizeTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                sizeCards();
+                goTo(0, 'auto' === true); // snap back to a clean start on resize
+                wrap.scrollTo({ left: 0, behavior: 'auto' });
+                startAuto();
+            }, 200);
         });
-    }
-});
+    });
+})();
 </script>
  <!-- Amenities
 			============================================= -->
