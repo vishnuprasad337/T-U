@@ -2296,41 +2296,46 @@ body.hero-frames-page #header.scrolled {
                 position: relative;
             }
 
-            /* Scroll wrapper — height is set by JS to fit exactly 2 rows; scroll reveals the rest */
+            /* Stage wrapper — no longer scrolls. Height is driven by JS to
+               match whichever single row is active, so nothing else can
+               ever peek in from above or below. */
             .mist-scroll-wrap {
                 position: relative;
                 max-width: 1080px;
                 margin: 0 auto;
-                overflow-y: auto;
-                scroll-snap-type: y proximity;
-                overscroll-behavior: contain;
-                scrollbar-width: thin;
-                scrollbar-color: var(--mist-sage) transparent;
-            }
-            .mist-scroll-wrap::-webkit-scrollbar {
-                width: 6px;
-            }
-            .mist-scroll-wrap::-webkit-scrollbar-thumb {
-                background: var(--mist-sage);
-                border-radius: 999px;
-            }
-            .mist-scroll-wrap::-webkit-scrollbar-track {
-                background: transparent;
             }
 
-            /* The trail groups each testimonial row together */
+            /* The trail is the crossfade stage: exactly one row is
+               visible/opaque at a time, all others are absolutely
+               positioned on top of each other with opacity 0. Its height
+               is set by JS to match the active row and animates smoothly
+               when the active row changes. */
             .mist-trail {
                 position: relative;
+                overflow: hidden;
+                transition: height .4s ease;
             }
 
             .mist-row {
-                position: relative;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
                 display: flex;
                 align-items: center;
                 gap: 4.5rem;
                 padding: 1.5rem 0;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity .5s ease;
+                box-sizing: border-box;
+            }
+            .mist-row.is-active {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
                 z-index: 1;
-                scroll-snap-align: start;
             }
             .mist-row:nth-child(even) {
                 flex-direction: row-reverse;
@@ -2479,39 +2484,13 @@ body.hero-frames-page #header.scrolled {
                 color: var(--mist-sage);
             }
 
-            /* Hint that more testimonials are below — fades out once the user has scrolled */
-            .mist-scroll-hint {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: .4rem;
-                margin-top: 1rem;
-                font-size: .8rem;
-                letter-spacing: .04em;
-                text-transform: uppercase;
-                color: var(--mist-sage);
-                opacity: 1;
-                transition: opacity .3s ease;
-            }
-            .mist-scroll-hint.is-hidden {
-                opacity: 0;
-                pointer-events: none;
-            }
-            .mist-scroll-hint i {
-                animation: mist-bounce 1.6s ease-in-out infinite;
-            }
-            @keyframes mist-bounce {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(4px); }
-            }
-
             /* Manual prev/next controls — for stepping through cards on demand */
             .mist-manual-nav {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 gap: 1rem;
-                margin-top: 0.75rem;
+                margin-top: 1.5rem;
             }
             .mist-nav-btn {
                 display: flex;
@@ -2535,17 +2514,42 @@ body.hero-frames-page #header.scrolled {
                 transform: scale(0.94);
             }
 
+            /* Desktop pagination dots, under the prev/next buttons */
+            .mist-desktop-dots {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 1rem;
+            }
+            .mist-desktop-dots .mist-dot-btn {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--mist-fog);
+                border: none;
+                padding: 0;
+                cursor: pointer;
+                transition: background .25s ease, width .25s ease;
+            }
+            .mist-desktop-dots .mist-dot-btn.is-active {
+                background: var(--mist-sage);
+                width: 22px;
+                border-radius: 999px;
+            }
+
             @media (max-width: 767.98px) {
 
-                /* Mobile: horizontal swipe carousel instead of stacked rows */
-                .mist-scroll-wrap {
-                    overflow: visible !important;
-                    max-height: none !important;
-                }
+                /* Mobile: horizontal swipe carousel instead of a crossfade —
+                   every row is laid out normally (not absolutely positioned)
+                   so native scroll-snap can page through them. */
                 .mist-trail {
                     display: flex;
                     flex-direction: row;
                     overflow-x: auto;
+                    overflow-y: visible;
+                    height: auto !important;
+                    transition: none;
                     scroll-snap-type: x mandatory;
                     scroll-padding-left: 0;
                     -webkit-overflow-scrolling: touch;
@@ -2558,6 +2562,10 @@ body.hero-frames-page #header.scrolled {
 
                 .mist-row,
                 .mist-row:nth-child(even) {
+                    position: static !important;
+                    opacity: 1 !important;
+                    visibility: visible !important;
+                    pointer-events: auto !important;
                     flex: 0 0 100%;
                     width: 100%;
                     max-width: 100%;
@@ -2586,8 +2594,8 @@ body.hero-frames-page #header.scrolled {
                 .mist-quote-mark { font-size: 3rem; }
                 .mist-review { font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; }
                 .mist-meta { font-size: .75rem; }
-                .mist-scroll-hint { display: none !important; }
                 .mist-manual-nav { display: none !important; }
+                .mist-desktop-dots { display: none !important; }
             }
              .mist-mobile-dots {
                 display: none;
@@ -2621,7 +2629,7 @@ body.hero-frames-page #header.scrolled {
             <div class="mist-scroll-wrap" id="mistScrollWrap">
                 <div class="mist-trail" id="mistTrail">
                     {% for testimonial in testimonials %}
-                    <div class="mist-row" data-wow-delay=".{{ forloop.counter }}s">
+                    <div class="mist-row"{% if forloop.first %} data-initial-active="1"{% endif %}>
 
                         <!-- Photo side -->
                         <div class="mist-photo">
@@ -2672,109 +2680,77 @@ body.hero-frames-page #header.scrolled {
                     {% endfor %}
                 </div>
             </div>
-             <div class="mist-mobile-dots" id="mistMobileDots"></div>
-
-            <div class="mist-scroll-hint" id="mistScrollHint">
-                <span>Scroll for more</span>
-                <i class="fa-solid fa-chevron-down"></i>
-            </div>
+            <div class="mist-mobile-dots" id="mistMobileDots"></div>
 
             <div class="mist-manual-nav" id="mistManualNav">
                 <button type="button" class="mist-nav-btn" id="mistPrevBtn" aria-label="Previous testimonial">
-                    <i class="fa-solid fa-chevron-up"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
                 </button>
                 <button type="button" class="mist-nav-btn" id="mistNextBtn" aria-label="Next testimonial">
-                    <i class="fa-solid fa-chevron-down"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
                 </button>
             </div>
+            <div class="mist-desktop-dots" id="mistDesktopDots"></div>
 
             <script>
             (function () {
-                var VISIBLE_ROWS = 1;
-                var AUTO_ADVANCE_MS = 2800;
+                var AUTO_ADVANCE_MS = 3800;
                 var scrollWrap = document.getElementById('mistScrollWrap');
                 var trail = document.getElementById('mistTrail');
-                var hint = document.getElementById('mistScrollHint');
                 if (!scrollWrap || !trail) return;
 
-                // On mobile the trail becomes a native horizontal swipe carousel (see CSS),
-                // so the vertical auto-scroll/pagination logic below doesn't apply there.
+                // On mobile the trail is a native horizontal swipe carousel
+                // (see CSS) — the crossfade logic below only applies on
+                // desktop/tablet where rows are absolutely stacked.
                 var isMobile = window.matchMedia('(max-width: 767.98px)').matches;
                 if (isMobile) return;
 
-                var originalRows = Array.prototype.slice.call(trail.querySelectorAll('.mist-row'));
-                var totalPages = Math.max(1, Math.ceil(originalRows.length / VISIBLE_ROWS));
-                var currentPage = 0;
-                var pageHeight = 0;
+                var rows = Array.prototype.slice.call(trail.querySelectorAll('.mist-row'));
+                if (rows.length === 0) return;
+
+                var rowHeights = [];
+                var currentIndex = 0;
                 var autoTimer = null;
                 var isPaused = false;
-                var isResetting = false;
-
-                // Clone the first page's rows and append them to the end of the trail.
-                // This lets the auto-scroll keep flowing upward seamlessly past the
-                // "last" card straight into a visual repeat of the first card, so we
-                // can then jump back to the real top invisibly and loop forever —
-                // works even with an odd count like 3 testimonials.
-                if (originalRows.length > VISIBLE_ROWS) {
-                    originalRows.slice(0, VISIBLE_ROWS).forEach(function (row) {
-                        var clone = row.cloneNode(true);
-                        clone.setAttribute('aria-hidden', 'true');
-                        clone.classList.add('mist-row-clone');
-                        trail.appendChild(clone);
-                    });
-                }
 
                 function measure() {
-                    if (originalRows.length === 0) return;
-                    var rowsToMeasure = originalRows.slice(0, VISIBLE_ROWS);
-                    var height = 0;
-                    rowsToMeasure.forEach(function (row) {
-                        height += row.getBoundingClientRect().height;
+                    // Absolutely positioned rows still lay out and report a
+                    // real height via getBoundingClientRect even while
+                    // invisible, so every row's true height is available
+                    // up front — no guessing based on the first card only.
+                    rowHeights = rows.map(function (row) {
+                        return row.getBoundingClientRect().height;
                     });
-                    pageHeight = height;
-
-                    if (originalRows.length <= VISIBLE_ROWS) {
-                        scrollWrap.style.maxHeight = 'none';
-                        scrollWrap.style.overflowY = 'visible';
-                        if (hint) hint.style.display = 'none';
-                    } else {
-                        scrollWrap.style.maxHeight = height + 'px';
-                        scrollWrap.style.overflowY = 'auto';
-                        if (hint) hint.style.display = 'flex';
-                    }
                 }
 
-                function scrollToTop(pageIndex, behavior) {
-                    scrollWrap.scrollTo({
-                        top: pageIndex * pageHeight,
-                        behavior: behavior || 'smooth'
+                function showPage(index, instant) {
+                    currentIndex = ((index % rows.length) + rows.length) % rows.length;
+                    rows.forEach(function (row, i) {
+                        row.classList.toggle('is-active', i === currentIndex);
                     });
+
+                    var h = rowHeights[currentIndex] || rowHeights[0] || 0;
+                    if (instant) {
+                        var prevTransition = trail.style.transition;
+                        trail.style.transition = 'none';
+                        trail.style.height = h + 'px';
+                        void trail.offsetHeight; // force reflow so the 'none' actually applies
+                        trail.style.transition = prevTransition || '';
+                    } else {
+                        trail.style.height = h + 'px';
+                    }
+
+                    updateDots();
                 }
 
                 function advance() {
-                    if (isPaused || isResetting || totalPages <= 1) return;
-
-                    var nextPage = currentPage + 1;
-
-                    if (nextPage >= totalPages) {
-                        // Scroll smoothly into the cloned page (visually identical to page 0),
-                        // then snap back to the real top without animation once it's settled.
-                        isResetting = true;
-                        scrollToTop(totalPages, 'smooth');
-                        setTimeout(function () {
-                            scrollToTop(0, 'auto');
-                            currentPage = 0;
-                            isResetting = false;
-                        }, 450);
-                    } else {
-                        currentPage = nextPage;
-                        scrollToTop(currentPage, 'smooth');
-                    }
+                    if (isPaused) return;
+                    showPage(currentIndex + 1);
                 }
 
                 function startAuto() {
                     stopAuto();
-                    if (totalPages <= 1) return;
+                    if (rows.length <= 1) return;
                     autoTimer = setInterval(advance, AUTO_ADVANCE_MS);
                 }
 
@@ -2785,29 +2761,47 @@ body.hero-frames-page #header.scrolled {
                     }
                 }
 
-                function goToPage(pageIndex, behavior) {
-                    currentPage = ((pageIndex % totalPages) + totalPages) % totalPages;
-                    scrollToTop(currentPage, behavior || 'smooth');
-                }
-
                 function manualNext() {
-                    if (isResetting) return;
-                    advance();
-                    startAuto(); // restart the timer so it doesn't double-advance right after a manual click
+                    showPage(currentIndex + 1);
+                    startAuto(); // restart timer so it doesn't double-advance right after a manual click
                 }
 
                 function manualPrev() {
-                    if (isResetting) return;
-                    goToPage(currentPage - 1);
+                    showPage(currentIndex - 1);
                     startAuto();
+                }
+
+                // Desktop dots
+                var desktopDotsWrap = document.getElementById('mistDesktopDots');
+                var desktopDots = [];
+                if (desktopDotsWrap && rows.length > 1) {
+                    rows.forEach(function (row, i) {
+                        var dot = document.createElement('button');
+                        dot.type = 'button';
+                        dot.className = 'mist-dot-btn' + (i === 0 ? ' is-active' : '');
+                        dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
+                        dot.addEventListener('click', function () {
+                            showPage(i);
+                            startAuto();
+                        });
+                        desktopDotsWrap.appendChild(dot);
+                        desktopDots.push(dot);
+                    });
+                }
+
+                function updateDots() {
+                    desktopDots.forEach(function (d, i) {
+                        d.classList.toggle('is-active', i === currentIndex);
+                    });
                 }
 
                 var manualNav = document.getElementById('mistManualNav');
                 var prevBtn = document.getElementById('mistPrevBtn');
                 var nextBtn = document.getElementById('mistNextBtn');
 
-                if (totalPages <= 1) {
+                if (rows.length <= 1) {
                     if (manualNav) manualNav.style.display = 'none';
+                    if (desktopDotsWrap) desktopDotsWrap.style.display = 'none';
                 } else {
                     if (prevBtn) prevBtn.addEventListener('click', manualPrev);
                     if (nextBtn) nextBtn.addEventListener('click', manualNext);
@@ -2825,11 +2819,12 @@ body.hero-frames-page #header.scrolled {
                     clearTimeout(resizeTimer);
                     resizeTimer = setTimeout(function () {
                         measure();
-                        scrollToTop(currentPage, 'auto');
+                        showPage(currentIndex, true);
                     }, 150);
                 });
 
                 measure();
+                showPage(0, true);
                 startAuto();
             })();
             // Mobile pagination dots
