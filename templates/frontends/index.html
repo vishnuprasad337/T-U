@@ -700,11 +700,11 @@ img {
 		}
 	});
 </script>
-          <!-- About
+<!-- About
 ============================================= -->
 <section class="section">
     <div class="container">
-        <div class="row g-5">
+        <div class="row g-5 align-items-stretch">
             <div class="col-lg-6 wow fadeInLeft">
                 <!-- Heading -->
                 <p><span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1">About The T&U</span></p>
@@ -724,9 +724,20 @@ img {
 
                 <p class="text-body-secondary">Children can spend time in the <strong>kids' zone</strong>. Families can use the recreation centre for pool table, table tennis, chess and carrom. Guests who want to exercise have access to the fitness centre. The lawn can be arranged for outdoor meals, campfire evenings and private gatherings.</p>
 
-                <p class="text-body-secondary mb-4">For travellers comparing a <strong>luxury hotel in Munnar</strong>, these practical details can matter just as much as the setting.</p>
+                <p class="text-body-secondary mb-0">For travellers comparing a <strong>luxury hotel in Munnar</strong>, these practical details can matter just as much as the setting.</p>
+            </div>
 
-                <div class="d-inline-flex align-items-center gap-4">
+            <div class="col-lg-6 wow fadeInRight d-flex flex-column">
+                <div class="position-relative about-img-wrap">
+                    <img class="rounded-5 about-img" src="{% static 'tandu-main/room.png' %}" alt="Hotel room at T&U Munnar" loading="lazy">
+
+                    <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
+                        <div class="text-light text-start bg-dark bg-opacity-50 rounded-5 m-3 p-4 wow fadeInUp">There are reasons to stay in for an evening too — kids' zone, recreation centre, fitness centre and a lawn for outdoor meals and campfire evenings.</div>
+                    </div>
+                </div>
+
+                <!-- Buttons under the image, pinned to bottom of column -->
+                <div class="d-flex flex-wrap align-items-center gap-4 mt-auto about-actions-row">
                     <!-- Button -->
                     <a class="btn btn-new btn-primary rounded-pill" href="about-us.html">
                         <span class="btn-text"><span>Know More</span></span>
@@ -738,7 +749,7 @@ img {
                         <span class="btn-icon"><i class="fa-solid fa-calendar-check"></i></span>
                     </a>
                     <!-- Call us -->
-                    <div class="d-flex align-items-center gap-3 ms-sm-2 h-100">
+                    <div class="d-flex align-items-center gap-3 ms-sm-2 h-100 call-us-block">
                         <div class="text-body-tertiary text-7 opacity-7 d-inline-flex"><i class="fa-solid fa-phone-volume"></i></div>
                         <div class="vr my-1 opacity-1"></div>
                         <div class="text-start">
@@ -749,25 +760,89 @@ img {
                     <!-- Call us End -->
                 </div>
             </div>
-            <div class="col-lg-6 wow fadeInRight">
-                <div class="position-relative about-img-wrap">
-                    <img class="rounded-5 about-img" src="{% static 'tandu-main/room.png' %}" alt="">
-
-                    <div class="position-absolute top-0 end-0">
-                        <!-- Circle Text -->
-
-                        <!-- Circle Text End -->
-                    </div>
-
-                    <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
-                        <div class="text-light text-start bg-dark bg-opacity-50 rounded-5 m-5 p-4 wow fadeInUp">There are reasons to stay in for an evening too — kids' zone, recreation centre, fitness centre and a lawn for outdoor meals and campfire evenings.</div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </section>
 <!-- About end -->
+
+<style>
+.about-img-wrap {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    margin-bottom: 6.5rem; /* desktop gap */
+}
+
+.about-img-wrap .about-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.about-img-wrap:hover .about-img {
+    transform: scale(1.04);
+}
+
+@media (max-width: 991px) {
+    .about-img-wrap {
+        height: auto;
+        min-height: 300px;
+        aspect-ratio: 16 / 10;
+        margin-bottom: 2rem; /* tablet gap */
+    }
+}
+
+@media (max-width: 575px) {
+    .about-img-wrap {
+        height: auto;
+        min-height: 260px;
+        aspect-ratio: 4 / 3;
+        margin-bottom: 1.25rem; /* mobile gap */
+    }
+
+    /* Give the whole actions row breathing room before the next section */
+    .about-actions-row {
+        margin-bottom: 2rem;
+    }
+}
+
+/* Fix "Call us for Inquiry" getting cut off / faded on mobile */
+@media (max-width: 575px) {
+    .about-actions-row {
+        width: 100%;
+        row-gap: 1rem;
+    }
+
+    .call-us-block {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        opacity: 1 !important; /* ensure not faded */
+        height: auto !important; /* remove h-100 constraint causing clipping */
+    }
+
+    .call-us-block .text-body-tertiary {
+        opacity: 1 !important;
+    }
+
+    .call-us-block .text-start {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    .call-us-block h3 {
+        white-space: nowrap;
+        color: #212529; /* make sure number is clearly visible, not faded */
+    }
+}
+</style>
 
             <!-- Book Now Modal -->
             <div class="modal fade" id="bookNowModal" tabindex="-1" aria-labelledby="bookNowModalLabel" aria-hidden="true">
@@ -1085,21 +1160,7 @@ img {
 <!-- Rooms & Suites (DYNAMIC - STYLED LIKE IMAGE 2)
 ============================================= -->
 <style>
-    .about-img-wrap {
-    height: 100%;
-    min-height: 420px;
-}
-.about-img-wrap .about-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-@media (max-width: 991px) {
-    .about-img-wrap {
-        min-height: 320px;
-    }
-}
+
 /* Smaller variant of the site-wide .btn-new pill so it fits neatly
    side-by-side inside a room card */
 .room-item .btn-new {
