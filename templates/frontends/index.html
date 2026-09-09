@@ -2120,6 +2120,11 @@ body.hero-frames-page #header.scrolled {
             /* Text side */
             .mist-text {
                 flex: 1 1 auto;
+                /* Fixed footprint for the text column so every card reads
+                   at a consistent size regardless of review length. The
+                   review itself is clamped below; this just keeps the
+                   surrounding rhythm steady. */
+                min-height: 0;
             }
 
             /* Star rating shown above the review, in the text column */
@@ -2158,8 +2163,42 @@ body.hero-frames-page #header.scrolled {
                 color: var(--mist-ink);
                 font-weight: 500;
                 margin-top: 0;
-                margin-bottom: 1.5rem;
+                margin-bottom: .6rem;
             }
+            /* Fixed-size clamp: every review card shows the same amount of
+               text by default, no matter how long the review actually is.
+               Overflowing text is cut off with an ellipsis and revealed
+               only via the Read more toggle below. */
+            .mist-review.is-clamped {
+                display: -webkit-box;
+                -webkit-line-clamp: 5;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            /* Read more / Read less toggle — only shown (via JS) on cards
+               whose review text actually overflows the clamp. */
+            .mist-readmore-btn {
+                display: none;
+                background: none;
+                border: none;
+                padding: 0;
+                margin: 0 0 1.25rem 0;
+                font-family: inherit;
+                font-size: .95rem;
+                font-weight: 600;
+                color: var(--mist-sage);
+                text-decoration: underline;
+                text-underline-offset: 3px;
+                cursor: pointer;
+            }
+            .mist-readmore-btn:hover {
+                color: var(--mist-ink);
+            }
+            .mist-readmore-btn.is-visible {
+                display: inline-block;
+            }
+
             .mist-meta {
                 display: flex;
                 align-items: center;
@@ -2332,7 +2371,9 @@ body.hero-frames-page #header.scrolled {
                 .mist-google-stars { font-size: .85rem; }
                 .mist-google-date { font-size: .75rem; }
                 .mist-quote-mark { font-size: 3rem; }
-                .mist-review { font-size: 1rem; line-height: 1.4; margin-bottom: 0.75rem; }
+                .mist-review { font-size: 1rem; line-height: 1.4; margin-bottom: 0.5rem; }
+                .mist-review.is-clamped { -webkit-line-clamp: 4; }
+                .mist-readmore-btn { font-size: .85rem; margin-bottom: .5rem; }
                 .mist-meta { font-size: .75rem; }
                 .mist-manual-nav { display: none !important; }
                 .mist-desktop-dots { display: none !important; }
@@ -2394,7 +2435,8 @@ body.hero-frames-page #header.scrolled {
                                 {% endfor %}
                             </div>
                             <span class="mist-quote-mark">&rdquo;</span>
-                            <p class="mist-review">{{ testimonial.review|safe }}</p>
+                            <p class="mist-review is-clamped">{{ testimonial.review|safe }}</p>
+                            <button type="button" class="mist-readmore-btn" data-state="more">Read more</button>
                             <div class="mist-attribution">
                                 <p class="mist-attr-name">{{ testimonial.name }}</p>
                                 <div class="mist-google-badge">
@@ -2439,13 +2481,61 @@ body.hero-frames-page #header.scrolled {
                 var trail = document.getElementById('mistTrail');
                 if (!scrollWrap || !trail) return;
 
+                var rows = Array.prototype.slice.call(trail.querySelectorAll('.mist-row'));
+
+                /* ---------------------------------------------------------
+                   Read more / Read less
+                   Runs on both desktop and mobile. For each row: if the
+                   clamped review text is actually overflowing (its real
+                   scrollHeight is taller than the clamped clientHeight),
+                   reveal the toggle button. Clicking it removes/re-applies
+                   the clamp and, on desktop, re-measures + animates the
+                   crossfade stage height so the active card resizes
+                   smoothly instead of clipping or jumping.
+                --------------------------------------------------------- */
+                function setupReadMore(onToggle) {
+                    rows.forEach(function (row) {
+                        var review = row.querySelector('.mist-review');
+                        var btn = row.querySelector('.mist-readmore-btn');
+                        if (!review || !btn) return;
+
+                        // A tiny tolerance avoids false positives from
+                        // sub-pixel rounding.
+                        var overflowing = review.scrollHeight > review.clientHeight + 2;
+                        if (overflowing) {
+                            btn.classList.add('is-visible');
+                        } else {
+                            btn.classList.remove('is-visible');
+                        }
+
+                        btn.addEventListener('click', function () {
+                            var expanded = btn.getAttribute('data-state') === 'less';
+                            if (expanded) {
+                                review.classList.add('is-clamped');
+                                btn.setAttribute('data-state', 'more');
+                                btn.textContent = 'Read more';
+                            } else {
+                                review.classList.remove('is-clamped');
+                                btn.setAttribute('data-state', 'less');
+                                btn.textContent = 'Read less';
+                            }
+                            if (typeof onToggle === 'function') onToggle(row);
+                        });
+                    });
+                }
+
                 // On mobile the trail is a native horizontal swipe carousel
                 // (see CSS) — the crossfade logic below only applies on
                 // desktop/tablet where rows are absolutely stacked.
                 var isMobile = window.matchMedia('(max-width: 767.98px)').matches;
-                if (isMobile) return;
+                if (isMobile) {
+                    // Mobile rows flow normally, so expanding/collapsing
+                    // the clamp just reflows the page naturally — no extra
+                    // height bookkeeping needed.
+                    setupReadMore();
+                    return;
+                }
 
-                var rows = Array.prototype.slice.call(trail.querySelectorAll('.mist-row'));
                 if (rows.length === 0) return;
 
                 var rowHeights = [];
@@ -2561,6 +2651,16 @@ body.hero-frames-page #header.scrolled {
                         measure();
                         showPage(currentIndex, true);
                     }, 150);
+                });
+
+                // When a Read more/Read less toggle fires inside the active
+                // row, re-measure every row's height and animate the stage
+                // to match — same smooth height transition the auto-advance
+                // already uses, so expanding a review resizes the card
+                // instead of clipping or snapping.
+                setupReadMore(function (row) {
+                    measure();
+                    showPage(currentIndex);
                 });
 
                 measure();
