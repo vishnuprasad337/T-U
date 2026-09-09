@@ -87,7 +87,7 @@
 			<!-- Intro / Hero Video end -->
 <style>
 /* ===== Prevent page-wide horizontal overflow ===== */
-html, body {
+html body {
 	max-width: 100%;
 	overflow-x: hidden;
 }
@@ -2631,21 +2631,36 @@ body.hero-frames-page #header.scrolled {
 <!-- FAQ Section with Olive Green Theme -->
 <section class="section faq-section">
     <div class="container">
-        <div class="row g-5 align-items-start">
+        <div class="row g-5 faq-row">
 
             <!-- Left column: intro, CTA, review badge - STICKY -->
-            <div class="col-lg-4 wow fadeInLeft">
+            <!-- IMPORTANT: "wow fadeInLeft" was REMOVED from this wrapper. WOW.js/animate.css
+                 apply a CSS transform to whatever element carries the animation class. A
+                 transform on this column (or any ancestor of .faq-left-sticky) creates a new
+                 "containing block", which makes position: sticky compute against that
+                 transformed box instead of the scrolling viewport — so it silently stops
+                 sticking. This was almost certainly the actual cause. -->
+            <!-- NO "wow" class anywhere on this <div> or any wrapper around
+                 .faq-left-sticky — the site-wide .wow / .wow-visible rules in
+                 base.html apply `will-change: transform` permanently and
+                 `transform: translate(0,0) scale(1)` even once "visible",
+                 and either one alone creates a new containing block that
+                 silently breaks position: sticky on any descendant. The
+                 fade-in is applied per-child below instead, which animates
+                 the *content* without ever putting a transform on an
+                 ancestor of the sticky box itself. -->
+            <div class="col-lg-4 faq-col-left">
                 <div class="faq-left-sticky">
-                    <span class="text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1 d-inline-block mb-4">Question &amp; Answer</span>
-                    <h2 class="heading-font-family text-13 fw-600 lh-sm mb-3">Frequently Asked<br>Questions</h2>
-                    <p class="text-body-secondary faq-intro">Answers to the things guests most often ask before booking a stay at MaxiMunnar T&amp;U Leisure Hotel.</p>
+                    <span class="wow fadeInLeft text-3 text-uppercase fw-600 rounded-pill border border-dark border-opacity-10 px-3 py-1 d-inline-block mb-4">Question &amp; Answer</span>
+                    <h2 class="wow fadeInLeft heading-font-family text-13 fw-600 lh-sm mb-3" data-wow-delay=".1s">Frequently Asked<br>Questions</h2>
+                    <p class="wow fadeInLeft text-body-secondary faq-intro" data-wow-delay=".2s">Answers to the things guests most often ask before booking a stay at MaxiMunnar T&amp;U Leisure Hotel.</p>
 
-                    <a class="btn btn-new btn-primary rounded-pill mt-2" href="{% url 'tandj_app:contact' %}">
+                    <a class="wow fadeInLeft btn btn-new btn-primary rounded-pill mt-2" data-wow-delay=".3s" href="{% url 'tandj_app:contact' %}">
                         <span class="btn-text"><span>Ask a Question</span></span>
                         <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
                     </a>
 
-                    <div class="faq-review-badge mt-5">
+                    <div class="wow fadeInLeft faq-review-badge mt-5" data-wow-delay=".4s">
                         <span class="faq-google-wordmark">
                             <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span> Reviews
                         </span>
@@ -2665,7 +2680,7 @@ body.hero-frames-page #header.scrolled {
             </div>
 
             <!-- Right column: accordion - SCROLLABLE -->
-            <div class="col-lg-8 wow fadeInRight" data-wow-delay=".15s">
+            <div class="col-lg-8 faq-col-right wow fadeInRight" data-wow-delay=".15s">
                 <div class="faq-accordion" id="hotelFaqAccordion">
 
                     <div class="faq-item is-open">
@@ -2788,28 +2803,64 @@ body.hero-frames-page #header.scrolled {
     --faq-olive-light: #8BA339; /* Light Olive Green */
     --faq-light-gray: #F0F0F0;
     --faq-paper: #F7F6F2;
-    overflow: visible !important;
+    position: relative;
+    isolation: isolate;
+    overflow: visible !important; /* must win over theme's .section { overflow: hidden } */
 }
 
 .faq-section .container {
-    overflow: visible !important;
+    overflow: visible;
 }
 
-.faq-section .row {
-    overflow: visible !important;
+/* Force a real two-column flex layout ourselves so the accordion always
+   sits beside the sticky column, regardless of whether Bootstrap's grid
+   CSS is present/overridden on the live page. */
+.faq-section .faq-row {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: stretch;
+    overflow: visible;
 }
 
-.faq-section .col-lg-4 {
-    overflow: visible !important;
+.faq-col-left {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+    overflow: visible;
 }
 
-/* Sticky Left Sidebar - CRITICAL FIX */
+/* Defensive: force no transform/will-change on the sticky column itself
+   and the sticky box, no matter what global site-wide rules (like the
+   .wow / .wow-visible repeatable-scroll-reveal script in base.html) try
+   to apply. will-change: transform and any non-"none" transform value —
+   even an identity transform like translate(0,0) — silently break
+   position: sticky on descendants by creating a new containing block. */
+.faq-col-left,
+.faq-col-left .faq-left-sticky {
+    transform: none !important;
+    filter: none !important;
+    perspective: none !important;
+    will-change: auto !important;
+}
+
+.faq-col-right {
+    flex: 0 0 66.666%;
+    max-width: 66.666%;
+    min-width: 0;
+}
+
+/* Sticky Left Sidebar */
 .faq-left-sticky {
-    position: sticky !important;
-    top: 20px !important;
-    height: fit-content !important;
-    z-index: 999 !important;
-    will-change: position;
+    position: sticky;
+    /* IMPORTANT: #header in base.html is `position: fixed` and sits on top
+       of the whole page (topbar row + 90px main row ≈ 125–140px tall). A
+       sticky element with `top: 20px` sticks correctly, but 20px puts it
+       right underneath that fixed header — so the top of this column gets
+       visually hidden behind the navbar as you scroll, which looks
+       identical to "not sticking" even though it technically is. Push the
+       stick point below the header's height instead. */
+    top: 150px;
+    height: fit-content;
+    z-index: 2;
 }
 
 .faq-intro {
@@ -2975,13 +3026,20 @@ body.hero-frames-page #header.scrolled {
 
 /* ===== Responsive Design ===== */
 @media (max-width: 991px) {
+    .faq-section .faq-row {
+        flex-direction: column;
+    }
+    .faq-col-left,
+    .faq-col-right {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
     .faq-left-sticky {
-        position: relative !important;
-        top: 0 !important;
-        height: auto !important;
-        z-index: auto !important;
+        position: relative;
+        top: 0;
+        height: auto;
+        z-index: auto;
         margin-bottom: 2rem;
-        will-change: auto;
     }
     .faq-intro {
         max-width: 100%;
@@ -2993,24 +3051,24 @@ body.hero-frames-page #header.scrolled {
         padding: 20px 22px;
         gap: 12px;
     }
-    
+
     .faq-q-num {
         font-size: 1rem;
     }
-    
+
     .faq-q-text {
         line-height: 1.3;
         font-size: 1.05rem;
     }
-    
+
     .faq-answer-inner {
         padding: 0 22px 22px 60px;
     }
-    
+
     .faq-answer-inner p {
         font-size: 0.9rem;
     }
-    
+
     .faq-toggle-icon {
         width: 36px;
         height: 36px;
