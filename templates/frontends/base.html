@@ -17,7 +17,7 @@
     <meta property="og:title" content="{% block og_title %}The Mist - Luxury Hotel HTML Template{% endblock %}">
     <meta property="og:description" content="{% block og_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}">
     <meta property="og:type" content="website">
-
+     {% block canonical %}<link rel="canonical" href="https://tanduleisurehotel.in{{ request.path }}">{% endblock %}
     <meta name="author" content="harnishdesign.net">
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="gPKZxSsN8RsjJRLbCfOadg" async></script>
     <!-- Stylesheet
