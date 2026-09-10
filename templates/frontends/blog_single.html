@@ -1,8 +1,8 @@
 {% extends "frontends/base.html" %}
 {% load static %}
 
-{% block title %}{{ blog.title|default:"Blog" }} - The Mist Luxury Hotel{% endblock %}
-{% block meta_description %}{{ blog.description|striptags|truncatewords:20 }}{% endblock %}
+{% block title %}{{ blog.title|default:"Blog" }} - Munnar Travel Blog | Travel Tips, Places & Guides{% endblock %}
+{% block meta_description %}{{ blog.description|striptags|truncatewords:20|default:"Read our latest travel tips and guides for Munnar, from T&U Leisure Hotel." }}{% endblock %}
 
 {% block content %}
 
@@ -269,9 +269,7 @@
                                             +91 9188954770
                                         </div>
 
-                                        <div class="fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">
-                                         mail@tanduleisurehotel.in
-                                        </div>
+                                        <div class="help-email fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">reservation@tanduleisurehotel.in</div>
 
                                         <a
                                             class="btn btn-new btn-sm btn-dark rounded-pill"
@@ -307,6 +305,16 @@
 
 </section>
 
+<style>
+    .help-email {
+	display: block;
+	font-size: clamp(0.75rem, 3.2vw, 0.95rem);
+	word-break: break-word;
+	overflow-wrap: break-word;
+	line-height: 1.4;
+	padding: 0 6px;
+}
+</style>
 <!-- =========================================================
      CUSTOM BLOG STYLES
 ========================================================= -->

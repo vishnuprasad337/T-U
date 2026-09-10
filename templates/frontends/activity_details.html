@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}{{ activity.name|default:"Activity" }} - The Mist Luxury Hotel{% endblock %}
-{% block meta_description %}The Mist is responsive bootstrap 5 luxury hotel HTML template.{% endblock %}
+{% block meta_description %}{{ activity.name }} at MaxiMunnar T&U Leisure Hotel, Munnar — {{ activity.description|striptags|truncatewords:20 }}{% endblock %}
 
 {% block content %}
 
@@ -111,7 +111,7 @@
 													<span class="text-primary text-13"><i class="fa-solid fa-circle-question"></i></span>
 													<h3 class="text-white text-6 fw-600 mb-3">Need Help?</h3>
 													<div class="text-6 fw-700 text-primary mb-1">+91 9188954770</div>
-													<div class="fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">mail@tanduleisurehotel.in</div>
+													<div class="help-email fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">reservation@tanduleisurehotel.in</div>
 													<a class="btn btn-new btn-sm btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
 														<span class="btn-text"><span>Contact Us</span></span>
 														<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
@@ -127,7 +127,16 @@
                 </div>
             </section>
             <!-- Activity Details end -->
-
+<style>
+	.help-email {
+	display: block;
+	font-size: clamp(0.75rem, 3.2vw, 0.95rem);
+	word-break: break-word;
+	overflow-wrap: break-word;
+	line-height: 1.4;
+	padding: 0 6px;
+}
+</style>
 		<!-- Book Now Modal (same component/markup pattern used on the
 			 rooms list, room detail & destination detail pages) -->
 		<div class="modal fade" id="bookNowModal" tabindex="-1" aria-labelledby="bookNowModalLabel" aria-hidden="true">

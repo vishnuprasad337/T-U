@@ -14,7 +14,7 @@
 		<section class="page-header page-header-text-light py-0 mb-0">
 			<div class="hero-wrap py-5">
 				<div class="hero-mask opacity-6 bg-black"></div>
-				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/images/slider/slide-2.jpg' %}');"></div>
+				<div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/webp/slide-2.webp' %}');"></div>
 				<div class="hero-content py-2 py-lg-4 my-2 my-md-4">
 					<div class="container text-center mt-5 pt-5 pb-2">
 						<h1 class="text-17 mb-4 wow fadeInUp">Contact Us</h1>
@@ -70,7 +70,7 @@
 								<span class="contact-info-icon"><i class="fa-solid fa-envelope"></i></span>
 								<h4>Email Direct</h4>
 							</div>
-							<p>mail@tanduleisurehotel.in</p>
+							<p>reservation@tanduleisurehotel.in</p>
 						</div>
 					</div>
 				</div>
@@ -140,6 +140,12 @@
 									<label for="contactMessage"><i class="fa-solid fa-comment-dots"></i> Message</label>
 									<textarea id="contactMessage" name="message" placeholder="Tell us how we can help…" required></textarea>
 									<span class="contact-form-error" data-field-error="message"></span>
+								</div>
+
+								<!-- reCAPTCHA v2 — visible "I'm not a robot" checkbox widget. -->
+								<div class="contact-form-robot-check">
+									<div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+									<span class="contact-form-error" data-field-error="recaptcha"></span>
 								</div>
 
 								<button type="submit" class="contact-form-submit">
@@ -240,6 +246,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			form.querySelector('[data-field-error="message"]').textContent = 'This field is required.';
 		}
 
+		var recaptchaToken = (typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : '';
+		if (!recaptchaToken) {
+			hasError = true;
+			form.querySelector('[data-field-error="recaptcha"]').textContent = "Please confirm you're not a robot.";
+		}
+
 		if (hasError) {
 			msgBox.textContent = 'Please fill in the required fields.';
 			msgBox.classList.add('error');
@@ -250,7 +262,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		var originalLabel = btnLabel.textContent;
 		btnLabel.textContent = 'Sending…';
 
+		function resetSubmitState() {
+			submitBtn.disabled = false;
+			btnLabel.textContent = originalLabel;
+		}
+
 		var formData = new FormData(form);
+		formData.append('g-recaptcha-response', recaptchaToken);
 
 		fetch("{% url 'tandj_app:contact_ajax_create' %}", {
 			method: 'POST',
@@ -259,8 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		})
 		.then(function (res) { return res.json(); })
 		.then(function (data) {
-			submitBtn.disabled = false;
-			btnLabel.textContent = originalLabel;
+			resetSubmitState();
 
 			if (!data.success) {
 				if (data.errors) {
@@ -273,17 +290,19 @@ document.addEventListener('DOMContentLoaded', function () {
 						}
 					});
 				}
+				if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
 				msgBox.textContent = 'Please check your details and try again.';
 				msgBox.classList.add('error');
 				return;
 			}
 
 			form.reset();
+			if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
 			showSuccessModal();
 		})
 		.catch(function () {
-			submitBtn.disabled = false;
-			btnLabel.textContent = originalLabel;
+			resetSubmitState();
+			if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
 			msgBox.textContent = 'Network error — please try again.';
 			msgBox.classList.add('error');
 		});
@@ -569,6 +588,12 @@ document.addEventListener('DOMContentLoaded', function () {
 .contact-form-msg.success { color: #198754; }
 .contact-form-msg.error { color: #d64545; }
 
+.contact-form-robot-check {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
 @media (max-width: 991.98px) {
 	.contact-map-col {
 		min-height: 0;
@@ -754,4 +779,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	wowEls.forEach(function (el) { observer.observe(el); });
 });
 </script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

@@ -719,6 +719,23 @@ def contact_view(request):
             messages.error(request, "Please correct the errors and try again.")
             return enquiry_list(request, add_form=form)
     return redirect("tandj_app:index")  
+
+import requests
+from django.conf import settings
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.http import require_POST
+from .forms import ContactForm   # <-- make sure this import matches where your ContactForm actually lives
+
+
+# Renders the contact page and passes the reCAPTCHA site key into the template
+def contact_page(request):
+    return render(request, "frontends/contact.html", {
+        "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
+    })
+
+
+
 # ---------------------------------------------------------------------
 # STAFF VIEW — everything (list, reply, edit, delete) happens on ONE page
 # via Bootstrap modals. Only enquiry_list renders a template; the rest
@@ -1031,9 +1048,6 @@ def reservation_ajax_create(request):
 
     return JsonResponse({"success": True, "reservation_id": reservation.pk})
 
-def contact_page(request):
-    """Public 'Contact Us' page."""
-    return render(request, "frontends/contact.html")
 
 
 from django.conf import settings
@@ -1041,6 +1055,30 @@ from django.core.mail import send_mail
 
 @require_POST
 def contact_ajax_create(request):
+    recaptcha_token = request.POST.get('g-recaptcha-response', '')
+
+    if not recaptcha_token:
+        return JsonResponse({
+            'success': False,
+            'errors': {'recaptcha': ['Please try submitting the form again.']}
+        })
+
+    verify = requests.post(
+        'https://www.google.com/recaptcha/api/siteverify',
+        data={
+            'secret': settings.RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_token,
+            'remoteip': request.META.get('REMOTE_ADDR'),
+        },
+        timeout=5,
+    ).json()
+
+    if not verify.get('success'):
+        return JsonResponse({
+            'success': False,
+            'errors': {'recaptcha': ['We could not verify your submission. Please try again.']}
+        })
+
     first_name = (request.POST.get("first_name") or "").strip()
     last_name = (request.POST.get("last_name") or "").strip()
     email = (request.POST.get("email") or "").strip()
@@ -1093,7 +1131,6 @@ def contact_ajax_create(request):
         pass
 
     return JsonResponse({"success": True, "contact_id": contact.pk})
-
 def restaurant(request):
     """Public 'Restaurant' page."""
     

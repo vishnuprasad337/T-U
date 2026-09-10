@@ -35,7 +35,7 @@
     </div>
 
     <div class="hero-frames-logo-wrap">
-        <img src="{% static 'tandu-main/tandu.png' %}" alt="MaxiMunnar T&U Leisure Hotel" id="heroFramesLogo" class="hero-frames-logo">
+        <img src="{% static 'tandu-main/webp/tandu.webp' %}" alt="MaxiMunnar T&U Leisure Hotel" id="heroFramesLogo" class="hero-frames-logo">
     </div>
     <div class="hero-frames-content">
     <div class="hero-frames-caption hero-frames-caption--left" data-caption-index="0">
@@ -727,7 +727,7 @@ img {
 
             <div class="col-lg-6 wow fadeInRight d-flex flex-column">
                 <div class="position-relative about-img-wrap">
-                    <img class="rounded-5 about-img" src="{% static 'tandu-main/room.png' %}" alt="Hotel room at T&U Munnar" loading="lazy">
+                    <img class="rounded-5 about-img" src="{% static 'tandu-main/webp/room.webp' %}" alt="Hotel room at T&U Munnar" loading="lazy">
 
                     
                 </div>
@@ -735,7 +735,7 @@ img {
                 <!-- Buttons under the image, pinned to bottom of column -->
                 <div class="d-flex flex-wrap align-items-center gap-4 mt-auto about-actions-row">
                     <!-- Button -->
-                    <a class="btn btn-new btn-primary rounded-pill" href="about-us.html">
+                    <a class="btn btn-new btn-primary rounded-pill" href="{% url 'tandj_app:about' %}">
                         <span class="btn-text"><span>Know More</span></span>
                         <span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
                     </a>
@@ -1431,7 +1431,7 @@ body.hero-frames-page #header.scrolled {
     <div class="hero-mask opacity-3 bg-black"></div>
     <!-- Autoplaying background video (muted, loops) -->
     <video class="video-hero-bg" autoplay muted loop playsinline preload="auto"
-           poster="{% static 'tandu-main/villa.png' %}">
+           poster="{% static 'tandu-main/webp/villa.webp' %}">
         <source src="{% static 'tandu-main/v1.mp4' %}" type="video/mp4">
     </video>
     <div class="hero-content">
@@ -1971,13 +1971,13 @@ body.hero-frames-page #header.scrolled {
             <!-- Our Experience	============================================= -->
             <section class="hero-wrap section">
     <div class="hero-mask opacity-7 bg-black"></div>
-    <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/room.png' %}');"></div>
+    <div class="hero-bg jarallax" style="background-image:url('{% static 'tandu-main/webp/room.webp' %}');"></div>
     <div class="hero-content">
         <div class="container-xxl px-4">
             <div class="row g-5">
             <div class="col-lg-6 wow fadeInLeft">
     <div class="position-relative experience-img-wrap">
-        <img class="rounded-5 experience-img" src="{% static 'tandu-main/villa.png' %}" alt="">
+        <img class="rounded-5 experience-img" src="{% static 'tandu-main/webp/villa.webp' %}" alt="">
     </div>
 </div>
                 <div class="col-lg-6 align-content-center wow fadeInRight">
