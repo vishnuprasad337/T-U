@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -133,4 +133,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'msvishnu673@gmail.com'
 EMAIL_HOST_PASSWORD = 'sjcf tyva aldr ashi' 
 DEFAULT_FROM_EMAIL = 'T&U<msvishnu673@gmail.com>'
+
 
