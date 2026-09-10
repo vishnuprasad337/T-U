@@ -1,0 +1,23 @@
+User-agent: *
+Disallow: /login/
+Disallow: /dashboard/
+Disallow: /admin-logout/
+Disallow: /blogs/
+Disallow: /testimonials/
+Disallow: /add-review
+Disallow: /categories/
+Disallow: /list-images/
+Disallow: /add_image/
+Disallow: /delete-image/
+Disallow: /rooms/
+Disallow: /activities/
+Disallow: /nearby-destinations/
+Disallow: /packages/
+Disallow: /reservations/
+Disallow: /enquiries/
+Disallow: /contact/
+Disallow: /media/private/
+Allow: /static/
+Allow: /
+
+Sitemap: https://tanduleisurehotel.in/sitemap.xml
