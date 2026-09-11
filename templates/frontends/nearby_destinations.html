@@ -6,7 +6,8 @@
 
 {% block og_title %}Nearby Places to Visit from T&U Leisure Hotel{% endblock %}
 {% block og_description %}Explore Munnar attractions near T&U Leisure Hotel, from scenic lakes and waterfalls to tea plantations and popular viewpoints.{% endblock %}
-
+{% block og_image %}{% if destinations.0.image %}{{ destinations.0.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/images/destinations/default.jpg' %}{% endif %}{% endblock %}
+{% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:nearby_destinations' %}{% endblock %}
 {% block content %}
 
 		<!-- Page Header

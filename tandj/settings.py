@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'tandj_app.context_processors.booking_modal_rooms',
             ],
         },
     },
@@ -133,4 +134,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'reservation@tanduleisurehotel.in'
 EMAIL_HOST_PASSWORD = 'KkJK sp44 PJ2u' 
 DEFAULT_FROM_EMAIL = 'T&U<reservation@tanduleisurehotel.in>'
+RECAPTCHA_SITE_KEY = '6Lc9rrMtAAAAACnAgzVEwzYgJHNHhzPN4xB3UWQf'
+RECAPTCHA_SECRET_KEY = '6Lc9rrMtAAAAAMp0dZdJcwcwh0RcKbglmyvEU8ra'
 

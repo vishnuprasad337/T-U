@@ -3,7 +3,8 @@
 
 {% block title %}{{ activity.name|default:"Activity" }} - The Mist Luxury Hotel{% endblock %}
 {% block meta_description %}{{ activity.name }} at MaxiMunnar T&U Leisure Hotel, Munnar — {{ activity.description|striptags|truncatewords:20 }}{% endblock %}
-
+{% block og_image %}{% if activity.image %}{{ activity.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/images/rooms/room-3.jpg' %}{% endif %}{% endblock %}
+{% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:activity_detail_public' activity.slug %}{% endblock %}
 {% block content %}
 
 		<!-- Page Header

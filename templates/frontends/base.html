@@ -14,9 +14,31 @@
     <meta name="description" content="{% block meta_description %}Stay at MaxiMunnar T&U Leisure Hotel, a luxury 4-star hotel in Munnar offering elegant rooms, premium amenities, fine dining and memorable Munnar experiences.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}T&U Leisure Hotel, Munnar hotel, luxury stay Munnar, Munnar resort, hotel in Munnar Kerala, Munnar tourism{% endblock %}">
 
+    
     <meta property="og:title" content="{% block og_title %}Luxury 4 Star Hotel in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}">
     <meta property="og:description" content="{% block og_description %}A four-star stay in Munnar with 30 rooms and suites, tea garden views, multi-cuisine dining, recreation, a kids' zone and a convenient Mattupetty Road location.{% endblock %}">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}https://tanduleisurehotel.in{{ request.path }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://tanduleisurehotel.in{% static 'tandu-main/webp/slide-2.webp' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="T&U Leisure Hotel">
+    <meta property="og:locale" content="en_IN">
+
+    <!-- ===== Twitter Card tags =====
+         SEO crawlers commonly flag these alongside missing OG tags since
+         Twitter/X doesn't fall back to Open Graph the way some other
+         platforms do. Each block below defaults to reusing the matching
+         og_* block content via {{ block.super }}-style inheritance isn't
+         available across differently-named blocks in Django templates,
+         so each page that overrides og_title/og_description/og_image
+         should also override the matching twitter_* block if it wants a
+         different value — otherwise these safe static defaults apply. -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Luxury 4 Star Hotel in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}A four-star stay in Munnar with 30 rooms and suites, tea garden views, multi-cuisine dining, recreation, a kids' zone and a convenient Mattupetty Road location.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://tanduleisurehotel.in{% static 'tandu-main/webp/slide-2.webp' %}{% endblock %}">
+
      {% block canonical %}<link rel="canonical" href="https://tanduleisurehotel.in{{ request.path }}">{% endblock %}
     <meta name="author" content="harnishdesign.net">
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="gPKZxSsN8RsjJRLbCfOadg" async></script>

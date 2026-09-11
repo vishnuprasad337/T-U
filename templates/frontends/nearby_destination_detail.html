@@ -3,6 +3,11 @@
 
 {% block title %}{{ destination.name }} - Places to Visit Near T&U Leisure Hotel Munnar{% endblock %}
 {% block meta_description %}{{ destination.name }} near T&U Leisure Hotel, Munnar — {{ destination.description|striptags|truncatewords:20 }}{% endblock %}
+{% block og_title %}{{ destination.name }} - Places to Visit Near T&U Leisure Hotel Munnar{% endblock %}
+{% block og_description %}{{ destination.name }} near T&U Leisure Hotel, Munnar — {{ destination.description|striptags|truncatewords:20 }}{% endblock %}
+
+{% block og_image %}{% if destination.image %}{{ destination.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/images/destinations/default.jpg' %}{% endif %}{% endblock %}
+{% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}{% endblock %}
 {% block content %}
 
 		<!-- Page Header

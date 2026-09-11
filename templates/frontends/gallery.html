@@ -6,7 +6,8 @@
 
 {% block og_title %}T&U Leisure Hotel Munnar | Photo Gallery{% endblock %}
 {% block og_description %}Take a visual tour of T&U Leisure Hotel in Munnar through photos of rooms, suites, hotel spaces and scenic surroundings.{% endblock %}
-
+{% block og_image %}{% if category_data.0.page_obj.0.image %}{{ category_data.0.page_obj.0.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/webp/slide-2.webp' %}{% endif %}{% endblock %}
+{% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:gallery_public' %}{% endblock %}
 {% block content %}
 
 		<!-- Page Header

@@ -4,6 +4,8 @@
 {% block title %}{{ blog.title|default:"Blog" }} - Munnar Travel Blog | Travel Tips, Places & Guides{% endblock %}
 {% block meta_description %}{{ blog.description|striptags|truncatewords:20|default:"Read our latest travel tips and guides for Munnar, from T&U Leisure Hotel." }}{% endblock %}
 
+{% block og_image %}{% if blog.image %}{{ blog.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/images/slider/slide-2.jpg' %}{% endif %}{% endblock %}
+{% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:blog_detail_public' blog.slug %}{% endblock %}
 {% block content %}
 
 <!-- =========================================================

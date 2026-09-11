@@ -6,7 +6,8 @@
 
 {% block og_title %}Activities & Things to Do at T&U Leisure Hotel Munnar{% endblock %}
 {% block og_description %}Make your Munnar stay more enjoyable with indoor games, kids' activities, campfire evenings, outdoor dining, barbecue, fitness and more at T&U Leisure Hotel.{% endblock %}
-
+{% block og_image %}{% if activities.0.image %}{{ activities.0.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/webp/slide-2.webp' %}{% endif %}{% endblock %}
+{% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:activities' %}{% endblock %}
 {% block content %}
 		<!-- Page Header
 		============================================= -->

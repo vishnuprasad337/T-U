@@ -6,7 +6,8 @@
 
 {% block og_title %}Munnar Travel Blog | T&U Leisure Hotel{% endblock %}
 {% block og_description %}Explore Munnar travel guides, local attractions, things to do, places to visit and practical tips from T&U Leisure Hotel.{% endblock %}
-
+{% block og_image %}{% if blogs.0.image %}{{ blogs.0.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/webp/slide-2.webp' %}{% endif %}{% endblock %}
+{% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:blogs' %}{% endblock %}
 {% block content %}
 
 		<!-- Page Header
