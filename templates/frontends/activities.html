@@ -329,7 +329,7 @@
                         <p class="booking-modal-sub">Fill in your details and we'll confirm your booking over WhatsApp.</p>
                     </div>
 
-                    <form class="booking-modal-form" id="bookNowForm" novalidate>
+                    <form class="booking-modal-form" id="activityBookingForm" novalidate>
                         {% csrf_token %}
 
                         <div class="booking-modal-section-label">Guest Details</div>
@@ -397,7 +397,7 @@
             document.addEventListener('DOMContentLoaded', function () {
                 var overlay = document.getElementById('bookingModalOverlay');
                 var closeBtn = document.getElementById('bookingModalClose');
-                var form = document.getElementById('bookNowForm');
+                var form = document.getElementById('activityBookingForm');
                 var msgBox = document.getElementById('bookingModalMsg');
                 var submitBtn = form ? form.querySelector('.booking-modal-submit') : null;
                 var btnLabel = submitBtn ? submitBtn.querySelector('.btn-label') : null;

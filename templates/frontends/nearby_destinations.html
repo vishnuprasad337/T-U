@@ -6,7 +6,7 @@
 
 {% block og_title %}Nearby Places to Visit from T&U Leisure Hotel{% endblock %}
 {% block og_description %}Explore Munnar attractions near T&U Leisure Hotel, from scenic lakes and waterfalls to tea plantations and popular viewpoints.{% endblock %}
-{% block og_image %}{% if destinations.0.image %}{{ destinations.0.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/images/destinations/default.jpg' %}{% endif %}{% endblock %}
+{% block og_image %}{% if destinations.0.image %}{{ destinations.0.image.url }}{% else %}https://tanduleisurehotel.in{% static 'tandu-main/webp/slide-2.webp' %}{% endif %}{% endblock %}
 {% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:nearby_destinations' %}{% endblock %}
 {% block content %}
 
@@ -56,7 +56,7 @@
 								{% if destination.image %}
 									<img src="{{ destination.image.url }}" alt="{{ destination.name }}">
 								{% else %}
-									<img src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}">
+									<img src="{% static 'tandu-main/webp/slide-2.webp' %}" alt="{{ destination.name }}">
 								{% endif %}
 							</a>
 
@@ -122,12 +122,12 @@
 
 				<!-- Header -->
 				<div class="booking-modal-header">
-					<span class="booking-modal-eyebrow">The Mist</span>
+					<span class="booking-modal-eyebrow">T&U Leisure Hotel</span>
 					<h3 id="bookingModalTitle" class="booking-modal-title">Book Your <span class="text-primary">Visit</span></h3>
 					<p class="booking-modal-sub">Fill in your details and we'll confirm over WhatsApp.</p>
 				</div>
 
-				<form class="booking-modal-form" id="bookNowForm" novalidate>
+				<form class="booking-modal-form" id="destinationBookingForm" novalidate>
 					{% csrf_token %}
 
 					<div class="booking-modal-section-label">Guest Details</div>
@@ -195,7 +195,7 @@
 		document.addEventListener('DOMContentLoaded', function () {
 			var overlay = document.getElementById('bookingModalOverlay');
 			var closeBtn = document.getElementById('bookingModalClose');
-			var form = document.getElementById('bookNowForm');
+			var form = document.getElementById('destinationBookingForm');
 			var msgBox = document.getElementById('bookingModalMsg');
 			var submitBtn = form ? form.querySelector('.booking-modal-submit') : null;
 			var btnLabel = submitBtn ? submitBtn.querySelector('.btn-label') : null;
@@ -204,7 +204,7 @@
 			if (!overlay || !form) return;
 
 			var lockedScrollY = 0;
-			var WHATSAPP_NUMBER = '919188954769'; // country code 91 + 9633870962
+			var WHATSAPP_NUMBER = '919188954770';
 
 			function openModal(destinationName) {
 				lockedScrollY = window.scrollY || window.pageYOffset || 0;
@@ -341,7 +341,7 @@
 
 					// ...then, once it's saved, hand off to WhatsApp same as before
 					var lines = [
-						'New Destination Inquiry — The Mist',
+						'New Destination Inquiry — T&U Leisure Hotel',
 						'',
 						'Name: ' + name,
 						'Email: ' + email,
@@ -665,41 +665,6 @@
     .booking-modal-header {
         padding-right: 20px;
     }
-}
-@media (max-width: 576px) {
-	#bookNowModal .modal-dialog {
-		max-width: 320px;
-		margin: 1.5rem auto;
-	}
-	#bookNowModal .modal-content {
-		border-radius: 20px !important;
-	}
-	#bookNowModal .modal-header {
-		padding: 1.25rem 1.25rem 0 !important;
-	}
-	#bookNowModal .modal-body {
-		padding: 1.25rem !important;
-	}
-	#bookNowModal .modal-title {
-		font-size: 1.15rem !important;
-	}
-	/* Shrink the "sending" state specifically */
-	#bookNowModal .modal-body .spinner-border {
-		width: 2rem !important;
-		height: 2rem !important;
-		margin-bottom: 0.75rem !important;
-	}
-	#bookNowModal .modal-body h5 {
-		font-size: 1rem !important;
-		margin-bottom: 0.5rem !important;
-	}
-	#bookNowModal .modal-body p {
-		font-size: 0.85rem !important;
-	}
-	#bookNowModal .modal-body .py-4 {
-		padding-top: 0.5rem !important;
-		padding-bottom: 0.5rem !important;
-	}
 }
 </style>
 
