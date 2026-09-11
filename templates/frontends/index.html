@@ -1119,7 +1119,7 @@ body.hero-frames-page #header.scrolled {
                                     {% if room.main_image %}
                                         <img class="img-fluid h-100 w-100" src="{{ room.main_image.url }}" alt="{{ room.room_category }}" style="object-fit: cover; border-radius: 1.5rem;">
                                     {% else %}
-                                        <img class="img-fluid h-100 w-100" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="" style="object-fit: cover; border-radius: 1.5rem;">
+                                        <img class="img-fluid h-100 w-100" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ room.room_category|default:'Room at T&U Leisure Hotel' }}"style="object-fit: cover; border-radius: 1.5rem;">
                                     {% endif %}
                                 </a>
                                 <div class="position-absolute top-0 start-0 pt-3 ps-3"></div>
@@ -1619,7 +1619,7 @@ body.hero-frames-page #header.scrolled {
                     {% if activity.image %}
                         <img src="{{ activity.image.url }}" alt="{{ activity.name }}">
                     {% else %}
-                        <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="">
+                        <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="{{ activity.name|default:'Activity at T&U Leisure Hotel' }}">
                     {% endif %}
                 </a>
             </div>
@@ -1978,7 +1978,7 @@ body.hero-frames-page #header.scrolled {
             <div class="row g-5">
             <div class="col-lg-6 wow fadeInLeft">
     <div class="position-relative experience-img-wrap">
-        <img class="rounded-5 experience-img" src="{% static 'tandu-main/webp/villa.webp' %}" alt="">
+        <img class="rounded-5 experience-img" src="{% static 'tandu-main/webp/villa.webp' %}" alt="Villa accommodation surrounded by Munnar tea gardens">
     </div>
 </div>
                 <div class="col-lg-6 align-content-center wow fadeInRight">

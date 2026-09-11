@@ -219,7 +219,7 @@
                                         {% if activity.image %}
                                             <img src="{{ activity.image.url }}" alt="{{ activity.title }}">
                                         {% else %}
-                                            <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="">
+                                            <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="{{ activity.title|default:activity.name|default:'Activity at T & U Leisure Hotel' }}">
                                         {% endif %}
                                     </a>
                                 </div>
@@ -228,9 +228,9 @@
                                 <div class="col-lg-6 activity-img-col wow fadeInLeft">
                                     <a href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
                                         {% if activity.image %}
-                                            <img src="{{ activity.image.url }}" alt="{{ activity.title }}">
+                                            <img src="{{ activity.image.url }}" alt="{{ activity.title|default:activity.name|default:'Activity at T & U Leisure Hotel' }}">
                                         {% else %}
-                                            <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="">
+                                            <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="{{ activity.title|default:activity.name|default:'Activity at T & U Leisure Hotel' }}">
                                         {% endif %}
                                     </a>
                                 </div>
@@ -272,7 +272,7 @@
             <div class="row g-5">
                 <div class="col-lg-6 wow fadeInLeft">
                     <div class="position-relative experience-img-wrap">
-                        <img class="rounded-5 experience-img" src="{% static 'tandu-main/webp/villa.webp' %}" alt="">
+                        <img class="rounded-5 experience-img" src="{% static 'tandu-main/webp/villa.webp' %}" alt="Private villa at T & U Leisure Hotel">
                     </div>
                 </div>
                 <div class="col-lg-6 align-content-center wow fadeInRight">
