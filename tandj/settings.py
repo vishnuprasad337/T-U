@@ -131,9 +131,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.zoho.in'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'reservation@tanduleisurehotel.in'
-EMAIL_HOST_PASSWORD = 'KkJK sp44 PJ2u' 
-DEFAULT_FROM_EMAIL = 'T&U<reservation@tanduleisurehotel.in>'
-RECAPTCHA_SITE_KEY = '6Lc9rrMtAAAAACnAgzVEwzYgJHNHhzPN4xB3UWQf'
-RECAPTCHA_SECRET_KEY = '6Lc9rrMtAAAAAMp0dZdJcwcwh0RcKbglmyvEU8ra'
+EMAIL_HOST_USER = 'msvishnu673@gmail.com'
+EMAIL_HOST_PASSWORD = 'sjcf tyva aldr ashi' 
+DEFAULT_FROM_EMAIL = 'Ambady Estate<msvishnu673@gmail.com>'
 
