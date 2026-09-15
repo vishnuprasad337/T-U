@@ -71,27 +71,10 @@ urlpatterns = [
     path('', include('tandj_app.urls')),
 ]
 
-# Media files
-urlpatterns += [
-    re_path(
-        r"^media/(?P<path>.*)$",
-        serve,
-        {
-            "document_root": settings.MEDIA_ROOT,
-        },
-    ),
-]
 
-# Static files
-urlpatterns += [
-    re_path(
-        r"^static/(?P<path>.*)$",
-        serve,
-        {
-            "document_root": settings.STATIC_ROOT,
-        },
-    ),
-]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Custom 404 handler
 handler404 = "tandj_app.views.page_404"
