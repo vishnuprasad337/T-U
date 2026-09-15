@@ -26,7 +26,19 @@ SECRET_KEY = 'django-insecure-a91^0g_=24rzvpl01k%=%xqk(o5x14(w#3sxbwk__w0m7dvj5-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'tanduleisurehotel.in',
+    'www.tanduleisurehotel.in',
+    't-u-mw2v.onrender.com',
+    'localhost',
+    '127.0.0.1',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://tanduleisurehotel.in',
+    'https://www.tanduleisurehotel.in',
+    'https://t-u-mw2v.onrender.com',
+]
 
 
 # Application definition
