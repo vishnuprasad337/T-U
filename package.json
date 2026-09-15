@@ -1,0 +1,24 @@
+{
+  "name": "tandu",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "purge-css": "node purge-css.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishnuprasad337/T-U.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vishnuprasad337/T-U/issues"
+  },
+  "homepage": "https://github.com/vishnuprasad337/T-U#readme",
+  "description": "",
+  "devDependencies": {
+    "purgecss": "^8.0.0"
+  }
+}

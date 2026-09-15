@@ -45,18 +45,17 @@
    
     <!-- Stylesheet
 	============================== -->
-    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/animate.min.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/swiper-bundle.min.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/glightbox.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/daterangepicker.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/stylesheet.css' %}">
+   <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/bootstrap.purged.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/stylesheet.purged.css' %}">
 	<!-- Here goes your Colors Css -->
 
     <!-- Navbar font (reference-matched: clean geometric sans, medium weight) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"></noscript>
 
     <!-- Custom Header/Logo Scroll Behavior
 	============================== -->
@@ -1231,19 +1230,11 @@
 
     <!-- JavaScript -->
     <script src="{% static 'tandu-main/js/jquery.min.js' %}"></script>
-    <script src="{% static 'tandu-main/js/bootstrap.bundle.min.js' %}"></script>
-	<script src="{% static 'tandu-main/js/wow.min.js' %}"></script>
-    <script src="{% static 'tandu-main/js/lenis.min.js' %}"></script>
-	<script src="{% static 'tandu-main/js/swiper-bundle.min.js' %}"></script>
-	<script src="{% static 'tandu-main/js/glightbox.min.js' %}"></script>
-    <script src="{% static 'tandu-main/js/jarallax.min.js' %}"></script>
-	<!-- Datepicker -->
-	<script src="{% static 'tandu-main/js/moment.min.js' %}"></script>
-    <script src="{% static 'tandu-main/js/daterangepicker.min.js' %}"></script>
-	<script src="{% static 'tandu-main/js/daterangepicker-custom.js' %}"></script>
-	
-    <!-- Custom Script -->
-    <script src="{% static 'tandu-main/js/main.js' %}"></script>
+<script src="{% static 'tandu-main/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'tandu-main/js/lenis.min.js' %}"></script>
+
+<!-- Custom Script -->
+<script src="{% static 'tandu-main/js/main.js' %}"></script>
 	
        <!-- Header scroll behavior: centered logo on hero -> normal navbar on scroll -->
     <script>
