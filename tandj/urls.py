@@ -5,11 +5,12 @@ The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/6.0/topics/http/urls/
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.http import HttpResponse
+from django.views.static import serve
 
 from tandj_app.sitemaps import (
     StaticViewSitemap,
@@ -65,7 +66,7 @@ urlpatterns = [
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
     ),
-    
+
     # App URLs
     path('', include('tandj_app.urls')),
 ]
@@ -80,8 +81,7 @@ urlpatterns += [
         },
     ),
 ]
-from django.views.static import serve
-from django.urls import path, include, re_path
+
 # Static files
 urlpatterns += [
     re_path(
