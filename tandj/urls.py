@@ -71,16 +71,27 @@ urlpatterns = [
 ]
 
 # Media files
-urlpatterns += static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
-
+urlpatterns += [
+    re_path(
+        r"^media/(?P<path>.*)$",
+        serve,
+        {
+            "document_root": settings.MEDIA_ROOT,
+        },
+    ),
+]
+from django.views.static import serve
+from django.urls import path, include, re_path
 # Static files
-urlpatterns += static(
-    settings.STATIC_URL,
-    document_root=settings.STATIC_ROOT
-)
+urlpatterns += [
+    re_path(
+        r"^static/(?P<path>.*)$",
+        serve,
+        {
+            "document_root": settings.STATIC_ROOT,
+        },
+    ),
+]
 
 # Custom 404 handler
 handler404 = "tandj_app.views.page_404"
