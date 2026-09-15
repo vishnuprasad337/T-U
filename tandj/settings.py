@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'cloudinary_storage',
     'django.contrib.staticfiles',
-    'cloudinary'
     'tandj_app',
 ]
 
@@ -143,7 +142,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # Media files (uploaded images)
 
