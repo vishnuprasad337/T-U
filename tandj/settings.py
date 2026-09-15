@@ -78,7 +78,10 @@ WSGI_APPLICATION = 'tandj.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        default=os.environ.get(
+            'DATABASE_URL',
+            'postgresql://postgres.bfjfxupkcufrsoegciul:M1l683FrLohaEAjy@aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres'
+        ),
         conn_max_age=600,
         ssl_require=True,
     )
