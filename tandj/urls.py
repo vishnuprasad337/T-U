@@ -70,12 +70,17 @@ urlpatterns = [
     path('', include('tandj_app.urls')),
 ]
 
-# Media files (user uploads)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Media files
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)
 
-# Static files (only in DEBUG mode for development)
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# Static files
+urlpatterns += static(
+    settings.STATIC_URL,
+    document_root=settings.STATIC_ROOT
+)
 
 # Custom 404 handler
 handler404 = "tandj_app.views.page_404"
