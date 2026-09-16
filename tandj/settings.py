@@ -140,7 +140,6 @@ USE_TZ = True
 # =========================
 
 STATIC_URL = "/static/"
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [
@@ -149,41 +148,43 @@ STATICFILES_DIRS = [
 
 
 # =========================
-# SUPABASE STORAGE - MEDIA
+# SUPABASE S3 MEDIA STORAGE
 # =========================
-
-AWS_ACCESS_KEY_ID = os.environ.get("SUPABASE_S3_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.environ.get("SUPABASE_S3_SECRET_ACCESS_KEY")
-
-AWS_STORAGE_BUCKET_NAME = os.environ.get(
-    "SUPABASE_STORAGE_BUCKET",
-    "media"
-)
-
-AWS_S3_ENDPOINT_URL = os.environ.get(
-    "SUPABASE_S3_ENDPOINT",
-    "https://iqmgruelpkcnkxalzwg.storage.supabase.co/storage/v1/s3"
-)
-
-AWS_S3_REGION_NAME = os.environ.get(
-    "SUPABASE_S3_REGION",
-    "ap-southeast-1"
-)
-
-AWS_S3_SIGNATURE_VERSION = "s3v4"
-AWS_S3_ADDRESSING_STYLE = "path"
-
-AWS_S3_FILE_OVERWRITE = False
-AWS_QUERYSTRING_AUTH = False
-
-AWS_S3_OBJECT_PARAMETERS = {
-    "CacheControl": "max-age=86400",
-}
 
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "access_key": os.environ.get("SUPABASE_S3_ACCESS_KEY_ID"),
+            "secret_key": os.environ.get("SUPABASE_S3_SECRET_ACCESS_KEY"),
+
+            "bucket_name": os.environ.get(
+                "SUPABASE_STORAGE_BUCKET",
+                "media"
+            ),
+
+            "endpoint_url": os.environ.get(
+                "SUPABASE_S3_ENDPOINT",
+                "https://iqmgruelpkcnkxalzwg.storage.supabase.co/storage/v1/s3"
+            ),
+
+            "region_name": os.environ.get(
+                "SUPABASE_S3_REGION",
+                "ap-southeast-1"
+            ),
+
+            "signature_version": "s3v4",
+            "addressing_style": "path",
+
+            "file_overwrite": False,
+            "querystring_auth": False,
+
+            "object_parameters": {
+                "CacheControl": "max-age=86400",
+            },
+        },
     },
+
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
