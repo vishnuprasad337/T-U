@@ -176,7 +176,9 @@ STORAGES = {
             "signature_version": "s3v4",
             "addressing_style": "path",
 
-            "file_overwrite": False,
+            # IMPORTANT: test without HeadObject existence check
+            "file_overwrite": True,
+
             "querystring_auth": False,
 
             "object_parameters": {
