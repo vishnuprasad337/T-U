@@ -167,7 +167,7 @@ STORAGES = {
 
             "endpoint_url": os.environ.get(
                 "SUPABASE_S3_ENDPOINT",
-                "https://iqmgruelpkcnkxalzwg.storage.supabase.co/storage/v1/s3"
+                "https://iqmgreuelpkcnkxalzwg.storage.supabase.co/storage/v1/s3"
             ),
 
             "region_name": os.environ.get(
