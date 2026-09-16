@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     't-u-mw2v.onrender.com',
     'localhost',
     '127.0.0.1',
+    '*'
 ]
 
 
