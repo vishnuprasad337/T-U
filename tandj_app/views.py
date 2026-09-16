@@ -355,7 +355,7 @@ def room_add(request):
         "admin_pages/room_form.html",
         {"form": form, "image_form": image_form, "action": "Add"},
     )
-
+from botocore.exceptions import ClientError
 from django.db.models import Max
 @login_required
 def room_edit(request, slug):
@@ -373,7 +373,11 @@ def room_edit(request, slug):
                 # first newly-picked image replaces the cover; rest go to gallery
                 room.main_image = files[0]
 
-            room.save()
+            from botocore.exceptions import ClientError
+            try:
+                room.save()
+            except ClientError as e:
+                raise Exception(f"S3 DEBUG INFO: {e.response}") from e
 
             if len(files) > 1:
                 last_order = room.images.aggregate(Max("order"))["order__max"] or 0
@@ -397,7 +401,6 @@ def room_edit(request, slug):
         "admin_pages/room_form.html",
         {"form": form, "image_form": image_form, "action": "Edit", "room": room},
     )
-
 @login_required
 def room_delete(request, slug):
     room = get_object_or_404(Room, slug=slug)
