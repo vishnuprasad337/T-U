@@ -153,7 +153,6 @@ STATICFILES_DIRS = [
 # =========================
 
 AWS_ACCESS_KEY_ID = os.environ.get("SUPABASE_S3_ACCESS_KEY_ID")
-
 AWS_SECRET_ACCESS_KEY = os.environ.get("SUPABASE_S3_SECRET_ACCESS_KEY")
 
 AWS_STORAGE_BUCKET_NAME = os.environ.get(
@@ -162,7 +161,8 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get(
 )
 
 AWS_S3_ENDPOINT_URL = os.environ.get(
-    "SUPABASE_S3_ENDPOINT"
+    "SUPABASE_S3_ENDPOINT",
+    "https://iqmgruelpkcnkxalzwg.storage.supabase.co/storage/v1/s3"
 )
 
 AWS_S3_REGION_NAME = os.environ.get(
@@ -171,19 +171,15 @@ AWS_S3_REGION_NAME = os.environ.get(
 )
 
 AWS_S3_SIGNATURE_VERSION = "s3v4"
-
 AWS_S3_ADDRESSING_STYLE = "path"
 
 AWS_S3_FILE_OVERWRITE = False
-
 AWS_QUERYSTRING_AUTH = False
 
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
 }
 
-
-# Django 4.2+ / Django 6 storage configuration
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3.S3Storage",
@@ -193,7 +189,7 @@ STORAGES = {
     },
 }
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.zoho.in'
 EMAIL_PORT = 587
