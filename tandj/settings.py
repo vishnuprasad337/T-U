@@ -34,11 +34,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://tanduleisurehotel.in',
-    'https://www.tanduleisurehotel.in',
-    'https://t-u-mw2v.onrender.com',
-]
+
 
 
 # Application definition
@@ -141,7 +137,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # Media files (uploaded images)
