@@ -48,8 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
 
     'django.contrib.staticfiles',
+    'django.contrib.sites',      # required by sitemaps framework
+    'django.contrib.sitemaps',
     'tandj_app',
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
