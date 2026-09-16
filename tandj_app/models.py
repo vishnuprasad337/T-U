@@ -26,12 +26,20 @@ class OptimizedImageModel(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        # Optimize all declared image fields
+        # Optimize all declared image fields.
+        # Local filesystem storage supports .path; S3/remote storage
+        # (e.g. Supabase) does not and raises NotImplementedError instead
+        # of AttributeError, so hasattr() alone isn't safe here.
         for field in self.image_fields:
             image_field = getattr(self, field, None)
-            if image_field and hasattr(image_field, "path"):
-                optimize_image(image_field.path)
-
+            if not image_field:
+                continue
+            try:
+                path = image_field.path
+            except NotImplementedError:
+                # Remote storage backend — no local path to optimize in place.
+                continue
+            optimize_image(path)
 
 # --------- Blogs ---------
 class Blog(OptimizedImageModel):
