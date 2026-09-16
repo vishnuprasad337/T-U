@@ -146,7 +146,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-
+import os
+os.environ.setdefault("AWS_REQUEST_CHECKSUM_CALCULATION", "when_required")
+os.environ.setdefault("AWS_RESPONSE_CHECKSUM_VALIDATION", "when_required")
 # =========================
 # SUPABASE S3 MEDIA STORAGE
 # =========================
