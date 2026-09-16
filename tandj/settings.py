@@ -152,9 +152,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.zoho.in'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'msvishnu673@gmail.com'
-EMAIL_HOST_PASSWORD = 'sjcf tyva aldr ashi'
-DEFAULT_FROM_EMAIL = 'Ambady Estate<msvishnu673@gmail.com>'
+EMAIL_HOST_USER = 'mail@tanduleisurehotel.in'
+EMAIL_HOST_PASSWORD = '1srN QpAF 61FJ'
+DEFAULT_FROM_EMAIL = 'T & U<mail@tanduleisurehotel.in>'
