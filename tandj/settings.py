@@ -178,10 +178,13 @@ STORAGES = {
             "signature_version": "s3v4",
             "addressing_style": "path",
 
-            # IMPORTANT: test without HeadObject existence check
             "file_overwrite": True,
-
             "querystring_auth": False,
+
+            "custom_domain": os.environ.get(
+                "SUPABASE_PUBLIC_DOMAIN",
+                "iqmgreuelpkcnkxalzwg.supabase.co/storage/v1/object/public/media"
+            ),
 
             "object_parameters": {
                 "CacheControl": "max-age=86400",
