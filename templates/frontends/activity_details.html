@@ -328,6 +328,18 @@ document.addEventListener('DOMContentLoaded', function () {
 	}, { threshold: 0.15 });
 
 	revealEls.forEach(function (el) { observer.observe(el); });
+
+	// Safety net: if the observer never fires for an element (a JS error
+	// elsewhere on the page, an element sized 0 before its image loads,
+	// etc.), force it visible anyway after a short delay so content is
+	// never permanently stuck at opacity:0.
+	setTimeout(function () {
+		revealEls.forEach(function (el) {
+			if (!el.classList.contains('reveal-visible')) {
+				el.classList.add('reveal-visible');
+			}
+		});
+	}, 2500);
 });
 </script>
 {% endblock %}

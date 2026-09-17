@@ -46,8 +46,25 @@
     <!-- Stylesheet
 	============================== -->
    <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/bootstrap.purged.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/stylesheet.purged.css' %}">
+
+<link rel="preload" as="style" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}"></noscript>
+<style>
+@font-face {
+    font-family: "Font Awesome 6 Free";
+    font-display: swap;
+    src: url("{% static 'tandu-main/css/font-awesome/webfonts/fa-solid-900.woff2' %}") format("woff2");
+    font-weight: 900;
+}
+@font-face {
+    font-family: "Font Awesome 6 Brands";
+    font-display: swap;
+    src: url("{% static 'tandu-main/css/font-awesome/webfonts/fa-brands-400.woff2' %}") format("woff2");
+    font-weight: 400;
+}
+</style>
 	<!-- Here goes your Colors Css -->
 
     <!-- Navbar font (reference-matched: clean geometric sans, medium weight) -->
@@ -849,7 +866,7 @@
         <footer id="footer" class="footer-dark">
             <div class="hero-wrap section pb-0">
                 <div class="hero-mask opacity-9 bg-black"></div>
-                <div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/villa.png' %}');"></div>
+                <div class="hero-bg hero-bg-scroll" style="background-image:url('{% static 'tandu-main/webp/villa.webp' %}');"></div>
                 <div class="hero-content">
                     <div class="container">
                         <div class="row gy-4">
