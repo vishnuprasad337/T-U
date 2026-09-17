@@ -26,7 +26,7 @@
     <video class="hero-frames-video" id="heroVideo" autoplay muted loop playsinline preload="auto">
         <source src="{% static 'tandu-main/hero1.mp4' %}" type="video/mp4">
     </video>
-    <div class="hero-mask bg-dark opacity-2"></div>
+    <div class="hero-mask bg-dark opacity-1"></div>
 
     <div class="hero-frames-topbar">
         <div class="hero-frames-topbar-contact">
@@ -193,6 +193,7 @@ img {
 	object-position: center;
 	z-index: 0;
 	display: block;
+	filter: brightness(1.25) contrast(1.1) saturate(1.1);
 }
 .hero-video-section .hero-mask {
 	z-index: 1;
