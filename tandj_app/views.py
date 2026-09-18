@@ -937,23 +937,31 @@ def blogs_public(request):
     page_number = request.GET.get("page")
     blogs = paginator.get_page(page_number)
     return render(request, "frontends/blog.html", {"blogs": blogs})
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from .utils import linkify_description
+
+from .models import Blog, NearbyDestination
+from .utils import linkify_description, build_destination_keyword_map
+
+
 def blog_detail_public(request, slug):
     """Show a single blog post to visitors."""
     blog = get_object_or_404(Blog, slug=slug)
     other_blogs = Blog.objects.exclude(pk=blog.pk).order_by("-created_at")[:3]
 
-    # Build the keyword -> URL map for auto-linking mentions inside the blog body
     keyword_map = {
         "MaxiMunnar T&U Leisure Hotel": reverse("tandj_app:index"),
     }
 
-    for dest in NearbyDestination.objects.all():
-        keyword_map[dest.name] = reverse(
-            "tandj_app:nearby_destination_detail_public",
-            args=[dest.slug],
+    active_destinations = NearbyDestination.objects.filter(status="active")
+    keyword_map.update(
+        build_destination_keyword_map(
+            active_destinations,
+            url_builder=lambda dest_slug: reverse(
+                "tandj_app:nearby_destination_detail_public", args=[dest_slug]
+            ),
         )
+    )
 
     blog.description = linkify_description(blog.description, keyword_map)
 
