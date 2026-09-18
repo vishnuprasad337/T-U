@@ -179,7 +179,7 @@ img {
 .hero-video-section {
 	position: relative;
 	width: 100%;
-	height: 100vh;
+	height: 100dvh; /* was 100vh — dvh avoids mobile browser-chrome clipping */
 	overflow: hidden;
 	background: #000;
 }
@@ -244,6 +244,19 @@ img {
 .hero-frames-caption--left .hero-frames-caption-inner {
 	text-align: left;
 }
+
+/* ===== Caption backing panel — now a BASE rule so it applies on all
+   screen sizes, not just mobile. This is what keeps the heading/desc/
+   button readable no matter how bright the video frame behind it is. ===== */
+.hero-frames-caption-inner {
+	background: rgba(0, 0, 0, 0.42);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	padding: 28px 34px;
+	border-radius: 20px;
+	display: inline-block;
+}
+
 .hero-frames-caption--right .hero-caption-sub {
 	text-align-last: right;
 }
@@ -280,13 +293,14 @@ img {
 	margin-left: auto;
 }
 .hero-caption-sub {
-	color: #eaeaea;
+	color: #f5f5f5;
 	font-size: 1.15rem;
 	line-height: 1.55;
-	opacity: 0.9;
+	opacity: 1;
 	margin: 0;
 	text-align: justify;
 	text-justify: inter-word;
+	text-shadow: 0 2px 6px rgba(0,0,0,0.85), 0 1px 2px rgba(0,0,0,0.95);
 }
 .hero-caption-btn {
 	pointer-events: auto;
@@ -389,7 +403,8 @@ img {
 	.hero-caption-sub {
 		font-size: 1.05rem;
 	}
-}@media (max-width: 767px) {
+}
+@media (max-width: 767px) {
 	.container, .container-fluid, .container-xxl {
 		max-width: 100%;
 	}
