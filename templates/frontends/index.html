@@ -249,11 +249,6 @@ img {
    screen sizes, not just mobile. This is what keeps the heading/desc/
    button readable no matter how bright the video frame behind it is. ===== */
 .hero-frames-caption-inner {
-	background: rgba(0, 0, 0, 0.42);
-	backdrop-filter: blur(6px);
-	-webkit-backdrop-filter: blur(6px);
-	padding: 28px 34px;
-	border-radius: 20px;
 	display: inline-block;
 }
 
@@ -270,8 +265,9 @@ img {
 	font-size: 0.95rem;
 	font-weight: 600;
 	letter-spacing: 3px;
-	opacity: 0.85;
+	opacity: 0.95;
 	margin-bottom: 14px;
+	text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.7);
 }
 .hero-caption-heading {
 	color: #fff;
@@ -279,28 +275,26 @@ img {
 	font-size: 3.6rem;
 	line-height: 1.1;
 	margin-bottom: 20px;
-	text-shadow: 0 3px 14px rgba(0,0,0,0.4);
+	text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 4px 16px rgba(0,0,0,0.75), 0 8px 30px rgba(0,0,0,0.5);
 	pointer-events: auto;
 }
 .hero-caption-divider {
 	display: inline-block;
 	width: 56px;
 	height: 3px;
-	background: rgba(255,255,255,0.65);
+	background: rgba(255,255,255,0.85);
+	box-shadow: 0 1px 4px rgba(0,0,0,0.8);
 	margin-bottom: 20px;
 }
-.hero-frames-caption--right .hero-caption-divider {
-	margin-left: auto;
-}
 .hero-caption-sub {
-	color: #f5f5f5;
+	color: #fff;
 	font-size: 1.15rem;
 	line-height: 1.55;
 	opacity: 1;
 	margin: 0;
 	text-align: justify;
 	text-justify: inter-word;
-	text-shadow: 0 2px 6px rgba(0,0,0,0.85), 0 1px 2px rgba(0,0,0,0.95);
+	text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 3px 10px rgba(0,0,0,0.8), 0 6px 20px rgba(0,0,0,0.55);
 }
 .hero-caption-btn {
 	pointer-events: auto;
