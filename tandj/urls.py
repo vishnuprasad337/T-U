@@ -9,7 +9,7 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.static import serve
 
 from tandj_app.sitemaps import (
@@ -57,6 +57,10 @@ Sitemap: https://tanduleisurehotel.in/sitemap.xml
     return HttpResponse(content, content_type="text/plain")
 
 
+def health_check(request):
+    return JsonResponse({"status": "ok"})
+
+
 urlpatterns = [
     # SEO
     path("robots.txt", robots_txt, name="robots_txt"),
@@ -66,6 +70,8 @@ urlpatterns = [
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
     ),
+
+    path("h-e-alth/", health_check),
 
     # App URLs
     path('', include('tandj_app.urls')),
