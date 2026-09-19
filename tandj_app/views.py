@@ -940,69 +940,26 @@ def blogs_public(request):
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
-from .models import Blog, NearbyDestination, Activity, Room
-from .utils import linkify_description, build_keyword_map
-
-
-# Landmarks with no dedicated DB record (or you just want a fixed URL)
-HARDCODED_LOCATION_LINKS = {
-    "Mattupetty Dam": "/our-nearby-destinations/mattupetty-dam/",
-    "Echo Point": "/our-nearby-destinations/echo-point/",
-    "Kundala Lake": "/our-nearby-destinations/kundala-lake/",
-    "Top Station": "/our-nearby-destinations/top-station/",
-}
+from .models import Blog, NearbyDestination
+from .utils import linkify_description, build_destination_keyword_map
 
 
 def blog_detail_public(request, slug):
-    """Show a single blog post to visitors, with keywords auto-linked
-    to matching Room / Activity / Nearby Destination detail pages."""
+    """Show a single blog post to visitors."""
     blog = get_object_or_404(Blog, slug=slug)
     other_blogs = Blog.objects.exclude(pk=blog.pk).order_by("-created_at")[:3]
 
-    # --- generic phrases -> listing pages ---
     keyword_map = {
         "MaxiMunnar T&U Leisure Hotel": reverse("tandj_app:index"),
-        "nearby Munnar attractions": reverse("tandj_app:nearby_destinations"),
-        "Munnar attractions": reverse("tandj_app:nearby_destinations"),
-        "Munnar tourist places": reverse("tandj_app:nearby_destinations"),
-        "Munnar sightseeing": reverse("tandj_app:nearby_destinations"),
     }
 
-    # --- hardcoded landmarks ---
-    keyword_map.update(HARDCODED_LOCATION_LINKS)
-
-    # --- Nearby Destinations -> our-nearby-destinations/<slug>/ ---
     active_destinations = NearbyDestination.objects.filter(status="active")
     keyword_map.update(
-        build_keyword_map(
+        build_destination_keyword_map(
             active_destinations,
-            url_builder=lambda s: reverse(
-                "tandj_app:nearby_destination_detail_public", args=[s]
+            url_builder=lambda dest_slug: reverse(
+                "tandj_app:nearby_destination_detail_public", args=[dest_slug]
             ),
-            name_fields=("name",),
-        )
-    )
-
-    # --- Activities -> our-activities/<slug>/ ---
-    # CONFIRM: does Activity use "title" or "name" for its display name?
-    keyword_map.update(
-        build_keyword_map(
-            Activity.objects.all(),
-            url_builder=lambda s: reverse(
-                "tandj_app:activity_detail_public", args=[s]
-            ),
-            name_fields=("title", "name"),
-        )
-    )
-
-    # --- Rooms -> our-rooms/<slug>/ ---
-    keyword_map.update(
-        build_keyword_map(
-            Room.objects.all(),
-            url_builder=lambda s: reverse(
-                "tandj_app:room_detail_public", args=[s]
-            ),
-            name_fields=("room_category", "name", "title"),
         )
     )
 
@@ -1011,8 +968,12 @@ def blog_detail_public(request, slug):
     return render(
         request,
         "frontends/blog_single.html",
-        {"blog": blog, "other_blogs": other_blogs},
+        {
+            "blog": blog,
+            "other_blogs": other_blogs,
+        },
     )
+
 import json
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
