@@ -53,26 +53,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    
     <!-- Stylesheet
 	============================== -->
-   <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/bootstrap.purged.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/stylesheet.purged.css' %}">
+    <!-- Minimal critical CSS so the preloader looks right before the main CSS arrives -->
+    <style>
+        html { background: #fff; }
+        body { margin: 0; }
+        .preloader { position: fixed; inset: 0; background: #fff; z-index: 99999; }
+    </style>
 
-<link rel="preload" as="style" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
-<link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}"></noscript>
-<style>
-@font-face {
-    font-family: "Font Awesome 6 Free";
-    font-display: swap;
-    src: url("{% static 'tandu-main/css/font-awesome/webfonts/fa-solid-900.woff2' %}") format("woff2");
-    font-weight: 900;
-}
-@font-face {
-    font-family: "Font Awesome 6 Brands";
-    font-display: swap;
-    src: url("{% static 'tandu-main/css/font-awesome/webfonts/fa-brands-400.woff2' %}") format("woff2");
-    font-weight: 400;
-}
-</style>
+    <!-- Load main CSS without blocking first paint -->
+    <link rel="preload" as="style" href="{% static 'tandu-main/css/bootstrap.purged.css' %}" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" as="style" href="{% static 'tandu-main/css/stylesheet.purged.css' %}" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="{% static 'tandu-main/css/bootstrap.purged.css' %}">
+        <link rel="stylesheet" href="{% static 'tandu-main/css/stylesheet.purged.css' %}">
+    </noscript>
+
+    <!-- Per-page preload slot (e.g. hero image on the homepage). Empty by default. -->
+    {% block preload_image %}{% endblock %}
+
+    <!-- Preload icon fonts so they start downloading immediately.
+         crossorigin is required for font preloads, even on same origin. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="{% static 'tandu-main/css/font-awesome/webfonts/fa-solid-900.woff2' %}">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="{% static 'tandu-main/css/font-awesome/webfonts/fa-brands-400.woff2' %}">
+
+    <!-- Font Awesome CSS (font-display must be set to "swap" inside all.min.css itself) -->
+    <link rel="preload" as="style" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}"></noscript>
 	<!-- Here goes your Colors Css -->
 
     <!-- Navbar font (reference-matched: clean geometric sans, medium weight) -->
@@ -883,14 +892,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <div class="container">
                         <div class="row gy-4">
                             <div class="col-sm-7 col-md-6 col-lg-4">
-    <div class="footer-logo mb-2"><a href="{% url 'tandj_app:index' %}"><img src="{% static 'tandu-main/webp/tanduwhite.webp' %}" alt="T & U Leisure Hotel logo"></a></div>
+    <div class="footer-logo mb-2">
+        <a href="{% url 'tandj_app:index' %}">
+            <img src="{% static 'tandu-main/webp/tanduwhite.webp' %}"
+                 alt="T & U Leisure Hotel logo"
+                 loading="lazy"
+                 decoding="async">
+        </a>
+    </div>
     <p class="text-3">Welcome uncover a luxurious haven at T & U Leisure Hotel, Munnar, Kerala. Nestled amidst the tea hills, our hotel offers modern elegance and warm hospitality.</p>
     <div class="mt-3">
         <ul class="social-icons social-icons-light">
-            <li><a data-bs-toggle="tooltip" href="http://www.facebook.com/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
-            <li><a data-bs-toggle="tooltip" href="http://www.x.com/" target="_blank" title="X"><i class="fa-brands fa-x-twitter"></i></a></li>
-            <li><a data-bs-toggle="tooltip" href="http://www.instagram.com/" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
-            <li><a data-bs-toggle="tooltip" href="http://www.whatsapp.com/" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
+            <li><a data-bs-toggle="tooltip" href="http://www.facebook.com/" target="_blank" rel="noopener" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+            <li><a data-bs-toggle="tooltip" href="http://www.x.com/" target="_blank" rel="noopener" title="X"><i class="fa-brands fa-x-twitter"></i></a></li>
+            <li><a data-bs-toggle="tooltip" href="http://www.instagram.com/" target="_blank" rel="noopener" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+            <li><a data-bs-toggle="tooltip" href="http://www.whatsapp.com/" target="_blank" rel="noopener" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a></li>
         </ul>
     </div>
 </div>
@@ -1257,13 +1273,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 	============================================= -->
     <a id="back-to-top" href="javascript:void(0)"><i class="fa-solid fa-arrow-up"></i></a>
 
-    <!-- JavaScript -->
-    <script src="{% static 'tandu-main/js/jquery.min.js' %}"></script>
-<script src="{% static 'tandu-main/js/bootstrap.bundle.min.js' %}"></script>
-<script src="{% static 'tandu-main/js/lenis.min.js' %}"></script>
+    <!-- JavaScript (deferred: downloads in parallel, runs in order after HTML is parsed) -->
+    <script src="{% static 'tandu-main/js/jquery.min.js' %}" defer></script>
+    <script src="{% static 'tandu-main/js/bootstrap.bundle.min.js' %}" defer></script>
+    <script src="{% static 'tandu-main/js/lenis.min.js' %}" defer></script>
 
-<!-- Custom Script -->
-<script src="{% static 'tandu-main/js/main.js' %}"></script>
+    <!-- Custom Script -->
+    <script src="{% static 'tandu-main/js/main.js' %}" defer></script>
 	
        <!-- Header scroll behavior: centered logo on hero -> normal navbar on scroll -->
     <script>
