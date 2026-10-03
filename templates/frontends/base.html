@@ -59,18 +59,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preload" as="style" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
 <link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}"></noscript>
+<link rel="preload" href="{% static 'tandu-main/css/font-awesome/webfonts/fa-solid-900.woff2' %}" as="font" type="font/woff2" crossorigin media="(max-width: 767px)">
 <style>
-@font-face {
-    font-family: "Font Awesome 6 Free";
-    font-display: swap;
-    src: url("{% static 'tandu-main/css/font-awesome/webfonts/fa-solid-900.woff2' %}") format("woff2");
-    font-weight: 900;
-}
-@font-face {
-    font-family: "Font Awesome 6 Brands";
-    font-display: swap;
-    src: url("{% static 'tandu-main/css/font-awesome/webfonts/fa-brands-400.woff2' %}") format("woff2");
-    font-weight: 400;
+@media (max-width: 767px) {
+    @font-face {
+        font-family: "Font Awesome 7 Free";
+        font-style: normal;
+        font-weight: 900;
+        font-display: swap;
+        src: url("{% static 'tandu-main/css/font-awesome/webfonts/fa-solid-900.woff2' %}") format("woff2");
+    }
+    @font-face {
+        font-family: "Font Awesome 7 Brands";
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url("{% static 'tandu-main/css/font-awesome/webfonts/fa-brands-400.woff2' %}") format("woff2");
+    }
 }
 </style>
 	<!-- Here goes your Colors Css -->
