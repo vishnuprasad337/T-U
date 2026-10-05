@@ -9,6 +9,8 @@ from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
 from django.db.models.functions import Lower
 from django.conf import settings
 from django.core.mail import send_mail
+from django.core.mail import EmailMessage
+from email.utils import formataddr
 # --------- admin-authentication ---------
 def admin_login(request):
     if request.method == "POST":
@@ -1025,11 +1027,11 @@ def reservation_ajax_create(request):
 
     reservation.save()
 
-    # --- Notify hotel staff ---
+    # --- Notify hotel staff (Reply goes straight to the guest) ---
     try:
-        send_mail(
+        staff_msg = EmailMessage(
             subject=f"New Booking Request — {guest_name}",
-            message=(
+            body=(
                 f"You've received a new booking request on the T&U website.\n\n"
                 f"Name: {guest_name}\n"
                 f"Email: {guest_email}\n"
@@ -1039,11 +1041,13 @@ def reservation_ajax_create(request):
                 f"Check In: {check_in}\n"
                 f"Check Out: {check_out}\n"
                 + (f"Special Requests: {special_requests}\n" if special_requests else "")
+                + f"\n— Hit Reply to respond directly to {guest_name}."
             ),
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[getattr(settings, "CONTACT_NOTIFY_EMAIL", settings.DEFAULT_FROM_EMAIL)],
-            fail_silently=True,
+            to=[getattr(settings, "CONTACT_NOTIFY_EMAIL", settings.DEFAULT_FROM_EMAIL)],
+            reply_to=[formataddr((guest_name, guest_email))],
         )
+        staff_msg.send(fail_silently=True)
     except Exception:
         pass
 
@@ -1073,16 +1077,21 @@ def reservation_ajax_create(request):
 
     return JsonResponse({"success": True, "reservation_id": reservation.pk})
 
-
+import logging
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
+from email.utils import formataddr
+
+logger = logging.getLogger(__name__)
+
 
 @require_POST
 def contact_ajax_create(request):
     recaptcha_token = request.POST.get('g-recaptcha-response', '')
 
     if not recaptcha_token:
+        print("CONTACT DEBUG: no recaptcha token received")
         return JsonResponse({
             'success': False,
             'errors': {'recaptcha': ['Please try submitting the form again.']}
@@ -1099,6 +1108,7 @@ def contact_ajax_create(request):
     ).json()
 
     if not verify.get('success'):
+        print("CONTACT DEBUG: recaptcha failed:", verify.get('error-codes'))
         return JsonResponse({
             'success': False,
             'errors': {'recaptcha': ['We could not verify your submission. Please try again.']}
@@ -1138,22 +1148,27 @@ def contact_ajax_create(request):
 
     contact.save()
 
+    # Notify the owner; clicking "Reply" in the inbox goes straight to the guest
     try:
-        send_mail(
+        email_msg = EmailMessage(
             subject=f"New Contact Enquiry — {contact.full_name}",
-            message=(
+            body=(
                 f"You've received a new enquiry from The T&U contact page.\n\n"
                 f"Name: {contact.full_name}\n"
                 f"Email: {contact.email}\n"
                 f"Phone: {contact.phone_number or 'N/A'}\n\n"
-                f"Message:\n{contact.message}"
+                f"Message:\n{contact.message}\n\n"
+                f"— Hit Reply to respond directly to {contact.full_name}."
             ),
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[getattr(settings, "CONTACT_NOTIFY_EMAIL", settings.DEFAULT_FROM_EMAIL)],
-            fail_silently=True,
+            to=[getattr(settings, "CONTACT_NOTIFY_EMAIL", settings.DEFAULT_FROM_EMAIL)],
+            reply_to=[formataddr((contact.full_name, contact.email))],
         )
-    except Exception:
-        pass
+        email_msg.send(fail_silently=False)
+        print("CONTACT DEBUG: email sent OK")
+    except Exception as e:
+        print("EMAIL ERROR:", repr(e))
+        logger.exception("Contact email failed")
 
     return JsonResponse({"success": True, "contact_id": contact.pk})
 def restaurant(request):
