@@ -11,11 +11,16 @@ from django.utils.text import slugify
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.html import strip_tags
+import os
+from utils.image_optimizer import MAIN_WIDTH, build_variants, variant_name
 
 class OptimizedImageModel(models.Model):
     """
     Base class: any model inheriting this can declare image_fields = []
-    to auto-optimize images on save.
+    to auto-optimize NEW uploads before they reach storage.
+    Works with remote storage (Supabase / S3) because the image is
+    processed in memory, not through a local file path.
+    Creates WebP files at 480, 800 and 1200 px wide.
     """
 
     image_fields = []  # override in child models
@@ -24,23 +29,19 @@ class OptimizedImageModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
+        for name in self.image_fields:
+            f = getattr(self, name, None)
+            if f and not f._committed:  # only brand-new uploads
+                variants = build_variants(f.file)
+                base = os.path.splitext(os.path.basename(f.name))[0]
+                # main file = 1200px WebP
+                f.save(f"{base}.webp", variants[MAIN_WIDTH], save=False)
+                # 480px and 800px versions stored next to it
+                for w, content in variants.items():
+                    if w != MAIN_WIDTH:
+                        f.storage.save(variant_name(f.name, w), content)
+
         super().save(*args, **kwargs)
-
-        # Optimize all declared image fields.
-        # Local filesystem storage supports .path; S3/remote storage
-        # (e.g. Supabase) does not and raises NotImplementedError instead
-        # of AttributeError, so hasattr() alone isn't safe here.
-        for field in self.image_fields:
-            image_field = getattr(self, field, None)
-            if not image_field:
-                continue
-            try:
-                path = image_field.path
-            except NotImplementedError:
-                # Remote storage backend — no local path to optimize in place.
-                continue
-            optimize_image(path)
-
 # --------- Blogs ---------
 class Blog(OptimizedImageModel):
     image = models.ImageField(upload_to="blogs/", help_text="Blog cover image")
@@ -141,7 +142,7 @@ class GalleryImage(OptimizedImageModel):
 
 
 
-class Room(models.Model):
+class Room(OptimizedImageModel):  # CHANGED: was models.Model
     STATUS_CHOICES = [
         ("active", "Active"),
         ("inactive", "Inactive"),
@@ -169,14 +170,16 @@ class Room(models.Model):
     description = models.TextField(blank=True)
 
     price_per_night = models.DecimalField(
-    max_digits=10, decimal_places=2,
-    blank=True, null=True,
-)
+        max_digits=10, decimal_places=2,
+        blank=True, null=True,
+    )
 
     main_image = models.ImageField(upload_to="rooms/main/", blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    image_fields = ["main_image"]  # CHANGED: tells the base class which field to optimize
 
     class Meta:
         db_table = "rooms"
@@ -198,7 +201,7 @@ class Room(models.Model):
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             self.slug = slug
-        super().save(*args, **kwargs)
+        super().save(*args, **kwargs)  # this now calls OptimizedImageModel.save
 
 class RoomImage(OptimizedImageModel):
     room = models.ForeignKey(

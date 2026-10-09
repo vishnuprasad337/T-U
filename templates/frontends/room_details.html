@@ -1,6 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
-
+{% load image_tags %}
 {% block title %}{{ room.room_category }} - Luxury Rooms & Suites in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}
 {% block meta_description %}{{ room.room_category }} at MaxiMunnar T&U Leisure Hotel, Munnar — {{ room.description|striptags|truncatewords:20 }}{% endblock %}
 {% block og_title %}{{ room.room_category }} - Luxury Rooms & Suites in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}
@@ -40,7 +40,7 @@
 								<!-- Main Image -->
 								<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
 									{% if room.main_image %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{{ room.main_image.url }}" alt="{{ room.room_category }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+									<img class="img-fluid d-block w-100 rounded-5" src="{{ room.main_image.url }}" srcset="{{ room.main_image|srcset }}" sizes="(max-width: 991px) 100vw, 850px" alt="{{ room.room_category }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
 									{% else %}
 									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/rooms/default.jpg' %}" alt="{{ room.room_category }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
 									{% endif %}
@@ -77,7 +77,7 @@
 									<div class="col-6">
 										<a href="{{ img.image.url }}" class="glightbox d-block room-thumb-link" data-gallery="room-gallery"{% if img.caption %} data-title="{{ img.caption }}"{% endif %}>
 											<div class="rounded-4 overflow-hidden position-relative">
-												<img class="img-fluid w-100" src="{{ img.image.url }}" alt="{{ img.caption|default:room.room_category }}" style="height:220px; object-fit:cover; display:block;" loading="lazy" decoding="async">
+												<img class="img-fluid w-100" src="{{ img.image.url }}" srcset="{{ img.image|srcset }}" sizes="(max-width: 767px) 50vw, 400px" alt="{{ img.caption|default:room.room_category }}" style="height:220px; object-fit:cover; display:block;" loading="lazy" decoding="async">
 												{% if img.caption %}
 												<div class="room-thumb-caption">{{ img.caption }}</div>
 												{% endif %}

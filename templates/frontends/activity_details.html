@@ -1,5 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
+{% load image_tags %}
 
 {% block title %}{{ activity.name|default:"Activity" }} - MaxiMunnar T&U Leisure Hotel{% endblock %}
 {% block meta_description %}{{ activity.name }} at MaxiMunnar T&U Leisure Hotel, Munnar — {{ activity.description|striptags|truncatewords:20 }}{% endblock %}
@@ -39,7 +40,7 @@
 								<!-- Main Image -->
 								<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
 									{% if activity.image %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{{ activity.image.url }}" alt="{{ activity.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+									<img class="img-fluid d-block w-100 rounded-5" src="{{ activity.image.url }}" srcset="{{ activity.image|srcset }}" sizes="(max-width: 991px) 100vw, 850px" alt="{{ activity.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
 									{% else %}
 									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/rooms/room-3.jpg' %}" alt="{{ activity.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
 									{% endif %}

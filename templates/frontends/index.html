@@ -1,5 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
+{% load image_tags %}
 
 {% block title %}Luxury 4 Star Hotel in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}
 {% block meta_description %}Stay at MaxiMunnar T&U Leisure Hotel, a luxury 4-star hotel in Munnar offering elegant rooms, premium amenities, fine dining and memorable Munnar experiences.{% endblock %}
@@ -1137,7 +1138,7 @@ body.hero-frames-page #header.scrolled {
                                 <a href="#" class="d-block h-100">
                                 {% endif %}
                                     {% if room.main_image %}
-                                        <img class="img-fluid h-100 w-100" src="{{ room.main_image.url }}" alt="{{ room.room_category }}" style="object-fit: cover; border-radius: 1.5rem;">
+                                        <img class="img-fluid h-100 w-100" src="{{ room.main_image.url }}" srcset="{{ room.main_image|srcset }}" sizes="(max-width: 576px) 92vw, (max-width: 991px) 45vw, 400px" alt="{{ room.room_category }}" style="object-fit: cover; border-radius: 1.5rem;">
                                     {% else %}
                                         <img class="img-fluid h-100 w-100" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ room.room_category|default:'Room at T&U Leisure Hotel' }}"style="object-fit: cover; border-radius: 1.5rem;">
                                     {% endif %}
@@ -1637,7 +1638,7 @@ body.hero-frames-page #header.scrolled {
             <div class="col-lg-6 activity-img-col order-1 order-lg-2 wow fadeInRight">
                 <a href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
                     {% if activity.image %}
-                        <img src="{{ activity.image.url }}" alt="{{ activity.name }}">
+                        <img src="{{ activity.image.url }}" srcset="{{ activity.image|srcset }}" sizes="(max-width: 991px) 100vw, 540px" alt="{{ activity.name }}">
                     {% else %}
                         <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="{{ activity.name|default:'Activity at T&U Leisure Hotel' }}">
                     {% endif %}
@@ -1648,7 +1649,7 @@ body.hero-frames-page #header.scrolled {
             <div class="col-lg-6 activity-img-col wow fadeInLeft">
                 <a href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
                     {% if activity.image %}
-                        <img src="{{ activity.image.url }}" alt="{{ activity.name }}">
+                        <img src="{{ activity.image.url }}" srcset="{{ activity.image|srcset }}" sizes="(max-width: 991px) 100vw, 540px" alt="{{ activity.name }}">
                     {% else %}
                         <img src="{% static 'tandu-main/images/activities/activity-1.jpg' %}" alt="">
                     {% endif %}
@@ -1697,7 +1698,7 @@ body.hero-frames-page #header.scrolled {
                 <div class="nearby-trail-card">
                     <a href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}" class="nearby-trail-img d-block">
                         {% if destination.image %}
-                            <img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+                            <img src="{{ destination.image.url }}" srcset="{{ destination.image|srcset }}" sizes="(max-width: 576px) 92vw, 524px" alt="{{ destination.name }}">
                         {% else %}
                             <img src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ destination.name }}">
                         {% endif %}
@@ -2462,7 +2463,7 @@ body.hero-frames-page #header.scrolled {
                         <div class="mist-photo">
                             <div class="mist-photo-frame">
                                 {% if testimonial.image %}
-                                    <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}">
+                                    <img src="{{ testimonial.image.url }}" srcset="{{ testimonial.image|srcset }}" sizes="280px" alt="{{ testimonial.name }}">
                                 {% else %}
                                     <div class="mist-photo-fallback"><i class="fa-solid fa-user"></i></div>
                                 {% endif %}
@@ -3281,7 +3282,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="blog-post card h-100 rounded-5 shadow-none border-0">
                         <a class="d-flex rounded-5 overflow-hidden" href="{% url 'tandj_app:blog_detail_public' blog.slug %}">
                             {% if blog.image %}
-                                <img class="card-img-top rounded-5" src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                                <img class="card-img-top rounded-5" src="{{ blog.image.url }}" srcset="{{ blog.image|srcset }}" sizes="(max-width: 767px) 100vw, 400px" alt="{{ blog.title }}">
                             {% else %}
                                 <img class="card-img-top rounded-5" src="{% static 'tandu-main/images/blog/post-1.jpg' %}" alt="{{ blog.title }}">
                             {% endif %}

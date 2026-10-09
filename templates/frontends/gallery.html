@@ -1,6 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
-
+{% load image_tags %}
 {% block title %}T&U Leisure Hotel Gallery Munnar | Photos & Views{% endblock %}
 {% block meta_description %}Explore photos of T&U Leisure Hotel in Munnar, including rooms, suites, hotel spaces, surroundings, tea garden views and more.{% endblock %}
 
@@ -57,7 +57,7 @@
 							<div class="col-md-4 gallery-grid-item scroll-reveal" data-category="cat-{{ entry.category.id }}">
 								<div class="gallery-item rounded-5">
 									<a class="glightbox" href="{{ image.image.url }}" data-gallery="hotel-gallery"{% if image.title %} data-title="{{ image.title }}"{% endif %}>
-										<img class="img-fluid d-block" src="{{ image.image.url }}" alt="{{ image.title|default:entry.category.name }}">
+										<img class="img-fluid d-block" src="{{ image.image.url }}" srcset="{{ image.image|srcset }}" sizes="(max-width: 767px) 100vw, 400px" alt="{{ image.title|default:entry.category.name }}">
 										<div class="overlay-details">
 											<span class="text-6"><i class="fa-solid fa-plus"></i></span>
 										</div>

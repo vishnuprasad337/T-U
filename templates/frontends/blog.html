@@ -1,6 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
-
+{% load image_tags %}
 {% block title %}Munnar Travel Blog | Travel Tips, Places & Guides{% endblock %}
 {% block meta_description %}Read the T&U Leisure Hotel Munnar blog for travel guides, local attractions, things to do, places to visit and useful Munnar travel tips.{% endblock %}
 
@@ -41,7 +41,7 @@
 								<!-- Image + Badge -->
 								<div class="blog-card-new-media">
 									{% if blog.image %}
-									<img class="blog-card-new-img" src="{{ blog.image.url }}" alt="{{ blog.title }}">
+									<img class="blog-card-new-img" src="{{ blog.image.url }}" srcset="{{ blog.image|srcset }}" sizes="(max-width: 767px) 100vw, 400px" alt="{{ blog.title }}">
 									{% else %}
 									<img class="blog-card-new-img" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ blog.title }}">
 									{% endif %}

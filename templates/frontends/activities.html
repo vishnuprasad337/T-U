@@ -1,6 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
-
+{% load image_tags %}
 {% block title %}Activities in Munnar | Things to Do at T&U Leisure Hotel{% endblock %}
 {% block meta_description %}Enjoy the best activities in Munnar at T&U Leisure Hotel, from indoor games and kids' play areas to campfires, outdoor dining, barbecue and fitness.{% endblock %}
 
@@ -92,7 +92,7 @@
 									<div class="room-item-img rounded-5">
 										<a href="{% url 'tandj_app:activity_detail_public' activity.slug %}">
 											{% if activity.image %}
-											<img class="img-fluid d-block" src="{{ activity.image.url }}" alt="{{ activity.name }}">
+											<img class="img-fluid d-block" src="{{ activity.image.url }}" srcset="{{ activity.image|srcset }}" sizes="(max-width: 991px) 100vw, 540px" alt="{{ activity.name }}">
 											{% else %}
 											<img class="img-fluid d-block" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ activity.name }}">
 											{% endif %}

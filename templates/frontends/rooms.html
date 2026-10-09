@@ -1,6 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
-
+{% load image_tags %}
 {% block title %}Luxury Rooms & Suites in Munnar | MaxiMunnar T&U Leisure Hotel{% endblock %}
 {% block meta_description %}Explore rooms and suites at MaxiMunnar T&U Leisure Hotel, including Deluxe, Premium, Suite and Honeymoon rooms for a comfortable stay in Munnar.{% endblock %}
 
@@ -94,7 +94,7 @@
 								<div class="room-card-img-wrapper position-relative overflow-hidden">
 									<a href="{% url 'tandj_app:room_detail_public' room.slug %}" class="d-block">
 										{% if room.main_image %}
-										<img class="img-fluid d-block room-card-img" src="{{ room.main_image.url }}" alt="{{ room.room_category }}" loading="lazy">
+										<img class="img-fluid d-block room-card-img" src="{{ room.main_image.url }}" srcset="{{ room.main_image|srcset }}" sizes="(max-width: 991px) 100vw, 570px" alt="{{ room.room_category }}" loading="lazy">
 										{% else %}
 										<img class="img-fluid d-block room-card-img" src="{% static 'tandu-main/images/rooms/room-1.jpg' %}" alt="{{ room.room_category }}" loading="lazy">
 										{% endif %}

@@ -1,6 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
-
+{% load image_tags %}
 {% block title %}Places to Visit Near T&U Leisure Hotel Munnar{% endblock %}
 {% block meta_description %}Discover popular places to visit near T&U Leisure Hotel in Munnar, including Mattupetty Dam, Echo Point, Kundala Lake, tea plantations and waterfalls.{% endblock %}
 
@@ -54,7 +54,7 @@
 							<!-- Full-bleed photo -->
 							<a href="{% url 'tandj_app:nearby_destination_detail_public' destination.slug %}" class="destination-card-media" aria-label="Explore {{ destination.name }}">
 								{% if destination.image %}
-									<img src="{{ destination.image.url }}" alt="{{ destination.name }}">
+									<img src="{{ destination.image.url }}" srcset="{{ destination.image|srcset }}" sizes="(max-width: 767px) 100vw, 800px" alt="{{ destination.name }}">
 								{% else %}
 									<img src="{% static 'tandu-main/webp/slide-2.webp' %}" alt="{{ destination.name }}">
 								{% endif %}

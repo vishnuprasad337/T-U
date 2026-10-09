@@ -1,6 +1,6 @@
 {% extends "frontends/base.html" %}
 {% load static %}
-
+{% load image_tags %}
 {% block title %}{{ blog.title|default:"Blog" }} - Munnar Travel Blog | Travel Tips, Places & Guides{% endblock %}
 {% block meta_description %}{{ blog.description|striptags|truncatewords:20|default:"Read our latest travel tips and guides for Munnar, from T&U Leisure Hotel." }}{% endblock %}
 {% block og_title %}{{ blog.title|default:"Blog" }} | MaxiMunnar T&U Leisure Hotel{% endblock %}
@@ -78,12 +78,14 @@
 
                         {% if blog.image %}
 
-                            <img
-                                class="img-fluid d-block w-100 rounded-5"
-                                src="{{ blog.image.url }}"
-                                alt="{{ blog.title }}"
-                                loading="eager"
-                                decoding="async">
+                           <img
+    class="img-fluid d-block w-100 rounded-5"
+    src="{{ blog.image.url }}"
+    srcset="{{ blog.image|srcset }}"
+    sizes="(max-width: 991px) 100vw, 850px"
+    alt="{{ blog.title }}"
+    loading="eager"
+    decoding="async">
 
                         {% else %}
 
