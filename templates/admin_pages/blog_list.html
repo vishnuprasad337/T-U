@@ -45,7 +45,7 @@
                         {% endif %}
                     </td>
                     <td>{{ blog.title }}</td>
-                    <td>{{ blog.description|truncatechars:30|safe }}</td>
+                    <td>{{ blog.description|striptags|truncatechars:30 }}</td>
                     <td>{{ blog.created_at|date:"M d, Y" }}</td>
                     <td class="text-center">
                         <div class="btn-group" role="group">
@@ -134,7 +134,8 @@
 <!-- MODALS - Placed OUTSIDE the main content area -->
 {% for blog in blogs %}
 <!-- Update Blog Modal -->
-<div class="modal fade" id="updateBlogModal{{ blog.id }}" tabindex="-1" aria-labelledby="updateBlogModalLabel{{ blog.slug }}" aria-hidden="true">
+<!-- data-bs-focus="false" disables Bootstrap's focus trap so the CKEditor link input is typeable -->
+<div class="modal fade" id="updateBlogModal{{ blog.id }}" tabindex="-1" data-bs-focus="false" aria-labelledby="updateBlogModalLabel{{ blog.id }}" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
            <form method="post" enctype="multipart/form-data" action="{% url 'tandj_app:blog_update' blog.slug %}">
@@ -151,7 +152,7 @@
                     
                     <div class="mb-3">
                         <label class="form-label">Description</label>
-                        <textarea name="description" class="form-control uni-description" id="blogEditor{{ blog.id }}" rows="6" required>{{ blog.description }}</textarea>
+                        <textarea name="description" class="form-control uni-description" id="blogEditor{{ blog.id }}" rows="6">{{ blog.description }}</textarea>
                     </div> 
                     
                     <div class="mb-3">
@@ -182,7 +183,7 @@
            <form method="post" action="{% url 'tandj_app:blog_delete' blog.slug %}">
                 {% csrf_token %}
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteBlogModalLabel{{ blog.slug }}">Delete Blog</h5>
+                    <h5 class="modal-title" id="deleteBlogModalLabel{{ blog.id }}">Delete Blog</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -230,7 +231,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     toolbar: [
                         'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
                         '|', 'insertTable', 'blockQuote', 'undo', 'redo', 'imageUpload'
-                    ]
+                    ],
+                    link: {
+                        addTargetToExternalLinks: true,   // external links open in a new tab
+                        defaultProtocol: 'https://',      // auto-adds https:// if user forgets
+                        decorators: {
+                            openInNewTab: {
+                                mode: 'manual',
+                                label: 'Open in a new tab',
+                                attributes: {
+                                    target: '_blank',
+                                    rel: 'noopener noreferrer'
+                                }
+                            }
+                        }
+                    }
                 })
                 .then(editor => {
                     textarea.classList.add('ckeditor-applied');
@@ -261,8 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
         form.addEventListener('submit', function () {
             const textarea = form.querySelector('textarea.uni-description');
             if (textarea && ckEditorInstances[textarea.id]) {
-                const editor = ckEditorInstances[textarea.id];
-                textarea.value = editor.getData();
+                ckEditorInstances[textarea.id].updateSourceElement();
             }
         });
     });
@@ -281,6 +295,38 @@ document.addEventListener('DOMContentLoaded', function () {
     height: 60px;
     object-fit: cover;
     border-radius: 6px;
+}
+
+/* ============================================ */
+/* CKEditor link popup fixes (inside modals)     */
+/* ============================================ */
+
+/* Link popup / dropdowns must sit above the Bootstrap modal (z-index 1055) */
+.ck.ck-balloon-panel {
+    z-index: 99999 !important;
+}
+
+/* Stop any global 100% width rule from breaking the link form */
+.ck input,
+.ck button,
+.ck textarea {
+    width: auto !important;
+    max-width: none !important;
+}
+
+.ck .ck-input-text {
+    width: 18em !important;
+    min-width: 0;
+}
+
+@media (max-width: 576px) {
+    .ck .ck-input-text { width: 12em !important; }
+}
+
+/* Make links visible inside the editor */
+.ck-editor__editable a {
+    color: #4f46e5;
+    text-decoration: underline;
 }
 
 /* CKEditor in modal fixes - SCROLLABLE like university modal */
