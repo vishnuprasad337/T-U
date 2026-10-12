@@ -30,132 +30,122 @@
 		</section>
 		<!-- Page Header end -->
 
-            <!-- Nearby Destination Detail
-			============================================= -->
-            <section class="section room-detail-section">
-                <div class="container">
-                    <div class="room-items-wrap">
-						<div class="row gx-4 gy-5">
-							<div class="col-lg-8 col-xl-9 reveal reveal-fade">
-								<!-- Main Image -->
-								<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
-									{% if destination.image %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{{ destination.image.url }}" srcset="{{ destination.image|srcset }}" sizes="(max-width: 991px) 100vw, 850px" alt="{{ destination.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
-									{% else %}
-									<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
-									{% endif %}
-								</div>
+		<!-- Nearby Destination Detail
+		============================================= -->
+		<section class="section room-detail-section">
+			<div class="container">
+				<div class="room-items-wrap">
+					<div class="row gx-4 gy-5">
+						<div class="col-lg-8 col-xl-9 reveal reveal-fade">
+							<!-- Main Image -->
+							<div class="rounded-5 mb-4 overflow-hidden reveal reveal-fadeInUp" style="max-height:520px;">
+								{% if destination.image %}
+								<img class="img-fluid d-block w-100 rounded-5" src="{{ destination.image.url }}" srcset="{{ destination.image|srcset }}" sizes="(max-width: 991px) 100vw, 850px" alt="{{ destination.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+								{% else %}
+								<img class="img-fluid d-block w-100 rounded-5" src="{% static 'tandu-main/images/destinations/default.jpg' %}" alt="{{ destination.name }}" style="height:520px; object-fit:cover;" loading="eager" decoding="async">
+								{% endif %}
+							</div>
 
-								<!-- Destination Details -->
-								<h2 class="text-13 fw-600 reveal reveal-fadeInUp">{{ destination.name }}</h2>
-								<div class="row gy-2 gx-5 text-body-secondary mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
-									{% if destination.location %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-map-pin"></i></span>{{ destination.location }}
-									</div>
-									{% endif %}
-									{% if destination.distance %}
-									<div class="col-6 col-md-auto d-flex align-items-center">
-										<span class="text-primary text-6 me-2"><i class="fa-solid fa-route"></i></span>{{ destination.distance }}
-									</div>
-									{% endif %}
-								</div>
-								<div class="text-body-secondary lh-lg reveal reveal-fadeInUp" data-reveal-delay="200">{{ destination.description|safe }}</div>
-
-								<!-- Thumbnail Gallery -->
-								{% if destination_images %}
-								<div class="row g-3 mt-2 mb-4 reveal reveal-fadeInUp" data-reveal-delay="250">
-									{% for img in destination_images %}
-									<div class="col-6">
-										<a href="{{ img.image.url }}" class="glightbox d-block destination-thumb-link" data-gallery="destination-gallery"{% if img.caption %} data-title="{{ img.caption }}"{% endif %}>
-											<div class="rounded-4 overflow-hidden position-relative">
-												<img class="img-fluid w-100" src="{{ img.image.url }}" srcset="{{ img.image|srcset }}" sizes="(max-width: 767px) 50vw, 400px" alt="{{ img.caption|default:destination.name }}" style="height:220px; object-fit:cover; display:block;" loading="lazy" decoding="async">
-												{% if img.caption %}
-												<div class="destination-thumb-caption">{{ img.caption }}</div>
-												{% endif %}
-											</div>
-										</a>
-									</div>
-									{% endfor %}
+							<!-- Destination Details -->
+							<h2 class="text-13 fw-600 reveal reveal-fadeInUp">{{ destination.name }}</h2>
+							<div class="row gy-2 gx-5 text-body-secondary mb-4 reveal reveal-fadeInUp" data-reveal-delay="100">
+								{% if destination.location %}
+								<div class="col-6 col-md-auto d-flex align-items-center">
+									<span class="text-primary text-6 me-2"><i class="fa-solid fa-map-pin"></i></span>{{ destination.location }}
 								</div>
 								{% endif %}
+								{% if destination.distance %}
+								<div class="col-6 col-md-auto d-flex align-items-center">
+									<span class="text-primary text-6 me-2"><i class="fa-solid fa-route"></i></span>{{ destination.distance }}
+								</div>
+								{% endif %}
+							</div>
+							<div class="text-body-secondary lh-lg destination-description reveal reveal-fadeInUp" data-reveal-delay="200">{{ destination.description|safe }}</div>
 
-								<hr class="opacity-1 my-4">
-								<div class="room-price-book-bar d-flex flex-wrap align-items-center justify-content-between gap-3 w-100 reveal reveal-fadeInUp" data-reveal-delay="300">
-									<div class="text-7 fw-600 d-flex align-items-center gap-2 flex-shrink-0">
-										<span class="text-primary text-9"><i class="fa-solid fa-compass"></i></span>
-										Plan your visit to {{ destination.name }}
-									</div>
-									<a class="btn btn-new btn-primary rounded-pill flex-shrink-0"
-									   href="#"
-									   data-bs-toggle="modal"
-									   data-bs-target="#bookNowModal">
-										<span class="btn-text"><span>Book Now</span></span>
-										<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+							<!-- Thumbnail Gallery -->
+							{% if destination_images %}
+							<div class="row g-3 mt-2 mb-4 reveal reveal-fadeInUp" data-reveal-delay="250">
+								{% for img in destination_images %}
+								<div class="col-6">
+									<a href="{{ img.image.url }}" class="glightbox d-block destination-thumb-link" data-gallery="destination-gallery"{% if img.caption %} data-title="{{ img.caption }}"{% endif %}>
+										<div class="rounded-4 overflow-hidden position-relative">
+											<img class="img-fluid w-100" src="{{ img.image.url }}" srcset="{{ img.image|srcset }}" sizes="(max-width: 767px) 50vw, 400px" alt="{{ img.caption|default:destination.name }}" style="height:220px; object-fit:cover; display:block;" loading="lazy" decoding="async">
+											{% if img.caption %}
+											<div class="destination-thumb-caption">{{ img.caption }}</div>
+											{% endif %}
+										</div>
 									</a>
 								</div>
+								{% endfor %}
 							</div>
-							<div class="col-lg-4 col-xl-3 reveal reveal-fade">
-								<div class="row room-sidebar-sticky" style="z-index: 10;">
-									<div class="col-sm-6 col-lg-12">
-										<!-- Other Link -->
-										<div class="bg-white rounded-5 p-4 mb-4">
-											<h4 class="text-7 fw-600">Other Destinations</h4>
-											<ul class="list-link">
-												{% for other in other_destinations %}
-												<li><a href="{% url 'tandj_app:nearby_destination_detail_public' other.slug %}">{{ other.name }}</a></li>
-												{% empty %}
-												<li><a href="{% url 'tandj_app:nearby_destinations' %}">View All Destinations</a></li>
-												{% endfor %}
-											</ul>
-										</div>
+							{% endif %}
+
+							<hr class="opacity-1 my-4">
+							<div class="room-price-book-bar d-flex flex-wrap align-items-center justify-content-between gap-3 w-100 reveal reveal-fadeInUp" data-reveal-delay="300">
+								<div class="text-7 fw-600 d-flex align-items-center gap-2 flex-shrink-0">
+									<span class="text-primary text-9"><i class="fa-solid fa-compass"></i></span>
+									Plan your visit to {{ destination.name }}
+								</div>
+								<a class="btn btn-new btn-primary rounded-pill flex-shrink-0"
+								   href="#"
+								   data-bs-toggle="modal"
+								   data-bs-target="#bookNowModal">
+									<span class="btn-text"><span>Book Now</span></span>
+									<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+								</a>
+							</div>
+						</div>
+
+						<div class="col-lg-4 col-xl-3 reveal reveal-fade">
+							<div class="row room-sidebar-sticky" style="z-index: 10;">
+								<div class="col-sm-6 col-lg-12">
+									<!-- Other Link -->
+									<div class="bg-white rounded-5 p-4 mb-4">
+										<h4 class="text-7 fw-600">Other Destinations</h4>
+										<ul class="list-link">
+											{% for other in other_destinations %}
+											<li><a href="{% url 'tandj_app:nearby_destination_detail_public' other.slug %}">{{ other.name }}</a></li>
+											{% empty %}
+											<li><a href="{% url 'tandj_app:nearby_destinations' %}">View All Destinations</a></li>
+											{% endfor %}
+										</ul>
 									</div>
-									<div class="col-sm-6 col-lg-12">
-										<!-- Help -->
-										<div class="hero-wrap rounded-5">
-											<div class="hero-mask opacity-6 bg-black"></div>
-											<img class="img-fluid d-flex rounded-5" src="{% static 'tandu-main/images/help-bg.jpg' %}" alt="Need help? Contact T&U Leisure Hotel">
-											<div class="hero-content position-absolute top-50 start-50 translate-middle w-100">
-												<div class="container py-5 px-4 text-center">
-													<span class="text-primary text-13"><i class="fa-solid fa-circle-question"></i></span>
-													<h3 class="text-white text-6 fw-600 mb-3">Need Help?</h3>
-													<div class="text-6 fw-700 text-primary mb-1">+91 9188954770</div>
-													<div class="help-email fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">mail@tanduleisurehotel.in</div>
-													<a class="btn btn-new btn-sm btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
-														<span class="btn-text"><span>Contact Us</span></span>
-														<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
-													</a>
-												</div>
+								</div>
+								<div class="col-sm-6 col-lg-12">
+									<!-- Help -->
+									<div class="hero-wrap rounded-5">
+										<div class="hero-mask opacity-6 bg-black"></div>
+										<img class="img-fluid d-flex rounded-5" src="{% static 'tandu-main/images/help-bg.jpg' %}" alt="Need help? Contact T&U Leisure Hotel">
+										<div class="hero-content position-absolute top-50 start-50 translate-middle w-100">
+											<div class="container py-5 px-4 text-center">
+												<span class="text-primary text-13"><i class="fa-solid fa-circle-question"></i></span>
+												<h3 class="text-white text-6 fw-600 mb-3">Need Help?</h3>
+												<div class="text-6 fw-700 text-primary mb-1">+91 9188954770</div>
+												<div class="help-email fw-600 link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover mb-3">mail@tanduleisurehotel.in</div>
+												<a class="btn btn-new btn-sm btn-dark rounded-pill" href="{% url 'tandj_app:contact' %}">
+													<span class="btn-text"><span>Contact Us</span></span>
+													<span class="btn-icon"><i class="fa-solid fa-arrow-right"></i></span>
+												</a>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-                    </div>
-                </div>
-            </section>
-            <!-- Nearby Destination Detail end -->
-			 <style>
-				.help-email {
-	display: block;
-	font-size: clamp(0.75rem, 3.2vw, 0.95rem);
-	word-break: break-word;
-	overflow-wrap: break-word;
-	line-height: 1.4;
-	padding: 0 6px;
-}
-			 </style>
-
-		
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Nearby Destination Detail end -->
 
 {% endblock %}
 
 {% block extra_css %}
+{{ block.super }}
 <style>
-
-    .page-header .hero-wrap {
-  min-height: 550px;
+/* ===== Page header ===== */
+.page-header .hero-wrap {
+	min-height: 550px;
 }
 @media (max-width: 576px) {
 	.page-header .hero-wrap {
@@ -166,6 +156,16 @@
 		padding-bottom: 0 !important;
 	}
 }
+
+.page-header .hero-bg {
+	background-size: cover !important;
+	background-position: center center !important;
+	background-repeat: no-repeat !important;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: crisp-edges;
+}
+
+/* ===== Detail section ===== */
 .room-detail-section {
 	overflow: visible !important;
 }
@@ -184,18 +184,35 @@
 	z-index: 1000 !important;
 }
 
-.page-header .hero-bg {
-	background-size: cover !important;
-	background-position: center center !important;
-	background-repeat: no-repeat !important;
-	image-rendering: -webkit-optimize-contrast;
-	image-rendering: crisp-edges;
-}
-
 .room-items-wrap img {
 	image-rendering: -webkit-optimize-contrast;
 }
 
+/* Description content coming from CKEditor */
+.destination-description a {
+	color: var(--bs-primary, #4f46e5);
+	text-decoration: underline;
+}
+.destination-description img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 12px;
+}
+.destination-description table {
+	max-width: 100%;
+}
+
+/* ===== Help box email ===== */
+.help-email {
+	display: block;
+	font-size: clamp(0.75rem, 3.2vw, 0.95rem);
+	word-break: break-word;
+	overflow-wrap: break-word;
+	line-height: 1.4;
+	padding: 0 6px;
+}
+
+/* ===== Price / book bar ===== */
 .room-price-book-bar {
 	min-width: 0;
 }
@@ -234,6 +251,7 @@
 	}
 }
 
+/* ===== Reveal animation ===== */
 .reveal {
 	opacity: 0;
 	transition: opacity .6s ease, transform .6s ease;
@@ -265,98 +283,70 @@
 
 /* ===== Destination thumbnail gallery ===== */
 .destination-thumb-link {
-    display: block;
-    transition: transform 0.3s ease;
+	display: block;
+	transition: transform 0.3s ease;
 }
 .destination-thumb-link:hover {
-    transform: translateY(-3px);
+	transform: translateY(-3px);
 }
 .destination-thumb-caption {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 14px 16px 12px;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
-    color: #fff;
-    font-size: 0.95rem;
-    font-weight: 600;
-    line-height: 1.3;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 14px 16px 12px;
+	background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+	color: #fff;
+	font-size: 0.95rem;
+	font-weight: 600;
+	line-height: 1.3;
 }
 
 @media (max-width: 576px) {
-    .destination-thumb-caption {
-        font-size: 0.85rem;
-        padding: 12px 12px 10px;
-    }
+	.destination-thumb-caption {
+		font-size: 0.85rem;
+		padding: 12px 12px 10px;
+	}
 }
 
 /* ===== Consistent GLightbox popup styling for the destination gallery ===== */
 .gslide-image {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    width: min(90vw, 1200px) !important;
-    height: min(75vh, 675px) !important;
-    margin: 0 auto;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	width: min(90vw, 1200px) !important;
+	height: min(75vh, 675px) !important;
+	margin: 0 auto;
 }
 .gslide-image img {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: cover !important;
-    border-radius: 20px !important;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+	width: 100% !important;
+	height: 100% !important;
+	max-width: 100% !important;
+	max-height: 100% !important;
+	object-fit: cover !important;
+	border-radius: 20px !important;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 .gslide-description,
 .gdesc-inner {
-    display: none !important;
+	display: none !important;
 }
 .glightbox-clean .gslide-media {
-    box-shadow: none !important;
+	box-shadow: none !important;
 }
 .gclose, .gprev, .gnext {
-    background-color: rgba(0, 0, 0, 0.45) !important;
-    border-radius: 50% !important;
+	background-color: rgba(0, 0, 0, 0.45) !important;
+	border-radius: 50% !important;
 }
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-	var revealEls = document.querySelectorAll('.reveal');
-	if (!revealEls.length) return;
-
-	if (!('IntersectionObserver' in window)) {
-		revealEls.forEach(function (el) { el.classList.add('reveal-visible'); });
-		return;
-	}
-
-	var observer = new IntersectionObserver(function (entries) {
-		entries.forEach(function (entry) {
-			var el = entry.target;
-			var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
-			if (entry.isIntersecting) {
-				if (delay) {
-					setTimeout(function () { el.classList.add('reveal-visible'); }, delay);
-				} else {
-					el.classList.add('reveal-visible');
-				}
-			} else {
-				el.classList.remove('reveal-visible');
-			}
-		});
-	}, { threshold: 0.15 });
-
-	revealEls.forEach(function (el) { observer.observe(el); });
-});
-</script>
 {% endblock %}
 
 {% block extra_js %}
+{# Keep the scripts that base.html loads in this block (modal, GLightbox, etc.) #}
+{{ block.super }}
 
 <style>
-	@media (max-width: 576px) {
+@media (max-width: 576px) {
 	#bookNowModal .modal-dialog {
 		max-width: 320px;
 		margin: 1.5rem auto;
@@ -392,4 +382,48 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 }
 </style>
+
+<!-- Reveal animation: shows each element once, never hides it again,
+     and force-shows everything after 2.5s so content can never stay blank. -->
+<script>
+(function () {
+	function initReveal() {
+		var els = document.querySelectorAll('.reveal');
+		if (!els.length) return;
+
+		function show(el) {
+			if (el.classList.contains('reveal-visible')) return;
+			var delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+			setTimeout(function () { el.classList.add('reveal-visible'); }, delay);
+		}
+
+		if (!('IntersectionObserver' in window)) {
+			els.forEach(show);
+			return;
+		}
+
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (entry) {
+				if (entry.isIntersecting) {
+					show(entry.target);
+					io.unobserve(entry.target); // show once, never hide again
+				}
+			});
+		}, { threshold: 0, rootMargin: '0px 0px -5% 0px' });
+
+		els.forEach(function (el) { io.observe(el); });
+
+		// Safety net: never leave content hidden
+		setTimeout(function () {
+			els.forEach(function (el) { el.classList.add('reveal-visible'); });
+		}, 2500);
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initReveal);
+	} else {
+		initReveal();
+	}
+})();
+</script>
 {% endblock %}

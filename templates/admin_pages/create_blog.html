@@ -34,7 +34,8 @@
 </style>
 
 <style>
-    * FIX: CKEditor Toolbar Sticky Position Issues */
+/* ============================================ */
+/* FIX: CKEditor Toolbar Sticky Position Issues */
 /* ============================================ */
 
 /* Disable default sticky behavior */
@@ -69,9 +70,9 @@
 
 /* Make editable area fully auto-expanding */
 .ck-editor__editable_inline {
-    min-height: 200px; /* Start with comfortable minimum height */
-    height: auto !important; /* Allow automatic expansion */
-    overflow-y: visible !important; /* No scrollbar - content expands naturally */
+    min-height: 200px;
+    height: auto !important;
+    overflow-y: visible !important;
     overflow-x: hidden !important;
     position: relative !important;
 }
@@ -91,8 +92,31 @@
     z-index: 1 !important;
 }
 
+/* Link popup / dropdowns must sit above sidebar, header, etc. */
 .ck.ck-balloon-panel {
-    z-index: 1000 !important;
+    z-index: 99999 !important;
+}
+
+/* ============================================ */
+/* FIX: Stop global 100% width rule from breaking */
+/* CKEditor's link form (URL input and buttons)   */
+/* ============================================ */
+.ck input,
+.ck button,
+.ck textarea {
+    width: auto !important;
+    max-width: none !important;
+    height: auto;
+}
+
+.ck .ck-input-text {
+    width: 18em !important;
+    min-width: 0;
+}
+
+/* Keep link form tidy on small screens */
+@media (max-width: 576px) {
+    .ck .ck-input-text { width: 12em !important; }
 }
 </style>
 
@@ -138,7 +162,6 @@ img, input, textarea, select, .form-control, .modern-input, .form-text {
     word-wrap: break-word;
 }
 
-/* CKEditor safety */
 /* CKEditor List Styles - Fix for bullets and numbers */
 .ck-editor__editable ul,
 .ck-editor__editable ol {
@@ -178,6 +201,11 @@ img, input, textarea, select, .form-control, .modern-input, .form-text {
     list-style-type: square !important;
 }
 
+/* Make links visible inside the editor */
+.ck-editor__editable a {
+    color: #4f46e5;
+    text-decoration: underline;
+}
 
 /* Form Inputs Style */
 .modern-input {
@@ -275,7 +303,6 @@ img, input, textarea, select, .form-control, .modern-input, .form-text {
             <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12">
                 <div class="dashboard__section__title">
                     <h4 class="mb-0">Add Blog Post</h4>
-                   
                 </div>
 
                 <div class="row mt-4">
@@ -287,7 +314,6 @@ img, input, textarea, select, .form-control, .modern-input, .form-text {
                                 <div class="col-12 mb-4">
                                     <label for="title" class="form-label">Blog Title <span class="text-danger">*</span></label>
                                     <input type="text" name="title" id="title" class="form-control modern-input" placeholder="Enter blog title" required>
-                                    <div class="invalid-feedback">Please provide a blog title.</div>
                                 </div>
 
                                 <!-- Blog Image -->
@@ -298,11 +324,13 @@ img, input, textarea, select, .form-control, .modern-input, .form-text {
                                     <div id="imagePreview" class="blog-image-preview mt-2" style="display: none;"></div>
                                 </div>
 
-                                <!-- Description -->
+                                <!-- Description (CKEditor) -->
+                                <!-- NOTE: no "required" attribute here. CKEditor hides this textarea, and the
+                                     browser would block submit with "invalid form control is not focusable".
+                                     Validation is handled in JavaScript below. -->
                                 <div class="col-12 mb-4">
                                     <label for="description" class="form-label">Content <span class="text-danger">*</span></label>
-                                    <textarea name="description" id="description" class="form-control modern-input uni-description" rows="10" placeholder="Write your blog content here" required></textarea>
-                                    <div class="invalid-feedback">Please provide blog content.</div>
+                                    <textarea name="description" id="description" class="form-control modern-input uni-description" rows="10" placeholder="Write your blog content here"></textarea>
                                 </div>
 
                                 <!-- Submit Button -->
@@ -328,18 +356,146 @@ img, input, textarea, select, .form-control, .modern-input, .form-text {
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    let descriptionEditor; // store CKEditor instance
+    let descriptionEditor = null; // CKEditor instance (set once the editor is ready)
 
+    const form = document.querySelector('form.needs-validation');
+    const imageInput = document.getElementById('image');
+    const imagePreview = document.getElementById('imagePreview');
+    const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
+
+    // ------------------------------------------------------------
+    // Form validation setup (defined BEFORE the editor so the editor
+    // callback can safely use `fields` and `validateField`)
+    // ------------------------------------------------------------
+    const fields = {
+        title: {
+            element: document.getElementById('title'),
+            error: document.createElement('div'),
+            validate: function (value) {
+                if (!value.trim()) return "Blog title is required.";
+                return null;
+            }
+        },
+        image: {
+            element: imageInput,
+            error: document.createElement('div'),
+            validate: function (file) {
+                if (!file) return "Blog cover image is required.";
+                if (!file.type.startsWith('image/')) return "Please upload a valid image.";
+                if (file.size > MAX_IMAGE_SIZE) return "Image must be 2MB or smaller.";
+                return null;
+            }
+        },
+        description: {
+            element: document.getElementById('description'),
+            error: document.createElement('div'),
+            validate: function (value) {
+                if (!value.trim()) return "Blog content is required.";
+                return null;
+            }
+        }
+    };
+
+    // Insert error elements right after each field
+    Object.values(fields).forEach(f => {
+        f.error.classList.add('text-danger', 'mt-1');
+        f.error.style.display = 'none';
+        f.element.insertAdjacentElement('afterend', f.error);
+    });
+
+    // Returns the element that should get the red border
+    function getBorderTarget(fieldName) {
+        if (fieldName === 'description' && descriptionEditor) {
+            return descriptionEditor.ui.view.editable.element; // visible editor area
+        }
+        return fields[fieldName].element;
+    }
+
+    function validateField(fieldName) {
+        const field = fields[fieldName];
+        let value = field.element.value;
+
+        if (fieldName === 'image') {
+            value = field.element.files[0] || null;
+        }
+        if (fieldName === 'description' && descriptionEditor) {
+            const html = descriptionEditor.getData();
+            // Count images as content too (a post with only an image is valid)
+            const hasImage = /<img\b/i.test(html);
+            const text = html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+            value = hasImage && !text ? 'image' : text;
+        }
+
+        const error = field.validate(value);
+
+        field.error.textContent = error || '';
+        field.error.style.display = error ? 'block' : 'none';
+
+        const target = getBorderTarget(fieldName);
+        if (target) target.classList.toggle('field-error-border', !!error);
+
+        return !error;
+    }
+
+    function validateForm() {
+        // Run every validator (don't stop at the first failure) so all errors show
+        return Object.keys(fields).map(validateField).every(Boolean);
+    }
+
+    // Live validation events
+    Object.keys(fields).forEach(fieldName => {
+        const field = fields[fieldName];
+        if (fieldName === 'description') return; // handled by CKEditor events below
+
+        if (field.element.type === 'text') {
+            field.element.addEventListener('blur', () => validateField(fieldName));
+            field.element.addEventListener('input', () => {
+                if (field.error.textContent) validateField(fieldName);
+            });
+        } else if (field.element.type === 'file') {
+            field.element.addEventListener('change', () => validateField(fieldName));
+        }
+    });
+
+    // ------------------------------------------------------------
     // Initialize CKEditor
+    // ------------------------------------------------------------
     ClassicEditor
         .create(document.querySelector('#description'), {
             toolbar: [
-                'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList',
-                '|', 'insertTable', 'blockQuote', 'undo', 'redo', 'imageUpload'
-            ]
+                'heading', '|',
+                'bold', 'italic', 'link', '|',
+                'bulletedList', 'numberedList', '|',
+                'insertTable', 'blockQuote', 'imageUpload', '|',
+                'undo', 'redo'
+            ],
+            link: {
+                addTargetToExternalLinks: true,   // external links open in a new tab
+                defaultProtocol: 'https://',      // auto-adds https:// if user forgets
+                decorators: {
+                    openInNewTab: {
+                        mode: 'manual',
+                        label: 'Open in a new tab',
+                        attributes: {
+                            target: '_blank',
+                            rel: 'noopener noreferrer'
+                        }
+                    }
+                }
+            }
         })
         .then(editor => {
             descriptionEditor = editor;
+
+            // Live validation when content changes (attached AFTER the editor exists)
+            editor.model.document.on('change:data', () => {
+                if (fields.description.error.textContent) validateField('description');
+            });
+
+            // Validate when the editor loses focus
+            editor.ui.focusTracker.on('change:isFocused', (evt, name, isFocused) => {
+                if (!isFocused) validateField('description');
+            });
 
             // Base64 image upload
             editor.plugins.get('FileRepository').createUploadAdapter = loader => {
@@ -354,16 +510,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
             };
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error('CKEditor error:', error));
 
+    // ------------------------------------------------------------
     // Blog cover image preview
-    const imageInput = document.getElementById('image');
-    const imagePreview = document.getElementById('imagePreview');
-    imageInput.addEventListener('change', function() {
+    // ------------------------------------------------------------
+    imageInput.addEventListener('change', function () {
         imagePreview.innerHTML = '';
         if (this.files && this.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 imagePreview.style.display = 'flex';
                 imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
             };
@@ -373,87 +529,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Form validation
-    const form = document.querySelector('form');
-    const fields = {
-        title: {
-            element: document.getElementById('title'),
-            error: document.createElement('div'),
-            validate: function(value) {
-                if (!value.trim()) return "Blog title is required.";
-                return null;
-            }
-        },
-        image: {
-            element: imageInput,
-            error: document.createElement('div'),
-            validate: function(file) {
-                if (!file) return "Blog cover image is required.";
-                if (!file.type.startsWith('image/')) return "Please upload a valid image.";
-                return null;
-            }
-        },
-        description: {
-            element: document.getElementById('description'),
-            error: document.createElement('div'),
-            validate: function(value) {
-                if (!value.trim()) return "Blog content is required.";
-                return null;
-            }
-        }
-    };
-
-    // Insert error elements
-    Object.values(fields).forEach(f => {
-        f.error.classList.add('text-danger', 'mt-1');
-        f.element.insertAdjacentElement('afterend', f.error);
-    });
-
-    function validateField(fieldName) {
-        const field = fields[fieldName];
-        let value = field.element.value;
-
-        if (fieldName === 'image') value = field.element.files[0] || null;
-        if (fieldName === 'description' && descriptionEditor) value = descriptionEditor.getData().replace(/<[^>]*>/g, '').trim();
-
-        const error = field.validate(value);
-
-        field.error.textContent = error || '';
-        field.error.style.display = error ? 'block' : 'none';
-        if (error) field.element.classList.add('field-error-border');
-        else field.element.classList.remove('field-error-border');
-
-        return !error;
-    }
-
-    function validateForm() {
-        return Object.keys(fields).every(validateField);
-    }
-
-    // Field events for live validation
-    Object.keys(fields).forEach(fieldName => {
-        const field = fields[fieldName];
-        if (field.element.tagName.toLowerCase() === 'textarea' || field.element.type === 'text') {
-            field.element.addEventListener('blur', () => validateField(fieldName));
-            field.element.addEventListener('input', () => { if (field.error.textContent) validateField(fieldName); });
-        } else if (field.element.type === 'file') {
-            field.element.addEventListener('change', () => validateField(fieldName));
-        }
-    });
-
-    // CKEditor events
-    if (descriptionEditor) {
-        descriptionEditor.model.document.on('change:data', () => {
-            if (fields.description.error.textContent) validateField('description');
-        });
-    }
-
+    // ------------------------------------------------------------
     // Form submit
-    form.addEventListener('submit', function(e) {
+    // ------------------------------------------------------------
+    form.addEventListener('submit', function (e) {
+        // Copy the editor content (including links) back into the textarea
+        if (descriptionEditor) {
+            descriptionEditor.updateSourceElement();
+        }
+
         if (!validateForm()) {
             e.preventDefault();
             const firstErrorField = Object.keys(fields).find(f => fields[f].error.textContent);
-            if (firstErrorField) fields[firstErrorField].element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (firstErrorField) {
+                const target = getBorderTarget(firstErrorField);
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         }
     });
 });
