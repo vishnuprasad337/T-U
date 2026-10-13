@@ -10,7 +10,7 @@
 {% block og_image %}https://tanduleisurehotel.in{% static 'tandu-main/webp/villa.webp' %}{% endblock %}
 {% block og_url %}https://tanduleisurehotel.in{% url 'tandj_app:index' %}{% endblock %}
 {% block extra_js %}
-<script src="{% static 'tandu-main/js/jarallax.min.js' %}"></script>
+<script src="{% static 'tandu-main/js/jarallax.min.js' %}" defer></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         if (window.jarallax) {
@@ -50,7 +50,7 @@
         <img src="{% static 'tandu-main/webp/tandu.webp' %}" alt="MaxiMunnar T&U Leisure Hotel" id="heroFramesLogo" class="hero-frames-logo">
     </div>
     <div class="hero-frames-content">
-    <div class="hero-frames-caption hero-frames-caption--left" data-caption-index="0">
+    <div class="hero-frames-caption hero-frames-caption--left hero-content-active" data-caption-index="0">
         <div class="hero-frames-caption-inner">
             <span class="hero-caption-eyebrow">Welcome To</span>
             <h1 class="heading-font-family hero-caption-heading">MaxiMunnar T&amp;U Leisure Hotel <span class="hero-caption-tagline">Luxury 4 Star Hotel in Munnar</span></h1>
@@ -672,9 +672,8 @@ img {
 		}
 
 		function startCaptionCycle() {
-			if (!captions.length || captionInterval) return;
-			showCaption(currentCaptionIndex);
-			captionInterval = setInterval(function () {
+    if (!captions.length || captionInterval) return;
+    captionInterval = setInterval(function () {
 				currentCaptionIndex = (currentCaptionIndex + 1) % captions.length;
 				showCaption(currentCaptionIndex);
 			}, CAPTION_DURATION);
