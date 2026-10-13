@@ -10,9 +10,11 @@
 	"use strict";
 
 // Preloader
-$(window).on('load', function () {
-	$('.lds-ellipsis').fadeOut(); // will first fade out the loading animation
-	$('.preloader').delay(333).fadeOut('slow'); // will fade out the white DIV that covers the website.
+// Preloader — hide as soon as the DOM is ready instead of waiting for
+// every image/video/font to finish (window 'load')
+$(function () {
+	$('.lds-ellipsis').fadeOut();
+	$('.preloader').delay(333).fadeOut('slow');
 	$('body').delay(333);
 });
 
