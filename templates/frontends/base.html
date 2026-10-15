@@ -1,4 +1,5 @@
 {% load static %}
+{% load inline_static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,12 +52,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="gPKZxSsN8RsjJRLbCfOadg" async></script>
    
-    <!-- Stylesheet
+    <!-- Stylesheet (inlined to remove render-blocking requests; falls back to <link> automatically)
 	============================== -->
-   <link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/bootstrap.purged.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'tandu-main/css/stylesheet.purged.css' %}">
+{% inline_css 'tandu-main/css/bootstrap.purged.css' %}
+{% inline_css 'tandu-main/css/stylesheet.purged.css' %}
 
-<link rel="preload" as="style" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}">
 <link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="{% static 'tandu-main/css/font-awesome/css/all.min.css' %}"></noscript>
 <link rel="preload" href="{% static 'tandu-main/css/font-awesome/webfonts/fa-solid-900.woff2' %}" as="font" type="font/woff2" crossorigin media="(max-width: 767px)">
@@ -80,12 +80,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </style>
 	<!-- Here goes your Colors Css -->
 
-    <!-- Navbar font (reference-matched: clean geometric sans, medium weight) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"></noscript>
+    <!-- Poppins (self-hosted: no Google Fonts request) -->
+    <link rel="preload" href="{% static 'tandu-main/fonts/poppins-400.woff2' %}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{% static 'tandu-main/fonts/poppins-500.woff2' %}" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Poppins';font-style:normal;font-weight:400;font-display:swap;src:url("{% static 'tandu-main/fonts/poppins-400.woff2' %}") format("woff2")}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:500;font-display:swap;src:url("{% static 'tandu-main/fonts/poppins-500.woff2' %}") format("woff2")}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:600;font-display:swap;src:url("{% static 'tandu-main/fonts/poppins-600.woff2' %}") format("woff2")}
+@font-face{font-family:'Poppins';font-style:normal;font-weight:700;font-display:swap;src:url("{% static 'tandu-main/fonts/poppins-700.woff2' %}") format("woff2")}
+</style>
 
     <!-- Custom Header/Logo Scroll Behavior
 	============================== -->
@@ -359,8 +362,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         /* ===== Navbar link font — matched to reference (clean modern
            sans, regular weight, minimal letter-spacing, like the RIXOS
-           reference). Loaded via the Google Fonts <link> tags added above
-           in <head>. */
+           reference). Poppins is self-hosted via the @font-face rules
+           added above in <head>. */
         #header #header-nav .nav-link,
         #header .btn-new .btn-text {
             font-family: 'Poppins', sans-serif;
