@@ -187,7 +187,7 @@ STORAGES = {
             ),
 
             "object_parameters": {
-                "CacheControl": "public, max-age=31536000, immutable",
+                "CacheControl": "max-age=86400",
             },
         },
     },
